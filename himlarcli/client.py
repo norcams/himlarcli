@@ -22,5 +22,6 @@ class Client(object):
 
         self.sess = session.Session(auth=auth,verify=openstack['keystone_cachain'])
 
-    def set_version(self, version):
-        self.version = version
+    @abstractmethod
+    def get_client(self):
+        pass

@@ -5,31 +5,54 @@ import urllib2
 class Nova(Client):
     version = 2
 
-    def __init__(self, config_path):
+    def __init__(self, config_path, host):
+        """ Create a new nova client to manaage a host
+        `**host`` fqdn for the nova compute host
+        `**config_path`` path to ini file with config
+        """
         super(Nova,self).__init__(config_path)
         self.client = novaclient.Client(self.version, session=self.sess)
+        self.host = host
 
-    def get(self):
+    def set_host(self, host):
+        self.host = host
+
+    def list_users(self):
+        """ Return a list of email for users that have instance(s) on a host """
+        instances = self.__get_instances()
+        emails = set()
+        for i in instances:
+            emails.add(urllib2.unquote(i._info['user_id']))
+        return list(emails)
+
+    def stop_instances(self, state='ACTIVE'):
+        """ Stop all instances on a host with one state
+        `**host`` fqdn for the nova compute host
+        `**state`` stop all instances with this state
+        """
+        self.__change_status('stop', state)
+
+    def start_instances(self):
+        """ Start all instances on a host with state SHUTOFF
+        `**host`` fqdn for the nova compute host
+        """
+        self.__change_status('start', 'SHUTOFF')
+
+    def delete_instances(self, state='SHUTOFF'):
+        """ Delete all instances on a host with one state
+        `**host`` fqdn for the nova compute host
+        `**state`` delete all instances with this state
+        """
+        self.__change_status('delete', state)
+
+    def get_client(self):
         return self.client
 
-    def list_users(self, host):
-        instances = self.__get_instances(host)
-        list = []
-        for i in instances:
-            list.append(urllib2.unquote(i._info['user_id']))
-        return list
-
-    def stop_instances(self, host):
-        self.__change_status(host, 'stop', 'ACTIVE')
-
-    def start_instances(self, host):
-        self.__change_status(host)
-
-    def delete_instances(self, host, state='SHUTOFF'):
-        self.__change_status(host, 'delete', state)
-
-    def __change_status(self, host, action='start', state='SHUTOFF'):
-        instances = self.__get_instances(host)
+    #
+    # private methods
+    #
+    def __change_status(self, action='start', state='SHUTOFF'):
+        instances = self.__get_instances()
         count = 0
         for i in instances:
             if i._info['status'] == state:
@@ -37,8 +60,8 @@ class Nova(Client):
                 count += 1
         print "run %s on %s instances with state %s" % (action, count, state)
 
-    def __get_instances(self, host):
-        search_opts = dict(all_tenants=1, host=host)
+    def __get_instances(self):
+        search_opts = dict(all_tenants=1, host=self.host)
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
         return instances

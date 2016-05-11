@@ -8,7 +8,7 @@ class Keystone(Client):
         super(Keystone,self).__init__(config_path)
         self.client = keystoneclient.Client(session=self.sess)
 
-    def get(self):
+    def get_client(self):
         return self.client
 
     def list_projects(self, domain=False):
