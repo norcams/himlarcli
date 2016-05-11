@@ -20,7 +20,7 @@ class Client(object):
                            user_domain_name=openstack['default_domain'],
                            project_domain_name=openstack['default_domain'])
 
-        if openstack['keystone_cachain']:
+        if 'keystone_cachain' in openstack:
             self.sess = session.Session(auth=auth,
                                         verify=openstack['keystone_cachain'])
         else:

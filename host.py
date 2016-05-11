@@ -9,7 +9,9 @@ options = utils.get_options(sys.argv[1:], sys.argv[0])
 novaclient = Nova(options['config'], options['host'])
 
 if options['action'] == 'print':
-    print novaclient.list_users()
+    emails = novaclient.list_users()
+    for i in emails:
+        print i.lower()
 elif options['action'] == 'start':
     novaclient.start_instances()
 elif options['action'] == 'stop':
