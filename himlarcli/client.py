@@ -20,7 +20,11 @@ class Client(object):
                            user_domain_name=openstack['default_domain'],
                            project_domain_name=openstack['default_domain'])
 
-        self.sess = session.Session(auth=auth,verify=openstack['keystone_cachain'])
+        if openstack['keystone_cachain']:
+            self.sess = session.Session(auth=auth,
+                                        verify=openstack['keystone_cachain'])
+        else:
+            self.sess = session.Session(auth=auth)
 
     @abstractmethod
     def get_client(self):
