@@ -1,3 +1,9 @@
-build
-dist
+bin/
+build/
+dist/
+lib/
+lib64
+include/
+*.egg-info
 *.pyc
+config.ini
