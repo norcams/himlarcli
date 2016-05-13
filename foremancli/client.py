@@ -17,7 +17,7 @@ class Client(object):
 
     def set_host_build(self, host, build=True):
         if len(self.foreman.show_hosts(id=host)) > 0:
-            self.foreman.update_hosts(id=host, host={'build': bulid})
+            self.foreman.update_hosts(id=host, host={'build': build})
 
     def _print_attr():
         attr = self.foreman.__dict__
