@@ -1,5 +1,6 @@
 from client import Client
 from novaclient import client as novaclient
+from novaclient.exceptions import NotFound
 import urllib2
 
 class Nova(Client):
@@ -14,6 +15,14 @@ class Nova(Client):
         self.client = novaclient.Client(self.version, session=self.sess)
         self.host = host
 
+    def valid_host(self):
+        try:
+            self.client.hosts.get(self.host)
+            valid = True
+        except NotFound as e:
+            valid = False
+        return valid
+
     def set_host(self, host):
         self.host = host
 
@@ -22,7 +31,7 @@ class Nova(Client):
         instances = self.__get_instances()
         emails = set()
         for i in instances:
-            emails.add(urllib2.unquote(i._info['user_id']))
+            emails.add(urllib2.unquote(i._info['user_id']).lower())
         return list(emails)
 
     def stop_instances(self, state='ACTIVE'):
@@ -61,6 +70,8 @@ class Nova(Client):
         print "run %s on %s instances with state %s" % (action, count, state)
 
     def __get_instances(self):
+        if not self.valid_host():
+            return list()
         search_opts = dict(all_tenants=1, host=self.host)
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
