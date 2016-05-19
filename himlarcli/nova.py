@@ -27,6 +27,21 @@ class Nova(Client):
     def set_host(self, host):
         self.host = host
 
+    def list_instances(self):
+        instances = self.__get_instances()
+        users = dict()
+        for i in instances:
+            email = urllib2.unquote(i._info['user_id'])
+            if email not in users.keys():
+                users[email] = {}
+            if len(i._info['addresses']['public']) > 0:
+                ip = i._info['addresses']['public'][0]['addr']
+            else:
+                ip = '<no public ip>'
+            name = i._info['name']
+            users[email][name] = ip
+        return users
+
     def list_users(self):
         """ Return a list of email for users that have instance(s) on a host """
         instances = self.__get_instances()
