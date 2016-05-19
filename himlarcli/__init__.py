@@ -1,2 +1,2 @@
 
-__all__ = ["keystone", "nova", "client"]
+__all__ = ["keystone", "nova", "client", "notify"]
