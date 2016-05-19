@@ -11,6 +11,11 @@ class Keystone(Client):
     def get_client(self):
         return self.client
 
+    def get_region(self):
+        region = self.client.regions.list()
+        if len(region) > 0:
+            return region[0].id
+
     def list_projects(self, domain=False):
         if domain:
             domain_id = self.__get_domain(domain)
