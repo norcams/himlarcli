@@ -1,4 +1,5 @@
-Your instance(s) at UH-IaaS will be terminated.
+
+These instances running in UH-IaaS will be terminated.
 Read more at http://iaas.readthedocs.io/en/latest/enduser/pilot.html
 
 We welcome feedback on this email warning:

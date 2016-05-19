@@ -7,6 +7,9 @@ from himlarcli.notify import Notify
 from email.mime.text import MIMEText
 
 options = utils.get_host_options('Notify users of rebuild host', hosts=1)
+notify = Notify(options.config, debug=1)
+with open('misc/notify_email.txt', 'r') as body_txt:
+    body_content = body_txt.read()
 
 # Find region
 keystoneclient = Keystone(options.config)
@@ -17,24 +20,15 @@ novaclient = Nova(options.config, options.host[0])
 if not novaclient.valid_host():
     print "ERROR: could not find host %s" % options.host[0]
     sys.exit(1)
-toaddr = novaclient.list_users()
+toaddr = novaclient.list_instances()
+for user, instance in toaddr.iteritems():
+    user_instances = ""
+    for server,ip in instance.iteritems():
+        user_instances += "%s (%s)\n" % (server,ip)
+    msg = MIMEText(user_instances + body_content)
+    msg['Subject'] = 'UH-IaaS: Terminating instance (%s)' % region
+    notify.send_mail(user, msg)
+    print '\nUser: %s' % user
+    print 'Servers:\n' + user_instances + '\n'
 
-# Optional from file
-#fp = open('users.txt', 'rb')
-#toaddr = list()
-#for line in fp:
-#    if line != '\n':
-#        toaddr.append(line)
-
-with open('misc/notify_email.txt', 'r') as body_txt:
-    body = body_txt.read()
-
-msg = MIMEText(body)
-msg['Subject'] = 'UH-IaaS: Terminating instance (%s)' % region
-
-notify = Notify(options.config)
-notify.send_mail(toaddr, msg, debug=0)
-
-print '\nTo:' + ', '.join(toaddr)
-print 'Subject: %s' % msg['Subject']
-print "\n" + body + "\n"
+notify.close()
