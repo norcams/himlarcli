@@ -3,20 +3,26 @@
 import sys
 import utils
 from himlarcli.nova import Nova
-from himlarcli.keystone import Keystone
 
-options = utils.get_options(sys.argv[1:], sys.argv[0])
-novaclient = Nova(options['config'], options['host'])
+desc = 'Perform action on all instances on host'
+actions = ['print','start','stop','delete']
 
-if options['action'] == 'print':
+options = utils.get_action_options(desc, actions)
+novaclient = Nova(options.config, options.host)
+
+if options.action[0] == 'print':
     emails = novaclient.list_users()
     for i in emails:
-        print i.lower()
-elif options['action'] == 'start':
+        print i
+elif options.action[0] == 'start':
     novaclient.start_instances()
-elif options['action'] == 'stop':
+elif options.action[0] == 'stop':
     novaclient.stop_instances()
-#elif options['action'] == 'delete':
-#    novaclient.delete_instances()
-else:
-    print "action must be one of print, start, stop or delete"
+elif options.action[0] == 'delete':
+    q = "Delete all stopped instances on %s (yes|no)? " % options.host
+    answer = raw_input(q)
+    if answer.lower() == 'yes':
+        print "We are now deleting alle instances"
+        novaclient.delete_instances()
+    else:
+        print "You just dodged a bullet my friend!"
