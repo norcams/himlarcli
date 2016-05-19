@@ -4,7 +4,6 @@ import os.path
 import argparse
 
 def get_host_options(desc, config=True, hosts='+'):
-    print hosts
     parser = argparse.ArgumentParser(description=desc)
     if config:
         parser.add_argument('-c',
@@ -18,11 +17,7 @@ def get_host_options(desc, config=True, hosts='+'):
                         type=str,
                         nargs=hosts,
                         help='nova compute host')
-    if len(sys.argv) > 1:
-        return parser.parse_args()
-    else:
-        parser.print_help()
-        sys.exit(0)
+    return parser.parse_args()
 
 def get_options(argv, file):
     config = 'config.ini'
