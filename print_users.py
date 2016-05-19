@@ -6,4 +6,6 @@ from himlarcli.keystone import Keystone
 
 options = utils.get_host_options('Print users on nova compute host', hosts=1)
 novaclient = Nova(options.config, options.host[0])
-print novaclient.list_users()
+users = novaclient.list_users()
+for i in users:
+    print i
