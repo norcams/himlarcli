@@ -1,6 +1,28 @@
 import getopt
 import sys
 import os.path
+import argparse
+
+def get_host_options(desc, config=True, hosts='+'):
+    print hosts
+    parser = argparse.ArgumentParser(description=desc)
+    if config:
+        parser.add_argument('-c',
+                            dest='config',
+                            metavar='config.ini',
+                            action='store',
+                            default='config.ini',
+                            help='path to ini file with config')
+    parser.add_argument('host',
+                        metavar='FQDN',
+                        type=str,
+                        nargs=hosts,
+                        help='nova compute host')
+    if len(sys.argv) > 1:
+        return parser.parse_args()
+    else:
+        parser.print_help()
+        sys.exit(0)
 
 def get_options(argv, file):
     config = 'config.ini'
