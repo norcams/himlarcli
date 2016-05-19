@@ -12,9 +12,7 @@ class Keystone(Client):
         return self.client
 
     def get_region(self):
-        region = self.client.regions.list()
-        if len(region) > 0:
-            return region[0].id
+        return self.config._sections['openstack']['region']
 
     def list_projects(self, domain=False):
         if domain:
