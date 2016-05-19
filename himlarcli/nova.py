@@ -6,7 +6,7 @@ import urllib2
 class Nova(Client):
     version = 2
 
-    def __init__(self, config_path, host):
+    def __init__(self, config_path, host, debug=False):
         """ Create a new nova client to manaage a host
         `**host`` fqdn for the nova compute host
         `**config_path`` path to ini file with config
@@ -14,6 +14,7 @@ class Nova(Client):
         super(Nova,self).__init__(config_path)
         self.client = novaclient.Client(self.version, session=self.sess)
         self.host = host
+        self.debug = debug
 
     def valid_host(self):
         try:
@@ -31,7 +32,13 @@ class Nova(Client):
         instances = self.__get_instances()
         emails = set()
         for i in instances:
-            emails.add(urllib2.unquote(i._info['user_id']).lower())
+            email = urllib2.unquote(i._info['user_id'])
+            # avoid system users in list
+            if "@" in email:
+                emails.add(email.lower())
+            else:
+                if self.debug:
+                    print "Warning: Dropping %s from user list" % email
         return list(emails)
 
     def stop_instances(self, state='ACTIVE'):
