@@ -6,7 +6,7 @@ import urllib2
 class Nova(Client):
     version = 2
 
-    def __init__(self, config_path, host, debug=False):
+    def __init__(self, config_path, host=None, debug=False):
         """ Create a new nova client to manaage a host
         `**host`` fqdn for the nova compute host
         `**config_path`` path to ini file with config
@@ -56,6 +56,12 @@ class Nova(Client):
                     print "Warning: Dropping %s from user list" % email
         return list(emails)
 
+    def get_stats(self, domain=None):
+        instances = self.__get_all_instances()
+        stats = dict()
+        stats['count'] = len(instances)
+        return stats
+
     def stop_instances(self, state='ACTIVE'):
         """ Stop all instances on a host with one state
         `**host`` fqdn for the nova compute host
@@ -95,6 +101,12 @@ class Nova(Client):
         if not self.valid_host():
             return list()
         search_opts = dict(all_tenants=1, host=self.host)
+        instances = self.client.servers.list(detailed=True,
+                                             search_opts=search_opts)
+        return instances
+
+    def __get_all_instances(self):
+        search_opts = dict(all_tenants=1)
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
         return instances
