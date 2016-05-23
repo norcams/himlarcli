@@ -12,6 +12,8 @@ class Notify(object):
         self.server.starttls()
 
     def send_mail(self, toaddr, msg, ):
+        msg['From'] = self.config['from_addr']
+        msg['To'] = toaddr
         self.server.sendmail(self.config['from_addr'], toaddr, msg.as_string())
 
     def close(self):
