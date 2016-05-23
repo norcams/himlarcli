@@ -1,3 +1,4 @@
+import sys
 import ConfigParser
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
@@ -9,10 +10,15 @@ class Client(object):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, config_path):
+    def __init__(self, config_path, debug):
+        self.debug = debug
         self.config = ConfigParser.ConfigParser()
         self.config.read(config_path)
-        openstack = self.config._sections['openstack']
+        try:
+            openstack = self.config._sections['openstack']
+        except KeyError as e:
+            print 'ERROR! Could not find section [openstack] in %s' % config_path
+            sys.exit(1)
         auth = v3.Password(auth_url=openstack['auth_url'],
                            username=openstack['username'],
                            password=openstack['password'],

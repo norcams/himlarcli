@@ -4,8 +4,8 @@ from keystoneclient.v3 import client as keystoneclient
 class Keystone(Client):
     version = 3
 
-    def __init__(self, config_path):
-        super(Keystone,self).__init__(config_path)
+    def __init__(self, config_path, debug=False):
+        super(Keystone,self).__init__(config_path, debug)
         self.client = keystoneclient.Client(session=self.sess)
 
     def get_domain_id(self, domain):

@@ -11,10 +11,9 @@ class Nova(Client):
         `**host`` fqdn for the nova compute host
         `**config_path`` path to ini file with config
         """
-        super(Nova,self).__init__(config_path)
+        super(Nova,self).__init__(config_path, debug)
         self.client = novaclient.Client(self.version, session=self.sess)
         self.host = host
-        self.debug = debug
 
     def valid_host(self):
         try:
