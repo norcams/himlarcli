@@ -6,16 +6,12 @@ import utils
 from himlarcli.nova import Nova
 
 desc = 'Perform action on all instances on host'
-actions = ['print','start','stop','delete','instance']
+actions = ['list','start','stop','delete']
 
-options = utils.get_action_options(desc, actions)
-novaclient = Nova(options.config, options.host)
+options = utils.get_host_action_options(desc, actions)
+novaclient = Nova(options.config, options.host, options.debug)
 
-if options.action[0] == 'print':
-    emails = novaclient.list_users()
-    for i in emails:
-        print i
-elif options.action[0] == 'instance':
+if options.action[0] == 'list':
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(novaclient.list_instances())
 elif options.action[0] == 'start':

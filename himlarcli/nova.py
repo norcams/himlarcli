@@ -38,7 +38,7 @@ class Nova(Client):
             else:
                 ip = '<no public ip>'
             name = i._info['name']
-            users[email][name] = ip
+            users[email][name] = { 'ip': ip, 'status': i._info['status']}
         return users
 
     def list_users(self):

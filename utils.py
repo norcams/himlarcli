@@ -28,8 +28,15 @@ def get_options(desc, config=True, debug=True, hosts='+'):
                             help='nova compute host')
     return parser.parse_args()
 
-def get_action_options(desc, actions, config=True):
+def get_host_action_options(desc, actions, config=True, debug=True):
     parser = argparse.ArgumentParser(description=desc)
+    if debug:
+        parser.add_argument('-d',
+                            dest='debug',
+                            action='store_const',
+                            const=True,
+                            default=False,
+                            help='verbose debug mode')
     if config:
         parser.add_argument('-c',
                             dest='config',
