@@ -6,8 +6,8 @@ from himlarcli.keystone import Keystone
 from himlarcli.notify import Notify
 from email.mime.text import MIMEText
 
-options = utils.get_host_options('Notify users of rebuild host', hosts=1)
-notify = Notify(options.config, debug=1)
+options = utils.get_options('Notify users of rebuild host', hosts=1)
+notify = Notify(options.config, debug=options.debug)
 with open('misc/notify_email.txt', 'r') as body_txt:
     body_content = body_txt.read()
 

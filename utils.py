@@ -3,8 +3,15 @@ import sys
 import os.path
 import argparse
 
-def get_host_options(desc, config=True, hosts='+'):
+def get_options(desc, config=True, debug=True, hosts='+'):
     parser = argparse.ArgumentParser(description=desc)
+    if debug:
+        parser.add_argument('-d',
+                            dest='debug',
+                            action='store_const',
+                            const=True,
+                            default=False,
+                            help='verbose debug mode')
     if config:
         parser.add_argument('-c',
                             dest='config',
@@ -12,11 +19,13 @@ def get_host_options(desc, config=True, hosts='+'):
                             action='store',
                             default='config.ini',
                             help='path to ini file with config')
-    parser.add_argument('host',
-                        metavar='FQDN',
-                        type=str,
-                        nargs=hosts,
-                        help='nova compute host')
+
+    if hosts:
+        parser.add_argument('host',
+                            metavar='FQDN',
+                            type=str,
+                            nargs=hosts,
+                            help='nova compute host')
     return parser.parse_args()
 
 def get_action_options(desc, actions, config=True):
