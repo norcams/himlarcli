@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
 import pprint
+import utils
 from himlarcli.nova import Nova
 from himlarcli.keystone import Keystone
 
+options = utils.get_options('Print openstack location stats', hosts=False)
 
-keystoneclient = Keystone('config.ini')
+keystoneclient = Keystone(options.config, options.debug)
 projects_count = keystoneclient.get_project_count('dataporten')
 
-novaclient = Nova('config.ini')
+novaclient = Nova(options.config, options.debug)
 novastats = novaclient.get_stats('dataporten')
 
 stats = dict()
