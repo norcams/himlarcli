@@ -23,11 +23,11 @@ if not novaclient.valid_host():
 toaddr = novaclient.list_instances()
 for user, instance in toaddr.iteritems():
     user_instances = ""
-    for server,ip in instance.iteritems():
-        user_instances += "%s (%s)\n" % (server,ip)
+    for server,info in instance.iteritems():
+        user_instances += "%s (%s)\n" % (server, info['ip'])
     msg = MIMEText(user_instances + body_content)
     msg['Subject'] = 'UH-IaaS: Terminating instance (%s)' % region
-    notify.send_mail(user, msg)
+    #notify.send_mail(user, msg)
     print '\nUser: %s' % user
     print 'Servers:\n' + user_instances + '\n'
 
