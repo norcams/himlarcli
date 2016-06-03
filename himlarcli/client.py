@@ -1,9 +1,7 @@
 import sys
-import logging
-import logging.config
-import warnings
-import yaml
 import ConfigParser
+import logger
+from state import State
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
 from novaclient import client
@@ -14,9 +12,12 @@ class Client(object):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, config_path, debug):
+    def __init__(self, config_path, debug, log=None):
         self.debug = debug
-        self.__setup_logger(debug)
+        if log:
+            self.logger = log
+        else:
+            self.logger = logger.setup_logger(__name__, debug)
         self.config = ConfigParser.ConfigParser()
         self.config.read(config_path)
         try:
@@ -38,25 +39,15 @@ class Client(object):
         else:
             self.sess = session.Session(auth=auth)
 
+        self.state = State(config_path, debug, log=self.logger)
+
+
     @abstractmethod
     def get_client(self):
         pass
 
+    def get_logger(self):
+        return logger
+
     def log(self, msg):
         self.logger.debug(msg)
-
-    def __setup_logger(self, debug):
-        with open("logging.yaml", 'r') as stream:
-            try:
-                config = yaml.load(stream)
-            except yaml.YAMLError as exc:
-                print(exc)
-        if config:
-            logging.config.dictConfig(config)
-        self.logger = logging.getLogger(__name__)
-        logging.captureWarnings(True)
-        # If debug add verbose console logger only to our logger
-        if (debug):
-            ch = logging.StreamHandler()
-            ch.setLevel(logging.DEBUG)
-            self.logger.addHandler(ch)

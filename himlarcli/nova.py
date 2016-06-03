@@ -8,12 +8,12 @@ class Nova(Client):
     version = 2
     instances = dict()
 
-    def __init__(self, config_path, host=None, debug=False):
+    def __init__(self, config_path, host=None, debug=False, log=None):
         """ Create a new nova client to manaage a host
         `**host`` fqdn for the nova compute host
         `**config_path`` path to ini file with config
         """
-        super(Nova,self).__init__(config_path, debug)
+        super(Nova,self).__init__(config_path, debug, log)
         self.client = novaclient.Client(self.version, session=self.sess)
         self.host = host
 
@@ -58,6 +58,12 @@ class Nova(Client):
                 self.log("list_users(): drop %s from email list" % email)
         return list(emails)
 
+    def save_states(self):
+        instances = self.__get_all_instances()
+        if instances:
+            self.state.add_active(instances)
+            self.state.close()
+
     def get_stats(self, domain=None):
         instances = self.__get_all_instances()
         stats = dict()
@@ -70,27 +76,27 @@ class Nova(Client):
         `**state`` stop all instances with this state
         """
         self.__change_status('stop', state)
-        self.__save_instances()
 
     def start_instances(self):
         """ Start all instances on a host with state SHUTOFF
         `**host`` fqdn for the nova compute host
         """
         self.__change_status('start', 'SHUTOFF')
-        #self.__save_instances()
 
-    def start_instances_from_file(self):
-        """ Start all instances on a host from a maintenance file
-        `**host`` fqdn for the nova compute host
-        """
-        self.__load_instances()
+
+    def start_instances_from_state(self):
+        """ Start all instances from a previous saved state """
+        instances = self.state.get_instances(state='ACTIVE', host=self.host)
         count = 0
-        for name, id in self.instances.iteritems():
-            i = self.client.servers.get(id)
-            i.start()
-            count += 1
-            self.log("Starting %s" % name)
-        print "run start on %s instances with state SHUTOFF" % (count)
+        for i in instances:
+            instance = self.client.servers.get(i[0])
+            if instance._info['status'] != 'ACTIVE':
+                instance.start()
+                count += 1
+                self.log("start_instances_from_state(): starting %s" % i[1])
+            else:
+                self.log("start_instances_from_state(): already running %s" % i[1])
+        print "run start on %s instances with previous state ACTIVE" % (count)
 
     def delete_instances(self, state='SHUTOFF'):
         """ Delete all instances on a host with one state
@@ -98,7 +104,6 @@ class Nova(Client):
         `**state`` delete all instances with this state
         """
         self.__change_status('delete', state)
-        #self.__save_instances()
 
     def get_client(self):
         return self.client
@@ -134,27 +139,3 @@ class Nova(Client):
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
         return instances
-
-    def __save_instances(self):
-        if bool(self.instances) == False:
-            return
-        try:
-            maintenance = self.config._sections['maintenance']
-        except KeyError as e:
-            self.logger.exception('missing [maintenance]')
-        if maintenance['instance_file']:
-            file = maintenance['instance_file']
-            with open(file, 'w') as f:
-                self.log("save instances to %s" % file)
-                json.dump(self.instances, f)
-
-    def __load_instances(self):
-        try:
-            maintenance = self.config._sections['maintenance']
-        except KeyError as e:
-            self.logger.exception('missing [maintenance]')
-        if maintenance['instance_file']:
-            file = maintenance['instance_file']
-            with open(file, 'r') as f:
-                self.instances = json.load(f)
-                self.log("read instances from %s" % file)

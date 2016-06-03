@@ -6,7 +6,7 @@ import utils
 from himlarcli.nova import Nova
 
 desc = 'Perform action on all instances on host'
-actions = ['list','start','start_from_file','stop','delete']
+actions = ['list','start','start_from_state','stop','delete', 'save']
 
 options = utils.get_host_action_options(desc, actions)
 novaclient = Nova(options.config, options.host, options.debug)
@@ -16,10 +16,12 @@ if options.action[0] == 'list':
     pp.pprint(novaclient.list_instances())
 elif options.action[0] == 'start':
     novaclient.start_instances()
-elif options.action[0] == 'start_from_file':
-    novaclient.start_instances_from_file()
+elif options.action[0] == 'start_from_state':
+    novaclient.start_instances_from_state()
 elif options.action[0] == 'stop':
     novaclient.stop_instances()
+elif options.action[0] == 'save':
+    novaclient.save_states()
 elif options.action[0] == 'delete':
     q = "Delete all stopped instances on %s (yes|no)? " % options.host
     answer = raw_input(q)

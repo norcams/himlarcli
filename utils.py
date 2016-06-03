@@ -28,7 +28,7 @@ def get_options(desc, config=True, debug=True, hosts='+'):
                             help='nova compute host')
     return parser.parse_args()
 
-def get_host_action_options(desc, actions, config=True, debug=True):
+def get_host_action_options(desc, actions, hosts=True, config=True, debug=True):
     parser = argparse.ArgumentParser(description=desc)
     if debug:
         parser.add_argument('-d',
@@ -44,10 +44,11 @@ def get_host_action_options(desc, actions, config=True, debug=True):
                             action='store',
                             default='config.ini',
                             help='path to ini file with config')
-    parser.add_argument('host',
-                        metavar='FQDN',
-                        action='store',
-                        help='nova compute host')
+    if hosts:
+        parser.add_argument('host',
+                            metavar='FQDN',
+                            action='store',
+                            help='nova compute host')
     parser.add_argument('action',
                         metavar='actions',
                         choices=actions,
