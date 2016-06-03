@@ -19,7 +19,9 @@ if options.action[0] == 'start':
     novaclient.start_instances_from_state()
 elif options.action[0] == 'dump':
     state = State(options.config, debug=options.debug)
-    state.get_instances()
+    instances = state.get_instances()
+    for i in instances:
+        print i
     state.close()
 elif options.action[0] == 'purge':
     q = "Delete all state information (yes|no)? "
