@@ -2,9 +2,11 @@ from client import Client
 from novaclient import client as novaclient
 from novaclient.exceptions import NotFound
 import urllib2
+import json
 
 class Nova(Client):
     version = 2
+    instances = dict()
 
     def __init__(self, config_path, host=None, debug=False):
         """ Create a new nova client to manaage a host
@@ -39,6 +41,7 @@ class Nova(Client):
                 ip = '<no public ip>'
             name = i._info['name']
             users[email][name] = { 'ip': ip, 'status': i._info['status']}
+            self.log("list_instances(): instance %s for %s" % (i.name, email))
         return users
 
     def list_users(self):
@@ -50,9 +53,9 @@ class Nova(Client):
             # avoid system users in list
             if "@" in email:
                 emails.add(email.lower())
+                self.log("list_users(): add %s to email list" % email)
             else:
-                if self.debug:
-                    print "Warning: Dropping %s from user list" % email
+                self.log("list_users(): drop %s from email list" % email)
         return list(emails)
 
     def get_stats(self, domain=None):
@@ -67,12 +70,27 @@ class Nova(Client):
         `**state`` stop all instances with this state
         """
         self.__change_status('stop', state)
+        self.__save_instances()
 
     def start_instances(self):
         """ Start all instances on a host with state SHUTOFF
         `**host`` fqdn for the nova compute host
         """
         self.__change_status('start', 'SHUTOFF')
+        #self.__save_instances()
+
+    def start_instances_from_file(self):
+        """ Start all instances on a host from a maintenance file
+        `**host`` fqdn for the nova compute host
+        """
+        self.__load_instances()
+        count = 0
+        for name, id in self.instances.iteritems():
+            i = self.client.servers.get(id)
+            i.start()
+            count += 1
+            self.log("Starting %s" % name)
+        print "run start on %s instances with state SHUTOFF" % (count)
 
     def delete_instances(self, state='SHUTOFF'):
         """ Delete all instances on a host with one state
@@ -80,6 +98,7 @@ class Nova(Client):
         `**state`` delete all instances with this state
         """
         self.__change_status('delete', state)
+        #self.__save_instances()
 
     def get_client(self):
         return self.client
@@ -94,6 +113,12 @@ class Nova(Client):
             if i._info['status'] == state:
                 getattr(i, action)()
                 count += 1
+                self.instances[i.name] = i.id
+                self.log('Change status to %s on %s' % (action, i.name))
+            else:
+                print i.id
+                self.log('%s had not status %s' % (i.name, state))
+
         print "run %s on %s instances with state %s" % (action, count, state)
 
     def __get_instances(self):
@@ -109,3 +134,27 @@ class Nova(Client):
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
         return instances
+
+    def __save_instances(self):
+        if bool(self.instances) == False:
+            return
+        try:
+            maintenance = self.config._sections['maintenance']
+        except KeyError as e:
+            self.logger.exception('missing [maintenance]')
+        if maintenance['instance_file']:
+            file = maintenance['instance_file']
+            with open(file, 'w') as f:
+                self.log("save instances to %s" % file)
+                json.dump(self.instances, f)
+
+    def __load_instances(self):
+        try:
+            maintenance = self.config._sections['maintenance']
+        except KeyError as e:
+            self.logger.exception('missing [maintenance]')
+        if maintenance['instance_file']:
+            file = maintenance['instance_file']
+            with open(file, 'r') as f:
+                self.instances = json.load(f)
+                self.log("read instances from %s" % file)

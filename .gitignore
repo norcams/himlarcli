@@ -7,3 +7,4 @@ include/
 *.egg-info
 *.pyc
 config.ini
+active_instances.txt
