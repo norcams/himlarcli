@@ -1,4 +1,5 @@
 import sys
+import os.path
 import ConfigParser
 import logger
 from state import State
@@ -13,11 +14,16 @@ class Client(object):
     __metaclass__ = ABCMeta
 
     def __init__(self, config_path, debug, log=None):
-        self.debug = debug
         if log:
             self.logger = log
         else:
             self.logger = logger.setup_logger(__name__, debug)
+
+        if not os.path.isfile(config_path):
+             self.logger.critical("Could not find config file: %s" %config_path)
+             sys.exit(1)
+        self.debug = debug
+
         self.config = ConfigParser.ConfigParser()
         self.config.read(config_path)
         try:
