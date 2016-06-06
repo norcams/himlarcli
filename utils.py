@@ -3,7 +3,7 @@ import sys
 import os.path
 import argparse
 
-def get_options(desc, config=True, debug=True, hosts='+'):
+def get_options(desc, config=True, debug=True, dry_run=False, hosts='+'):
     parser = argparse.ArgumentParser(description=desc)
     if debug:
         parser.add_argument('-d',
@@ -17,9 +17,15 @@ def get_options(desc, config=True, debug=True, hosts='+'):
                             dest='config',
                             metavar='config.ini',
                             action='store',
-                            default='config.ini',
+                            default='/etc/himlarcli/config.ini',
                             help='path to ini file with config')
-
+    if dry_run:
+        parser.add_argument('--dry-run',
+                            dest='dry_run',
+                            action='store_const',
+                            const=True,
+                            default=False,
+                            help='dry run script')
     if hosts:
         parser.add_argument('host',
                             metavar='FQDN',
