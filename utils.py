@@ -48,7 +48,7 @@ def get_host_action_options(desc, actions, hosts=True, config=True, debug=True):
                             dest='config',
                             metavar='config.ini',
                             action='store',
-                            default='config.ini',
+                            default='/etc/himlarcli/config.ini',
                             help='path to ini file with config')
     if hosts:
         parser.add_argument('host',
