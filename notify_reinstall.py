@@ -6,7 +6,7 @@ from himlarcli.keystone import Keystone
 from himlarcli.notify import Notify
 from email.mime.text import MIMEText
 
-options = utils.get_options('Notify users of rebuild host', hosts=1)
+options = utils.get_options('Notify users of rebuild host', dry_run=True, hosts=1)
 notify = Notify(options.config, debug=options.debug)
 with open('misc/notify_email.txt', 'r') as body_txt:
     body_content = body_txt.read()
@@ -27,7 +27,8 @@ for user, instance in toaddr.iteritems():
         user_instances += "%s (%s)\n" % (server, info['ip'])
     msg = MIMEText(user_instances + body_content)
     msg['Subject'] = 'UH-IaaS: Terminating instance (%s)' % region
-    #notify.send_mail(user, msg)
+    if options.dry_run:
+        notify.send_mail(user, msg)
     print '\nUser: %s' % user
     print 'Servers:\n' + user_instances + '\n'
 
