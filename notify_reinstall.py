@@ -27,7 +27,7 @@ for user, instance in toaddr.iteritems():
         user_instances += "%s (%s)\n" % (server, info['ip'])
     msg = MIMEText(user_instances + body_content)
     msg['Subject'] = 'UH-IaaS: Terminating instance (%s)' % region
-    if options.dry_run:
+    if not options.dry_run:
         notify.send_mail(user, msg)
     print '\nUser: %s' % user
     print 'Servers:\n' + user_instances + '\n'
