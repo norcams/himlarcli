@@ -1,1 +1,2 @@
 python-foreman
+py2-ipaddress
