@@ -1,6 +1,16 @@
 import sys
+import os
+import ConfigParser
 import netifaces
 import ipaddress
+
+def get_config(config_path):
+    if not os.path.isfile(config_path):
+        logging.critical("Could not find config file: %s" %config_path)
+        sys.exit(1)
+    config = ConfigParser.ConfigParser()
+    config.read(config_path)
+    return config
 
 def has_network_access(network, log=None):
     net = ipaddress.ip_network(network)

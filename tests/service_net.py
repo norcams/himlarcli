@@ -10,13 +10,7 @@ from himlarcli import utils
 import utils as cli
 
 options = cli.get_options('Test access to service net', hosts=False, debug=False)
-config_path = options.config
-
-if not os.path.isfile(config_path):
-    logging.critical("Could not find config file: %s" %config_path)
-    sys.exit(1)
-config = ConfigParser.ConfigParser()
-config.read(config_path)
+config = utils.get_config(options.config)
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
