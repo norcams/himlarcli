@@ -3,6 +3,7 @@
 """ Test if we have access to service net """
 
 import os
+import sys
 import logging
 import ConfigParser
 from himlarcli import utils
