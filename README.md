@@ -3,6 +3,8 @@
 ## Examples
 
 ```bash
+cd himlarcli
+source bin/activate
 ./tests/service_net.py -c ../config.ini.vagrant
 ./host.py -h
 ```
