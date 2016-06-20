@@ -2,6 +2,7 @@ import sys
 import os.path
 import ConfigParser
 import logger
+import logging
 from state import State
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
@@ -14,18 +15,10 @@ class Client(object):
     __metaclass__ = ABCMeta
 
     def __init__(self, config_path, debug, log=None):
-        if log:
-            self.logger = log
-        else:
-            self.logger = logger.setup_logger(__name__, debug)
-
-        if not os.path.isfile(config_path):
-             self.logger.critical("Could not find config file: %s" %config_path)
-             sys.exit(1)
+        self.__setup_config(config_path)
+        self.__setup_log(debug, log)
         self.debug = debug
 
-        self.config = ConfigParser.ConfigParser()
-        self.config.read(config_path)
         try:
             openstack = self.config._sections['openstack']
         except KeyError as e:
@@ -57,3 +50,22 @@ class Client(object):
 
     def log(self, msg):
         self.logger.debug(msg)
+
+    def __setup_log(self, debug, log):
+        try:
+            log_config = self.config._sections['log']
+            log_path = log_config['path']
+        except KeyError as e:
+            log_path = '/opt/himlarcli/'
+            logging.debug('could not find [log] section in config file')
+        if log:
+            self.logger = log
+        else:
+            self.logger = logger.setup_logger(__name__, debug, log_path)
+
+    def __setup_config(self, config_path):
+        if not os.path.isfile(config_path):
+             logging.critical("Could not find config file: %s" %config_path)
+             sys.exit(1)
+        self.config = ConfigParser.ConfigParser()
+        self.config.read(config_path)
