@@ -1,0 +1,10 @@
+openstack:
+  - service_net
+  - auth_url
+  - region
+
+log:
+  - path
+
+state:
+  - db
