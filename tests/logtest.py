@@ -10,3 +10,5 @@ logger = logger.setup_logger('test',
                              configfile=install_dir + '/logging.yaml')
 
 logger.debug('This should be both in logfile and console')
+
+sys.exit(1)
