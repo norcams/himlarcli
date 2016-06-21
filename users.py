@@ -36,21 +36,24 @@ for i in conf.keys():
     conf[i]['attr'] = [conf[i]['type'], conf[i]['org']]
 
 for mail in projects:
-    print "---------------- %s ------------------" % mail
+    print "----- %s -----" % mail
     if 'uib' in mail:
         # student
         if 'student' in mail:
             count['type']['student'] += 1
         else:
             user = uib.get_user(mail, attr=conf['uib']['attr'])[0]
-            if 'IT-avdelingen' or 'Kommunikasjonsavdelingen' in user[1][conf['uib']['org']]:
+            if 'IT-avdelingen' in user[1][conf['uib']['org']]:
+                count['type']['staff'] += 1
+            elif 'Kommunikasjonsavdelingen' in user[1][conf['uib']['org']]:
                 count['type']['staff'] += 1
             else:
                 print user[1]
     elif 'uio' in mail:
         user = uio.get_user(mail, attr=conf['uio']['attr'])[0]
-        print user[1][conf['uio']['type']][0]
-        print user[conf['uio']['type']]
-        #print uio.get_user(mail, attr=conf['uio']['attr'])
+        if user[1][conf['uio']['type']][0]:
+            count['type'][user[1][conf['uio']['type']][0]] += 1
+        else:
+            print user
 
 print count
