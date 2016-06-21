@@ -46,7 +46,7 @@ class Client(object):
         pass
 
     def get_logger(self):
-        return logger
+        return self.logger
 
     def log(self, msg):
         self.logger.debug(msg)
