@@ -16,7 +16,7 @@ def main():
     if os.path.isfile(config_path):
         config_file(config_path)
     else:
-        print "No default config file found at %s" % config_path
+        print "Warning: No default config file found at %s" % config_path
 
     # Test that requirements.txt modules are installed
     install_dir = os.environ['VIRTUAL_ENV']

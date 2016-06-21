@@ -1,6 +1,10 @@
 openstack:
   - service_net
   - auth_url
+  - username
+  - password
+  - project_name
+  - default_domain
   - region
 
 log:
