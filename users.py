@@ -24,8 +24,8 @@ conf['uib'] = {
 conf['uio'] = {
     'server': 'ldap.uio.no',
     'base_dn': 'dc=uio,dc=no',
-    'type': 'eduPersonPrimaryAffiliation:',
-    'org': 'eduPersonOrgUnitDN:'
+    'type': 'eduPersonPrimaryAffiliation',
+    'org': 'eduPersonPrimaryOrgUnitDN'
 }
 
 uib = LdapClient(options.config, conf['uib'], options.debug, logger)
@@ -40,11 +40,11 @@ for mail in projects:
     if 'uib' in mail:
         # student
         if 'student' in mail:
-            count['type']['student'] =+ 1
+            count['type']['student'] += 1
         else:
             user = uib.get_user(mail, attr=conf['uib']['attr'])[0]
-            if 'IT-avdelingen' in user[1][conf['uib']['org']]:
-                count['type']['staff'] =+ 1
+            if 'IT-avdelingen' or 'Kommunikasjonsavdelingen' in user[1][conf['uib']['org']]:
+                count['type']['staff'] += 1
             else:
                 print user[1]
     elif 'uio' in mail:
