@@ -8,7 +8,7 @@ import yaml
 def setup_logger(name, debug,
                  log_path = '/opt/himlarcli/',
                  configfile = 'logging.yaml'):
-    with open(configfile, 'r') as stream:
+    with open(log_path + configfile, 'r') as stream:
         try:
             config = yaml.load(stream)
         except yaml.YAMLError as exc:
