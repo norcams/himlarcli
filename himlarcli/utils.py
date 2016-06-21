@@ -4,6 +4,7 @@ import ConfigParser
 import logging
 import netifaces
 import ipaddress
+import logger
 
 def get_config(config_path):
     if not os.path.isfile(config_path):
@@ -12,6 +13,17 @@ def get_config(config_path):
     config = ConfigParser.ConfigParser()
     config.read(config_path)
     return config
+
+def get_logger(name, config, debug, log):
+    log_path = config.get('log', 'path')
+    if not log_path:
+        log_path = '/opt/himlarcli/'
+        logging.debug('could not find [log] section in config file')
+    if log:
+        mylog = log
+    else:
+        mylog = logger.setup_logger(name, debug, log_path)
+    return mylog
 
 def has_network_access(network, log=None):
     net = ipaddress.ip_network(network)
