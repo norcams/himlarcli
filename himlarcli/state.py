@@ -1,7 +1,7 @@
 import sys
 import ConfigParser
 import sqlite3
-import logger
+import utils
 
 class State(object):
 
@@ -9,13 +9,9 @@ class State(object):
     table = 'Active'
 
     def __init__(self, config_path, debug, log=False):
+        self.config = utils.get_config(config_path)
+        self.logger = utils.get_logger(__name__, self.config, debug, log)
         self.debug = debug
-        if log:
-            self.logger = log
-        else:
-            self.logger = logger.setup_logger(__name__, debug)
-        self.config = ConfigParser.ConfigParser()
-        self.config.read(config_path)
         try:
             self.state = self.config._sections['state']
         except KeyError as e:
@@ -29,10 +25,10 @@ class State(object):
             cur = self.conn.cursor()
             cur.execute('SELECT SQLITE_VERSION()')
             data = cur.fetchone()
-            self.logger.debug("State(): sqlite3 version %s" % data)
-            self.logger.debug("State(): connected to %s" % self.state['db'])
+            self.logger.debug("=> sqlite3 version %s" % data)
+            self.logger.debug("=> connected to %s" % self.state['db'])
         except sqlite3.Error as e:
-            self.logger.critical("error %s" % e.args[0])
+            self.logger.critical("ERROR %s" % e.args[0])
             sys.exit(1)
 
     def add_active(self, instances):
@@ -48,9 +44,9 @@ class State(object):
             cur.execute(sql)
             if cur.fetchone()[0] == 0:
                 instance_list.append((i.id, i.name, state, host))
-                self.logger.debug("add_active(): add instance %s" % i.id)
+                self.logger.debug("=> add instance %s" % i.id)
             else:
-                self.logger.debug("add_active(): instance %s exits in db" % i.id)
+                self.logger.debug("=> instance %s exits in db" % i.id)
         if instance_list:
             sql = "INSERT INTO %s VALUES(?, ?, ?, ?)" % self.table
             cur.executemany(sql, instance_list)
@@ -70,10 +66,10 @@ class State(object):
             sql = "SELECT * FROM %s WHERE host = '%s'" % (self.table, host)
         else:
             sql = "SELECT * FROM %s" % self.table
-        self.logger.debug("get_instances(): %s" % sql)
+        self.logger.debug("=> %s" % sql)
         cur.execute(sql)
         rows = cur.fetchall()
-        self.logger.debug("get_instances(): row size %s" % len(rows))
+        self.logger.debug("=> row size %s" % len(rows))
         return rows
 
     def dump(self):
@@ -81,12 +77,12 @@ class State(object):
             self.connect()
         sql = "SELECT * FROM %s" % self.table
         cur = self.conn.cursor()
-        self.logger.debug("dump(): %s" % sql)
+        self.logger.debug("%s" % sql)
         cur.execute(sql)
         rows = cur.fetchall()
-        self.logger.debug("dump(): row size %s" % len(rows))
+        self.logger.debug("=> row size %s" % len(rows))
         for row in rows:
-            self.logger.debug("dump(): %s" % str(row))
+            self.logger.debug("%s" % str(row))
         return rows
 
     def purge(self):
@@ -96,7 +92,7 @@ class State(object):
         sql = "DROP TABLE IF EXISTS %s" % self.table
         cur = self.conn.cursor()
         cur.execute(sql)
-        self.logger.debug(sql)
+        self.logger.debug("=> %s" % sql)
         self._create_active_table()
 
     def close(self):
@@ -111,4 +107,4 @@ class State(object):
                                    host TEXT)" % self.table
             cur = self.conn.cursor()
             cur.execute(sql)
-            self.logger.debug(sql)
+            self.logger.debug("=> %s" % sql)
