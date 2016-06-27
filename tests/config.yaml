@@ -6,6 +6,7 @@ openstack:
   - project_name
   - default_domain
   - region
+  - domain
 
 log:
   - path
