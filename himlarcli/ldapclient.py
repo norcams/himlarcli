@@ -14,12 +14,12 @@ class LdapClient(object):
             self.logger.critical('Missing config from secton [ldap]')
             sys.exit(1)
         else:
-            self.logger.debug('LDAP: server = %s' % server)
-            self.logger.debug('LDAP: base_dn = %s' % self.base_dn)
+            self.logger.debug('=> LDAP: server = %s' % server)
+            self.logger.debug('=> LDAP: base_dn = %s' % self.base_dn)
         try:
             self.ldap = ldap.open(server)
             self.ldap.simple_bind()
-            self.logger.debug('LDAP: connected to server %s' % server)
+            self.logger.debug('=> LDAP: connected to server %s' % server)
         except ldap.LDAPError as e:
             print e
 
