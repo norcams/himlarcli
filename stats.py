@@ -10,7 +10,7 @@ options = utils.get_options('Print openstack location stats', hosts=False)
 keystoneclient = Keystone(options.config, options.debug)
 projects_count = keystoneclient.get_project_count('dataporten')
 
-novaclient = Nova(options.config, options.debug)
+novaclient = Nova(options.config, debug=options.debug)
 novastats = novaclient.get_stats('dataporten')
 
 stats = dict()
