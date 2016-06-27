@@ -2,10 +2,13 @@ version: 1
 formatters:
   simple:
     format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  console_format:
+    format: '%(module)s.%(funcName)s():%(lineno)d %(message)s'
 handlers:
   console:
     class: logging.StreamHandler
     level: ERROR
+    formatter: console_format
     stream: ext://sys.stdout
   file:
     class: logging.handlers.TimedRotatingFileHandler
