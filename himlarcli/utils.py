@@ -4,7 +4,10 @@ import ConfigParser
 import logging
 import netifaces
 import ipaddress
-import logger
+import logging
+import logging.config
+import warnings
+import yaml
 
 def get_config(config_path):
     if not os.path.isfile(config_path):
@@ -22,7 +25,7 @@ def get_logger(name, config, debug, log):
     if log:
         mylog = log
     else:
-        mylog = logger.setup_logger(name, debug, log_path)
+        mylog = setup_logger(name, debug, log_path)
     return mylog
 
 def has_network_access(network, log=None):
@@ -45,3 +48,36 @@ def has_network_access(network, log=None):
         except KeyError as e:
             pass
     return False
+
+def setup_logger(name, debug,
+                 log_path = '/opt/himlarcli/',
+                 configfile = 'logging.yaml'):
+    with open(configfile, 'r') as stream:
+        try:
+            config = yaml.load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+
+    # Always use absolute paths
+    if not os.path.isabs(config['handlers']['file']['filename']):
+        config['handlers']['file']['filename'] = log_path + \
+            config['handlers']['file']['filename']
+    if config:
+        try:
+            logging.config.dictConfig(config)
+        except ValueError as e:
+            print e
+            print "Please check your log section in config.ini and logging.yaml"
+            sys.exit(1)
+    logger = logging.getLogger(name)
+    logging.captureWarnings(True)
+    # If debug add verbose console logger
+    if (debug):
+        ch = logging.StreamHandler()
+        format = '%(message)s [%(module)s.%(funcName)s():%(lineno)d]'
+        formatter = logging.Formatter(format)
+        ch.setFormatter(formatter)
+        ch.setLevel(logging.DEBUG)
+        logger.addHandler(ch)
+        #print "%s: loglevel %s" % (name, logging.DEBUG)
+    return logger
