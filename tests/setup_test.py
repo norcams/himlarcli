@@ -32,6 +32,8 @@ def main():
         map(__import__, modules)
     except ImportError as e:
         print e
+        print "You should most likely run this in a virutalenv!"
+        print "Workaround is to run /opt/himlarcli/bin/python <script>"
         sys.exit(1)
 
 def config_file(config_path):
