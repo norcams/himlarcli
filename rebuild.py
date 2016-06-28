@@ -1,22 +1,12 @@
-#!/usr/bin/python
-import argparse
-from foremancli.client import Client
+#!/usr/bin/env python
+import utils
+import sys
+from himlarcli.foremanclient import Client
 
-parser = argparse.ArgumentParser(description='Toggle rebuild host in foreman')
-parser.add_argument('-c',
-                     dest='config',
-                     metavar='config.ini',
-                     action='store',
-                     default='config.ini',
-                     help='path to ini file with config')
-parser.add_argument('host',
-                     metavar='FQDN',
-                     type=str,
-                     nargs='+',
-                     help='host to rebuild')
-options = parser.parse_args()
+desc = 'Toggle rebuild host in foreman'
+options = utils.get_options(desc)
 
-foreman = Client(options.config)
+foreman = Client(options.config, options.debug)
 
 for host in options.host:
     foreman.set_host_build(host)
