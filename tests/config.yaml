@@ -8,8 +8,5 @@ openstack:
   - region
   - domain
 
-log:
-  - path
-
 state:
   - db
