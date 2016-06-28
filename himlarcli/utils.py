@@ -18,14 +18,10 @@ def get_config(config_path):
     return config
 
 def get_logger(name, config, debug, log):
-    log_path = config.get('log', 'path')
-    if not log_path:
-        log_path = '/opt/himlarcli/'
-        logging.debug('could not find [log] section in config file')
     if log:
         mylog = log
     else:
-        mylog = setup_logger(name, debug, log_path)
+        mylog = setup_logger(name, debug)
     return mylog
 
 def has_network_access(network, log=None):
@@ -53,7 +49,7 @@ def setup_logger(name, debug,
                  log_path = '/opt/himlarcli/',
                  configfile = 'logging.yaml'):
     if not os.path.isabs(configfile):
-        configfile = os.environ.get('VIRTUAL_ENV') + '/' + configfile
+        configfile = log_path + '/' + configfile
     with open(configfile, 'r') as stream:
         try:
             config = yaml.load(stream)
@@ -83,3 +79,12 @@ def setup_logger(name, debug,
         logger.addHandler(ch)
         #print "%s: loglevel %s" % (name, logging.DEBUG)
     return logger
+
+def get_abs_path(file):
+    abs_path = file
+    if not os.path.isabs(file):
+        install_dir = os.environ.get('VIRTUAL_ENV')
+        if not install_dir:
+            install_dir = '/opt/himlarcli'
+        abs_path = install_dir + '/' + file
+    return abs_path
