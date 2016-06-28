@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
 import os
-from himlarcli import logger
+from himlarcli import utils
 
-install_dir = os.environ['VIRTUAL_ENV']
-logger = logger.setup_logger('test',
-                             debug=True,
-                             log_path=install_dir + '/',
-                             configfile=install_dir + '/logging.yaml')
+def main():
+    logger = utils.setup_logger('test', debug=True)
+    logger.debug('This should be both in logfile and console')
 
-logger.debug('This should be both in logfile and console')
+if __name__ == "__main__":
+    main()

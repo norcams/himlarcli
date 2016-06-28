@@ -11,6 +11,12 @@ def main():
         print "Please make sure environment variable VIRTUAL_ENV is set!"
         sys.exit(1)
 
+    # Test logging config
+    log_config_path = utils.get_abs_path('logging.yaml')
+    if not os.path.isfile(log_config_path):
+        print "Could not load logging config from %s" % log_config_path
+        sys.exit(1)
+
     # Config file test
     config_path = '/etc/himlarcli/config.ini'
     if os.path.isfile(config_path):
@@ -19,8 +25,8 @@ def main():
         print "Warning: No default config file found at %s" % config_path
 
     # Test that requirements.txt modules are installed
-    install_dir = os.environ['VIRTUAL_ENV']
-    with open(install_dir + '/tests/modules.txt') as f:
+    modules_file = utils.get_abs_path('tests/modules.txt')
+    with open(modules_file) as f:
         modules = f.read().splitlines()
     try:
         map(__import__, modules)
@@ -29,11 +35,11 @@ def main():
         sys.exit(1)
 
 def config_file(config_path):
-    install_dir = os.environ['VIRTUAL_ENV']
+    config_template = utils.get_abs_path('tests/config.yaml')
     config = utils.get_config(config_path)
-    with open(install_dir + '/tests/config.yaml') as stream:
+    with open(config_template) as template:
         try:
-            tests = yaml.load(stream)
+            tests = yaml.load(template)
         except yaml.YAMLError as e:
             print e
     for section, options in tests.iteritems():
