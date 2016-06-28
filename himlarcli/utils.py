@@ -17,7 +17,7 @@ def get_config(config_path):
     config.read(config_path)
     return config
 
-def get_logger(name, config, debug, log):
+def get_logger(name, config, debug, log=None):
     if log:
         mylog = log
     else:
