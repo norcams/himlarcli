@@ -52,6 +52,8 @@ def has_network_access(network, log=None):
 def setup_logger(name, debug,
                  log_path = '/opt/himlarcli/',
                  configfile = 'logging.yaml'):
+    if not os.path.isabs(configfile):
+        configfile = os.environ.get('VIRTUAL_ENV') + '/' + configfile
     with open(configfile, 'r') as stream:
         try:
             config = yaml.load(stream)
