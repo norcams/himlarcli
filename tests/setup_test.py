@@ -8,8 +8,8 @@ from himlarcli import utils
 def main():
     # Test that virutalenv is setup
     if not os.environ.get('VIRTUAL_ENV'):
-        print "Please make sure environment variable VIRTUAL_ENV is set!"
-        sys.exit(1)
+        print "Warning: VIRTUAL_ENV is not set!"
+        print "Running from /opt/himlarcli"
 
     # Test logging config
     log_config_path = utils.get_abs_path('logging.yaml')
