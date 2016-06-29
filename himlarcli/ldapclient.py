@@ -8,6 +8,7 @@ class LdapClient(object):
     def __init__(self, config_path, ldap_config, debug, log=None):
         self.config = utils.get_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug, log)
+        self.logger.debug('=> config file: %s' % config_path)
         server = ldap_config['server']
         self.base_dn = ldap_config['base_dn']
         if not server or not self.base_dn:

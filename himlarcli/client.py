@@ -17,6 +17,7 @@ class Client(object):
     def __init__(self, config_path, debug, log=None):
         self.config = utils.get_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug, log)
+        self.logger.debug('=> config file: %s' % config_path)
         self.debug = debug
 
         try:

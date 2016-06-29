@@ -9,6 +9,7 @@ class Client(object):
         self.config = utils.get_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug)
         config = self.config._sections['foreman']
+        self.logger.debug('=> config file: %s' % config_path)
         self.logger.debug('=> foreman url: %s' % config['url'])
 
         self.foreman = Foreman(config['url'],
