@@ -29,7 +29,7 @@ parser.add_section(children)
 parser.add_section(nodes)
 
 for section,hosts in hostlist.iteritems():
-  loc, role = sectin.split('-')
+  loc, role = section.split('-')
   parser.set(children, section)
   parser.add_section(section)
   if role not in physical:
