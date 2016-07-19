@@ -23,6 +23,12 @@ class Client(object):
         if len(self.foreman.show_hosts(id=host)) > 0:
             self.foreman.update_hosts(id=host, host={'build': build})
 
+    def get_hosts(self, search=None):
+      hosts = self.foreman.index_hosts()
+      self.logger.debug("=> fetch %s page(s) with a total of %s hosts" %
+          (hosts['page'], hosts['total']))
+      return hosts
+
     def __set_host(self, host):
         if not host:
             self.host = None

@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+import utils
+import sys
+import ConfigParser
+from himlarcli.foremanclient import Client
+
+desc = 'Create an ansible inventory hostfile in ./hostfile.<loc>'
+options = utils.get_options(desc, hosts=False)
+
+foreman = Client(options.config, options.debug)
+
+hosts = foreman.get_hosts('*')
+hostlist = dict()
+for host in hosts['results']:
+  hostname = host['name'].split('.')[0]
+  loc,role,id = hostname.split('-')
+  group = "%s-%s" % (loc, role)
+  if not group in hostlist:
+    hostlist[group] = []
+  hostlist[group].append(hostname)
+
+children = "%s:children" % loc
+filename = "hostfile.%s" % loc
+
+parser = ConfigParser.ConfigParser(allow_no_value=True)
+parser.add_section(children)
+
+for section,hosts in hostlist.iteritems():
+  print section
+  print hosts
+  parser.set(children, section)
+  parser.add_section(section)
+  for host in hosts:
+    parser.set(section, host)
+
+with open(filename, 'w') as f:
+      parser.write(f)
