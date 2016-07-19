@@ -26,8 +26,6 @@ parser = ConfigParser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
 
 for section,hosts in hostlist.iteritems():
-  print section
-  print hosts
   parser.set(children, section)
   parser.add_section(section)
   for host in hosts:
