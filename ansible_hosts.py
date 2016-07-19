@@ -21,13 +21,19 @@ for host in hosts['results']:
 
 children = "%s:children" % loc
 filename = "hostfile.%s" % loc
+nodes = "%s-nodes:children" % loc
+physical = { 'storage', 'compute', 'controller' }
 
 parser = ConfigParser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
+parser.add_section(nodes)
 
 for section,hosts in hostlist.iteritems():
+  loc, role = sectin.split('-')
   parser.set(children, section)
   parser.add_section(section)
+  if role not in physical:
+    parser.set(nodes, section)
   for host in hosts:
     parser.set(section, host)
 
