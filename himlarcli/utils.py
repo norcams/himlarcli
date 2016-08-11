@@ -8,6 +8,8 @@ import logging
 import logging.config
 import warnings
 import yaml
+import hashlib
+import functools
 
 def get_config(config_path):
     if not os.path.isfile(config_path):
@@ -88,3 +90,15 @@ def get_abs_path(file):
             install_dir = '/opt/himlarcli'
         abs_path = install_dir + '/' + file
     return abs_path
+
+def checksum_file(file_path, type='sha256', chunk_size=65336):
+    # Read the file in small pieces, so as to prevent failures to read particularly large files.
+    # Also ensures memory usage is kept to a minimum. Testing shows default is a pretty good size.
+    assert isinstance(chunk_size, int) and chunk_size > 0
+    if type == 'sha256':
+        digest = hashlib.sha256()
+    elif type == 'md5':
+        digest = hashlib.md5()
+    with open(file_path, 'rb') as f:
+        [digest.update(chunk) for chunk in iter(functools.partial(f.read, chunk_size), '')]
+    return digest.hexdigest()
