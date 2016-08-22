@@ -40,6 +40,10 @@ class Nova(Client):
         users = dict()
         for i in instances:
             email = urllib2.unquote(i._info['user_id'])
+            # avoid system users in list
+            if "@" not in email:
+                self.logger.debug("=> %s is not a valid user" % i._info['name'])
+                continue
             if email not in users.keys():
                 users[email] = {}
             if len(i._info['addresses']['public']) > 0:
