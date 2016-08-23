@@ -46,6 +46,17 @@ class Client(object):
     def get_client(self):
         pass
 
+    def get_config(self, section, option):
+        try:
+            value = self.config.get(section, option)
+            return value
+        except ConfigParser.NoOptionError as e:
+            self.logger.debug('=> config file section [%s] missing option %s'
+                               % (section, option))
+        except ConfigParser.NoSectionError as e:
+            self.logger.debug('=> config file missing section %s' % section)
+        return None
+
     def get_logger(self):
         return self.logger
 
