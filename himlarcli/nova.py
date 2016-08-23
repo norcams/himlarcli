@@ -1,5 +1,6 @@
 from client import Client
 from novaclient import client as novaclient
+from keystoneclient.v3 import client as keystoneclient
 from novaclient.exceptions import NotFound
 import urllib2
 import json
@@ -7,6 +8,7 @@ import json
 class Nova(Client):
     version = 2
     instances = dict()
+    ksclient = None
 
     def __init__(self, config_path, host=None, debug=False, log=None):
         """ Create a new nova client to manaage a host
@@ -16,6 +18,11 @@ class Nova(Client):
         super(Nova,self).__init__(config_path, debug, log)
         self.client = novaclient.Client(self.version, session=self.sess)
         self.set_host(host)
+
+    def get_keystone_client(self):
+        if not self.ksclient:
+            self.ksclient = self.client = keystoneclient.Client(session=self.sess)
+        return self.ksclient
 
     def valid_host(self):
         try:
@@ -37,13 +44,18 @@ class Nova(Client):
 
     def list_instances(self):
         instances = self.__get_instances()
+        self.get_keystone_client()
         users = dict()
         for i in instances:
             email = urllib2.unquote(i._info['user_id'])
-            # avoid system users in list
+            # user_id is not email if local user
             if "@" not in email:
-                self.logger.debug("=> %s is not a valid user" % i._info['name'])
-                continue
+                user = self.ksclient.users.get(email)
+                # First make sure it is not a system user
+                if user.domain_id == 'default':
+                    self.logger.debug("=> instance %s is owned by system user" % i._info['name'])
+                    continue
+                email = user.email
             if email not in users.keys():
                 users[email] = {}
             if len(i._info['addresses']['public']) > 0:
