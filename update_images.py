@@ -9,30 +9,10 @@ import utils
 from himlarcli import utils as himutils
 from himlarcli.glance import Glance
 
-golden_images = dict()
-golden_images['centos'] = {
-    'name':             'CentOS 7',
-    'url':              'http://cloud.centos.org/centos/7/images/',
-    'latest':           'CentOS-7-x86_64-GenericCloud.qcow2',
-    'checksum_file':    'sha256sum.txt',
-    'checksum':         'sha256',
-    'visibility':       'public',
-    'disk_format':      'qcow2',
-    'min_ram':          768,
-    'min_disk':         8
-}
-
-golden_images['ubuntu'] = {
-    'name':             'Ubuntu server 16.04',
-    'url':              'https://cloud-images.ubuntu.com/xenial/current/',
-    'latest':           'xenial-server-cloudimg-amd64-disk1.img',
-    'checksum_file':    'SHA256SUMS',
-    'checksum':         'sha256',
-    'visibility':       'public',
-    'disk_format':      'qcow2',
-    'min_ram':          768,
-    'min_disk':         8
-}
+# Import golden images from misc
+misc_path = himutils.get_abs_path('misc')
+sys.path.append(misc_path)
+import golden_images
 
 options = utils.get_options('Create and update golden images', hosts=0)
 glclient = Glance(options.config, debug=options.debug)
@@ -63,7 +43,7 @@ def create_image(glclient, source_path, image):
                           min_ram=image['min_ram'],
                           container_format='bare')
 
-for name, image_data in golden_images.iteritems():
+for name, image_data in golden_images.images.iteritems():
     image = glclient.get_image(image_data['name'])
     if image:
         source_path = download_and_check(image_data)
@@ -80,4 +60,7 @@ for name, image_data in golden_images.iteritems():
         else:
             logger.error("=> checksum failed for %s" % name)
     # Clean up
-    os.remove(source_path)
+    if source_path:
+        os.remove(source_path)
+    else:
+        logger.error("=> image download failed %s" % name)
