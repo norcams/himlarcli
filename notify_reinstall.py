@@ -11,12 +11,9 @@ notify = Notify(options.config, debug=options.debug)
 with open('misc/notify_email.txt', 'r') as body_txt:
     body_content = body_txt.read()
 
-# Find region
-keystoneclient = Keystone(options.config)
-region = keystoneclient.get_region()
-
 # Find users
-novaclient = Nova(options.config, options.host[0])
+novaclient = Nova(options.config, options.host[0], debug=options.debug)
+region = novaclient.get_config('openstack', 'region')
 if not novaclient.valid_host():
     print "ERROR: could not find host %s" % options.host[0]
     sys.exit(1)
