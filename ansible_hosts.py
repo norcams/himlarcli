@@ -28,7 +28,7 @@ parser = ConfigParser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
 parser.add_section(nodes)
 
-for section,hosts in hostlist.iteritems():
+for section,hosts in sorted(hostlist.iteritems()):
   loc, role = section.split('-')
   parser.set(children, section)
   parser.add_section(section)
