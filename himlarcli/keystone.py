@@ -28,6 +28,37 @@ class Keystone(Client):
             projects.append(i.name)
         return projects
 
+    """ Federation settings for identity provider """
+    def set_identity_provider(self, name, remote_id):
+        providers = self.client.federation.identity_providers.list()
+        for i in providers:
+            if name == i.id:
+                self.logger.debug('=> identity provider %s exists' % name)
+                return
+        self.client.federation.identity_providers.create(id=name,
+                                                         enabled=True,
+                                                         remote_ids=[remote_id])
+
+    """ Federation settings for identity mappping """
+    def set_mapping(self, id, rules):
+        mappings = self.client.federation.mappings.list()
+        for i in mappings:
+            if id == i.id:
+                self.logger.debug('=> mapping %s exists' % id)
+                return
+        self.client.federation.mappings.create(mapping_id=id, rules=rules)
+
+    """ Federation settings for protocol container """
+    def set_protocol(self, id, provider, mapping):
+        protocols = self.client.federation.protocols.list(provider)
+        for i in protocols:
+            if id == i.id:
+                self.logger.debug('=> protocol %s exists' % id)
+                return
+        self.client.federation.protocols.create(id,
+                                                identity_provider=provider,
+                                                mapping=mapping)
+
     def __get_domain(self, domain):
         domain = self.client.domains.list(name=domain)
         if len(domain) > 0:
