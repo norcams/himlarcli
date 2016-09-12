@@ -5,6 +5,7 @@ import sys
 import os
 import urllib
 import urllib2
+from datetime import datetime
 import utils
 from himlarcli import utils as himutils
 from himlarcli.glance import Glance
@@ -49,7 +50,11 @@ for name, image_data in golden_images.images.iteritems():
         source_path = download_and_check(image_data)
         md5 = himutils.checksum_file(source_path, 'md5')
         if image['checksum'] != md5:
-            glclient.delete_image()
+            timestamp = datetime.utcnow().isoformat()
+            glclient.update_image(name=image_data['depricated'],
+                                  visibility='private',
+                                  depricated=timestamp)
+            logger.debug("=> depricated old image for %s" % image['name'])
             create_image(glclient, source_path, image_data)
         else:
             logger.debug("=> no new image for %s" % image['name'])
