@@ -37,7 +37,7 @@ class Glance(Client):
         self.logger.debug('=> create new image %s' % kwargs['name'])
         self.image = self.client.images.create(**kwargs)
         self.upload_image(source_path)
-
+        return self.image
 
     def delete_image(self):
         self.logger.debug('=> image delete %s' % self.image.name)

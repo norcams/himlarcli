@@ -5,6 +5,7 @@ import sys
 import os
 import urllib
 import urllib2
+import pprint
 from datetime import datetime
 import utils
 from himlarcli import utils as himutils
@@ -15,7 +16,8 @@ misc_path = himutils.get_abs_path('misc')
 sys.path.append(misc_path)
 import golden_images
 
-options = utils.get_options('Create and update golden images', hosts=0)
+options = utils.get_options('Create and update golden images',
+                             hosts=0, dry_run=True)
 glclient = Glance(options.config, debug=options.debug)
 logger = glclient.get_logger()
 
@@ -36,13 +38,17 @@ def download_and_check(image):
         return None
 
 def create_image(glclient, source_path, image):
-    glclient.create_image(source_path,
-                          name=image['name'],
-                          visibility=image['visibility'],
-                          disk_format=image['disk_format'],
-                          min_disk=image['min_disk'],
-                          min_ram=image['min_ram'],
-                          container_format='bare')
+    if not options.dry_run:
+        res = glclient.create_image(source_path,
+                                    name=image['name'],
+                                    visibility=image['visibility'],
+                                    disk_format=image['disk_format'],
+                                    min_disk=image['min_disk'],
+                                    min_ram=image['min_ram'],
+                                    container_format='bare')
+        print "New image created:"
+        pp = pprint.PrettyPrinter(indent=1)
+        pp.pprint(res)
 
 for name, image_data in golden_images.images.iteritems():
     image = glclient.get_image(image_data['name'])
@@ -51,9 +57,10 @@ for name, image_data in golden_images.images.iteritems():
         md5 = himutils.checksum_file(source_path, 'md5')
         if image['checksum'] != md5:
             timestamp = datetime.utcnow().isoformat()
-            glclient.update_image(name=image_data['depricated'],
-                                  visibility='private',
-                                  depricated=timestamp)
+            if not options.dry_run:
+                glclient.update_image(name=image_data['depricated'],
+                                      visibility='private',
+                                      depricated=timestamp)
             logger.debug("=> depricated old image for %s" % image['name'])
             create_image(glclient, source_path, image_data)
         else:

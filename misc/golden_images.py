@@ -50,3 +50,16 @@ images['debian'] = {
     'min_ram':          768,
     'min_disk':         8
 }
+
+images['cirros'] = {
+    'name':             'CirrOS debug image',
+    'depricated':       'Outdated (CirrOS)',
+    'url':              'http://download.cirros-cloud.net/0.3.4/',
+    'latest':           'cirros-0.3.4-x86_64-disk.img',
+    'checksum_file':    'MD5SUMS',
+    'checksum':         'md5',
+    'visibility':       'private',
+    'disk_format':      'qcow2',
+    'min_ram':          256,
+    'min_disk':         1
+}
