@@ -13,12 +13,11 @@ ksclient = Keystone(options.config, debug=options.debug)
 domain = ksclient.get_domain_id('dataporten')
 rules = [{
     "local": [{
-        "user": { "name": "{1}","id": "{0}" },
+        "user": { "name": "{0}", "id": "{0}",
         "group": { "name": "{0}-group", "domain": { "id": domain } } }],
-    "remote": [{ "type": "OIDC-email" }, { "type": "OIDC-sub" }]
+    "remote": [{ "type": "OIDC-email" }, { "type": "OIDC-name" }]
 }]
 
 # Create provider, mapping and container to connect them
-ksclient.set_identity_provider('dataporten', 'https://auth.dataporten.no')
 ksclient.set_mapping('dataporten_personal', rules)
 ksclient.set_protocol('oidc', 'dataporten', 'dataporten_personal')
