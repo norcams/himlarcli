@@ -13,7 +13,7 @@ ksclient = Keystone(options.config, debug=options.debug)
 domain = ksclient.get_domain_id('dataporten')
 rules = [{
     "local": [{
-        "user": { "name": "{0}", "id": "{0}",
+        "user": { "name": "{0}", "id": "{0}" },
         "group": { "name": "{0}-group", "domain": { "id": domain } } }],
     "remote": [{ "type": "OIDC-email" }, { "type": "OIDC-name" }]
 }]
