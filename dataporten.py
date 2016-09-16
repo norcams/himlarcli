@@ -20,4 +20,4 @@ rules = [{
 
 # Create provider, mapping and container to connect them
 ksclient.set_mapping('dataporten_personal', rules)
-ksclient.set_protocol('oidc', 'dataporten', 'dataporten_personal')
+ksclient.set_protocol('openidc', 'dataporten', 'dataporten_personal')
