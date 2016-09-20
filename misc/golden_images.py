@@ -39,7 +39,7 @@ images['ubuntu'] = {
 }
 
 images['debian'] = {
-    'name':             'Debian Jessie 8.6',
+    'name':             'Debian Jessie 8',
     'depricated':       'Outdated (Debian)',
     'url':              'http://cdimage.debian.org/cdimage/openstack/current/',
     'latest':           'debian-8.6.0-openstack-amd64.qcow2',
