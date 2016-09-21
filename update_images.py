@@ -59,7 +59,7 @@ for name, image_data in golden_images.images.iteritems():
             timestamp = datetime.utcnow().isoformat()
             if not options.dry_run:
                 glclient.update_image(name=image_data['depricated'],
-                                      visibility='private',
+                                      status='deactivated',
                                       depricated=timestamp)
             logger.debug("=> depricated old image for %s" % image['name'])
             create_image(glclient, source_path, image_data)
