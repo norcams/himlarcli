@@ -61,7 +61,7 @@ class Glance(Client):
             else:
                 self.logger.critical('Image must exist to deactivate.')
                 sys.exit(1)
-        self.client.images.deactivate(self.image_id)
+        self.client.images.deactivate(self.image.id)
 
     def upload_image(self, source_path, name=None):
         if not self.image:
