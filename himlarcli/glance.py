@@ -53,6 +53,16 @@ class Glance(Client):
                 sys.exit(1)
         self.client.images.update(self.image.id, **kwargs)
 
+    def deactivate(self, name=None):
+        if not self.image:
+            self.logger.debug('=> image not found %s' % name)
+            if name:
+                self.get_image(name)
+            else:
+                self.logger.critical('Image must exist to deactivate.')
+                sys.exit(1)
+        self.client.images.deactivate(self.image_id)
+
     def upload_image(self, source_path, name=None):
         if not self.image:
             self.logger.debug('=> image not found %s' % name)
