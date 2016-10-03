@@ -39,20 +39,23 @@ def download_and_check(image):
 
 def create_image(glclient, source_path, image):
     if not options.dry_run:
+        region = glclient.get_config('openstack', 'region')
         res = glclient.create_image(source_path,
                                     name=image['name'],
                                     visibility=image['visibility'],
                                     disk_format=image['disk_format'],
                                     min_disk=image['min_disk'],
                                     min_ram=image['min_ram'],
-                                    container_format='bare')
+                                    container_format='bare',
+                                    region=region)
         print "New image created:"
         pp = pprint.PrettyPrinter(indent=1)
         pp.pprint(res)
 
 for name, image_data in golden_images.images.iteritems():
+    region = glclient.get_config('openstack', 'region')
     image = glclient.get_image(image_data['name'])
-    if image:
+    if image and (image['region'] == region):
         source_path = download_and_check(image_data)
         md5 = himutils.checksum_file(source_path, 'md5')
         if image['checksum'] != md5:
