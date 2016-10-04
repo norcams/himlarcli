@@ -21,7 +21,7 @@ class Nova(Client):
 
     def get_keystone_client(self):
         if not self.ksclient:
-            self.ksclient = self.client = keystoneclient.Client(session=self.sess)
+            self.ksclient = keystoneclient.Client(session=self.sess)
         return self.ksclient
 
     def valid_host(self):
