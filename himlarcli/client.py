@@ -39,6 +39,7 @@ class Client(object):
         else:
             self.sess = session.Session(auth=auth)
 
+        self.region = self.get_config('openstack', 'region')
         self.state = State(config_path, debug, log=self.logger)
 
 
