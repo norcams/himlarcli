@@ -16,8 +16,10 @@ class Glance(Client):
     def __init__(self, config_path, debug=False):
         super(Glance,self).__init__(config_path, debug)
         self.ksclient = ksclient.Client(session=self.sess)
-        self.endpoint = self.__get_endpoint()
-        self.client = glclient(self.version, session=self.sess)
+        #self.endpoint = self.__get_endpoint()
+        self.client = glclient(self.version,
+                               session=self.sess,
+                               region_name=self.region)
         self.logger.debug('=> init glance client')
 
     def get_client(self):

@@ -16,7 +16,9 @@ class Nova(Client):
         `**config_path`` path to ini file with config
         """
         super(Nova,self).__init__(config_path, debug, log)
-        self.client = novaclient.Client(self.version, session=self.sess)
+        self.client = novaclient.Client(self.version,
+                                        session=self.sess,
+                                        region_name=self.region)
         self.set_host(host)
 
     def get_keystone_client(self):
