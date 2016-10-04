@@ -3,6 +3,7 @@ import itertools
 import utils
 from client import Client
 from glanceclient import Client as glclient
+from keystoneclient.v3 import client as ksclient
 
 class Glance(Client):
 
@@ -14,6 +15,8 @@ class Glance(Client):
 
     def __init__(self, config_path, debug=False):
         super(Glance,self).__init__(config_path, debug)
+        self.ksclient = ksclient.Client(session=self.sess)
+        self.endpoint = self.__get_endpoint()
         self.client = glclient(self.version, session=self.sess)
         self.logger.debug('=> init glance client')
 
@@ -79,10 +82,19 @@ class Glance(Client):
             self.logger.critical('Upload of %s failed' % self.image.name)
             sys.exit(1)
 
-#    def get_md5(self, file_path):
-#        if not self.images:
-#            self.__get_images()
-#        utils.checksum_file(file_path), 'md5')
+    def __get_endpoint(self, interface='internal'):
+        if not self.ksclient:
+            return
+        image_services = self.ksclient.services.list(type='image')
+        endpoints = self.ksclient.endpoints.list(region=self.region,
+                                                interface=interface,
+                                                enabled=True)
+        for endpoint in endpoints:
+            for service in image_services:
+                if service.id == endpoint.service_id:
+                    self.logger.debug("=> image internal endpoint %s" % endpoint.url)
+                    return endpoint.url
+        self.logger.debug("=> image endpoint not found!")
 
     def __get_images(self):
         self.images = self.client.images.list()
