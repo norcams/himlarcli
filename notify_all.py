@@ -11,6 +11,9 @@ keystone = Keystone(options.config, debug=options.debug)
 notify = Notify(options.config, debug=options.debug)
 region = keystone.region
 
+print "Remove these lines if you want to run this and send mail to all!"
+sys.exit(0)
+
 # Edit this to send new email to all users
 subject = 'UH-IaaS: Purge of all data (%s)' % region
 body_file = 'misc/notify_reinstall.txt'
