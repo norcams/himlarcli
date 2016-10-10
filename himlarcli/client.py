@@ -13,6 +13,7 @@ from abc import ABCMeta, abstractmethod
 class Client(object):
 
     __metaclass__ = ABCMeta
+    region = None
 
     def __init__(self, config_path, debug, log=None):
         self.config = utils.get_config(config_path)

@@ -1,0 +1,8 @@
+We will do a full reinstall of both locations this week.
+All instances, images, volumes, snapshots and user will be delete.
+
+More information and updates can be found at:
+http://iaas.readthedocs.io/en/latest/status.html
+
+--
+UH-IaaS team
