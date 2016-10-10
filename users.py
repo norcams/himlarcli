@@ -55,15 +55,16 @@ for mail in projects:
                 logger.debug("=> count:type:faculty: +1 %s" % user[1][conf['uib']['org']])
     elif 'uio' in mail:
         search = uio.get_user(mail, attr=conf['uio']['attr'])
-        if search[0]:
+        if len(search) > 0:
             user = search[0]
+            if user[1][conf['uio']['type']][0]:
+                count['type'][user[1][conf['uio']['type']][0]] += 1
+                logger.debug("=> count:type:%s: +1" % user[1][conf['uio']['type']][0])
+                logger.debug('=> org: %s' % user[1][conf['uio']['org']][0])
+            else:
+                print user
         else:
             print 'Unknown user %s' % mail
-        if user[1][conf['uio']['type']][0]:
-            count['type'][user[1][conf['uio']['type']][0]] += 1
-            logger.debug("=> count:type:%s: +1" % user[1][conf['uio']['type']][0])
-            logger.debug('=> org: %s' % user[1][conf['uio']['org']][0])
-        else:
-            print user
+
 
 print count
