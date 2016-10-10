@@ -43,16 +43,20 @@ for mail in projects:
             count['type']['student'] += 1
             logger.debug("=> count:type:student: +1")
         else:
-            user = uib.get_user(mail, attr=conf['uib']['attr'])[0]
-            if 'IT-avdelingen' in user[1][conf['uib']['org']]:
-                count['type']['staff'] += 1
-                logger.debug("=> count:type:staff: +1 (IT-avdelingen)")
-            elif 'Kommunikasjonsavdelingen' in user[1][conf['uib']['org']]:
-                count['type']['staff'] += 1
-                logger.debug("=> count:type:staff: +1 Kommunikasjonsavdelingen")
+            search = uib.get_user(mail, attr=conf['uib']['attr'])
+            if len(search) > 0:
+                user = search[0]
+                if 'IT-avdelingen' in user[1][conf['uib']['org']]:
+                    count['type']['staff'] += 1
+                    logger.debug("=> count:type:staff: +1 (IT-avdelingen)")
+                elif 'Kommunikasjonsavdelingen' in user[1][conf['uib']['org']]:
+                    count['type']['staff'] += 1
+                    logger.debug("=> count:type:staff: +1 Kommunikasjonsavdelingen")
+                else:
+                    count['type']['faculty'] += 1
+                    logger.debug("=> count:type:faculty: +1 %s" % user[1][conf['uib']['org']])
             else:
-                count['type']['faculty'] += 1
-                logger.debug("=> count:type:faculty: +1 %s" % user[1][conf['uib']['org']])
+                print 'Unknown user %s' % mail
     elif 'uio' in mail:
         search = uio.get_user(mail, attr=conf['uio']['attr'])
         if len(search) > 0:
