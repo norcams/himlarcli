@@ -7,7 +7,7 @@ from himlarcli.keystone import Keystone
 from himlarcli.foremanclient import Client
 
 desc = 'Setup compute resources and profiles'
-options = utils.get_options(desc, hosts=False)
+options = utils.get_options(desc, hosts=False, dry_run=True)
 keystone = Keystone(options.config, debug=options.debug)
 logger = keystone.get_logger()
 domain = keystone.get_config('openstack', 'domain')
@@ -31,11 +31,13 @@ for x in range(1, (num_resources+1)):
     resource['url'] = 'qemu+tcp://%s.%s:16509/system' % (name, domain)
     if name not in found_resources:
         logger.debug('=> add new compute resource %s' % name)
-        result = foreman.create_computeresources(resource)
-        found_resources[name] = result['id']
+        if not options.dry_run:
+            result = foreman.create_computeresources(resource)
+            found_resources[name] = result['id']
     else:
         logger.debug('=> update compute resource %s' % name)
-        result = foreman.update_computeresources(found_resources[name], resource)
+        if not options.dry_run:
+            result = foreman.update_computeresources(found_resources[name], resource)
 
 
 # Compute profile
@@ -57,18 +59,26 @@ for x in range(1,4):
     profile = foreman.show_computeprofiles(x)
     for r in found_resources:
         if not profile['compute_attributes']:
-            result = foreman.create_computeattributes(compute_profile_id=x,
-                                                   compute_resource_id=found_resources[r],
-                                                   compute_attribute=compute_attribute[x])
-            logger.debug("=> create result %s" % result)
+            if not options.dry_run:
+                result = foreman.create_computeattributes(
+                        compute_profile_id=x,
+                        compute_resource_id=found_resources[r],
+                        compute_attribute=compute_attribute[x])
+                logger.debug("=> create result %s" % result)
+            else:
+                logger.debug('=> dryrun %s: %s' % (profile['name'], compute_attribute[x]))
 
         for attr in profile['compute_attributes']:
             if r == attr['compute_resource_name']:
                 if attr['vm_attrs'] == compute_attribute[x]['vm_attrs']:
                     logger.debug("=> %s: no change for %s" % (profile['name'], r))
                     continue
-                result = foreman.update_computeattributes(compute_profile_id=x,
-                                                       compute_resource_id=found_resources[r],
-                                                       id=attr['id'],
-                                                       compute_attribute=compute_attribute[x])
-                logger.debug("=> update result %s" % result)
+                if not options.dry_run:
+                    result = foreman.update_computeattributes(
+                            compute_profile_id=x,
+                            compute_resource_id=found_resources[r],
+                            id=attr['id'],
+                            compute_attribute=compute_attribute[x])
+                    logger.debug("=> update result %s" % result)
+                else:
+                    logger.debug("=> dryrun %s: %s" % (profile['name'], compute_attribute[x]))
