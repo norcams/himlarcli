@@ -4,9 +4,8 @@ All instances, images, volumes, snapshots and user will be delete.
 More information and updates can be found at:
 http://iaas.readthedocs.io/en/latest/status.html
 
-This will be the final purge before the production version of UH-IaaS
-will launch in november. We welcome you back after we are back online
-to help us test the production setup.
+We welcome you back after we are back online to help us test the
+production setup.
 
 --
 UH-IaaS team
