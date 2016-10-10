@@ -24,7 +24,6 @@ for project in projects:
     msg['Subject'] = subject
     if not options.dry_run:
         notify.send_mail(project, msg)
-    print '\nUser: %s' % user
-    print 'Servers:\n' + user_instances + '\n'
+    print '\nProject: %s' % project
 
 notify.close()
