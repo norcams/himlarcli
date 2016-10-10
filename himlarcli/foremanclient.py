@@ -5,9 +5,9 @@ import utils
 
 class Client(object):
 
-    def __init__(self, config_path, debug=False, version='1'):
+    def __init__(self, config_path, debug=False, version='1', log=None):
         self.config = utils.get_config(config_path)
-        self.logger = utils.get_logger(__name__, self.config, debug)
+        self.logger = utils.get_logger(__name__, self.config, debug, log)
         config = self.config._sections['foreman']
         self.logger.debug('=> config file: %s' % config_path)
         self.logger.debug('=> foreman url: %s' % config['url'])
@@ -17,6 +17,8 @@ class Client(object):
                                api_version=2,
                                version=version,
                                verify=False)
+    def get_client(self):
+        return self.foreman
 
     def set_host_build(self, host, build=True):
         host = self.__set_host(host)
