@@ -31,6 +31,14 @@ class Client(object):
           (hosts['page'], hosts['total']))
       return hosts
 
+    def create_host(self, host):
+        if 'name' not in host:
+            self.logger.critical('host dict missing name')
+            return
+        self.logger.debug('=> create new host %s' % host['name'])
+        result = self.foreman.create_host(host)
+        self.logger.debug('=> host created: %s' % result)
+
     def __set_host(self, host):
         if not host:
             self.host = None
