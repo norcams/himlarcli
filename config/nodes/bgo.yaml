@@ -1,16 +1,16 @@
 nodes:
   access-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-03
   cephmon-01:
     compute_profile: 1
     compute_resource: controller-01
   cephmon-02:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   cephmon-03:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-03
   compute-01:
     mac: ec:f4:bb:ce:21:84
   compute-02:
@@ -18,8 +18,8 @@ nodes:
   compute-03:
     mac: ec:f4:bb:cd:a0:2c
   console-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-03
   controller-01:
     mac: ec:f4:bb:cc:ce:f4
   controller-02:
@@ -27,37 +27,35 @@ nodes:
   controller-03:
     mac: ec:f4:bb:cc:d0:9c
   dashboard-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-02
   db-01:
     compute_profile: 1
     compute_resource: controller-01
-  foreman-1:
-    mac: None
+  db-02:
+    compute_profile: 1
+    compute_resource: controller-02
   identity-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-03
   image-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-02
   logger-01:
-    compute_profile: 1
-    compute_resource: controller-01
-  master-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-01
   monitor-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-01
   mq-01:
     compute_profile: 1
     compute_resource: controller-01
   network-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-03
   novactrl-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-02
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
@@ -72,5 +70,5 @@ nodes:
   storage-05:
     mac: b0:83:fe:cd:44:0f
   volume-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-03
