@@ -3,8 +3,14 @@ nodes:
   db-01:
     compute_resource:     'controller-01'
     compute_profile:      1
+  db-02:
+    compute_resource:     'controller-01'
+    compute_profile:      1
+  mq-01:
+    compute_resource:     'controller-01'
+    compute_profile:      1
   proxy-01:
-    compute_resource:     'controller-02'
+    compute_resource:     'controller-01'
     compute_profile:      1
   compute-01:
     mac:                  '00:23:24:5e:35:20'
