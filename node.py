@@ -46,8 +46,10 @@ for name, node_data in nodes.iteritems():
     elif 'mac' not in node_data:
         logger.critical('=> mac or compute resource are mandatory for %s' % name)
         continue
-    if 'profile' in node_data:
-        host['compute_profile_id'] = node_data['profile']
+    else:
+        host['compute_resource_id'] = 'nil'
+    if 'comptue_profile' in node_data:
+        host['compute_profile_id'] = node_data['compute_profile']
     if 'hostgroup' in node_data:
         host['hostgroup_id'] = node_data['hostgroup_id']
     else:
