@@ -5,6 +5,7 @@ import sys
 from himlarcli.keystone import Keystone
 #import himlarcli.foremanclient as foreman
 from himlarcli.foremanclient import Client
+from himlarcli import utils as himutils
 
 desc = 'Setup compute resources and profiles'
 options = utils.get_options(desc, hosts=False, dry_run=True)
@@ -16,7 +17,12 @@ client = Client(options.config, options.debug, log=logger)
 foreman = client.get_client()
 
 # Add compute resources
-num_resources = 1
+resource_config = himutils.load_config('config/compute_resources.yaml')
+if keystone.region not in resource_config:
+    num_resources = resource_config['default']['num_resources']
+else:
+    num_resources = resource_config[keystone.region]['num_resources']
+logger.debug("=> number of compute resources for %s: %s" % (keystone.region, num_resources))
 resources = foreman.index_computeresources()
 found_resources = dict({})
 for r in resources['results']:
@@ -41,19 +47,11 @@ for x in range(1, (num_resources+1)):
 
 
 # Compute profile
-compute_attribute = dict()
-compute_attribute[1] = dict({'vm_attrs':dict({'cpus': 1, 'memory': '2147483648',
-    'nics_attributes':{ '0': {'bridge': 'br0', 'model': 'virtio', 'type': 'bridge'},
-                        'br1': {'bridge': 'br1', 'model': 'virtio', 'type': 'bridge'}},
-    'volumes_attributes':{ '0': {'allocation': '0G', 'pool_name': 'dirpool', 'capacity': u'10G', 'format_type': u'raw'}} })})
-compute_attribute[2] = dict({'vm_attrs':dict({'cpus': 2, 'memory': '4294967296',
-    'nics_attributes':{ '0': {'bridge': 'br0', 'model': 'virtio', 'type': 'bridge'},
-                        'br1': {'bridge': 'br1', 'model': 'virtio', 'type': 'bridge'}},
-    'volumes_attributes':{ '0': {'allocation': '0G', 'pool_name': 'dirpool', 'capacity': u'10G', 'format_type': u'raw'}} })})
-compute_attribute[3] = dict({'vm_attrs':dict({'cpus': 2, 'memory': '8589934592',
-    'nics_attributes':{ '0': {'bridge': 'br0', 'model': 'virtio', 'type': 'bridge'},
-                        'br1': {'bridge': 'br1', 'model': 'virtio', 'type': 'bridge'}},
-    'volumes_attributes':{ '0': {'allocation': '0G', 'pool_name': 'dirpool', 'capacity': u'10G', 'format_type': u'raw'}} })})
+profile_config = himutils.load_config('config/compute_profiles.yaml')
+if keystone.region not in profile_config:
+    compute_attribute = profile_config['default']
+else:
+    compute_attribute = profile_config[keystone.region]
 
 for x in range(1,4):
     profile = foreman.show_computeprofiles(x)

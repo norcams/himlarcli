@@ -1,1 +1,11 @@
 ---
+default:
+  num_resources: 3
+test01:
+  num_resources: 4
+local1:
+  num_resources: 2
+local2:
+  num_resources: 1
+vagrant:
+  num_resources: 1
