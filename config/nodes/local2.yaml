@@ -1,12 +1,27 @@
 ---
 nodes:
+  dashboard-01:
+    compute_resource:     'controller-01'
+    compute_profile:      1
   db-01:
     compute_resource:     'controller-01'
     compute_profile:      1
   db-02:
     compute_resource:     'controller-01'
     compute_profile:      1
+  identity-01:
+    compute_resource:     'controller-01'
+    compute_profile:      1
+  image-01:
+    compute_resource:     'controller-01'
+    compute_profile:      1
   mq-01:
+    compute_resource:     'controller-01'
+    compute_profile:      1
+  network-01:
+    compute_resource:     'controller-01'
+    compute_profile:      1
+  novactrl-01:
     compute_resource:     'controller-01'
     compute_profile:      1
   proxy-01:
@@ -14,3 +29,6 @@ nodes:
     compute_profile:      1
   compute-01:
     mac:                  '00:23:24:5e:35:20'
+  volume-01:
+    compute_resource:     'controller-01'
+    compute_profile:      1
