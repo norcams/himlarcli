@@ -48,7 +48,7 @@ for name, node_data in nodes.iteritems():
         continue
     else:
         host['compute_resource_id'] = 'nil'
-    if 'comptue_profile' in node_data:
+    if 'compute_profile' in node_data:
         host['compute_profile_id'] = node_data['compute_profile']
     if 'hostgroup' in node_data:
         host['hostgroup_id'] = node_data['hostgroup_id']
