@@ -27,6 +27,11 @@ found_resources = dict({})
 for r in resources['results']:
     found_resources[r['name']] = r['id']
 
+def get_node_data(var, node_data, default=None):
+    if var in node_data:
+        return node_data[var]
+    else:
+        return default
 
 # Crate nodes
 for name, node_data in nodes.iteritems():
@@ -35,6 +40,10 @@ for name, node_data in nodes.iteritems():
     if client.get_host(host['name']):
         logger.debug('=> node %s found' % host['name'])
         continue
+    host['build'] = get_node_data('build', node_data, 1)
+    host['hostgroup_id'] = get_node_data('hostgroup', node_data, '1')
+    host['compute_profile_id'] = get_node_data('compute_profile', node_data, '1')
+
     if 'mac' in node_data:
         host['mac'] = node_data['mac']
     if 'compute_resource' in node_data:
@@ -48,12 +57,6 @@ for name, node_data in nodes.iteritems():
         continue
     else:
         host['compute_resource_id'] = 'nil'
-    if 'compute_profile' in node_data:
-        host['compute_profile_id'] = node_data['compute_profile']
-    if 'hostgroup' in node_data:
-        host['hostgroup_id'] = node_data['hostgroup_id']
-    else:
-        host['hostgroup_id'] = '1' #default hostgrup base
     if not options.dry_run:
         foreman.create_hosts(host)
     else:
