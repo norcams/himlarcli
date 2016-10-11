@@ -22,9 +22,7 @@ class Client(object):
 
     def get_host(self, host):
         host = self.__set_host(host)
-        search = self.foreman.show_hosts(id=host)
-        if len(search) > 0:
-            return search['results']
+        return self.foreman.show_hosts(id=host)
 
     def set_host_build(self, host, build=True):
         host = self.__set_host(host)

@@ -93,6 +93,8 @@ def get_abs_path(file):
 
 def load_config(configfile):
     configfile = get_abs_path(configfile)
+    if not os.path.isfile(configfile):
+        return None
     with open(configfile, 'r') as stream:
         try:
             config = yaml.load(stream)
