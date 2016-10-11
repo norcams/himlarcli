@@ -59,6 +59,7 @@ for name, node_data in nodes.iteritems():
         host['compute_resource_id'] = 'nil'
     if not options.dry_run:
         result = foreman.create_hosts(host)
+        foreman.hosts.power(result['name'], power_action='start')
         logger.debug('=> create host %s' % result)
     else:
         print host
