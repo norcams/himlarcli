@@ -1,0 +1,5 @@
+---
+default:
+  db-01:
+    compute_resource:     'controller-01'
+    profile:              1
