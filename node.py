@@ -15,12 +15,11 @@ logger = keystone.get_logger()
 client = Client(options.config, options.debug, log=logger)
 foreman = client.get_client()
 
-node_config = himutils.load_config('config/install_nodes.yaml')
-
-if keystone.region not in node_config:
-    nodes = node_config['default']
-else:
-    nodes = node_config[keystone.region]
+# Load first region config
+node_config = himutils.load_config('config/nodes/%s.yaml' % keystone.region)
+if not node_config:
+    node_config = himutils.load_config('config/nodes/default.yaml')
+nodes = node_config['nodes']
 
 # Available compute resources
 resources = foreman.index_computeresources()
@@ -31,11 +30,11 @@ for r in resources['results']:
 
 # Crate nodes
 for name, node_data in nodes.iteritems():
-    if client.get_host(name):
-        logger.debug('=> node %s found' % name)
-        continue
     host = dict()
     host['name'] = '%s-%s' % (keystone.region, name)
+    if client.get_host(host['name']):
+        logger.debug('=> node %s found' % host['name'])
+        continue
     if 'mac' in node_data:
         host['mac'] = node_data['mac']
     if 'compute_resource' in node_data:
@@ -44,8 +43,9 @@ for name, node_data in nodes.iteritems():
             host['compute_resource_id'] = found_resources[compute_resource]
         else:
             logger.debug('=> compute resource %s not found' % compute_resource)
-    else:
-        logger.critical('=> missing compute resource for %s' % name)
+    elif 'mac' not in node_data:
+        logger.critical('=> mac or compute resource are mandatory for %s' % name)
+        continue
     if 'profile' in node_data:
         host['compute_profile_id'] = node_data['profile']
     if 'hostgroup' in node_data:
