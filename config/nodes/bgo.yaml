@@ -1,0 +1,76 @@
+nodes:
+  access-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  cephmon-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  cephmon-02:
+    compute_profile: 1
+    compute_resource: controller-01
+  cephmon-03:
+    compute_profile: 1
+    compute_resource: controller-01
+  compute-01:
+    mac: ec:f4:bb:ce:21:84
+  compute-02:
+    mac: ec:f4:bb:cd:a0:94
+  compute-03:
+    mac: ec:f4:bb:cd:a0:2c
+  console-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  controller-01:
+    mac: ec:f4:bb:cc:ce:f4
+  controller-02:
+    mac: ec:f4:bb:cc:d1:54
+  controller-03:
+    mac: ec:f4:bb:cc:d0:9c
+  dashboard-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  db-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  foreman-1:
+    mac: None
+  identity-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  image-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  logger-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  master-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  monitor-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  mq-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  network-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  novactrl-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  proxy-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  storage-01:
+    mac: b0:83:fe:cd:64:7c
+  storage-02:
+    mac: b0:83:fe:cd:4b:39
+  storage-03:
+    mac: b0:83:fe:cd:61:3b
+  storage-04:
+    mac: b0:83:fe:cd:61:23
+  storage-05:
+    mac: b0:83:fe:cd:44:0f
+  volume-01:
+    compute_profile: 1
+    compute_resource: controller-01
