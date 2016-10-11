@@ -52,7 +52,7 @@ class Client(object):
 
     def create_node(self, name, node_data, region, dry_run=False):
         if self.get_host(name):
-            self.logger.debug('=> node %s exist, dropping create' % name)
+            self.logger.debug('=> node %s found, dropping create' % name)
             return
         found_resources = self.get_compute_resources()
         host = dict()
