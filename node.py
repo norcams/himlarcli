@@ -55,8 +55,6 @@ for name, node_data in nodes.iteritems():
     elif 'mac' not in node_data:
         logger.critical('=> mac or compute resource are mandatory for %s' % name)
         continue
-    else:
-        host['compute_resource_id'] = 'nil'
     if not options.dry_run:
         result = foreman.create_hosts(host)
         if 'mac' not in node_data:
