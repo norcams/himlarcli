@@ -9,7 +9,7 @@ from himlarcli.foremanclient import Client
 from himlarcli import utils as himutils
 
 desc = 'Perform action on node (use short nodename without region or domain)'
-actions = ['install', 'show', 'list']
+actions = ['install', 'show', 'list', 'full']
 
 options = utils.get_node_action_options(desc, actions, dry_run=True)
 keystone = Keystone(options.config, debug=options.debug)
@@ -39,7 +39,6 @@ elif options.action[0] == 'list':
             count[node['compute_resource']] += 1
         else:
             print "node: %s (%s)" % (name, node['mac'])
-
     print "Stats:"
     print count
 elif options.action[0] == 'install':
@@ -51,3 +50,10 @@ elif options.action[0] == 'install':
                            dry_run=options.dry_run)
     else:
         logger.debug('=> %s not found in config/nodes/*' % options.node)
+elif options.action[0] == 'full':
+    for name, node_data in sorted(nodes.iteritems()):
+        node_name =  '%s-%s' % (keystone.region, name)
+        client.create_node(name=node_name,
+                           node_data=node_data,
+                           region=keystone.region,
+                           dry_run=options.dry_run)
