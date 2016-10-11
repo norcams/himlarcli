@@ -41,6 +41,7 @@ for name, node_data in nodes.iteritems():
         logger.debug('=> node %s found' % host['name'])
         continue
     host['build'] = get_node_data('build', node_data, 1)
+    host['enable'] = get_node_data('enable', node_data, 1)
     host['hostgroup_id'] = get_node_data('hostgroup', node_data, '1')
     host['compute_profile_id'] = get_node_data('compute_profile', node_data, '1')
 
@@ -58,6 +59,7 @@ for name, node_data in nodes.iteritems():
     else:
         host['compute_resource_id'] = 'nil'
     if not options.dry_run:
+        logger.debug('=> create host %s' % host)
         foreman.create_hosts(host)
     else:
         print host
