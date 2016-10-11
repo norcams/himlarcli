@@ -91,6 +91,16 @@ def get_abs_path(file):
         abs_path = install_dir + '/' + file
     return abs_path
 
+def load_config(configfile):
+    configfile = get_abs_path(configfile)
+    with open(configfile, 'r') as stream:
+        try:
+            config = yaml.load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+            config = None
+    return config
+
 def checksum_file(file_path, type='sha256', chunk_size=65336):
     # Read the file in small pieces, so as to prevent failures to read particularly large files.
     # Also ensures memory usage is kept to a minimum. Testing shows default is a pretty good size.

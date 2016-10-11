@@ -1,0 +1,68 @@
+---
+# 1 GB = 1073741824
+# 2 GB = 2147483648
+# 3 GB = 3221225472
+# 4 GB = 4294967296
+# 6 GB = 6442450944
+# 8 GB = 8589934592
+# 12 GB = 12884901888
+# 16 GB = 17179869184
+
+default:
+  1: # small
+    vm_attrs:
+      cpus:   '1'
+      memory: '2147483648'
+      nics_attributes:
+        '0':
+          bridge: br0
+          model:  'virtio'
+          type:   'bridge'
+        '1':
+          bridge: br1
+          model:  'virtio'
+          type:   'bridge'
+      volumes_attributes:
+        '0':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '10G'
+          format_type:  'raw'
+  2: # medium
+    vm_attrs:
+      cpus:   '1'
+      memory: '4294967296'
+      nics_attributes:
+        '0':
+          bridge: br0
+          model:  'virtio'
+          type:   'bridge'
+        '1':
+          bridge: br1
+          model:  'virtio'
+          type:   'bridge'
+      volumes_attributes:
+        '0':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '10G'
+          format_type:  'raw'
+  3: # large
+    vm_attrs:
+      cpus:   '2'
+      memory: '8589934592'
+      nics_attributes:
+        '0':
+          bridge: br0
+          model:  'virtio'
+          type:   'bridge'
+        '1':
+          bridge: br1
+          model:  'virtio'
+          type:   'bridge'
+      volumes_attributes:
+        '0':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '10G'
+          format_type:  'raw'
