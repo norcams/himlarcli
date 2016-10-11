@@ -60,7 +60,7 @@ for name, node_data in nodes.iteritems():
     if not options.dry_run:
         result = foreman.create_hosts(host)
         if 'mac' not in node_data:
-            foreman.hosts.power(result['name'], power_action='start')
+            foreman.hosts.power(id=result['name'], power_action='start')
         logger.debug('=> create host %s' % result)
     else:
         print host
