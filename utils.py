@@ -88,9 +88,9 @@ def get_node_action_options(desc, actions, nodes=True, dry_run=False, config=Tru
                             help='dry run script')
     if nodes:
         parser.add_argument('node',
-                            metavar='hostname',
+                            metavar='nodename',
                             action='store',
-                            help='node hostname')
+                            help='nodename')
     parser.add_argument('action',
                         metavar='actions',
                         choices=actions,

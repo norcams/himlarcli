@@ -8,7 +8,7 @@ from himlarcli.keystone import Keystone
 from himlarcli.foremanclient import Client
 from himlarcli import utils as himutils
 
-desc = 'Perform action on node'
+desc = 'Perform action on node (use short nodename without region or domain)'
 actions = ['install', 'show']
 
 options = utils.get_node_action_options(desc, actions, dry_run=True)
@@ -24,7 +24,8 @@ if not node_config:
 nodes = node_config['nodes']
 
 if options.action[0] == 'show':
-    node = client.get_host(options.node)
+    node_name =  '%s-%s' % (keystone.region, options.node)
+    node = client.get_host(node_name)
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(node)
 elif options.action[0] == 'install':
