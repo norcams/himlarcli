@@ -60,6 +60,7 @@ class Client(object):
         host['build'] = self.__get_node_data('build', node_data, '1')
         host['hostgroup_id'] = self.__get_node_data('hostgroup', node_data, '1')
         host['compute_profile_id'] = self.__get_node_data('compute_profile', node_data, '1')
+        host['compute_attributes'] = self.__get_node_data('compute_attributes', node_data, None)
         if 'mac' in node_data:
             host['mac'] = node_data['mac']
         if 'compute_resource' in node_data:
