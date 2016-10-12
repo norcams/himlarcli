@@ -44,6 +44,16 @@ nodes:
   logger-01:
     compute_profile: 2
     compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '10G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   monitor-01:
     compute_profile: 2
     compute_resource: controller-01
