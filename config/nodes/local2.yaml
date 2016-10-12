@@ -25,6 +25,9 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '10G'
           format_type:  'raw'
+    host_parameters_attributes:
+      - name:   'installdevice'
+        value:  'vda'
   mq-01:
     compute_resource:     'controller-01'
     compute_profile:      1
