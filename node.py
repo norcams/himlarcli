@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import utils
 import sys
+import time
 import pprint
 #from himlarcli.nova import Nova
 from himlarcli.keystone import Keystone
@@ -57,3 +58,4 @@ elif options.action[0] == 'full':
                            node_data=node_data,
                            region=keystone.region,
                            dry_run=options.dry_run)
+        time.sleep(10)
