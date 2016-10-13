@@ -72,6 +72,7 @@ class Client(object):
             compute_resource = '%s-%s' % (region, node_data['compute_resource'])
             if compute_resource in found_resources:
                 host['compute_resource_id'] = found_resources[compute_resource]
+                host['interfaces_attributes'] = { '0': { 'primary': 1, 'provision': 1 }}
             else:
                 self.logger.critical('=> compute resource %s not found' % compute_resource)
                 return
