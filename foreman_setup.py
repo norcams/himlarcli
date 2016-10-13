@@ -68,7 +68,7 @@ for x in range(1,4):
                         compute_attribute=compute_attribute[x])
                 logger.debug("=> create result %s" % result)
             else:
-                logger.debug('=> dryrun %s: %s' % (profile['name'], compute_attribute[x]))
+                logger.debug('=> dryrun %s(%s): %s' % (r, profile['name'], compute_attribute[x]))
         else:
             attr = found_profile
             if r == attr['compute_resource_name']:
@@ -83,4 +83,4 @@ for x in range(1,4):
                             compute_attribute=compute_attribute[x])
                     logger.debug("=> update result %s" % result)
                 else:
-                    logger.debug("=> dryrun %s: %s" % (profile['name'], compute_attribute[x]))
+                    logger.debug("=> dryrun %s(%s): %s" % (r, profile['name'], compute_attribute[x]))
