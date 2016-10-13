@@ -56,7 +56,11 @@ else:
 for x in range(1,4):
     profile = foreman.show_computeprofiles(x)
     for r in found_resources:
-        if not profile['compute_attributes']:
+        found_profile = None
+        for attr in profile['compute_attributes']:
+            if r == attr['compute_resource_name']:
+                found_profile = attr
+        if not found_profile:
             if not options.dry_run:
                 result = foreman.create_computeattributes(
                         compute_profile_id=x,
@@ -65,8 +69,8 @@ for x in range(1,4):
                 logger.debug("=> create result %s" % result)
             else:
                 logger.debug('=> dryrun %s: %s' % (profile['name'], compute_attribute[x]))
-
-        for attr in profile['compute_attributes']:
+        else:
+            attr = found_profile
             if r == attr['compute_resource_name']:
                 if options.dry_run:
                     logger.debug('=> %s' % attr['vm_attrs'])
