@@ -68,9 +68,10 @@ for x in range(1,4):
 
         for attr in profile['compute_attributes']:
             if r == attr['compute_resource_name']:
+                if options.dry_run:
+                    logger.debug('=> %s' % attr['vm_attrs'])
                 if attr['vm_attrs'] == compute_attribute[x]['vm_attrs']:
                     logger.debug("=> %s: no change for %s" % (profile['name'], r))
-                    logger.debug('=> %s' % attr['vm_attrs'])
                     continue
                 if not options.dry_run:
                     result = foreman.update_computeattributes(
