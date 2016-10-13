@@ -79,9 +79,6 @@ nodes:
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
-    interfaces_attributes:
-      '0':
-        primary: 1
   storage-01:
     mac: b0:83:fe:cd:64:7c
   storage-02:
