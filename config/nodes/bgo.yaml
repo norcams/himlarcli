@@ -81,14 +81,19 @@ nodes:
     compute_resource: controller-01
   storage-01:
     mac: b0:83:fe:cd:64:7c
+    hostgroup: 2
   storage-02:
     mac: b0:83:fe:cd:4b:39
+    hostgroup: 2
   storage-03:
     mac: b0:83:fe:cd:61:3b
+    hostgroup: 2
   storage-04:
     mac: b0:83:fe:cd:61:23
+    hostgroup: 2
   storage-05:
     mac: b0:83:fe:cd:44:0f
+    hostgroup: 2
   volume-01:
     compute_profile: 2
     compute_resource: controller-03
