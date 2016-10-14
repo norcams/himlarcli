@@ -1,0 +1,101 @@
+nodes:
+  access-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  admin-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  cephmon-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  cephmon-02:
+    compute_profile: 1
+    compute_resource: controller-02
+  cephmon-03:
+    compute_profile: 1
+    compute_resource: controller-03
+  compute-01:
+    mac: 00:24:e8:38:a4:19
+  compute-02:
+    mac: b8:ac:6f:86:b6:6d
+  compute-03:
+    mac: b8:ac:6f:91:62:ed
+  console-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  controller-02:
+    mac: b8:ac:6f:91:8c:ab
+  controller-03:
+    mac: b8:ac:6f:8d:3a:54
+  dashboard-01:
+    compute_profile: 1
+    compute_resource: controller-02
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+  db-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  db-02:
+    compute_profile: 1
+    compute_resource: controller-02
+  identity-01:
+    compute_profile: 1
+    compute_resource: controller-02
+  image-01:
+    compute_profile: 1
+    compute_resource: controller-02
+  logger-01:
+    compute_profile: 1
+    compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+  monitor-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  mq-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  network-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  novactrl-01:
+    compute_profile: 1
+    compute_resource: controller-02
+  proxy-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  storage-01:
+    mac: 00:24:e8:2e:e3:9d
+    hostgroup: 2
+  storage-02:
+    mac: 00:26:b9:7d:15:3a
+    hostgroup: 2
+  storage-03:
+    mac: b8:ac:6f:8a:94:af
+    hostgroup: 2
+  storage-04:
+    mac: b8:ac:6f:80:f1:b0
+    hostgroup: 2
+  storage-05:
+    mac: 00:26:b9:79:1a:ce
+    hostgroup: 2
+  volume-01:
+    compute_profile: 1
+    compute_resource: controller-03
+
