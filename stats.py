@@ -23,6 +23,10 @@ stats['instances']['count'] = novastats['count']
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(stats)
 
-c = statsd.StatsClient('172.31.0.14', 8125, prefix='openstack')
+server = novaclient.get_config('statsd', 'server')
+port = novaclient.get_config('statsd', 'port')
+
+
+c = statsd.StatsClient(server, port, prefix='uh-iaas')
 for name, s in stats.iteritems():
     c.gauge(name, s['count'])
