@@ -2,6 +2,7 @@
 
 import pprint
 import utils
+import statsd
 from himlarcli.nova import Nova
 from himlarcli.keystone import Keystone
 
@@ -21,3 +22,7 @@ stats['instances']['count'] = novastats['count']
 
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(stats)
+
+c = statsd.StatsClient('172.31.0.14', 8125, prefix='openstack')
+for name, s in stats.iteritems():
+    c.gauge(name, s['count'])
