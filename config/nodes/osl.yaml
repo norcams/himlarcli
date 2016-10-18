@@ -1,16 +1,16 @@
 nodes:
   access-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-03
   cephmon-01:
     compute_profile: 1
     compute_resource: controller-01
   cephmon-02:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   cephmon-03:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-03
   compute-01:
     mac: ec:f4:bb:ce:20:0c
   compute-02:
@@ -18,55 +18,82 @@ nodes:
   compute-03:
     mac: ec:f4:bb:ce:28:24
   console-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-03
+  controller-01:
+    mac: ec:f4:bb:c7:fb:cc
   controller-02:
     mac: ec:f4:bb:c8:cb:fc
   controller-03:
     mac: ec:f4:bb:c8:01:cc
   dashboard-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 3
+    compute_resource: controller-02
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '60G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   db-01:
     compute_profile: 1
     compute_resource: controller-01
+  db-02:
+    compute_profile: 1
+    compute_resource: controller-02
   identity-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-03
   image-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-02
   logger-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-01
-  master-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '50G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   monitor-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-01
   mq-01:
     compute_profile: 1
     compute_resource: controller-01
   network-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-03
   novactrl-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-02
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
   storage-01:
     mac: b0:83:fe:cd:6a:a4
+    hostgroup: 2
   storage-02:
     mac: b0:83:fe:cd:28:f2
+    hostgroup: 2
   storage-03:
     mac: b0:83:fe:cd:19:d6
+    hostgroup: 2
   storage-04:
     mac: b0:83:fe:cd:31:a1
+    hostgroup: 2
   storage-05:
     mac: b0:83:fe:cd:5b:8d
+    hostgroup: 2
   volume-01:
-    compute_profile: 1
-    compute_resource: controller-01
+    compute_profile: 2
+    compute_resource: controller-03
