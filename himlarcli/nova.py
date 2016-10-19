@@ -133,6 +133,43 @@ class Nova(Client):
     def get_client(self):
         return self.client
 
+    """ Update is not an option. We delete and create a new flavor! """
+    def update_flavor(self, name, spec, dry_run=False):
+        flavors = self.get_flavors()
+        found = False
+        for f in flavors:
+            if f._info['name'] != name:
+                continue
+            found = True
+            update = False
+            for k,v in spec.iteritems():
+                if v != f._info[k]:
+                    update = True
+            if update and not dry_run:
+                self.logger.debug('=> updated flavor %s' % name)
+                # delete old
+                self.client.flavors.delete(f._info['id'])
+                # create new
+                self.client.flavors.create(name=name,
+                                            ram=spec['ram'],
+                                            vcpus=spec['vcpus'],
+                                            disk=spec['disk'])
+            elif update and dry_run:
+                self.logger.debug('=> dry-run: update %s: %s' % (name,spec))
+            else:
+                self.logger.debug('=> no update needed for %s' % name)
+        if not found:
+            self.logger.debug('=> create new flavor %s: %s' % (name, spec))
+            if not dry_run:
+                self.client.flavors.create(name=name,
+                                           ram=spec['ram'],
+                                           vcpus=spec['vcpus'],
+                                           disk=spec['disk'])
+
+    def get_flavors(self):
+        flavors = self.client.flavors.list(detailed=True, is_public=True)
+        return flavors
+
     #
     # private methods
     #
