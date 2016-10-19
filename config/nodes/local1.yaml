@@ -1,0 +1,75 @@
+nodes:
+  access-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  compute-01:
+    mac: 00:23:24:5e:33:b5
+  console-01:
+    compute_profile: 1
+    compute_resource: controller-02
+  controller-02:
+    mac: 00:23:24:5e:32:7e
+  dashboard-01:
+    compute_profile: 1
+    compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '60G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+  db-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  db-02:
+    compute_profile: 1
+    compute_resource: controller-02
+  identity-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  image-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  logger-01:
+    compute_profile: 1
+    compute_resource: controller-02
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '50G'
+          format_type:  'raw'
+      nics_attributes:
+        'br1': {}
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+  monitor-01:
+    compute_profile: 1
+    compute_resource: controller-01
+    compute_attributes:
+      nics_attributes:
+        'br1': {}
+  mq-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  mq-02:
+    compute_profile: 1
+    compute_resource: controller-02
+  network-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  novactrl-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  proxy-01:
+    compute_profile: 1
+    compute_resource: controller-02
+  volume-01:
+    compute_profile: 1
+    compute_resource: controller-02
