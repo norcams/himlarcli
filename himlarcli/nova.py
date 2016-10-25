@@ -57,7 +57,12 @@ class Nova(Client):
                 if user.domain_id == 'default':
                     self.logger.debug("=> instance %s is owned by system user" % i._info['name'])
                     continue
-                email = user.email
+                if not user.domain_id:
+                    self.logger.debug("=> dataporten user %s" % user.name)
+                    email = user.name
+                else:
+                    self.logger.debug("=> local user %s" % user.name)
+                    email = user.email
             if email not in users.keys():
                 users[email] = {}
             if len(i._info['addresses']['public']) > 0:
