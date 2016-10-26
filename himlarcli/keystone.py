@@ -6,7 +6,8 @@ class Keystone(Client):
 
     def __init__(self, config_path, debug=False):
         super(Keystone,self).__init__(config_path, debug)
-        self.client = keystoneclient.Client(session=self.sess)
+        self.client = keystoneclient.Client(session=self.sess,
+                                            region_name=self.region)
 
     def get_domain_id(self, domain):
         return self.__get_domain(domain)
