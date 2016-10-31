@@ -11,22 +11,29 @@ import utils
 from himlarcli import utils as himutils
 from himlarcli.glance import Glance
 
-# Import golden images from misc
-misc_path = himutils.get_abs_path('misc')
-sys.path.append(misc_path)
-import golden_images
-
 options = utils.get_options('Create and update golden images',
                              hosts=0, dry_run=True)
 glclient = Glance(options.config, debug=options.debug)
 logger = glclient.get_logger()
+golden_images = himutils.load_config('config/golden_images.yaml')
+if glclient.region in golden_images:
+    images = golden_images[glclient.region]
+else:
+    if not 'default' in golden_images:
+        print "Missing default in config/golden_images.yaml"
+        sys.exit(1)
+    images = golden_images['default']
 
 def download_and_check(image):
     source = himutils.get_abs_path('%s' % image['latest'])
     url = '%s%s' % (image['url'], image['latest'])
     # Do not redownload
     if not os.path.isfile(source):
-        urllib.urlretrieve(url, source)
+        (filename, headers) = urllib.urlretrieve(url, source)
+        if int(headers['content-length']) < 1000:
+            logger.debug("=> file is too small: %s" % url)
+            os.remove(source)
+            return None
     checksum = himutils.checksum_file(source, image['checksum'])
     checksum_url = "%s%s" % (image['url'], image['checksum_file'])
     response = urllib2.urlopen(checksum_url)
@@ -52,11 +59,13 @@ def create_image(glclient, source_path, image):
         pp = pprint.PrettyPrinter(indent=1)
         pp.pprint(res)
 
-for name, image_data in golden_images.images.iteritems():
+for name, image_data in images.iteritems():
     region = glclient.get_config('openstack', 'region')
     image = glclient.get_image(image_data['name'])
     if image and (image['region'] == region):
         source_path = download_and_check(image_data)
+        if not source_path:
+            continue
         md5 = himutils.checksum_file(source_path, 'md5')
         if image['checksum'] != md5:
             timestamp = datetime.utcnow().isoformat()

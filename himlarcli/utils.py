@@ -10,6 +10,7 @@ import warnings
 import yaml
 import hashlib
 import functools
+import mimetypes
 
 def get_config(config_path):
     if not os.path.isfile(config_path):
