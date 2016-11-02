@@ -1,0 +1,95 @@
+nodes:
+  access-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  api-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  cephmon-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  cephmon-02:
+    compute_profile: 1
+    compute_resource: controller-02
+  cephmon-03:
+    compute_profile: 1
+    compute_resource: controller-03
+  compute-01:
+    mac: 00:23:ae:ec:1d:30
+  compute-02:
+    mac: 00:23:ae:ec:47:98
+  compute-03:
+    mac: 00:1e:c9:d1:67:68
+  compute-04:
+    mac: 00:1e:c9:f6:28:e2
+  console-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  controller-02:
+    mac: 78:45:c4:f9:ac:8b
+  controller-03:
+    mac: 00:1e:c9:d1:81:04
+  controller-04:
+    mac: 00:1e:c9:e0:3e:23
+  dashboard-01:
+    compute_profile: 1
+    compute_resource: controller-02
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '60G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+  db-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  db-02:
+    compute_profile: 1
+    compute_resource: controller-02
+  identity-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  image-01:
+    compute_profile: 1
+    compute_resource: controller-02
+  logger-01:
+    compute_profile: 2
+    compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '50G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+  monitor-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  mq-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  network-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  novactrl-01:
+    compute_profile: 1
+    compute_resource: controller-02
+  proxy-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  storage-01:
+    mac: 00:22:19:af:51:61
+  storage-02:
+    mac: 00:1d:09:03:34:98
+  storage-03:
+    mac: 00:22:19:af:51:66
+  volume-01:
+    compute_profile: 1
+    compute_resource: controller-03
