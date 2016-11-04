@@ -1,6 +1,5 @@
 [openstack]
 auth_url: https://dashboard.himlar.local:5000/v3
-service_net: 172.31.16.0/24
 username: admin
 password: admin_pass
 project_name: openstack

@@ -14,8 +14,8 @@ config = utils.get_config(options.config)
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-net = config._sections['openstack']['service_net']
-if utils.has_network_access(net, logging):
+net = config._sections['openstack']['has_trp']
+if net == 1:
     print "Result: SUCCESS!"
 else:
     print "Result: NO ACCESS!"

@@ -1,5 +1,4 @@
 openstack:
-  - service_net
   - auth_url
   - username
   - password
@@ -7,6 +6,15 @@ openstack:
   - default_domain
   - region
   - domain
+
+foreman:
+  - url
+  - user
+  - password 
+
+statsd:
+  - server
+  - port
 
 state:
   - db
