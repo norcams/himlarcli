@@ -2,6 +2,9 @@ nodes:
   access-01:
     compute_profile: 1
     compute_resource: controller-03
+  api-01:
+    compute_profile: 1
+    compute_resource: controller-02
   admin-01:
     compute_profile: 1
     compute_resource: controller-01
@@ -53,7 +56,7 @@ nodes:
     compute_profile: 1
     compute_resource: controller-02
   logger-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -80,6 +83,9 @@ nodes:
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
+  status-01:
+    compute_profile: 1
+    compute_resource: controller-01
   storage-01:
     mac: 00:24:e8:2e:e3:9d
     hostgroup: 2
@@ -98,4 +104,3 @@ nodes:
   volume-01:
     compute_profile: 1
     compute_resource: controller-03
-
