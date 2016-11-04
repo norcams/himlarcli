@@ -25,6 +25,9 @@ if not node_config:
 nodes = node_config['nodes']
 
 if options.action[0] == 'show':
+    if not options.node:
+        print "Missing node name"
+        sys.exit(1)
     node_name =  '%s-%s' % (keystone.region, options.node)
     node = client.get_host(node_name)
     pp = pprint.PrettyPrinter(indent=2)
@@ -43,6 +46,9 @@ elif options.action[0] == 'list':
     print "Stats:"
     print count
 elif options.action[0] == 'install':
+    if not options.node:
+        print "Missing node name"
+        sys.exit(1)
     node_name =  '%s-%s' % (keystone.region, options.node)
     if options.node in nodes:
         client.create_node(name=node_name,
