@@ -86,7 +86,7 @@ nodes:
     compute_resource: controller-01
   status-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-04
   storage-01:
     mac: 00:22:19:af:51:61
   storage-02:
