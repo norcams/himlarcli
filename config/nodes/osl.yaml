@@ -4,7 +4,7 @@ nodes:
     compute_resource: controller-03
   api-01:
     compute_profile: 1
-    compute_resource: controller-02
+    compute_resource: controller-01
   cephmon-01:
     compute_profile: 1
     compute_resource: controller-01
@@ -84,7 +84,7 @@ nodes:
     compute_resource: controller-01
   status-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   storage-01:
     mac: b0:83:fe:cd:6a:a4
     hostgroup: 2
