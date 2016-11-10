@@ -26,7 +26,7 @@ pp.pprint(stats)
 server = novaclient.get_config('statsd', 'server')
 port = novaclient.get_config('statsd', 'port')
 
-
-c = statsd.StatsClient(server, port, prefix='uh-iaas')
+prefix = 'uh-iaas.%s' % keystoneclient.region
+c = statsd.StatsClient(server, port, prefix=prefix)
 for name, s in stats.iteritems():
     c.gauge(name, s['count'])
