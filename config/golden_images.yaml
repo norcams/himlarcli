@@ -11,6 +11,17 @@ default:
     'disk_format':      'qcow2'
     'min_ram':          256
     'min_disk':         1
+  'centos6':
+    'name':             'CentOS 6'
+    'depricated':       'Outdated (CentOS 6)'
+    'url':              'http://cloud.centos.org/centos/6/images/'
+    'latest':           'CentOS-6-x86_64-GenericCloud.qcow2'
+    'checksum_file':    'sha256sum.txt'
+    'checksum':         'sha256'
+    'visibility':       'public'
+    'disk_format':      'qcow2'
+    'min_ram':          1024
+    'min_disk':         8
   'centos':
     'name':             'CentOS 7'
     'depricated':       'Outdated (CentOS)'
