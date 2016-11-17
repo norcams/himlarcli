@@ -12,7 +12,7 @@ default:
     'min_ram':          256
     'min_disk':         1
   'centos6':
-    'name':             'CentOS 6'
+    'name':             'GOLD CentOS 6'
     'depricated':       'Outdated (CentOS 6)'
     'url':              'http://cloud.centos.org/centos/6/images/'
     'latest':           'CentOS-6-x86_64-GenericCloud.qcow2'
@@ -23,7 +23,7 @@ default:
     'min_ram':          1024
     'min_disk':         8
   'centos':
-    'name':             'CentOS 7'
+    'name':             'GOLD CentOS 7'
     'depricated':       'Outdated (CentOS)'
     'url':              'http://cloud.centos.org/centos/7/images/'
     'latest':           'CentOS-7-x86_64-GenericCloud.qcow2'
@@ -34,7 +34,7 @@ default:
     'min_ram':          768
     'min_disk':         8
   'fedora':
-    'name':             'Fedora 24'
+    'name':             'GOLD Fedora 24'
     'depricated':       'Outdated (Fedora)'
     'url':              'https://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/24/CloudImages/x86_64/images/'
     'latest':           'Fedora-Cloud-Base-24-1.2.x86_64.qcow2'
@@ -45,7 +45,7 @@ default:
     'min_ram':          768
     'min_disk':         8
   'ubuntu':
-    'name':             'Ubuntu server 16.04'
+    'name':             'GOLD Ubuntu server 16.04'
     'depricated':       'Outdated (Ubuntu)'
     'url':              'https://cloud-images.ubuntu.com/xenial/current/'
     'latest':           'xenial-server-cloudimg-amd64-disk1.img'
@@ -56,7 +56,7 @@ default:
     'min_ram':          768
     'min_disk':         8
   'debian':
-    'name':             'Debian Jessie 8'
+    'name':             'GOLD Debian Jessie 8'
     'depricated':       'Outdated (Debian)'
     'url':              'http://cdimage.debian.org/cdimage/openstack/current/'
     'latest':           'debian-8.6.1-openstack-amd64.qcow2'
