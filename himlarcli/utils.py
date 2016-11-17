@@ -92,9 +92,19 @@ def get_abs_path(file):
         abs_path = install_dir + '/' + file
     return abs_path
 
-def load_config(configfile):
+def load_region_config(configpath, filename='default', region=None, log=None):
+    regionfile = get_abs_path('%s/%s.yaml' % (configpath, region))
+    if os.path.isfile(regionfile):
+        configfile = '%s/%s.yaml' % (configpath, region)
+    else:
+        configfile = '%s/%s.yaml' % (configpath, filename)
+    return load_config(configfile, log)
+
+def load_config(configfile, log=None):
     configfile = get_abs_path(configfile)
     if not os.path.isfile(configfile):
+        if log:
+            log.debug('=> config file not found: %s' % configfile)
         return None
     with open(configfile, 'r') as stream:
         try:

@@ -20,10 +20,7 @@ prefix = 'uh-iaas.%s.checks' % region
 statsd = statsd.StatsClient(statsd_server, statsd_port, prefix=prefix)
 
 # Services to check
-services = himutils.load_config('config/checks/%s.yaml' % region)
-if not services:
-    logger.debug('=> use default config in config/checks/default.yaml')
-    services = himutils.load_config('config/checks/default.yaml')
+services = himutils.load_region_config('config/checks', region=region, log=logger)
 
 for name, check in sorted(services['checks'].iteritems()):
     if 'timeout' in check:
