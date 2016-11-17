@@ -15,7 +15,7 @@ class Client(object):
     __metaclass__ = ABCMeta
     region = None
 
-    def __init__(self, config_path, debug, log=None):
+    def __init__(self, config_path, debug, log=None, region=None):
         self.config = utils.get_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug, log)
         self.logger.debug('=> config file: %s' % config_path)
@@ -40,7 +40,10 @@ class Client(object):
         else:
             self.sess = session.Session(auth=auth)
 
-        self.region = self.get_config('openstack', 'region')
+        if region:
+            self.region = region
+        else:
+            self.region = self.get_config('openstack', 'region')
         self.state = State(config_path, debug, log=self.logger)
 
 

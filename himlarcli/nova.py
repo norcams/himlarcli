@@ -10,12 +10,12 @@ class Nova(Client):
     instances = dict()
     ksclient = None
 
-    def __init__(self, config_path, host=None, debug=False, log=None):
+    def __init__(self, config_path, host=None, debug=False, log=None, region=None):
         """ Create a new nova client to manaage a host
         `**host`` fqdn for the nova compute host
         `**config_path`` path to ini file with config
         """
-        super(Nova,self).__init__(config_path, debug, log)
+        super(Nova,self).__init__(config_path, debug, log, region)
         self.client = novaclient.Client(self.version,
                                         session=self.sess,
                                         region_name=self.region)
