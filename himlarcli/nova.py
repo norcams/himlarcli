@@ -4,6 +4,8 @@ from keystoneclient.v3 import client as keystoneclient
 from novaclient.exceptions import NotFound
 import urllib2
 import json
+import pprint
+import time
 
 class Nova(Client):
     version = 2
@@ -43,6 +45,21 @@ class Nova(Client):
             self.logger.debug("=> prepend %s to %s" % (domain, host))
             host = host + '.' + domain
         self.host = host
+
+    def delete_project_instances(self, project_id):
+        search_opts = dict(tenant_id=project_id, all_tenants=1)
+        instances = self.__get_all_instances(search_opts=search_opts)
+        self.__change_status(action='stop', state='ACTIVE', instances=instances)
+        if len(instances) > 0:
+            time.sleep(60)
+        self.__change_status(action='delete', state='SHUTOFF', instances=instances)
+
+    def list_quota(self, project_id):
+        return self.client.quotas.get(tenant_id=project_id)
+
+    def set_quota(self, project_id, quota):
+        self.logger.debug('=> quota set to %s' % quota)
+        self.client.quotas.update(project_id, **quota)
 
     def list_instances(self):
         instances = self.__get_instances()
@@ -178,8 +195,9 @@ class Nova(Client):
     #
     # private methods
     #
-    def __change_status(self, action='start', state='SHUTOFF'):
-        instances = self.__get_instances()
+    def __change_status(self, action='start', state='SHUTOFF', instances=None):
+        if not instances:
+            instances = self.__get_instances()
         count = 0
         for i in instances:
             if i._info['status'] == state:
@@ -201,8 +219,7 @@ class Nova(Client):
                                              search_opts=search_opts)
         return instances
 
-    def __get_all_instances(self):
-        search_opts = dict(all_tenants=1)
+    def __get_all_instances(self, search_opts=dict(all_tenants=1)):
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
         return instances

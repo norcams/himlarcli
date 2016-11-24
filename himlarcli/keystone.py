@@ -1,5 +1,8 @@
 from client import Client
+from nova import Nova
 from keystoneclient.v3 import client as keystoneclient
+import keystoneauth1.exceptions as exceptions
+from novaclient import client as novaclient
 
 class Keystone(Client):
     version = 3
@@ -22,12 +25,76 @@ class Keystone(Client):
         projects = self.__get_projects(domain)
         return len(projects)
 
+    def get_project(self, project, domain=None):
+        domain = self.__get_domain(domain)
+        project = self.__get_project(project, domain=domain)
+        return project
+
     def list_projects(self, domain=False):
         project_list = self.__get_projects(domain)
         projects = list()
         for i in project_list:
             projects.append(i.name)
         return projects
+
+    def list_quota(self, project, domain=None):
+        domain = self.__get_domain(domain)
+        project = self.__get_project(project, domain=domain)
+        compute = self.__list_compute_quota(project)
+        return dict({'compute':compute})
+
+    """ Delete project and all instances """
+    def delete_project(self, project, domain=None):
+        # Map str to objects
+        domain = self.__get_domain(domain)
+        project = self.__get_project(project, domain=domain)
+
+        self.__delete_instances(project)
+        self.client.projects.delete(project)
+
+    """ Grant a role to a project for a user """
+    def grant_role(self, user, project, role, domain=None):
+        self.logger.debug('=> grant access for %s to %s' % (user, project))
+        # Map str to objects
+        domain = self.__get_domain(domain)
+        group = self.__get_group(group='%s-group' % user, domain=domain)
+        if not group:
+            print 'Group %s-group not found!'
+            print 'Remember email for users is case sensitive.' % user
+            return None
+        project = self.__get_project(project, domain=domain)
+        role = self.__get_role(role)
+        try:
+            exists = self.client.roles.list(role=role,
+                                            project=project,
+                                            group=group)
+        except exceptions.http.NotFound as e:
+            exists = None
+        if exists:
+            print 'Access exist for %s in project %s' % (user, project.name)
+        else:
+           self.client.roles.grant(role=role,
+                                   project=project,
+                                   group=group)
+
+    """ Create new project """
+    def create_project(self, domain, project, quota, description=None, **kwargs):
+        parent_id = self.__get_domain(domain)
+        project_found = self.__get_project(project, domain=parent_id)
+        if project_found:
+            print 'Project %s exists!' % project_found.name
+            self.logger.debug('=> updating quota for project %s' % project_found.name)
+            self.__set_compute_quota(project_found, quota)
+            return None
+        project = self.client.projects.create(name=project,
+                                              domain=parent_id,
+                                              parent=parent_id,
+                                              enabled=True,
+                                              description=description,
+                                              **kwargs)
+        self.logger.debug('=> create new project %s' % project)
+        self.__set_compute_quota(project, quota)
+        return project
 
     """ Federation settings for identity provider """
     def set_identity_provider(self, name, remote_id):
@@ -60,6 +127,45 @@ class Keystone(Client):
                                                 identity_provider=provider,
                                                 mapping=mapping)
 
+    def __get_user(self, user, domain=None, group=None, project=None):
+        users = self.client.users.list(domain=domain,
+                                      project=project,
+                                      group=group)
+        print users
+        for u in users:
+            if u.name == user:
+                self.logger.debug('=> user %s found' % user)
+                return u
+        self.logger.debug('=> user %s NOT found' % user)
+        return None
+
+    def __get_project(self, project, domain=None, user=None):
+        projects = self.client.projects.list(domain=domain, user=user)
+        for p in projects:
+            if p.name == project:
+                self.logger.debug('=> project %s found' % project)
+                return p
+        self.logger.debug('=> project %s NOT found' % project)
+        return None
+
+    def __get_role(self, role, domain=None):
+        roles = self.client.roles.list(domain=domain)
+        for r in roles:
+            if r.name == role:
+                self.logger.debug('=> role %s found' % role)
+                return r
+        self.logger.debug('=> role %s NOT found' % role)
+        return None
+
+    def __get_group(self, group, domain=None, user=None):
+        groups = self.client.groups.list(domain=domain, user=user)
+        for g in groups:
+            if g.name == group:
+                self.logger.debug('=> group %s found' % group)
+                return g
+        self.logger.debug('=> group %s NOT found' % group)
+        return None
+
     def __get_domain(self, domain):
         domain = self.client.domains.list(name=domain)
         if len(domain) > 0:
@@ -74,3 +180,24 @@ class Keystone(Client):
         else:
             projects = self.client.projects.list()
         return projects
+
+    def __delete_instances(self, project):
+        self.novaclient = Nova(config_path=self.config_path,
+                               debug=self.debug,
+                               log=self.logger,
+                               region=self.region)
+        self.novaclient.delete_project_instances(project.id)
+
+    def __list_compute_quota(self, project):
+        self.novaclient = Nova(config_path=self.config_path,
+                               debug=self.debug,
+                               log=self.logger,
+                               region=self.region)
+        return self.novaclient.list_quota(project.id)
+
+    def __set_compute_quota(self, project, quota):
+        self.novaclient = Nova(config_path=self.config_path,
+                               debug=self.debug,
+                               log=self.logger,
+                               region=self.region)
+        return self.novaclient.set_quota(project.id, quota)
