@@ -62,7 +62,9 @@ if options.action[0] == 'delete':
     else:
         print 'project name must be set to delete project'
 if options.action[0] == 'list':
-    print ksclient.list_projects(domain=domain)
+    projects = ksclient.list_projects(domain=domain)
+    for p in projects:
+        print p
 if options.action[0] == 'show':
     if options.project:
         project = ksclient.get_project(project=options.project, domain=domain)
