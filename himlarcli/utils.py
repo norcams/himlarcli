@@ -2,8 +2,6 @@ import sys
 import os
 import ConfigParser
 import logging
-import netifaces
-import ipaddress
 import logging
 import logging.config
 import warnings
@@ -26,27 +24,6 @@ def get_logger(name, config, debug, log=None):
     else:
         mylog = setup_logger(name, debug)
     return mylog
-
-def has_network_access(network, log=None):
-    net = ipaddress.ip_network(network)
-    if log:
-        log.debug("Testing access to %s" % net)
-        log.debug("Interfaces: " + ", ".join(netifaces.interfaces()))
-    inf = netifaces.interfaces()
-    for i in inf:
-        addrs = netifaces.ifaddresses(i)
-        try:
-            for addr in addrs[netifaces.AF_INET]:
-                ip_addr = ipaddress.ip_address(addr['addr'])
-                if ip_addr.is_loopback:
-                    continue
-                if ip_addr in net:
-                    if log:
-                        log.debug("Interface %s has access to %s" % (i, net))
-                    return True
-        except KeyError as e:
-            pass
-    return False
 
 def setup_logger(name, debug,
                  log_path = '/opt/himlarcli/',
