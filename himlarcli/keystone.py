@@ -59,8 +59,8 @@ class Keystone(Client):
         domain = self.__get_domain(domain)
         group = self.__get_group(group='%s-group' % user, domain=domain)
         if not group:
-            print 'Group %s-group not found!'
-            print 'Remember email for users is case sensitive.' % user
+            print 'Group %s-group not found!'  % user
+            print 'Remember email for users is case sensitive.'
             return None
         project = self.__get_project(project, domain=domain)
         role = self.__get_role(role)
