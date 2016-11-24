@@ -10,7 +10,7 @@ from himlarcli import utils as himutils
 desc = 'Perform project action'
 actions = ['list', 'show', 'create', 'grant', 'delete', 'quota']
 opt_args = { '-p': { 'dest': 'project', 'help': 'project name', 'metavar': 'name'},
-             '-a': { 'dest': 'admin', 'help': 'email of admin', 'metavar': 'admin'},
+             '-u': { 'dest': 'user', 'help': 'email of user', 'metavar': 'user'},
              '-t': { 'dest': 'type', 'help': 'project type (used for quota)', 'default': 'default', 'metavar': 'type'}}
 options = utils.get_action_options(desc, actions, opt_args=opt_args)
 ksclient = Keystone(options.config, debug=options.debug)
