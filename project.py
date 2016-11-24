@@ -21,14 +21,14 @@ domain='Dataporten'
 if options.action[0] == 'create':
     if options.type not in quota:
         print 'Type %s unknown. Check config/quota.yaml' % options.type
-    if options.project and options.admin:
+    if options.project and options.user:
         if options.type == 'test':
             test = 1
         else:
             test = 0
         project = ksclient.create_project(domain=domain,
                                           project=options.project,
-                                          admin=options.admin,
+                                          admin=options.user,
                                           test=test,
                                           type=options.type,
                                           quota=quota[options.type])
@@ -36,19 +36,19 @@ if options.action[0] == 'create':
         if project:
             pp.pprint(project.to_dict())
             ksclient.grant_role(project=options.project,
-                                user=options.admin,
+                                user=options.user,
                                 role='user',
                                 domain=domain)
     else:
-        print 'admin and project name must be set to create project'
+        print 'user and project name must be set to create project'
 if options.action[0] == 'grant':
-    if options.project and options.admin:
+    if options.project and options.user:
         ksclient.grant_role(project=options.project,
-                                    user=options.admin,
+                                    user=options.user,
                                     role='user',
                                     domain=domain)
     else:
-        print 'admin and project name must be set to grant project access'
+        print 'user and project name must be set to grant project access'
 if options.action[0] == 'delete':
     if options.project:
         q = "Delete project and all instances for %s (yes|no)? " % options.project
