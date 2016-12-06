@@ -127,6 +127,15 @@ class Keystone(Client):
                                                 identity_provider=provider,
                                                 mapping=mapping)
 
+    def create_group(self, name, description, domain):
+        self.logger.debug('=> create group %s' % (name))
+        # Map str to objects
+        domain = self.__get_domain(domain)
+        if not self.__get_group(group=name, domain=domain):
+            project = self.client.groups.create(name=name,
+                                                domain=domain,
+                                                description=description)
+
     def __get_user(self, user, domain=None, group=None, project=None):
         users = self.client.users.list(domain=domain,
                                       project=project,

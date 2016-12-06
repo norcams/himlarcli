@@ -16,7 +16,15 @@ rules = [{
         "user": { "name": "{0}", "id": "{0}" },
         "group": { "name": "{0}-group", "domain": { "id": domain } } }],
     "remote": [{ "type": "OIDC-email" }, { "type": "OIDC-name" }]
+}, {
+    "local": [{
+        "group": { "name": "nologin", "domain": { "id": domain } } }],
+        "remote": [{ "type": "OIDC-email" }, { "type": "OIDC-name" }]
 }]
+
+# Crate nologin group
+desc = 'All authenticated users are mapped to nologin which has no role grants'
+ksclient.create_group('nologin', desc, 'dataporten')
 
 # Create provider, mapping and container to connect them
 ksclient.set_mapping('dataporten_personal', rules)
