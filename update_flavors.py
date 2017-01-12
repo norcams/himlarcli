@@ -11,7 +11,7 @@ options = utils.get_options('Create and update nova flavors',
 novaclient = Nova(options.config, debug=options.debug)
 logger = novaclient.get_logger()
 
-flavors = himutils.load_config('config/flavor.yaml')
+flavors = himutils.load_config('config/flavor.yaml', logger)
 
 if not 'default' in flavors:
     print "Missing default in config/flavor.yaml"
