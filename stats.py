@@ -13,13 +13,17 @@ options = utils.get_options('Print openstack location stats', hosts=False)
 # Project
 keystoneclient = Keystone(options.config, options.debug)
 projects_count = keystoneclient.get_project_count('dataporten')
+users_count = keystoneclient.get_user_count('dataporten')
 logger = keystoneclient.get_logger()
 
 stats = dict()
 stats['projects'] = {}
 stats['instances'] = {}
+stats['users'] = {}
 stats['projects'][keystoneclient.region] = {}
 stats['projects'][keystoneclient.region]['count'] = projects_count
+stats['users'][keystoneclient.region] = {}
+stats['users'][keystoneclient.region]['count'] = users_count
 
 server = keystoneclient.get_config('statsd', 'server')
 port = keystoneclient.get_config('statsd', 'port')

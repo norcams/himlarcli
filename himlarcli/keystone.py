@@ -25,6 +25,10 @@ class Keystone(Client):
         projects = self.__get_projects(domain)
         return len(projects)
 
+    def get_user_count(self, domain=False):
+        users = self.__get_users(domain)
+        return len(users)
+
     def get_project(self, project, domain=None):
         domain = self.__get_domain(domain)
         project = self.__get_project(project, domain=domain)
@@ -189,6 +193,15 @@ class Keystone(Client):
         else:
             projects = self.client.projects.list()
         return projects
+
+    def __get_users(self, domain=False, **kwargs):
+        if domain:
+            domain_id = self.__get_domain(domain)
+            users = self.client.users.list(domain=domain_id, **kwargs)
+            self.logger.debug('=> fetch users from domain %s' % domain)
+        else:
+            users = self.client.users.list(**kwargs)
+        return users
 
     def __delete_instances(self, project):
         self.novaclient = Nova(config_path=self.config_path,
