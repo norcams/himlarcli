@@ -69,6 +69,16 @@ def get_abs_path(file):
         abs_path = install_dir + '/' + file
     return abs_path
 
+def load_file(inputfile, log=None):
+    inputfile = get_abs_path(inputfile)
+    if not os.path.isfile(inputfile):
+        if log:
+            log.debug('=> file not found: %s' % inputfile)
+        return {}
+    with open(inputfile, 'r') as stream:
+        data = stream.read().splitlines()
+    return data
+
 def load_region_config(configpath, filename='default', region=None, log=None):
     regionfile = get_abs_path('%s/%s.yaml' % (configpath, region))
     if os.path.isfile(regionfile):

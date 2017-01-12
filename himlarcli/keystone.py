@@ -30,8 +30,8 @@ class Keystone(Client):
         project = self.__get_project(project, domain=domain)
         return project
 
-    def list_projects(self, domain=False):
-        project_list = self.__get_projects(domain)
+    def list_projects(self, domain=False, **kwargs):
+        project_list = self.__get_projects(domain, **kwargs)
         projects = list()
         for i in project_list:
             projects.append(i.name)
@@ -54,7 +54,7 @@ class Keystone(Client):
 
     """ Grant a role to a project for a user """
     def grant_role(self, user, project, role, domain=None):
-        self.logger.debug('=> grant access for %s to %s' % (user, project))
+        self.logger.debug('=> grant role %s for %s to %s' % (role, user, project))
         # Map str to objects
         domain = self.__get_domain(domain)
         group = self.__get_group(group='%s-group' % user, domain=domain)
@@ -85,7 +85,7 @@ class Keystone(Client):
             print 'Project %s exists!' % project_found.name
             self.logger.debug('=> updating quota for project %s' % project_found.name)
             self.__set_compute_quota(project_found, quota)
-            return None
+            return project_found
         project = self.client.projects.create(name=project,
                                               domain=parent_id,
                                               parent=parent_id,
@@ -182,10 +182,10 @@ class Keystone(Client):
         else:
             return False
 
-    def __get_projects(self, domain=False):
+    def __get_projects(self, domain=False, **kwargs):
         if domain:
             domain_id = self.__get_domain(domain)
-            projects = self.client.projects.list(domain=domain_id)
+            projects = self.client.projects.list(domain=domain_id, **kwargs)
         else:
             projects = self.client.projects.list()
         return projects

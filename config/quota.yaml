@@ -5,6 +5,11 @@ default:
   instances:  2
   ram:        8192
 
+course:
+  cores:      4
+  instances:  2
+  ram:        8192
+
 test:
   cores:      40
   instances:  20
