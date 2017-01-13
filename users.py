@@ -46,7 +46,15 @@ for mail in projects:
         else:
             search = uib.get_user(mail, attr=conf['uib']['attr'])
             if len(search) > 0:
-                user = search[0]
+                if 'student' in search[0][1]['employeeType']:
+                    if len(search) > 1:
+                        user = search[1]
+                    else:
+                        count['type']['student'] += 1
+                        logger.debug("=> count:type:student: +1")
+                        continue
+                else:
+                    user = search[0]
                 if 'IT-avdelingen' in user[1][conf['uib']['org']]:
                     count['type']['staff'] += 1
                     logger.debug("=> count:type:staff: +1 (IT-avdelingen)")
