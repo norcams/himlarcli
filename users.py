@@ -78,6 +78,7 @@ for mail in projects:
                 print user
         else:
             print 'Unknown user %s' % mail
-
+    else:
+        print 'Unknown user %s' % mail
 
 print count
