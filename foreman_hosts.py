@@ -7,7 +7,7 @@ import ConfigParser
 from himlarcli.foremanclient import Client
 from himlarcli import utils as himutils
 
-desc = 'Create an inventory config in ./config.<loc>'
+desc = 'Create an location inventory config in ./config.<loc>'
 options = utils.get_options(desc, hosts=False)
 
 foreman = Client(options.config, options.debug)
