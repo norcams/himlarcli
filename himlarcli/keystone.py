@@ -34,6 +34,13 @@ class Keystone(Client):
         project = self.__get_project(project, domain=domain)
         return project
 
+    def list_users(self, domain=False, **kwargs):
+        user_list = self.__get_users(domain, **kwargs)
+        users = list()
+        for i in user_list:
+            users.append(i.name)
+        return users
+
     def list_projects(self, domain=False, **kwargs):
         project_list = self.__get_projects(domain, **kwargs)
         projects = list()

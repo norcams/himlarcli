@@ -6,9 +6,10 @@ from himlarcli.nova import Nova
 from himlarcli.keystone import Keystone
 from himlarcli.ldapclient import LdapClient
 
-options = utils.get_options('Print openstack user stats', hosts=False)
+desc = 'Show types of openstack users in keystone'
+options = utils.get_options(desc=desc, hosts=False)
 keystoneclient = Keystone(options.config, debug=options.debug)
-projects = keystoneclient.list_projects('dataporten')
+projects = keystoneclient.list_users('dataporten')
 logger = keystoneclient.get_logger()
 
 count = dict()
