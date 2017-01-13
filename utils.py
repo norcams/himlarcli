@@ -140,12 +140,15 @@ def get_action_options(desc, actions, dry_run=False, config=True, debug=True, op
             arg['metavar'] = arg['dest']
         if not 'const' in arg:
             arg['const'] = None
+        if not 'required' in arg:
+            arg['required'] = False
         parser.add_argument(name,
                             dest=arg['dest'],
                             action=arg['action'],
                             default=arg['default'],
                             metavar=arg['metavar'],
                             const=arg['const'],
+                            required=arg['required'],
                             help=arg['help'])
     parser.add_argument('action',
                         metavar='actions',
