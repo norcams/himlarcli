@@ -8,45 +8,48 @@ from himlarcli import utils as himutils
 
 # Input args
 desc = 'Mange student course project'
-actions = ['create']
-opt_args = { '-n': { 'dest': 'name', 'help': 'course name', 'metavar': 'name'},
+actions = ['create', 'list', 'delete']
+opt_args = { '-n': { 'dest': 'name', 'help': 'course name (mandatory)', 'required': True, 'metavar': 'name'},
              '-u': { 'dest': 'user', 'help': 'email of teacher', 'metavar': 'user'},
+             '-q': { 'dest': 'quota', 'help': 'project quota', 'default': 'course', 'metavar': 'quota'},
              '-f': { 'dest': 'file', 'help': 'file with students', 'metavar': 'file'}}
 
-options = utils.get_action_options(desc, actions, opt_args=opt_args)
+options = utils.get_action_options(desc, actions, dry_run=True, opt_args=opt_args)
 ksclient = Keystone(options.config, debug=options.debug)
-#novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
 quota = himutils.load_config('config/quota.yaml', log=ksclient.get_logger())
-
+project_types = himutils.load_config('config/type.yaml', log=ksclient.get_logger())
 domain='Dataporten'
 
 if options.action[0] == 'create':
-    if options.name and options.user and options.file:
+    if options.user and options.file:
         students = himutils.load_file(options.file, log=ksclient.get_logger())
         pp = pprint.PrettyPrinter(indent=1)
         # Create owner project
         project_name = '%s-%s' % (options.name, options.user.lower())
-        project = ksclient.create_project(domain=domain,
-                                          project=project_name,
-                                          admin=options.user,
-                                          test=0,
-                                          type='course',
-                                          quota=quota['course'])
-        ksclient.grant_role(project=project_name,
-                            user=options.user,
-                            role='superuser',
-                            domain=domain)
-
-        # Create student projects
-        for student in students:
-            project_name = '%s-%s' % (options.name, student.lower())
+        if not options.dry_run:
             project = ksclient.create_project(domain=domain,
                                               project=project_name,
                                               admin=options.user,
                                               test=0,
-                                              type='course',
-                                              quota=quota['course'])
-            if project:
+                                              course=options.name,
+                                              type='education',
+                                              quota=quota[options.quota])
+            ksclient.grant_role(project=project_name,
+                                user=options.user,
+                                role='superuser',
+                                domain=domain)
+
+        # Create student projects
+        for student in students:
+            project_name = '%s-%s' % (options.name, student.lower())
+            if not options.dry_run:
+                project = ksclient.create_project(domain=domain,
+                                                  project=project_name,
+                                                  admin=options.user,
+                                                  test=0,
+                                                  course=options.name,
+                                                  type='education',
+                                                  quota=quota[options.quota])
                 pp.pprint(project.to_dict())
                 # Grant student access
                 ksclient.grant_role(project=project_name,
@@ -59,15 +62,28 @@ if options.action[0] == 'create':
                                     role='user',
                                     domain=domain)
     else:
-        print 'student file, user and project name must be set to create project'
+        print 'student file (-f) and user (-u) must be set to create course project'
 elif options.action[0] == 'list':
-    projects = ksclient.list_projects(domain=domain)
-    for p in projects:
-        print p
-elif options.action[0] == 'show':
-    if options.name:
-        project = ksclient.get_project(project=options.name, domain=domain)
-        pp = pprint.PrettyPrinter(indent=1)
-        pp.pprint(project.to_dict())
+    projects = ksclient.get_projects(domain=domain, course=options.name)
+    pp = pprint.PrettyPrinter(indent=1)
+    for project in projects:
+        if "%s-%s" % (options.name, project.admin.lower()) == project.name:
+            print "TEACHER=%s" % project.name
+            if options.debug:
+                pp.pprint(project.to_dict())
+        else:
+            print "STUDENT=%s" % project.name
+            if options.debug:
+                pp.pprint(project.to_dict())
+elif options.action[0] == 'delete':
+    projects = ksclient.get_projects(domain=domain, course=options.name)
+    q = "Delete projects and all instances for %s (yes|no)? " % options.name
+    answer = raw_input(q)
+    if answer.lower() == 'yes':
+        print "Deleting %s projects for %s" % (len(projects), options.name)
+        print 'Please wait...'
+        for project in projects:
+            if not options.dry_run:
+                ksclient.delete_project(project.name, domain=domain)
     else:
-        print 'name must be set to show project'
+        print "You just dodged a bullet my friend!"

@@ -34,6 +34,10 @@ class Keystone(Client):
         project = self.__get_project(project, domain=domain)
         return project
 
+    def get_projects(self, domain=False, user=False, **kwargs):
+        project_list = self.__get_projects(domain, user, **kwargs)
+        return project_list
+
     def list_users(self, domain=False, **kwargs):
         user_list = self.__get_users(domain, **kwargs)
         users = list()
@@ -58,10 +62,10 @@ class Keystone(Client):
     def delete_project(self, project, domain=None):
         # Map str to objects
         domain = self.__get_domain(domain)
-        project = self.__get_project(project, domain=domain)
-
-        self.__delete_instances(project)
-        self.client.projects.delete(project)
+        project_id = self.__get_project(project, domain=domain)
+        self.logger.debug('=> delete project %s' % project)
+        self.__delete_instances(project_id)
+        self.client.projects.delete(project_id)
 
     """ Grant a role to a project for a user """
     def grant_role(self, user, project, role, domain=None):
@@ -193,13 +197,22 @@ class Keystone(Client):
         else:
             return False
 
-    def __get_projects(self, domain=False, **kwargs):
-        if domain:
-            domain_id = self.__get_domain(domain)
-            projects = self.client.projects.list(domain=domain_id, **kwargs)
+    def __get_projects(self, domain=False, user=False, **kwargs):
+        domain_id = self.__get_domain(domain) if domain else None
+        user_id = self.__get_user(user=user, domain=domain_id) if user else None
+        projects = self.client.projects.list(domain=domain_id, user=user_id)
+        self.logger.debug('=> get projects (domain=%s,user=%s)' % (domain, user))
+        # Filter projects
+        if kwargs:
+            self.logger.debug('=> filter project %s' % kwargs)
+            project_list = list()
+            for p in projects:
+                for k,v in kwargs.iteritems():
+                    if hasattr(p, k) and getattr(p, k) == v:
+                        project_list.append(p)
+            return project_list
         else:
-            projects = self.client.projects.list()
-        return projects
+            return projects
 
     def __get_users(self, domain=False, **kwargs):
         if domain:
