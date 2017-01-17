@@ -2,10 +2,12 @@ from client import Client
 from novaclient import client as novaclient
 from keystoneclient.v3 import client as keystoneclient
 from novaclient.exceptions import NotFound
+from datetime import datetime, date
 import urllib2
 import json
 import pprint
 import time
+
 
 class Nova(Client):
     version = 2
@@ -104,6 +106,18 @@ class Nova(Client):
             else:
                 self.logger.debug("=> drop %s from email list" % email)
         return list(emails)
+
+    def get_usage(self, project_id=None, start=None, end=None):
+        if not start:
+            start = datetime(2016, 11, 10)
+        if not end:
+            end = datetime.today()
+        if project_id:
+            usage = self.client.usage.get(tenant_id=project_id, start=start, end=end)
+        else:
+            usage = self.client.usage.list(detailed=True, start=start, end=end)
+        return usage
+
 
     def save_states(self):
         instances = self.__get_all_instances()
