@@ -75,9 +75,14 @@ if options.action[0] == 'delete':
     else:
         print 'project name must be set to delete project'
 if options.action[0] == 'list':
-    projects = ksclient.list_projects(domain=domain)
+    projects = ksclient.get_projects(domain=domain)
     for p in projects:
-        print p
+        usage = novaclient.get_usage(project_id=p.id)
+        if hasattr(usage, 'server_usages'):
+            instance_count = len(usage.server_usages)
+        else:
+            instance_count = 0
+        print '%s (instances: %s)' % (p.name, instance_count)
 if options.action[0] == 'show':
     if options.project:
         project = ksclient.get_project(project=options.project, domain=domain)
