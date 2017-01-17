@@ -22,6 +22,9 @@ domain='Dataporten'
 
 if options.action[0] == 'create':
     if options.user and options.file:
+        if not ksclient.is_valid_user(user=options.user, domain=domain):
+            print "ERROR! %s is not a valid user. Group from access not found!" % options.user
+            sys.exit(1)
         students = himutils.load_file(options.file, log=ksclient.get_logger())
         pp = pprint.PrettyPrinter(indent=1)
         # Create owner project

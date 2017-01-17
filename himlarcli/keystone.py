@@ -38,6 +38,15 @@ class Keystone(Client):
         project_list = self.__get_projects(domain, user, **kwargs)
         return project_list
 
+    """ Check if a user has registered with access """
+    def is_valid_user(self, user, domain=None):
+        domain_id = self.__get_domain(domain)
+        group = self.__get_group(group='%s-group' % user, domain=domain)
+        if group:
+            return True
+        else:
+            return False
+
     def list_users(self, domain=False, **kwargs):
         user_list = self.__get_users(domain, **kwargs)
         users = list()
