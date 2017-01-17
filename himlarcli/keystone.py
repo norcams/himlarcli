@@ -41,7 +41,7 @@ class Keystone(Client):
     """ Check if a user has registered with access """
     def is_valid_user(self, user, domain=None):
         domain_id = self.__get_domain(domain)
-        group = self.__get_group(group='%s-group' % user, domain=domain)
+        group = self.__get_group(group='%s-group' % user, domain=domain_id)
         if group:
             return True
         else:
