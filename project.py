@@ -11,36 +11,49 @@ desc = 'Perform project action'
 actions = ['list', 'show', 'create', 'grant', 'delete', 'quota']
 opt_args = { '-p': { 'dest': 'project', 'help': 'project name', 'metavar': 'name'},
              '-u': { 'dest': 'user', 'help': 'email of user', 'metavar': 'user'},
-             '-t': { 'dest': 'type', 'help': 'project type (used for quota)', 'default': 'default', 'metavar': 'type'}}
-options = utils.get_action_options(desc, actions, opt_args=opt_args)
+             '-q': { 'dest': 'quota', 'help': 'project quota', 'default': 'default', 'metavar': 'quota'},
+             '-t': { 'dest': 'type', 'help': 'project type (default admin)', 'default': 'admin', 'metavar': 'type'}}
+options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
 ksclient = Keystone(options.config, debug=options.debug)
 novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
 quota = himutils.load_config('config/quota.yaml')
+project_types = himutils.load_config('config/type.yaml', log=ksclient.get_logger())
 domain='Dataporten'
 
 if options.action[0] == 'create':
-    if options.type not in quota:
-        print 'Type %s unknown. Check config/quota.yaml' % options.type
+    if options.quota not in quota:
+        print 'ERROR! Quota %s unknown. Check valid quota in config/quota.yaml' % options.quota
+        sys.exit(1)
+    if options.type not in project_types['types']:
+        print 'ERROR! Type %s is not valid. Check valid types in config/type.yaml' % options.type
+        sys.exit(1)
     if options.project and options.user:
+        if not ksclient.is_valid_user(user=options.user, domain=domain):
+            print "ERROR! %s is not a valid user. Group from access not found!" % options.user
+            sys.exit(1)
         if options.type == 'test':
             test = 1
         else:
             test = 0
-        project = ksclient.create_project(domain=domain,
-                                          project=options.project,
-                                          admin=options.user,
-                                          test=test,
-                                          type=options.type,
-                                          quota=quota[options.type])
-        pp = pprint.PrettyPrinter(indent=1)
-        if project:
-            pp.pprint(project.to_dict())
-            ksclient.grant_role(project=options.project,
-                                user=options.user,
-                                role='user',
-                                domain=domain)
+        if not options.dry_run:
+            project = ksclient.create_project(domain=domain,
+                                              project=options.project,
+                                              admin=options.user,
+                                              test=test,
+                                              type=options.type,
+                                              quota=quota[options.quota])
+            pp = pprint.PrettyPrinter(indent=1)
+            if project:
+                pp.pprint(project.to_dict())
+                ksclient.grant_role(project=options.project,
+                                    user=options.user,
+                                    role='user',
+                                    domain=domain)
+        else:
+            print 'Run in dry-run mode. No project created'
     else:
-        print 'user and project name must be set to create project'
+        print 'ERROR! user and project name must be set to create project'
+        sys.exit(1)
 if options.action[0] == 'grant':
     if options.project and options.user:
         ksclient.grant_role(project=options.project,
