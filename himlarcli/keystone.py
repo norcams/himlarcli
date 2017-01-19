@@ -18,6 +18,9 @@ class Keystone(Client):
     def get_client(self):
         return self.client
 
+    def get_user(self, user_id):
+        return self.client.users.get(user_id)
+
     def get_region(self):
         return self.config._sections['openstack']['region']
 
