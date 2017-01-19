@@ -51,7 +51,7 @@ elif options.action[0] == 'notify':
             user_instances += "%s (%s)\n" % (server, info['status'])
         msg = MIMEText(user_instances + body_content)
         msg['Subject'] = 'UH-IaaS: Rebooting instance(s) (%s)' % ksclient.region
-        if not options.dry_run:
+        #if not options.dry_run:
             #notify.send_mail(user, msg)
     pp = pprint.PrettyPrinter(indent=1)
     pp.pprint(users)
