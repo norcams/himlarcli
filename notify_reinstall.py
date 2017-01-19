@@ -6,6 +6,9 @@ from himlarcli.keystone import Keystone
 from himlarcli.notify import Notify
 from email.mime.text import MIMEText
 
+print "Depricated! Use aggregate.py"
+sys.exit(1)
+
 options = utils.get_options('Notify users of rebuild host', dry_run=True, hosts=1)
 notify = Notify(options.config, debug=options.debug)
 with open('misc/notify_email.txt', 'r') as body_txt:

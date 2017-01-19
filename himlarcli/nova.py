@@ -23,31 +23,55 @@ class Nova(Client):
         self.client = novaclient.Client(self.version,
                                         session=self.sess,
                                         region_name=self.region)
-        self.set_host(host)
 
+    """ Create a new keystone client if needed and then return the client """
     def get_keystone_client(self):
         if not self.ksclient:
-            self.ksclient = keystoneclient.Client(session=self.sess)
+            self.ksclient = keystoneclient.Client(session=self.sess,
+                                                  region_name=self.region)
         return self.ksclient
 
-    def valid_host(self):
-        try:
-            self.client.hosts.get(self.host)
-            valid = True
-        except NotFound as e:
-            valid = False
-        return valid
+################################## AGGREGATE ##################################
 
-    def set_host(self, host):
-        if not host:
-            self.host = None
-            return
-        domain = self.config.get('openstack', 'domain')
-        if domain and not '.' in host:
-            self.logger.debug("=> prepend %s to %s" % (domain, host))
-            host = host + '.' + domain
-        self.host = host
+    def get_aggregate(self, aggregate):
+        aggregate = self.__get_aggregate(aggregate)
+        return aggregate
 
+    def update_aggregate(self, aggregate, metadata):
+        aggregate = self.__get_aggregate(aggregate)
+        return self.client.aggregates.set_metadata(aggregate.id, metadata)
+
+    def get_instances(self, aggregate=None, simple=False):
+        if not aggregate:
+            instances = self.__get_instances()
+        else:
+            aggregate = self.__get_aggregate(aggregate)
+            if not aggregate.hosts:
+                instances = list()
+            else:
+                for h in aggregate.hosts:
+                    instances = self.__get_instances(h)
+        if not simple:
+            return instances
+        else:
+            instance_list = list()
+            for i in instances:
+                instance_list.append(i.name)
+            return instance_list
+
+    def get_users(self, aggregate=None, simple=False):
+        self.get_keystone_client()
+        instances = self.get_instances(aggregate)
+        emails = set() if simple else list()
+        for i in instances:
+            user = self.ksclient.users.get(i.user_id)
+            if not simple:
+                emails.append(user)
+            elif "@" in user.name:
+                emails.add(user.name.lower())
+                self.logger.debug("=> add %s to user list" % user.name)
+        return emails
+    
     def delete_project_instances(self, project_id):
         search_opts = dict(tenant_id=project_id, all_tenants=1)
         instances = self.__get_all_instances(search_opts=search_opts)
@@ -62,36 +86,6 @@ class Nova(Client):
     def set_quota(self, project_id, quota):
         self.logger.debug('=> quota set to %s' % quota)
         self.client.quotas.update(project_id, **quota)
-
-    def list_instances(self):
-        instances = self.__get_instances()
-        self.get_keystone_client()
-        users = dict()
-        for i in instances:
-            email = urllib2.unquote(i._info['user_id'])
-            # user_id is not email if local user
-            if "@" not in email:
-                user = self.ksclient.users.get(email)
-                # First make sure it is not a system user
-                if user.domain_id == 'default':
-                    self.logger.debug("=> instance %s is owned by system user" % i._info['name'])
-                    continue
-                if not user.domain_id:
-                    self.logger.debug("=> dataporten user %s" % user.name)
-                    email = user.name
-                else:
-                    self.logger.debug("=> local user %s" % user.name)
-                    email = user.email
-            if email not in users.keys():
-                users[email] = {}
-            if len(i._info['addresses']['public']) > 0:
-                ip = i._info['addresses']['public'][0]['addr']
-            else:
-                ip = '<no public ip>'
-            name = i._info['name']
-            users[email][name] = { 'ip': ip, 'status': i._info['status']}
-            self.logger.debug("=> instance %s for %s" % (i.name, email))
-        return users
 
     def list_users(self):
         """ Return a list of email for users that have instance(s) on a host """
@@ -169,6 +163,8 @@ class Nova(Client):
     def get_client(self):
         return self.client
 
+################################### FLAVOR ####################################
+
     """ Update is not an option. We delete and create a new flavor! """
     def update_flavor(self, name, spec, dry_run=False):
         flavors = self.get_flavors()
@@ -206,9 +202,8 @@ class Nova(Client):
         flavors = self.client.flavors.list(detailed=True, is_public=True)
         return flavors
 
-    #
-    # private methods
-    #
+################################## PRIVATE ####################################
+
     def __change_status(self, action='start', state='SHUTOFF', instances=None):
         if not instances:
             instances = self.__get_instances()
@@ -225,10 +220,8 @@ class Nova(Client):
 
         print "Run %s on %s instances with state %s" % (action, count, state)
 
-    def __get_instances(self):
-        if not self.valid_host():
-            return list()
-        search_opts = dict(all_tenants=1, host=self.host)
+    def __get_instances(self, host=None):
+        search_opts = dict(all_tenants=1, host=host)
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
         return instances
@@ -237,3 +230,10 @@ class Nova(Client):
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
         return instances
+
+    def __get_aggregate(self, aggregate):
+        aggregates = self.client.aggregates.list()
+        for a in aggregates:
+            if a.name == aggregate:
+                return a
+        return None

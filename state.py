@@ -6,6 +6,9 @@ from himlarcli import logger
 from himlarcli.state import State
 from himlarcli.nova import Nova
 
+print "Depricated!"
+sys.exit(1)
+
 desc = 'Update state information'
 actions = ['purge','dump','save', 'start']
 

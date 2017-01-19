@@ -5,6 +5,9 @@ import pprint
 import utils
 from himlarcli.nova import Nova
 
+print "Depricated! Use aggregate.py"
+sys.exit(1)
+
 desc = 'Perform action on all instances on host'
 actions = ['list','start','start_from_state','stop','delete', 'save']
 
