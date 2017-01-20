@@ -63,7 +63,7 @@ elif options.action[0] == 'notify':
     for user, instances in users.iteritems():
         user_instances = ""
         for server,info in instances.iteritems():
-            user_instances += "%s (%s)\n" % (server, info['status'])
+            user_instances += "%s (current status %s)\n" % (server, info['status'])
         msg = MIMEText(user_instances + body_content)
         msg['Subject'] = 'UH-IaaS: Rebooting instance (%s)' % ksclient.region
         if not options.dry_run:
