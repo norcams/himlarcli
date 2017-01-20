@@ -1,10 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 import sys
 import utils
 import pprint
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli import utils as himutils
+
+himutils.is_virtual_env()
 
 # Input args
 desc = 'Perform project action'
