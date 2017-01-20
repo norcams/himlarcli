@@ -45,12 +45,13 @@ class Nova(Client):
         if not aggregate:
             instances = self.__get_instances()
         else:
-            aggregate = self.__get_aggregate(aggregate)
-            if not aggregate.hosts:
+            agg = self.__get_aggregate(aggregate)
+            if not agg.hosts:
                 instances = list()
             else:
-                for h in aggregate.hosts:
+                for h in agg.hosts:
                     instances = self.__get_instances(h)
+        self.logger.debug("=> found %s instances in %s" % (len(instances), aggregate))
         if not simple:
             return instances
         else:
@@ -63,15 +64,17 @@ class Nova(Client):
         self.get_keystone_client()
         instances = self.get_instances(aggregate)
         emails = set() if simple else list()
+        self.logger.debug("=> found %s instances in %s" % (len(instances), aggregate))
         for i in instances:
             user = self.ksclient.users.get(i.user_id)
+            self.logger.debug('=> found user %s for instance %s' % (user.name, i.name))
             if not simple:
                 emails.append(user)
             elif "@" in user.name:
                 emails.add(user.name.lower())
                 self.logger.debug("=> add %s to user list" % user.name)
         return emails
-    
+
     def delete_project_instances(self, project_id):
         search_opts = dict(tenant_id=project_id, all_tenants=1)
         instances = self.__get_all_instances(search_opts=search_opts)
