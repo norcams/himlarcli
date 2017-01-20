@@ -1,0 +1,6 @@
+# Valid project types
+types:
+  - research
+  - education
+  - admin
+  - test
