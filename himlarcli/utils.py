@@ -9,6 +9,7 @@ import yaml
 import hashlib
 import functools
 import mimetypes
+from string import Template
 
 def get_config(config_path):
     if not os.path.isfile(config_path):
@@ -24,6 +25,11 @@ def get_logger(name, config, debug, log=None):
     else:
         mylog = setup_logger(name, debug)
     return mylog
+
+def is_virtual_env():
+    if not hasattr(sys, 'real_prefix'):
+        print "Remember to source bin/activate!"
+        sys.exit(1)
 
 def setup_logger(name, debug,
                  log_path = '/opt/himlarcli/',
@@ -68,6 +74,27 @@ def get_abs_path(file):
             install_dir = '/opt/himlarcli'
         abs_path = install_dir + '/' + file
     return abs_path
+
+def load_template(inputfile, mapping, log=None):
+    inputfile = get_abs_path(inputfile)
+    if not os.path.isfile(inputfile):
+        if log:
+            log.debug('=> file not found: %s' % inputfile)
+        return None
+    with open(inputfile, 'r') as txt:
+        content = txt.read()
+    template = Template(content)
+    return template.substitute(mapping)
+
+def load_txt_file(inputfile, log=None):
+    inputfile = get_abs_path(inputfile)
+    if not os.path.isfile(inputfile):
+        if log:
+            log.debug('=> file not found: %s' % inputfile)
+        return None
+    with open(inputfile, 'r') as txt:
+        content = txt.read()
+    return content
 
 def load_file(inputfile, log=None):
     inputfile = get_abs_path(inputfile)
