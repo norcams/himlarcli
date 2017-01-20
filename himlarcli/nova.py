@@ -47,9 +47,11 @@ class Nova(Client):
         else:
             agg = self.__get_aggregate(aggregate)
             if not agg.hosts:
+                self.logger.debug('=> not hosts found in aggregate %s' % aggregate)
                 instances = list()
             else:
                 for h in agg.hosts:
+                    self.logger.debug('=> hosts %s found in aggregate %s' % (h, aggregate))
                     instances = self.__get_instances(h)
         self.logger.debug("=> found %s instances in %s" % (len(instances), aggregate))
         if not simple:
@@ -64,7 +66,6 @@ class Nova(Client):
         self.get_keystone_client()
         instances = self.get_instances(aggregate)
         emails = set() if simple else list()
-        self.logger.debug("=> found %s instances in %s" % (len(instances), aggregate))
         for i in instances:
             user = self.ksclient.users.get(i.user_id)
             self.logger.debug('=> found user %s for instance %s' % (user.name, i.name))
