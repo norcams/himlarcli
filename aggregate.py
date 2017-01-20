@@ -68,5 +68,10 @@ elif options.action[0] == 'notify':
         msg['Subject'] = 'UH-IaaS: Rebooting instance (%s)' % ksclient.region
         if not options.dry_run:
             notify.send_mail(user, msg)
+            print "Sending email to user %s" % user
+        else:
+            print "Dry-run: Mail would be sendt to user %s" % user
     pp = pprint.PrettyPrinter(indent=1)
+    print "\nComplete list of users and instances:"
+    print "====================================="
     pp.pprint(users)
