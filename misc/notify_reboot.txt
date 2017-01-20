@@ -1,7 +1,10 @@
 
-These instances running in UH-IaaS region $region will be rebooted on $date:
+Due to scheduled maintenance these instances running in UH-IaaS region $region
+will be rebooted on $date:
 
 Read more at http://docs.uh-iaas.no/en/latest/terms-of-service.html#availability
+
+Support and contact information can be found at http://docs.uh-iaas.no
 
 --
 UH-IaaS team

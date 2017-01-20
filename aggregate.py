@@ -11,14 +11,14 @@ from email.mime.text import MIMEText
 
 himutils.is_virtual_env()
 
-desc = 'Mange host aggregate groups of compute nodes'
+desc = 'Mange host aggregate groups of compute nodes. Note that notify sends email to users!'
 actions = ['show', 'instances', 'users', 'notify']
 # Default date for notify are today at 14:00 + 5 days
 d = datetime.today()
 date = datetime(d.year, d.month, d.day, 14, 0) + timedelta(days=5)
-date = '%s-%s-%s around %s:00' % (date.year, date.month, date.day, date.hour)
+date = date.strftime('%Y-%m-%d around %H:00')
 opt_args = { '-n': { 'dest': 'aggregate', 'help': 'aggregate name', 'required': True, 'metavar': 'name'},
-             '--date': { 'dest': 'date', 'help': 'date string', 'default': date, 'metavar': 'date'} }
+             '-m': { 'dest': 'date', 'help': 'date message', 'default': date, 'metavar': 'date'} }
 
 options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
 ksclient = Keystone(options.config, debug=options.debug)
@@ -65,7 +65,7 @@ elif options.action[0] == 'notify':
         for server,info in instances.iteritems():
             user_instances += "%s (%s)\n" % (server, info['status'])
         msg = MIMEText(user_instances + body_content)
-        msg['Subject'] = 'UH-IaaS: Rebooting instance(s) (%s)' % ksclient.region
+        msg['Subject'] = 'UH-IaaS: Rebooting instance (%s)' % ksclient.region
         if not options.dry_run:
             notify.send_mail(user, msg)
     pp = pprint.PrettyPrinter(indent=1)
