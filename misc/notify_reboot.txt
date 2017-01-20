@@ -1,0 +1,7 @@
+
+These instances running in UH-IaaS region $region will be rebooted on $date:
+
+Read more at http://docs.uh-iaas.no/en/latest/terms-of-service.html#availability
+
+--
+UH-IaaS team
