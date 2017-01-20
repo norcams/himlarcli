@@ -50,9 +50,10 @@ class Nova(Client):
                 self.logger.debug('=> not hosts found in aggregate %s' % aggregate)
                 instances = list()
             else:
+                instances = list()
                 for h in agg.hosts:
                     self.logger.debug('=> hosts %s found in aggregate %s' % (h, aggregate))
-                    instances = self.__get_instances(h)
+                    instances += self.__get_instances(h)
         self.logger.debug("=> found %s instances in %s" % (len(instances), aggregate))
         if not simple:
             return instances
