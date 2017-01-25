@@ -171,7 +171,7 @@ class Nova(Client):
 ################################### FLAVOR ####################################
 
     """ Update is not an option. We delete and create a new flavor! """
-    def update_flavor(self, name, spec, dry_run=False):
+    def update_flavor(self, name, spec, public=True, dry_run=False):
         flavors = self.get_flavors()
         found = False
         for f in flavors:
@@ -179,6 +179,8 @@ class Nova(Client):
                 continue
             found = True
             update = False
+            if f._info['os-flavor-access:is_public'] != public:
+                update = True
             for k,v in spec.iteritems():
                 if v != f._info[k]:
                     update = True
@@ -190,9 +192,10 @@ class Nova(Client):
                 self.client.flavors.create(name=name,
                                             ram=spec['ram'],
                                             vcpus=spec['vcpus'],
-                                            disk=spec['disk'])
+                                            disk=spec['disk'],
+                                            is_public=public)
             elif update and dry_run:
-                self.logger.debug('=> dry-run: update %s: %s' % (name,spec))
+                self.logger.debug('=> dry-run: update %s: %s' % (name, spec))
             else:
                 self.logger.debug('=> no update needed for %s' % name)
         if not found:
@@ -201,11 +204,30 @@ class Nova(Client):
                 self.client.flavors.create(name=name,
                                            ram=spec['ram'],
                                            vcpus=spec['vcpus'],
-                                           disk=spec['disk'])
+                                           disk=spec['disk'],
+                                           is_public=public)
 
-    def get_flavors(self):
-        flavors = self.client.flavors.list(detailed=True, is_public=True)
-        return flavors
+
+    def get_flavors(self, filter=None):
+        flavors = self.client.flavors.list(detailed=True, is_public=None)
+        flavors_filtered = list()
+        if filter:
+            for flavor in flavors:
+                if filter in flavor.name:
+                    self.logger.debug('=> added %s to list' % flavor.name)
+                    flavors_filtered.append(flavor)
+                else:
+                    self.logger.debug('=> %s filterd out of list' % flavor.name)
+            return flavors_filtered
+        else:
+            return flavors
+
+    def purge_flavors(self, filter, flavors):
+        current_flavors = self.get_flavors(filter)
+        for flavor in current_flavors:
+            if flavor.name not in flavors[filter]:
+                self.logger.debug('=> delete flavor %s' % flavor.name)
+                self.client.flavors.delete(flavor.id)
 
 ################################## PRIVATE ####################################
 
