@@ -3,6 +3,7 @@
 import sys
 import utils
 import pprint
+from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli import utils as himutils
 
@@ -15,8 +16,10 @@ opt_args = { '-n': { 'dest': 'name', 'help': 'flavor class (mandatory)', 'requir
              '-p': { 'dest': 'project', 'help': 'project to grant or revoke access'} }
 
 options = utils.get_action_options(desc, actions, dry_run=True, opt_args=opt_args)
-novaclient = Nova(options.config, debug=options.debug)
-logger = novaclient.get_logger()
+ksclient = Keystone(options.config, debug=options.debug)
+logger = ksclient.get_logger()
+novaclient = Nova(options.config, debug=options.debug, log=logger)
+domain='Dataporten'
 
 if options.action[0] == 'list':
     pp = pprint.PrettyPrinter(indent=1)
@@ -51,10 +54,19 @@ elif options.action[0] == 'purge':
     print 'Purge %s flavors' % options.name
     novaclient.purge_flavors(options.name, flavors, options.dry_run)
 elif options.action[0] == 'grant' or options.action[0] == 'revoke':
+    flavors = himutils.load_config('config/flavors/%s.yaml' % options.name, logger)
+    if 'public' in flavors and flavors['public']:
+        print 'Grant or revoke will not work on public flavors!'
+        sys.exit(0)
     if not options.project:
         print 'Missing project to grant access'
         sys.exit(0)
+    project = ksclient.get_project(options.project, domain=domain)
+    if not project:
+        print 'Could not find project %s' % options.project
+        sys.exit(0)
+    print "%s access to %s for %s" % (options.action[0], options.name, options.project)
     novaclient.update_flavor_access(filter=options.name,
-                                    project=options.project,
+                                    project_id=project.id,
                                     action=options.action[0],
                                     dry_run=options.dry_run)

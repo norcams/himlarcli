@@ -232,7 +232,7 @@ class Nova(Client):
                 self.logger.debug('=> %sdelete flavor %s' %
                                   (dry_run_txt, flavor.name))
 
-    def update_flavor_access(self, filter, project, action, dry_run=False):
+    def update_flavor_access(self, filter, project_id, action, dry_run=False):
         dry_run_txt = 'DRY-RUN: ' if dry_run else ''
         if action == 'revoke':
             action_func = 'remove_tenant_access'
@@ -243,16 +243,16 @@ class Nova(Client):
             try:
                 if not dry_run:
                     getattr(self.client.flavor_access, action_func)(flavor.id,
-                                                                    project)
-                self.logger.debug('=> %s%s access to %s for %s' %
-                                  (dry_run_txt, action, flavor.name, project))
+                                                                    project_id)
+                self.logger.debug('=> %s%s access to %s' %
+                                  (dry_run_txt, action, flavor.name))
 
             except (novaclient.exceptions.Conflict) as e:
-                self.logger.debug('=> access exsists for %s to %s' %
-                                  (flavor.name, project))
+                self.logger.debug('=> access exsists for %s' %
+                                  (flavor.name))
             except (novaclient.exceptions.NotFound) as e:
-                self.logger.debug('=> unable to %s %s for %s' %
-                                  (action, flavor.name, project))
+                self.logger.debug('=> unable to %s %s' %
+                                  (action, flavor.name))
 
 ################################## PRIVATE ####################################
 
