@@ -10,16 +10,13 @@ himutils.is_virtual_env()
 
 # Input args
 desc = 'Manage flavors'
-actions = ['update', 'purge', 'list']
-opt_args = { '-n': { 'dest': 'name', 'help': 'flavor class (mandatory)', 'required': True } }
-#             '-u': { 'dest': 'user', 'help': 'email of teacher', 'metavar': 'user'},
-#             '-q': { 'dest': 'quota', 'help': 'project quota', 'default': 'course', 'metavar': 'quota'},
-#             '-t': { 'dest': 'type', 'help': 'flavor type (default m1)', 'default': 'm1'} }
+actions = ['update', 'purge', 'list', 'grant', 'revoke']
+opt_args = { '-n': { 'dest': 'name', 'help': 'flavor class (mandatory)', 'required': True },
+             '-p': { 'dest': 'project', 'help': 'project to grant or revoke access'} }
 
 options = utils.get_action_options(desc, actions, dry_run=True, opt_args=opt_args)
 novaclient = Nova(options.config, debug=options.debug)
 logger = novaclient.get_logger()
-#defaults = himutils.load_config('config/flavors/default.yaml', logger)
 
 if options.action[0] == 'list':
     pp = pprint.PrettyPrinter(indent=1)
@@ -37,8 +34,6 @@ if options.action[0] == 'list':
             print '------------------------'
             print '%s is disabled!' % flavor.name
         #pp.pprint(flavor.to_dict())
-#elif options.action[0] == 'show':
-#
 elif options.action[0] == 'update':
     flavors = himutils.load_config('config/flavors/%s.yaml' % options.name, logger)
     if not flavors:
@@ -54,4 +49,12 @@ elif options.action[0] == 'purge':
         print 'ERROR! No flavors found in config/flavors/%s.yaml' % options.name
         sys.exit(1)
     print 'Purge %s flavors' % options.name
-    novaclient.purge_flavors(options.name, flavors)
+    novaclient.purge_flavors(options.name, flavors, options.dry_run)
+elif options.action[0] == 'grant' or options.action[0] == 'revoke':
+    if not options.project:
+        print 'Missing project to grant access'
+        sys.exit(0)
+    novaclient.update_flavor_access(filter=options.name,
+                                    project=options.project,
+                                    action=options.action[0],
+                                    dry_run=options.dry_run)

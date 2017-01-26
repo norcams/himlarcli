@@ -222,12 +222,37 @@ class Nova(Client):
         else:
             return flavors
 
-    def purge_flavors(self, filter, flavors):
+    def purge_flavors(self, filter, flavors, dry_run=False):
+        dry_run_txt = 'DRY-RUN: ' if dry_run else ''
         current_flavors = self.get_flavors(filter)
         for flavor in current_flavors:
             if flavor.name not in flavors[filter]:
-                self.logger.debug('=> delete flavor %s' % flavor.name)
-                self.client.flavors.delete(flavor.id)
+                if not dry_run:
+                    self.client.flavors.delete(flavor.id)
+                self.logger.debug('=> %sdelete flavor %s' %
+                                  (dry_run_txt, flavor.name))
+
+    def update_flavor_access(self, filter, project, action, dry_run=False):
+        dry_run_txt = 'DRY-RUN: ' if dry_run else ''
+        if action == 'revoke':
+            action_func = 'remove_tenant_access'
+        else:
+            action_func = 'add_tenant_access'
+        flavors = self.get_flavors(filter)
+        for flavor in flavors:
+            try:
+                if not dry_run:
+                    getattr(self.client.flavor_access, action_func)(flavor.id,
+                                                                    project)
+                self.logger.debug('=> %s%s access to %s for %s' %
+                                  (dry_run_txt, action, flavor.name, project))
+
+            except (novaclient.exceptions.Conflict) as e:
+                self.logger.debug('=> access exsists for %s to %s' %
+                                  (flavor.name, project))
+            except (novaclient.exceptions.NotFound) as e:
+                self.logger.debug('=> unable to %s %s for %s' %
+                                  (action, flavor.name, project))
 
 ################################## PRIVATE ####################################
 
