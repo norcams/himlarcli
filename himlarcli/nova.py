@@ -85,12 +85,18 @@ class Nova(Client):
             time.sleep(60)
         self.__change_status(action='delete', state='SHUTOFF', instances=instances)
 
-    def list_quota(self, project_id):
-        return self.client.quotas.get(tenant_id=project_id)
+    def list_quota(self, project_id, detail=False):
+        return self.client.quotas.get(tenant_id=project_id, detail=detail)
 
     def set_quota(self, project_id, quota):
         self.logger.debug('=> quota set to %s' % quota)
         self.client.quotas.update(project_id, **quota)
+
+    def update_quota_class(self, class_name='default', updates={}):
+        return self.client.quota_classes.update(class_name, **updates)
+
+    def get_quota_class(self, class_name='default'):
+        return self.client.quota_classes.get(class_name)
 
     def list_users(self):
         """ Return a list of email for users that have instance(s) on a host """
