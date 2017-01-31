@@ -15,6 +15,7 @@ desc = 'Manage flavors'
 actions = ['update-default', 'show-default']
 opt_args = { '-n': { 'dest': 'name', 'help': 'project name'},
              '-p': { 'dest': 'project', 'help': 'project to grant or revoke access'} }
+opt_args = {}
 
 options = utils.get_action_options(desc, actions, dry_run=True, opt_args=opt_args)
 ksclient = Keystone(options.config, debug=options.debug)
@@ -35,6 +36,7 @@ if options.action[0] == 'show-default':
         print "Current defaults for %s" % comp
         pp.pprint(current.to_dict())
 elif options.action[0] == 'update-default':
+    dry_run_txt = 'DRY-RUN: ' if options.dry_run else ''
     pp = pprint.PrettyPrinter(indent=2)
     defaults = himutils.load_config('config/quotas/default.yaml', logger)
     if not 'cinder' in defaults or not 'nova' in defaults:
@@ -49,11 +51,13 @@ elif options.action[0] == 'update-default':
         updates = dict()
         for k,v in defaults[comp]['default'].iteritems():
             if getattr(current, k) != v:
-                logger.debug("=> Updated %s: from %s to %s" % (k, getattr(current, k), v))
+                logger.debug("=> %sUpdated %s: from %s to %s" %
+                             (dry_run_txt, k, getattr(current, k), v))
                 updates[k] = v
         if updates:
-            print 'Updated defaults for %s quota:' % comp
-            result = getattr(client, 'update_quota_class')()
-            pp.pprint(result.to_dict())
+            if not options.dry_run:
+                print 'Updated defaults for %s quota:' % comp
+                result = getattr(client, 'update_quota_class')(updates=updates)
+                pp.pprint(result.to_dict())
         else:
             print 'Nothing to update for %s' % comp
