@@ -1,0 +1,11 @@
+cinder:
+  default:
+    gigabytes:            100
+    per_volume_gigabytes: 100
+    volumes:              4
+    snapshots:            12
+nova:
+  default:
+    instances:            2
+    cores:                4
+    ram:                  8192
