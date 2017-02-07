@@ -1,0 +1,19 @@
+---
+public: false
+m2:
+  'm2.large':
+    ram:    8192
+    vcpus:  2
+    disk:   20
+  'm2.xlarge':
+    ram:    16384
+    vcpus:  4
+    disk:   20
+  'm2.2xlarge':
+    ram:    32768
+    vcpus:  8
+    disk:   20
+  'm2.4xlarge':
+    ram:    65536
+    vcpus:  16
+    disk:   20
