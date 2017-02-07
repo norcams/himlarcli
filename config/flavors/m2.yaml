@@ -1,5 +1,5 @@
 ---
-public: true
+public: false
 m2:
   'm2.large':
     ram:    8192
