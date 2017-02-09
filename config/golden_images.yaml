@@ -84,7 +84,7 @@ default:
     'latest':           'win2016-server.qcow2'
     'checksum_file':    'sha256sum.txt'
     'checksum':         'sha256'
-    'visibility':       'private'
+    'visibility':       'public'
     'disk_format':      'qcow2'
     'min_ram':          4090
     'min_disk':         39
