@@ -83,6 +83,16 @@ nodes:
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   status-01:
     compute_profile: 1
     compute_resource: controller-02
