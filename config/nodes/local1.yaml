@@ -2,6 +2,9 @@ nodes:
   access-01:
     compute_profile: 1
     compute_resource: controller-01
+  api-01:
+    compute_profile: 1
+    compute_resource: controller-01
   compute-01:
     mac: 00:23:24:5e:33:b5
   console-01:
