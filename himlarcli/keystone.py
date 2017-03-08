@@ -92,8 +92,7 @@ class Keystone(Client):
         project = self.__get_project(project, domain=domain)
         role = self.__get_role(role)
         try:
-            exists = self.client.roles.list(role=role,
-                                            project=project,
+            exists = self.client.roles.list(project=project,
                                             group=group)
         except exceptions.http.NotFound as e:
             exists = None
