@@ -21,6 +21,28 @@ class Keystone(Client):
     def get_user_by_id(self, user_id):
         return self.client.users.get(user_id)
 
+    """ Return all users, groups and project for this email """
+    def get_user_objects(self, email, domain):
+        domain_id = self.__get_domain(domain)
+        obj = dict()
+        user_id = None
+        api = self.__get_user_by_email(email=email.lower(), domain_id=domain_id)
+        if len(api) == 1:
+            obj['api'] = api[0]
+            user_id = api[0].id
+        dp =  self.__get_user_by_email(email=email)
+        if len(dp) == 1:
+            obj['dataporten'] = dp[0]
+        group = self.__get_group(group='%s-group' % email, domain=domain_id)
+        obj['group'] = group
+        if user_id:
+            projects = self.client.projects.list(domain=domain_id, user=user_id)
+        else:
+            projects = []
+        obj['projects'] = projects
+
+        return obj
+
     def get_region(self):
         return self.config._sections['openstack']['region']
 
@@ -74,10 +96,43 @@ class Keystone(Client):
     def delete_project(self, project, domain=None):
         # Map str to objects
         domain = self.__get_domain(domain)
-        project_id = self.__get_project(project, domain=domain)
+        project_obj = self.__get_project(project, domain=domain)
         self.logger.debug('=> delete project %s' % project)
-        self.__delete_instances(project_id)
-        self.client.projects.delete(project_id)
+        self.__delete_instances(project_obj)
+        self.client.projects.delete(project_obj)
+
+    """ Delete both users, the users group and personal project. """
+    def delete_user(self, email, domain=None, dry_run=False):
+        obj = self.get_user_objects(email=email, domain=domain)
+        # Delete api user
+        if not dry_run and 'api' in obj:
+            self.logger.debug('=> delete  api user %s' % obj['api'].name)
+            self.client.users.delete(obj['api'])
+        elif dry_run:
+            self.logger.debug('=> DRY-RUN: delete api user %s' % obj['api'].name)
+        # Delete dataporten user
+        if not dry_run and 'dataporten' in obj:
+            self.logger.debug('=> delete dataporten user %s' % obj['dataporten'].name)
+            self.client.users.delete(obj['dataporten'])
+        elif dry_run:
+            self.logger.debug('=> DRY-RUN: delete dataporten user %s' % obj['dataporten'].name)
+        # Delete group
+        if not dry_run and 'group' in obj:
+            self.logger.debug('=> delete group %s' % obj['group'].name)
+            self.client.groups.delete(obj['group'])
+        elif dry_run:
+            self.logger.debug('=> DRY-RUN: delete group %s' % obj['group'].name)
+        # Delete personal project and instances
+        if not dry_run and 'projects' in obj:
+            self.logger.debug('=> delete project %s' % email)
+            self.delete_project(project=email.lower(), domain=domain)
+        else:
+            self.logger.debug('=> DRY-RUN: delete project %s' % email)
+        if 'projects' in obj:
+            for project in obj['projects']:
+                if hasattr(project, 'admin') and email == project.admin:
+                    print "This user is also admin for %s" % project.name
+                    print "Make sure to update admin to valid user!"
 
     """ Grant a role to a project for a user """
     def grant_role(self, user, project, role, domain=None):
@@ -171,6 +226,18 @@ class Keystone(Client):
         self.logger.debug('=> project %s NOT found' % project)
         return None
 
+    """ Return all users where name matches email """
+    def __get_user_by_email(self, email, domain_id=None):
+        users = self.client.users.list(domain=domain_id)
+        match = list()
+        for user in users:
+            if user.name == email:
+                self.logger.debug('=> user %s found by email' % email)
+                match.append(user)
+        if not match:
+            self.logger.debug('=> no user found for email %s' % email)
+        return match
+
     def __get_role(self, role, domain=None):
         roles = self.client.roles.list(domain=domain)
         for r in roles:
@@ -180,6 +247,7 @@ class Keystone(Client):
         self.logger.debug('=> role %s NOT found' % role)
         return None
 
+    """ Return group object """
     def __get_group(self, group, domain=None, user=None):
         groups = self.client.groups.list(domain=domain, user=user)
         for g in groups:
@@ -189,6 +257,7 @@ class Keystone(Client):
         self.logger.debug('=> group %s NOT found' % group)
         return None
 
+    """ Return domain ID """
     def __get_domain(self, domain):
         domain = self.client.domains.list(name=domain)
         if len(domain) > 0:
