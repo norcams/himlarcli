@@ -18,7 +18,7 @@ class Keystone(Client):
     def get_client(self):
         return self.client
 
-    def get_user(self, user_id):
+    def get_user_by_id(self, user_id):
         return self.client.users.get(user_id)
 
     def get_region(self):
@@ -37,8 +37,8 @@ class Keystone(Client):
         project = self.__get_project(project, domain=domain)
         return project
 
-    def get_projects(self, domain=False, user=False, **kwargs):
-        project_list = self.__get_projects(domain, user, **kwargs)
+    def get_projects(self, domain=False, **kwargs):
+        project_list = self.__get_projects(domain, **kwargs)
         return project_list
 
     """ Check if a user has registered with access """
@@ -162,18 +162,6 @@ class Keystone(Client):
                                                 domain=domain,
                                                 description=description)
 
-    def __get_user(self, user, domain=None, group=None, project=None):
-        users = self.client.users.list(domain=domain,
-                                      project=project,
-                                      group=group)
-        print users
-        for u in users:
-            if u.name == user:
-                self.logger.debug('=> user %s found' % user)
-                return u
-        self.logger.debug('=> user %s NOT found' % user)
-        return None
-
     def __get_project(self, project, domain=None, user=None):
         projects = self.client.projects.list(domain=domain, user=user)
         for p in projects:
@@ -208,9 +196,8 @@ class Keystone(Client):
         else:
             return False
 
-    def __get_projects(self, domain=False, user=False, **kwargs):
+    def __get_projects(self, domain=False, **kwargs):
         domain_id = self.__get_domain(domain) if domain else None
-        user_id = self.__get_user(user=user, domain=domain_id) if user else None
         projects = self.client.projects.list(domain=domain_id, user=user_id)
         self.logger.debug('=> get projects (domain=%s,user=%s)' % (domain, user))
         # Filter projects

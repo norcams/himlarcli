@@ -47,7 +47,7 @@ elif options.action[0] == 'notify':
         novaclient.update_aggregate(options.aggregate, metadata=metadata)
     # Generate instance list per user
     for i in instances:
-        user = ksclient.get_user(i.user_id)
+        user = ksclient.get_user_by_id(i.user_id)
         if "@" not in user.name:
             continue
         email = user.name.lower()
