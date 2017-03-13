@@ -102,7 +102,8 @@ class Keystone(Client):
         domain = self.__get_domain(domain)
         project_obj = self.__get_project(project, domain=domain)
         self.logger.debug('=> delete project %s' % project)
-        self.__delete_instances(project_obj)
+        # TODO FIXME!!!!!!!
+        #self.__delete_instances(project_obj)
         self.client.projects.delete(project_obj)
 
     """ Delete both users, the users group and personal project. """
