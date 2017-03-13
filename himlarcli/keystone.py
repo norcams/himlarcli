@@ -275,8 +275,8 @@ class Keystone(Client):
 
     def __get_projects(self, domain=False, **kwargs):
         domain_id = self.__get_domain(domain) if domain else None
-        projects = self.client.projects.list(domain=domain_id, user=user_id)
-        self.logger.debug('=> get projects (domain=%s,user=%s)' % (domain, user))
+        projects = self.client.projects.list(domain=domain_id)
+        self.logger.debug('=> get projects (domain=%s)' % (domain))
         # Filter projects
         if kwargs:
             self.logger.debug('=> filter project %s' % kwargs)
