@@ -14,10 +14,12 @@ actions = ['create', 'list', 'delete']
 opt_args = { '-n': { 'dest': 'name', 'help': 'course name (mandatory)', 'required': True, 'metavar': 'name'},
              '-u': { 'dest': 'user', 'help': 'email of teacher', 'metavar': 'user'},
              '-q': { 'dest': 'quota', 'help': 'project quota', 'default': 'course', 'metavar': 'quota'},
+             '-F': { 'dest': 'flavor', 'help': 'grant access to extra flavor', 'metavar': 'flavor'},
              '-f': { 'dest': 'file', 'help': 'file with students', 'metavar': 'file'}}
 
 options = utils.get_action_options(desc, actions, dry_run=True, opt_args=opt_args)
 ksclient = Keystone(options.config, debug=options.debug)
+novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
 quota = himutils.load_config('config/quota.yaml', log=ksclient.get_logger())
 project_types = himutils.load_config('config/type.yaml', log=ksclient.get_logger())
 domain='Dataporten'
@@ -25,7 +27,7 @@ domain='Dataporten'
 if options.action[0] == 'create':
     if options.user and options.file:
         if not ksclient.is_valid_user(user=options.user, domain=domain):
-            print "ERROR! %s is not a valid user. Group from access not found!" % options.user
+            print "ERROR! %s is not a valid user." % options.user
             sys.exit(1)
         students = himutils.load_file(options.file, log=ksclient.get_logger())
         pp = pprint.PrettyPrinter(indent=1)
@@ -39,6 +41,13 @@ if options.action[0] == 'create':
                                               course=options.name,
                                               type='education',
                                               quota=quota[options.quota])
+            print "Created project %s" % project.name
+            # Grant flavor access
+            if options.flavor and project:
+                novaclient.update_flavor_access(filter=options.flavor,
+                                                project_id=project.id,
+                                                action='grant')
+            # Grant project access
             ksclient.grant_role(project=project_name,
                                 user=options.user,
                                 role='superuser',
@@ -55,15 +64,15 @@ if options.action[0] == 'create':
                                                   course=options.name,
                                                   type='education',
                                                   quota=quota[options.quota])
-                pp.pprint(project.to_dict())
+                print "Created project %s" % project.name
+                # Grant flavor access
+                if options.flavor and project:
+                    novaclient.update_flavor_access(filter=options.flavor,
+                                                    project_id=project.id,
+                                                    action='grant')
                 # Grant student access
                 ksclient.grant_role(project=project_name,
                                     user=student,
-                                    role='user',
-                                    domain=domain)
-                # Grant admin access as owner
-                ksclient.grant_role(project=project_name,
-                                    user=options.user,
                                     role='user',
                                     domain=domain)
     else:
