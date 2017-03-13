@@ -29,6 +29,8 @@ if options.action[0] == 'show':
     obj = ksclient.get_user_objects(email=options.user, domain=domain)
     obj_types = [ 'api', 'dataporten', 'group', 'projects']
     for type in obj_types:
+        if type not in obj:
+            continue
         print "\n%s:\n---------" % type.upper()
         if type == 'projects':
             for project in obj[type]:

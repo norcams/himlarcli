@@ -30,9 +30,13 @@ class Keystone(Client):
         if len(api) == 1:
             obj['api'] = api[0]
             user_id = api[0].id
-        dp =  self.__get_user_by_email(email=email)
+        elif len(api) > 1:
+            self.logger.warning('=> More than one api user found for %s' % email)
+        dp =  self.__get_user_by_email(email=email, domain_id=None)
         if len(dp) == 1:
             obj['dataporten'] = dp[0]
+        elif len(dp) > 1:
+            self.logger.warning('=> More than one dataporten user found for %s' % email)
         group = self.__get_group(group='%s-group' % email, domain=domain_id)
         obj['group'] = group
         if user_id:
@@ -114,7 +118,7 @@ class Keystone(Client):
         if not dry_run and 'dataporten' in obj:
             self.logger.debug('=> delete dataporten user %s' % obj['dataporten'].name)
             self.client.users.delete(obj['dataporten'])
-        elif dry_run:
+        elif dry_run and 'dataporten' in obj:
             self.logger.debug('=> DRY-RUN: delete dataporten user %s' % obj['dataporten'].name)
         # Delete group
         if not dry_run and 'group' in obj:
@@ -226,12 +230,15 @@ class Keystone(Client):
         self.logger.debug('=> project %s NOT found' % project)
         return None
 
-    """ Return all users where name matches email """
-    def __get_user_by_email(self, email, domain_id=None):
+    """ Return all users where name matches email.
+        Note that domain_id=None will search for user without domain."""
+    def __get_user_by_email(self, email, domain_id):
         users = self.client.users.list(domain=domain_id)
         match = list()
         for user in users:
-            if user.name == email:
+            # list(domain=None) will return all domains so domain check must
+            # be here. For other domains this is will just verify the domain
+            if user.name == email and user.domain_id == domain_id:
                 self.logger.debug('=> user %s found by email' % email)
                 match.append(user)
         if not match:
