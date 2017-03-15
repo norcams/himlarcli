@@ -19,7 +19,11 @@ class Keystone(Client):
         return self.client
 
     def get_user_by_id(self, user_id):
-        return self.client.users.get(user_id)
+        try:
+            user = self.client.users.get(user_id)
+        except exceptions.http.NotFound as e:
+            user = dict()
+        return user
 
     """ Return all users, groups and project for this email """
     def get_user_objects(self, email, domain):
