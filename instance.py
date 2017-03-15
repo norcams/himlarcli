@@ -10,7 +10,7 @@ himutils.is_virtual_env()
 
 # Input args
 desc = 'Instance stats'
-actions = ['type', 'user']
+actions = ['type', 'user', 'org']
 opt_args = {}
 options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
 ksclient = Keystone(options.config, debug=options.debug)
@@ -60,6 +60,27 @@ elif options.action[0] == 'user':
         for i in instances:
             user = ksclient.get_user_by_id(i.user_id)
             org = user.name.split("@")[1]
+            if org in stats:
+                stats[org] += 1
+            else:
+                stats[org] = 1
+    print "\nUsage grouped by user email domain:"
+    print "-----------------------------------"
+    for s in sorted(stats):
+        share = (float(stats[s])/float(total))*100
+        print "%s = %s (%.f%%)" % (s, stats[s], share)
+elif options.action[0] == 'org':
+    stats = dict()
+    total = 0
+    for name, info in sorted(regions['regions'].iteritems()):
+        logger.debug('=> count region %s' % name)
+        novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
+        instances = novaclient.get_instances()
+        total += len(instances)
+        for i in instances:
+            user = ksclient.get_user_by_id(i.user_id)
+            domain = user.name.split("@")[1]
+            org = domain.split(".")[-2]
             if org in stats:
                 stats[org] += 1
             else:
