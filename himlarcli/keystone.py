@@ -58,6 +58,9 @@ class Keystone(Client):
         users = self.__get_users(domain)
         return len(users)
 
+    def get_project_by_id(self, project_id):
+        return self.client.projects.get(project_id)
+
     def get_project(self, project, domain=None):
         domain = self.__get_domain(domain)
         project = self.__get_project(project, domain=domain)
