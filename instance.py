@@ -10,8 +10,8 @@ himutils.is_virtual_env()
 
 # Input args
 desc = 'Instance stats'
-actions = ['type', 'user', 'org']
-opt_args = {}
+actions = ['type', 'users', 'org', 'user']
+opt_args = { '-e': { 'dest': 'email', 'help': 'user name (email)', 'metavar': 'email'} }
 options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
 ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
@@ -49,7 +49,7 @@ if options.action[0] == 'type':
     for s in sorted(stats):
         share = (float(stats[s])/float(total))*100
         print "%s = %s (%.f%%)" % (s, stats[s], share)
-elif options.action[0] == 'user':
+elif options.action[0] == 'users':
     stats = dict()
     total = 0
     for name, info in sorted(regions['regions'].iteritems()):
@@ -90,3 +90,21 @@ elif options.action[0] == 'org':
     for s in sorted(stats):
         share = (float(stats[s])/float(total))*100
         print "%s = %s (%.f%%)" % (s, stats[s], share)
+elif options.action[0] == 'user':
+    if not ksclient.is_valid_user(user=options.email, domain=domain):
+        print "%s is not a valid user. Please check your spelling or case." % options.user
+        sys.exit(1)
+    obj = ksclient.get_user_objects(email=options.email, domain=domain)
+    projects = obj['projects']
+    total = 0
+    for project in projects:
+        type = project.type if hasattr(project, 'type') else 'unknown'
+        print "\n%s (type=%s):" % (project.name, type)
+        for name, info in sorted(regions['regions'].iteritems()):
+            logger.debug('=> count region %s' % name)
+            novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
+            instances = novaclient.get_project_instances(project.id)
+            total += len(instances)
+            for i in instances:
+                print "* %s" % i.name
+    print "\nTotal number of instances for %s: %s" % (options.email, total)
