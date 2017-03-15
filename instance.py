@@ -10,7 +10,7 @@ himutils.is_virtual_env()
 
 # Input args
 desc = 'Instance stats'
-actions = ['type']
+actions = ['type', 'user']
 opt_args = {}
 options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
 ksclient = Keystone(options.config, debug=options.debug)
@@ -24,11 +24,12 @@ regions = himutils.load_region_config('config/stats',
 
 if options.action[0] == 'type':
     stats = { 'personal': 0, 'research': 0, 'education': 0, 'admin': 0, 'test': 0 }
+    total = 0
     for name, info in sorted(regions['regions'].iteritems()):
         logger.debug('=> count region %s' % name)
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
         instances = novaclient.get_instances()
-
+        total += len(instances)
         for i in instances:
             project = ksclient.get_project_by_id(i.tenant_id)
             if hasattr(project, 'course'):
@@ -46,4 +47,25 @@ if options.action[0] == 'type':
     print "\nUsage grouped by type:"
     print "----------------------"
     for s in sorted(stats):
-        print "%s = %s" % (s, stats[s])
+        share = (float(stats[s])/float(total))*100
+        print "%s = %s (%.f%%)" % (s, stats[s], share)
+elif options.action[0] == 'user':
+    stats = dict()
+    total = 0
+    for name, info in sorted(regions['regions'].iteritems()):
+        logger.debug('=> count region %s' % name)
+        novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
+        instances = novaclient.get_instances()
+        total += len(instances)
+        for i in instances:
+            user = ksclient.get_user_by_id(i.user_id)
+            org = user.name.split("@")[1]
+            if org in stats:
+                stats[org] += 1
+            else:
+                stats[org] = 1
+    print "\nUsage grouped by user email domain:"
+    print "-----------------------------------"
+    for s in sorted(stats):
+        share = (float(stats[s])/float(total))*100
+        print "%s = %s (%.f%%)" % (s, stats[s], share)
