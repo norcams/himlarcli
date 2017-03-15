@@ -85,7 +85,7 @@ elif options.action[0] == 'org':
                 stats[org] += 1
             else:
                 stats[org] = 1
-    print "\nUsage grouped by user email domain:"
+    print "\nUsage grouped by user organization:"
     print "-----------------------------------"
     for s in sorted(stats):
         share = (float(stats[s])/float(total))*100
