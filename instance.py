@@ -92,7 +92,7 @@ elif options.action[0] == 'org':
         print "%s = %s (%.f%%)" % (s, stats[s], share)
 elif options.action[0] == 'user':
     if not ksclient.is_valid_user(user=options.email, domain=domain):
-        print "%s is not a valid user. Please check your spelling or case." % options.user
+        print "%s is not a valid user. Please check your spelling or case." % options.email
         sys.exit(1)
     obj = ksclient.get_user_objects(email=options.email, domain=domain)
     projects = obj['projects']
