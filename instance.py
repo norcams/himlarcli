@@ -37,7 +37,10 @@ if options.action[0] == 'type':
                 stats['personal'] += 1
             else:
                 if hasattr(project, 'type'):
-                    stats[project.type] += 1
+                    if project.type not in stats:
+                        print "unknown project type %s for %s" % (project.type, project.name)
+                    else:
+                        stats[project.type] += 1
                 else:
                     stats['admin'] += 1
     print "\nUsage grouped by type:"
