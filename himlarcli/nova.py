@@ -77,6 +77,12 @@ class Nova(Client):
                 self.logger.debug("=> add %s to user list" % user.name)
         return emails
 
+    def get_project_instances(self, project_id):
+        search_opts = dict(tenant_id=project_id, all_tenants=1)
+        instances = self.__get_all_instances(search_opts=search_opts)
+        self.logger.debug('=> found %s instances for project %s' % (len(instances), project_id))
+        return instances
+
     def delete_project_instances(self, project_id):
         search_opts = dict(tenant_id=project_id, all_tenants=1)
         instances = self.__get_all_instances(search_opts=search_opts)
@@ -130,7 +136,7 @@ class Nova(Client):
             self.state.add_active(instances)
             self.state.close()
 
-    def get_stats(self, domain=None):
+    def get_stats(self):
         instances = self.__get_all_instances()
         stats = dict()
         stats['count'] = len(instances)
