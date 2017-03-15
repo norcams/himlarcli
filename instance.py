@@ -11,7 +11,7 @@ himutils.is_virtual_env()
 # Input args
 desc = 'Instance stats'
 actions = ['type', 'users', 'org', 'user']
-opt_args = { '-e': { 'dest': 'email', 'help': 'user name (email)', 'metavar': 'email'} }
+opt_args = { '-n': { 'dest': 'email', 'help': 'user name (email)', 'metavar': 'email'} }
 options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
 ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
