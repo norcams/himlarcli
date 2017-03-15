@@ -61,6 +61,8 @@ elif options.action[0] == 'users':
             user = ksclient.get_user_by_id(i.user_id)
             if not user:
                 org = 'unknown'
+            elif '@' not in user.name:
+                org = 'sysuser'
             else:
                 org = user.name.split("@")[1]
             if org in stats:
@@ -84,6 +86,8 @@ elif options.action[0] == 'org':
             user = ksclient.get_user_by_id(i.user_id)
             if not user:
                 org = 'unknown'
+            elif '@' not in user.name:
+                org = 'sysuser'
             else:
                 domain = user.name.split("@")[1]
                 org = domain.split(".")[-2]
