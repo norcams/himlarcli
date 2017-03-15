@@ -59,7 +59,10 @@ elif options.action[0] == 'users':
         total += len(instances)
         for i in instances:
             user = ksclient.get_user_by_id(i.user_id)
-            org = user.name.split("@")[1]
+            if not user:
+                org = 'unknown'
+            else:
+                org = user.name.split("@")[1]
             if org in stats:
                 stats[org] += 1
             else:
@@ -79,8 +82,11 @@ elif options.action[0] == 'org':
         total += len(instances)
         for i in instances:
             user = ksclient.get_user_by_id(i.user_id)
-            domain = user.name.split("@")[1]
-            org = domain.split(".")[-2]
+            if not user:
+                org = 'unknown'
+            else:
+                domain = user.name.split("@")[1]
+                org = domain.split(".")[-2]
             if org in stats:
                 stats[org] += 1
             else:
