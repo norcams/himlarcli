@@ -9,7 +9,7 @@ from himlarcli import utils as himutils
 himutils.is_virtual_env()
 
 # Input args
-desc = 'Perform project action'
+desc = 'Perform action on shared project (not course and personal)'
 actions = ['list', 'show', 'create', 'grant', 'delete', 'quota']
 opt_args = { '-p': { 'dest': 'project', 'help': 'project name', 'metavar': 'name'},
              '-u': { 'dest': 'user', 'help': 'email of user', 'metavar': 'user'},
@@ -78,13 +78,13 @@ if options.action[0] == 'delete':
         print 'project name must be set to delete project'
 if options.action[0] == 'list':
     projects = ksclient.get_projects(domain=domain)
+    print "\nList off all shared project (excluding personal and course):"
+    print "------------------------------------------------------------"
     for p in projects:
-        usage = novaclient.get_usage(project_id=p.id)
-        if hasattr(usage, 'server_usages'):
-            instance_count = len(usage.server_usages)
-        else:
-            instance_count = 0
-        print '%s (instances: %s)' % (p.name, instance_count)
+        # Exclude personal and course projects
+        if '@' in p.name or hasattr(p, 'course'):
+            continue
+        print p.name
 if options.action[0] == 'show':
     if options.project:
         project = ksclient.get_project(project=options.project, domain=domain)

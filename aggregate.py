@@ -41,9 +41,13 @@ elif options.action[0] == 'users':
 elif options.action[0] == 'notify':
     users = dict()
     instances = novaclient.get_instances(options.aggregate)
+    # update metadata
+    if not options.dry_run:
+        metadata = { 'notify': options.date }
+        novaclient.update_aggregate(options.aggregate, metadata=metadata)
     # Generate instance list per user
     for i in instances:
-        user = ksclient.get_user(i.user_id)
+        user = ksclient.get_user_by_id(i.user_id)
         if "@" not in user.name:
             continue
         email = user.name.lower()

@@ -18,8 +18,38 @@ class Keystone(Client):
     def get_client(self):
         return self.client
 
-    def get_user(self, user_id):
-        return self.client.users.get(user_id)
+    def get_user_by_id(self, user_id):
+        try:
+            user = self.client.users.get(user_id)
+        except exceptions.http.NotFound as e:
+            user = dict()
+        return user
+
+    """ Return all users, groups and project for this email """
+    def get_user_objects(self, email, domain):
+        domain_id = self.__get_domain(domain)
+        obj = dict()
+        user_id = None
+        api = self.__get_user_by_email(email=email.lower(), domain_id=domain_id)
+        if len(api) == 1:
+            obj['api'] = api[0]
+            user_id = api[0].id
+        elif len(api) > 1:
+            self.logger.warning('=> More than one api user found for %s' % email)
+        dp =  self.__get_user_by_email(email=email, domain_id=None)
+        if len(dp) == 1:
+            obj['dataporten'] = dp[0]
+        elif len(dp) > 1:
+            self.logger.warning('=> More than one dataporten user found for %s' % email)
+        group = self.__get_group(group='%s-group' % email, domain=domain_id)
+        obj['group'] = group
+        if user_id:
+            projects = self.client.projects.list(domain=domain_id, user=user_id)
+        else:
+            projects = []
+        obj['projects'] = projects
+
+        return obj
 
     def get_region(self):
         return self.config._sections['openstack']['region']
@@ -32,13 +62,16 @@ class Keystone(Client):
         users = self.__get_users(domain)
         return len(users)
 
+    def get_project_by_id(self, project_id):
+        return self.client.projects.get(project_id)
+
     def get_project(self, project, domain=None):
         domain = self.__get_domain(domain)
         project = self.__get_project(project, domain=domain)
         return project
 
-    def get_projects(self, domain=False, user=False, **kwargs):
-        project_list = self.__get_projects(domain, user, **kwargs)
+    def get_projects(self, domain=False, **kwargs):
+        project_list = self.__get_projects(domain, **kwargs)
         return project_list
 
     """ Check if a user has registered with access """
@@ -74,10 +107,44 @@ class Keystone(Client):
     def delete_project(self, project, domain=None):
         # Map str to objects
         domain = self.__get_domain(domain)
-        project_id = self.__get_project(project, domain=domain)
+        project_obj = self.__get_project(project, domain=domain)
         self.logger.debug('=> delete project %s' % project)
-        self.__delete_instances(project_id)
-        self.client.projects.delete(project_id)
+        # TODO FIXME!!!!!!!
+        #self.__delete_instances(project_obj)
+        self.client.projects.delete(project_obj)
+
+    """ Delete both users, the users group and personal project. """
+    def delete_user(self, email, domain=None, dry_run=False):
+        obj = self.get_user_objects(email=email, domain=domain)
+        # Delete api user
+        if not dry_run and 'api' in obj:
+            self.logger.debug('=> delete  api user %s' % obj['api'].name)
+            self.client.users.delete(obj['api'])
+        elif dry_run:
+            self.logger.debug('=> DRY-RUN: delete api user %s' % obj['api'].name)
+        # Delete dataporten user
+        if not dry_run and 'dataporten' in obj:
+            self.logger.debug('=> delete dataporten user %s' % obj['dataporten'].name)
+            self.client.users.delete(obj['dataporten'])
+        elif dry_run and 'dataporten' in obj:
+            self.logger.debug('=> DRY-RUN: delete dataporten user %s' % obj['dataporten'].name)
+        # Delete group
+        if not dry_run and 'group' in obj:
+            self.logger.debug('=> delete group %s' % obj['group'].name)
+            self.client.groups.delete(obj['group'])
+        elif dry_run:
+            self.logger.debug('=> DRY-RUN: delete group %s' % obj['group'].name)
+        # Delete personal project and instances
+        if not dry_run and 'projects' in obj:
+            self.logger.debug('=> delete project %s' % email)
+            self.delete_project(project=email.lower(), domain=domain)
+        else:
+            self.logger.debug('=> DRY-RUN: delete project %s' % email)
+        if 'projects' in obj:
+            for project in obj['projects']:
+                if hasattr(project, 'admin') and email == project.admin:
+                    print "This user is also admin for %s" % project.name
+                    print "Make sure to update admin to valid user!"
 
     """ Grant a role to a project for a user """
     def grant_role(self, user, project, role, domain=None):
@@ -92,8 +159,7 @@ class Keystone(Client):
         project = self.__get_project(project, domain=domain)
         role = self.__get_role(role)
         try:
-            exists = self.client.roles.list(role=role,
-                                            project=project,
+            exists = self.client.roles.list(project=project,
                                             group=group)
         except exceptions.http.NotFound as e:
             exists = None
@@ -163,18 +229,6 @@ class Keystone(Client):
                                                 domain=domain,
                                                 description=description)
 
-    def __get_user(self, user, domain=None, group=None, project=None):
-        users = self.client.users.list(domain=domain,
-                                      project=project,
-                                      group=group)
-        print users
-        for u in users:
-            if u.name == user:
-                self.logger.debug('=> user %s found' % user)
-                return u
-        self.logger.debug('=> user %s NOT found' % user)
-        return None
-
     def __get_project(self, project, domain=None, user=None):
         projects = self.client.projects.list(domain=domain, user=user)
         for p in projects:
@@ -183,6 +237,21 @@ class Keystone(Client):
                 return p
         self.logger.debug('=> project %s NOT found' % project)
         return None
+
+    """ Return all users where name matches email.
+        Note that domain_id=None will search for user without domain."""
+    def __get_user_by_email(self, email, domain_id):
+        users = self.client.users.list(domain=domain_id)
+        match = list()
+        for user in users:
+            # list(domain=None) will return all domains so domain check must
+            # be here. For other domains this is will just verify the domain
+            if user.name == email and user.domain_id == domain_id:
+                self.logger.debug('=> user %s found by email' % email)
+                match.append(user)
+        if not match:
+            self.logger.debug('=> no user found for email %s' % email)
+        return match
 
     def __get_role(self, role, domain=None):
         roles = self.client.roles.list(domain=domain)
@@ -193,6 +262,7 @@ class Keystone(Client):
         self.logger.debug('=> role %s NOT found' % role)
         return None
 
+    """ Return group object """
     def __get_group(self, group, domain=None, user=None):
         groups = self.client.groups.list(domain=domain, user=user)
         for g in groups:
@@ -202,6 +272,7 @@ class Keystone(Client):
         self.logger.debug('=> group %s NOT found' % group)
         return None
 
+    """ Return domain ID """
     def __get_domain(self, domain):
         domain = self.client.domains.list(name=domain)
         if len(domain) > 0:
@@ -209,11 +280,10 @@ class Keystone(Client):
         else:
             return False
 
-    def __get_projects(self, domain=False, user=False, **kwargs):
+    def __get_projects(self, domain=False, **kwargs):
         domain_id = self.__get_domain(domain) if domain else None
-        user_id = self.__get_user(user=user, domain=domain_id) if user else None
-        projects = self.client.projects.list(domain=domain_id, user=user_id)
-        self.logger.debug('=> get projects (domain=%s,user=%s)' % (domain, user))
+        projects = self.client.projects.list(domain=domain_id)
+        self.logger.debug('=> get projects (domain=%s)' % (domain))
         # Filter projects
         if kwargs:
             self.logger.debug('=> filter project %s' % kwargs)
