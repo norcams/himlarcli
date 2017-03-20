@@ -5,6 +5,19 @@ nodes:
   api-01:
     compute_profile: 1
     compute_resource: controller-01
+  builder-01:
+    compute_profile: 2
+    compute_resource: controller-04
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '50G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   cephmon-01:
     compute_profile: 1
     compute_resource: controller-01
