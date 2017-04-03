@@ -37,7 +37,7 @@ regions = himutils.load_region_config('config/stats',
 for name, info in sorted(regions['regions'].iteritems()):
     logger.debug('=> count region %s' % name)
     novaclient = Nova(options.config, debug=options.debug, region=name)
-    novastats = novaclient.get_stats(info['domain'])
+    novastats = novaclient.get_stats()
     stats['instances'][name] = {}
     stats['instances'][name]['count'] = novastats['count']
 
