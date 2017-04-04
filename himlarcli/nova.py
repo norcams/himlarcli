@@ -68,7 +68,11 @@ class Nova(Client):
         instances = self.get_instances(aggregate)
         emails = set() if simple else list()
         for i in instances:
-            user = self.ksclient.users.get(i.user_id)
+            try:
+                user = self.ksclient.users.get(i.user_id)
+            except novaclient.exceptions.NotFound:
+                self.logger.error("=> user for instance %s (%s) not found ", i.id, i.name)
+                continue
             self.logger.debug('=> found user %s for instance %s' % (user.name, i.name))
             if not simple:
                 emails.append(user)
