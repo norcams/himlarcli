@@ -57,7 +57,8 @@ msg_file = 'misc/notify_reboot.txt'
 def hosts():
     aggregate = novaclient.get_aggregate(options.aggregate)
     for host in aggregate.hosts:
-        print host
+        services = novaclient.get_service(host)
+        print '%s (%s)' % (host, services[0].status)
 
 def instances():
     instances = novaclient.get_instances(options.aggregate)
