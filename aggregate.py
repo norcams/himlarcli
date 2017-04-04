@@ -16,7 +16,7 @@ himutils.is_virtual_env()
 
 desc = 'Mange host aggregate groups of compute nodes. \
         Note that notify sends email to users!'
-actions = ['hosts', 'instances', 'users', 'notify', 'migrate']
+actions = ['hosts', 'instances', 'users', 'notify', 'migrate', 'activate']
 # Default date for notify are today at 14:00 + 5 days
 d = datetime.today()
 date = datetime(d.year, d.month, d.day, 14, 0) + timedelta(days=5)
@@ -48,6 +48,7 @@ ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=logger)
 domain = 'Dataporten'
+zone = '%s-default-1' % ksclient.region
 msg_file = 'misc/notify_reboot.txt'
 
 """ ACTIONS """
@@ -76,6 +77,27 @@ def users():
     users = novaclient.get_users(options.aggregate, simple=True)
     for user in users:
         print user
+
+def activate():
+    aggregates = novaclient.get_aggregates()
+    for aggregate in aggregates:
+        print '=============== %s ================' % aggregate
+        metadata = novaclient.get_aggregate(options.aggregate)
+        # Enable this aggregate
+        if aggregate == options.aggregate:
+            for host in metadata.hosts:
+                print 'Enable %s' % host
+                novaclient.enable_host(host)
+            tags = {'enabled': datetime.today()}
+            novaclient.update_aggregate(aggregate, tags)
+        else: # Disable everything else
+            for host in metadata.hosts:
+                services = novaclient.get_service(host)
+                if services[0].status == 'enabled':
+                    print 'Disable %s' % host
+                    novaclient.disable_host(host)
+            tags = {'disabled': datetime.today()}
+            novaclient.update_aggregate(aggregate, tags)
 
 def migrate():
     state = State(options.config, debug=options.debug, log=logger)
