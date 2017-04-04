@@ -1,6 +1,7 @@
 from client import Client
 from novaclient import client as novaclient
 from keystoneclient.v3 import client as keystoneclient
+import keystoneauth1.exceptions as keyexc
 from novaclient.exceptions import NotFound
 from datetime import datetime, date
 import urllib2
@@ -70,7 +71,7 @@ class Nova(Client):
         for i in instances:
             try:
                 user = self.ksclient.users.get(i.user_id)
-            except keystoneclient.exceptions.http.NotFound:
+            except keyexc.http.NotFound:
                 self.logger.error("=> user for instance %s (%s) not found ", i.id, i.name)
                 continue
             self.logger.debug('=> found user %s for instance %s' % (user.name, i.name))
