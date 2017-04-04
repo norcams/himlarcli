@@ -16,7 +16,7 @@ himutils.is_virtual_env()
 
 desc = 'Mange host aggregate groups of compute nodes. \
         Note that notify sends email to users!'
-actions = ['hosts', 'instances', 'users', 'notify', 'migrate', 'activate']
+actions = ['show', 'instances', 'users', 'notify', 'migrate', 'activate']
 # Default date for notify are today at 14:00 + 5 days
 d = datetime.today()
 date = datetime(d.year, d.month, d.day, 14, 0) + timedelta(days=5)
@@ -32,11 +32,6 @@ opt_args = {
         'help': 'date message',
         'default': date,
         'metavar': 'date'},
-    '--save': {
-        'dest': 'save',
-        'help': 'save instance states',
-        'action': 'store_const',
-        'const': True},
     '--stage': {
         'dest': 'stage',
         'help': 'migration stage',
@@ -53,9 +48,12 @@ msg_file = 'misc/notify_reboot.txt'
 
 """ ACTIONS """
 
-
-def hosts():
+def show():
     aggregate = novaclient.get_aggregate(options.aggregate)
+    print '\nMETADATA:'
+    for key, value in aggregate.metadata.iteritems():
+        print "%s = %s" % (key, value)
+    print '\nHOSTS:'
     for host in aggregate.hosts:
         services = novaclient.get_service(host)
         print '%s (%s)' % (host, services[0].status)
