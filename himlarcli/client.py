@@ -45,7 +45,7 @@ class Client(object):
             self.region = region
         else:
             self.region = self.get_config('openstack', 'region')
-        self.state = State(config_path, debug, log=self.logger)
+        #self.state = State(config_path, debug, log=self.logger)
 
 
     @abstractmethod
