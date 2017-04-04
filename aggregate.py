@@ -120,19 +120,22 @@ def migrate():
             glclient.reactivate(image.id)
     # stage: migrate
     if options.stage == 'migrate':
-        instances = novaclient.get_instances(options.aggregate)
-        for instance in instances:
-            if options.dry_run:
-                logger.debug('=> DRY-RUN: migrate instance %s' % unicode(instance.name))
-            else:
-                logger.debug('=> migrate instance %s' % unicode(instance.name))
-                try:
-                    instance.migrate()
-                    time.sleep(5)
-                except novaexc.BadRequest as e:
-                    print e
-                    print "exit 1"
-                    sys.exit(1)
+        q = "Make sure all images are active! Migrate %s (yes|no)? " % options.aggregate
+        answer = raw_input(q)
+        if answer.lower() == 'yes':
+            instances = novaclient.get_instances(options.aggregate)
+            for instance in instances:
+                if options.dry_run:
+                    logger.debug('=> DRY-RUN: migrate instance %s' % unicode(instance.name))
+                else:
+                    logger.debug('=> migrate instance %s' % unicode(instance.name))
+                    try:
+                        instance.migrate()
+                        time.sleep(5)
+                    except novaexc.BadRequest as e:
+                        print e
+                        print "exit 1"
+                        sys.exit(1)
 
     # stage: deactivate images
     if options.stage == 'deactivate':
