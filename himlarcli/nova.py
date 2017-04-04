@@ -70,7 +70,7 @@ class Nova(Client):
         for i in instances:
             try:
                 user = self.ksclient.users.get(i.user_id)
-            except novaclient.exceptions.NotFound:
+            except keystoneclient.exceptions.http.NotFound:
                 self.logger.error("=> user for instance %s (%s) not found ", i.id, i.name)
                 continue
             self.logger.debug('=> found user %s for instance %s' % (user.name, i.name))
