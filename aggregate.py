@@ -8,9 +8,11 @@ from himlarcli.glance import Glance
 from himlarcli import utils as himutils
 from himlarcli.notify import Notify
 from himlarcli.state import State
-
+import novaclient.exceptions as novaexc
+import time
 import sys
 import utils
+
 
 himutils.is_virtual_env()
 
@@ -67,7 +69,7 @@ def instances():
             stats[i.status] += 1
         else:
             stats[i.status] = 1
-        print '%s (status=%s)' % (i.name, i.status)
+        print '%s (status=%s)' % (unicode(i.name), i.status)
     print "\nSTATUS:"
     print "======="
     pp.pprint(stats)
@@ -116,6 +118,22 @@ def migrate():
                          status=image.status, name=image.name)
             # Reactivate image
             glclient.reactivate(image.id)
+    # stage: migrate
+    if options.stage == 'migrate':
+        instances = novaclient.get_instances(options.aggregate)
+        for instance in instances:
+            if options.dry_run:
+                logger.debug('=> DRY-RUN: migrate instance %s' % unicode(instance.name))
+            else:
+                logger.debug('=> migrate instance %s' % unicode(instance.name))
+                try:
+                    instance.migrate()
+                    time.sleep(5)
+                except novaexc.BadRequest as e:
+                    print e
+                    print "exit 1"
+                    sys.exit(1)
+
     # stage: deactivate images
     if options.stage == 'deactivate':
         images = state.fetch(state.IMAGE_TABLE, columns='id, status', status='deactivated')
@@ -153,11 +171,10 @@ def notify():
         notify = Notify(options.config, debug=options.debug)
     # Email each users
     for user, instances in users.iteritems():
-        # FIXME unicode server
         user_instances = ""
         for server, info in instances.iteritems():
             user_instances += "%s (current status %s)\n" % (server, info['status'])
-        msg = MIMEText(user_instances + body_content)
+        msg = MIMEText(user_instances + body_content, 'plain', 'utf-8')
         msg['Subject'] = 'UH-IaaS: Rebooting instance (%s)' % ksclient.region
         if not options.dry_run:
             notify.send_mail(user, msg)
