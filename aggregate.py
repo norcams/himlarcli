@@ -82,7 +82,7 @@ def activate():
     aggregates = novaclient.get_aggregates()
     for aggregate in aggregates:
         print '=============== %s ================' % aggregate
-        metadata = novaclient.get_aggregate(options.aggregate)
+        metadata = novaclient.get_aggregate(aggregate)
         # Enable this aggregate
         if aggregate == options.aggregate:
             for host in metadata.hosts:
