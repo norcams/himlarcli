@@ -1,9 +1,8 @@
-import sys
 import itertools
-import utils
-from client import Client
+from himlarcli.client import Client
 from glanceclient import Client as glclient
-from keystoneclient.v3 import client as ksclient
+from glanceclient import exc
+import sys
 
 class Glance(Client):
 
@@ -13,17 +12,22 @@ class Glance(Client):
     """ Active image """
     image = None
 
-    def __init__(self, config_path, debug=False):
-        super(Glance,self).__init__(config_path, debug)
-        self.ksclient = ksclient.Client(session=self.sess)
-        #self.endpoint = self.__get_endpoint()
+    def __init__(self, config_path, debug=False, log=None, region=None):
+        super(Glance, self).__init__(config_path, debug, log, region)
+        self.logger.debug('=> init glance client verion %s for region %s' %
+                          (self.version, self.region))
         self.client = glclient(self.version,
                                session=self.sess,
                                region_name=self.region)
-        self.logger.debug('=> init glance client')
 
     def get_client(self):
         return self.client
+
+
+    """ Get images.
+    To filter use filters dict with key value pairs """
+    def get_images(self, **kwargs):
+        return self.client.images.list(**kwargs)
 
     def get_image(self, name):
         if not self.images:
@@ -48,7 +52,7 @@ class Glance(Client):
         self.logger.debug('=> image delete %s' % self.image.name)
         self.client.images.delete(self.image.id)
 
-    def update_image(self, **kwargs):
+    def update_image(self, name, **kwargs):
         if not self.image:
             self.logger.debug('=> image not found %s' % name)
             if name:
@@ -58,15 +62,25 @@ class Glance(Client):
                 sys.exit(1)
         self.client.images.update(self.image.id, **kwargs)
 
-    def deactivate(self, name=None):
-        if not self.image:
+    def deactivate(self, name=None, image_id=None):
+        if not self.image and not image_id:
             self.logger.debug('=> image not found %s' % name)
             if name:
                 self.get_image(name)
             else:
                 self.logger.critical('Image must exist to deactivate.')
                 sys.exit(1)
-        self.client.images.deactivate(self.image.id)
+        if not image_id:
+            image_id = self.image.id
+        self.client.images.deactivate(image_id)
+        self.logger.debug('=> deactivate image id %s' % image_id)
+
+    def reactivate(self, image_id):
+        try:
+            self.logger.debug('=> reactivate image id %s' % image_id)
+            self.client.images.reactivate(image_id)
+        except exc.HTTPNotFound:
+            self.logger.error('=> image id %s not found' % image_id)
 
     def upload_image(self, source_path, name=None):
         if not self.image:
@@ -83,20 +97,6 @@ class Glance(Client):
             print e
             self.logger.critical('Upload of %s failed' % self.image.name)
             sys.exit(1)
-
-    def __get_endpoint(self, interface='internal'):
-        if not self.ksclient:
-            return
-        image_services = self.ksclient.services.list(type='image')
-        endpoints = self.ksclient.endpoints.list(region=self.region,
-                                                interface=interface,
-                                                enabled=True)
-        for endpoint in endpoints:
-            for service in image_services:
-                if service.id == endpoint.service_id:
-                    self.logger.debug("=> image internal endpoint %s" % endpoint.url)
-                    return endpoint.url
-        self.logger.debug("=> image endpoint not found!")
 
     def __get_images(self):
         self.images = self.client.images.list()
