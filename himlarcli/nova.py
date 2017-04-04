@@ -32,7 +32,30 @@ class Nova(Client):
                                                   region_name=self.region)
         return self.ksclient
 
+    def get_hosts(self, zone=None):
+        return self.client.hosts.list(zone=zone)
+
+    def get_service(self, host, service='nova-compute'):
+        return self.client.services.list(host=host, binary=service)
+
+    def enable_host(self, name, service='nova-compute'):
+        self.logger.debug('=> enable host %s' % name)
+        self.client.services.enable(host=name, binary=service)
+
+    def disable_host(self, name, service='nova-compute'):
+        self.logger.debug('=> disable host %s' % name)
+        self.client.services.disable(host=name, binary=service)
+
 ################################## AGGREGATE ##################################
+
+    def get_aggregates(self, simple=True):
+        aggregates = self.client.aggregates.list()
+        if not simple:
+            return aggregates
+        agg_list = list()
+        for aggregate in aggregates:
+            agg_list.append(aggregate.name)
+        return agg_list
 
     def get_aggregate(self, aggregate):
         aggregate = self.__get_aggregate(aggregate)
