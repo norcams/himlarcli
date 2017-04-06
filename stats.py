@@ -19,6 +19,7 @@ logger = keystoneclient.get_logger()
 stats = dict()
 stats['projects'] = {}
 stats['instances'] = {}
+stats['instances']['total'] = {'count': 0, 'error': 0}
 stats['users'] = {}
 stats['projects'][keystoneclient.region] = {}
 stats['projects'][keystoneclient.region]['count'] = projects_count
@@ -40,6 +41,9 @@ for name, info in sorted(regions['regions'].iteritems()):
     novastats = novaclient.get_stats()
     stats['instances'][name] = {}
     stats['instances'][name]['count'] = novastats['count']
+    stats['instances'][name]['error'] = novastats['error']
+    stats['instances']['total']['count'] += novastats['count']
+    stats['instances']['total']['error'] += novastats['error']
 
 prefix = 'uh-iaas'
 c = statsd.StatsClient(server, port, prefix=prefix)
@@ -49,3 +53,7 @@ for t, s in stats.iteritems():
         count = d['count']
         print '%s = %s' % (name, count)
         c.gauge(name, count)
+        if 'error' in d:
+            name = '%s.%s.error' % (r, t)
+            print '%s = %s' % (name, d['error'])
+            c.gauge(name, d['error'])
