@@ -54,6 +54,6 @@ for t, s in stats.iteritems():
         print '%s = %s' % (name, count)
         c.gauge(name, count)
         if 'error' in d:
-            name = '%s.%s.error' % (r, t)
+            name = '%s.instance_errors' % (r)
             print '%s = %s' % (name, d['error'])
             c.gauge(name, d['error'])
