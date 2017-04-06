@@ -32,6 +32,7 @@ class Nova(Client):
                                                   region_name=self.region)
         return self.ksclient
 
+# =============================== HOSTS =======================================
     def get_hosts(self, zone=None):
         return self.client.hosts.list(zone=zone)
 
@@ -105,6 +106,16 @@ class Nova(Client):
                 self.logger.debug("=> add %s to user list" % user.name)
         return emails
 
+# ============================== INSTANCES ====================================
+
+    def get_all_instances(self, search_opts=None):
+        if 'all_tenants' not in search_opts:
+            if not search_opts:
+                search_opts = {'all_tenants': 1}
+            else:
+                search_opts.update({'all_tenants': 1})
+        return self.__get_all_instances(search_opts)
+
     def get_project_instances(self, project_id):
         search_opts = dict(tenant_id=project_id, all_tenants=1)
         instances = self.__get_all_instances(search_opts=search_opts)
@@ -168,6 +179,10 @@ class Nova(Client):
         instances = self.__get_all_instances()
         stats = dict()
         stats['count'] = len(instances)
+        stats['error'] = 0
+        for i in instances:
+            if i.status == 'ERROR':
+                stats['error'] += 1
         return stats
 
     def stop_instances(self, state='ACTIVE'):
