@@ -7,7 +7,7 @@ checks:
     code: 200
   api:
     ssl:  true
-    host: 'api..test.iaas.uio.no:5000'
+    host: 'api.test.iaas.uio.no:5000'
     url:  '/v3'
     code: 200
   dashboard:
