@@ -6,7 +6,7 @@ from himlarcli import utils as himutils
 import socket
 
 desc = 'Do a remote check of web services'
-options = utils.get_options(desc, hosts=False)
+options = utils.get_options(desc, hosts=False, debug=True)
 
 # Himmlar config
 config = himutils.get_config(options.config)
