@@ -1,0 +1,42 @@
+---
+checks:
+  access:
+    ssl:  true
+    host: 'access.test.iaas.uio.no'
+    url:  ''
+    code: 200
+  api:
+    ssl:  true
+    host: 'api..test.iaas.uio.no:5000'
+    url:  '/v3'
+    code: 200
+  dashboard:
+    ssl:  true
+    host: 'dashboard.test.iaas.uio.no'
+    url:  '/dashboard'
+    code: 302
+  network:
+    ssl:  true
+    host: 'network.api.test.iaas.uio.no:9696'
+    url:  '/'
+    code: 200
+  image:
+    ssl:  true
+    host: 'image.api.test.iaas.uio.no:9292'
+    url:  '/'
+    code: 300
+  volume:
+    ssl:  true
+    host: 'volume.api.test.iaas.uio.no:8776'
+    url:  '/'
+    code: 300
+  compute:
+    ssl:  true
+    host: 'compute.api.test.iaas.uio.no:8774'
+    url:  '/'
+    code: 200
+  identity:
+    ssl:  true
+    host: 'identity.api.test.iaas.uio.no:5000'
+    url:  '/'
+    code: 300
