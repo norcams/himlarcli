@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import utils
-import sys
 import httplib
 import statsd
 from himlarcli import utils as himutils
+import socket
 
 desc = 'Do a remote check of web services'
 options = utils.get_options(desc, hosts=False)
@@ -27,21 +27,22 @@ for name, check in sorted(services['checks'].iteritems()):
         timeout = check['timeout']
     else:
         timeout = 10
-    if (check['ssl']):
+    if check['ssl']:
         c = httplib.HTTPSConnection(check['host'], timeout=timeout)
     else:
         c = httplib.HTTPConnection(check['host'], timeout=timeout)
-    c.request("HEAD", check['url'])
-    response = c.getresponse()
-    #print response.status
-    #print response.getheaders()
-    statsd.gauge(name, response.status)
-    if response.status == check['code']:
+    try:
+        c.request("HEAD", check['url'])
+        response = c.getresponse()
+        status = response.status
+    except socket.error as e:
+        logger.debug("=> error on connect: %s" % e)
+        status = 0
+    statsd.gauge(name, status)
+    if status == check['code']:
         statsd.gauge(name, 1)
         print '%s -> ok' % check['host']
     else:
         statsd.gauge(name, 0)
-        logger.debug('=> %s = %s' % (name, response.status))
+        logger.debug('=> %s = %s' % (name, status))
         print '%s -> failed' % check['host']
-
-    logger.debug('=> headers for %s: %s' % (name, response.getheaders()))
