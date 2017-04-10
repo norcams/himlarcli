@@ -15,28 +15,53 @@ checks:
     host: 'dashboard.test.iaas.uio.no'
     url:  '/dashboard'
     code: 302
-  network:
+  test02.network:
     ssl:  true
     host: 'network.api.test.iaas.uio.no:9696'
     url:  '/'
     code: 200
-  image:
+  test02.image:
     ssl:  true
     host: 'image.api.test.iaas.uio.no:9292'
     url:  '/'
     code: 300
-  volume:
+  test02.volume:
     ssl:  true
     host: 'volume.api.test.iaas.uio.no:8776'
     url:  '/'
     code: 300
-  compute:
+  test02.compute:
     ssl:  true
     host: 'compute.api.test.iaas.uio.no:8774'
     url:  '/'
     code: 200
-  identity:
+  test02.identity:
     ssl:  true
     host: 'identity.api.test.iaas.uio.no:5000'
+    url:  '/'
+    code: 300
+  test01.network:
+    ssl:  true
+    host: 'network.api.test.iaas.uib.no:9696'
+    url:  '/'
+    code: 200
+  test01.image:
+    ssl:  true
+    host: 'image.api.test.iaas.uib.no:9292'
+    url:  '/'
+    code: 300
+  test01.volume:
+    ssl:  true
+    host: 'volume.api.test.iaas.uib.no:8776'
+    url:  '/'
+    code: 300
+  test01.compute:
+    ssl:  true
+    host: 'compute.api.test.iaas.uib.no:8774'
+    url:  '/'
+    code: 200
+  test01.identity:
+    ssl:  true
+    host: 'identity.api.test.iaas.uib.no:5000'
     url:  '/'
     code: 300
