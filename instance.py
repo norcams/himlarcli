@@ -1,35 +1,35 @@
 #!/usr/bin/env python
 import sys
-import utils
-import pprint
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
+from himlarcli.parser import Parser
+from himlarcli.printer import Printer
 from himlarcli import utils as himutils
 
 himutils.is_virtual_env()
 
-# Input args
-desc = 'Instance stats'
-actions = ['type', 'users', 'org', 'user']
-opt_args = { '-n': { 'dest': 'email', 'help': 'user name (email)', 'metavar': 'email'} }
-options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
+# Load parser config from config/parser/*
+parser = Parser()
+options = parser.parse_args()
+
 ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
-domain='Dataporten'
+printer = Printer(options.format)
+domain = 'Dataporten'
 
 # Regions
 regions = himutils.load_region_config('config/stats',
                                       region=ksclient.region,
                                       log=logger)
+""" ACTIONS """
 
-if options.action[0] == 'type':
-    stats = { 'personal': 0, 'research': 0, 'education': 0, 'admin': 0, 'test': 0 }
-    total = 0
-    for name, info in sorted(regions['regions'].iteritems()):
+def project():
+    stats = {'personal': 0, 'research': 0, 'education': 0, 'admin': 0, 'test': 0, 'total': 0}
+    for name in sorted(regions['regions'].iterkeys()):
         logger.debug('=> count region %s' % name)
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
         instances = novaclient.get_instances()
-        total += len(instances)
+        stats['total'] += len(instances)
         for i in instances:
             project = ksclient.get_project_by_id(i.tenant_id)
             if hasattr(project, 'course'):
@@ -44,19 +44,24 @@ if options.action[0] == 'type':
                         stats[project.type] += 1
                 else:
                     stats['admin'] += 1
-    print "\nUsage grouped by type:"
-    print "----------------------"
-    for s in sorted(stats):
-        share = (float(stats[s])/float(total))*100
-        print "%s = %s (%.f%%)" % (s, stats[s], share)
-elif options.action[0] == 'users':
+    if options.output == 'instances':
+        stats['header'] = 'Number of instances grouped by instance type:'
+        printer.output_dict(stats)
+    else:
+        percent = dict()
+        for s in sorted(stats):
+            percent[s] = (float(stats[s])/float(stats['total']))*100
+        percent['header'] = 'Percent of instances grouped by instance type:'
+        printer.output_dict(percent)
+
+def users():
     stats = dict()
-    total = 0
-    for name, info in sorted(regions['regions'].iteritems()):
+    stats['total'] = 0
+    for name in sorted(regions['regions'].iterkeys()):
         logger.debug('=> count region %s' % name)
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
         instances = novaclient.get_instances()
-        total += len(instances)
+        stats['total'] += len(instances)
         for i in instances:
             user = ksclient.get_user_by_id(i.user_id)
             if not user:
@@ -69,19 +74,24 @@ elif options.action[0] == 'users':
                 stats[org] += 1
             else:
                 stats[org] = 1
-    print "\nUsage grouped by user email domain:"
-    print "-----------------------------------"
-    for s in sorted(stats):
-        share = (float(stats[s])/float(total))*100
-        print "%s = %s (%.f%%)" % (s, stats[s], share)
-elif options.action[0] == 'org':
+    if options.output == 'instances':
+        stats['header'] = 'Usage grouped by user email domain:'
+        printer.output_dict(stats)
+    else:
+        percent = dict()
+        for s in sorted(stats):
+            percent[s] = (float(stats[s])/float(stats['total']))*100
+        percent['header'] = 'Percentage of instances grouped by users email domain:'
+        printer.output_dict(percent)
+
+def org():
     stats = dict()
-    total = 0
-    for name, info in sorted(regions['regions'].iteritems()):
+    stats['total'] = 0
+    for name in sorted(regions['regions'].iterkeys()):
         logger.debug('=> count region %s' % name)
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
         instances = novaclient.get_instances()
-        total += len(instances)
+        stats['total'] += len(instances)
         for i in instances:
             user = ksclient.get_user_by_id(i.user_id)
             if not user:
@@ -95,12 +105,17 @@ elif options.action[0] == 'org':
                 stats[org] += 1
             else:
                 stats[org] = 1
-    print "\nUsage grouped by user organization:"
-    print "-----------------------------------"
-    for s in sorted(stats):
-        share = (float(stats[s])/float(total))*100
-        print "%s = %s (%.f%%)" % (s, stats[s], share)
-elif options.action[0] == 'user':
+    if options.output == 'instances':
+        stats['header'] = 'Usage grouped by user organization:'
+        printer.output_dict(stats)
+    else:
+        percent = dict()
+        for s in sorted(stats):
+            percent[s] = (float(stats[s])/float(stats['total']))*100
+        percent['header'] = 'Percentage of instances grouped by users organization:'
+        printer.output_dict(percent)
+
+def user():
     if not ksclient.is_valid_user(user=options.email, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.email
         sys.exit(1)
@@ -108,9 +123,9 @@ elif options.action[0] == 'user':
     projects = obj['projects']
     total = 0
     for project in projects:
-        type = project.type if hasattr(project, 'type') else 'unknown'
-        print "\n%s (type=%s):" % (project.name, type)
-        for name, info in sorted(regions['regions'].iteritems()):
+        project_type = project.type if hasattr(project, 'type') else 'unknown'
+        print "\n%s (type=%s):" % (project.name, project_type)
+        for name in sorted(regions['regions'].iterkeys()):
             logger.debug('=> count region %s' % name)
             novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
             instances = novaclient.get_project_instances(project.id)
@@ -118,3 +133,10 @@ elif options.action[0] == 'user':
             for i in instances:
                 print "* %s" % i.name
     print "\nTotal number of instances for %s: %s" % (options.email, total)
+
+# Run local function with the same name as the action
+action = locals().get(options.action)
+if not action:
+    logger.error("Action %s not implemented" % options.action)
+    sys.exit(1)
+action()
