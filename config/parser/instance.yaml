@@ -1,0 +1,20 @@
+---
+desc:         'Instance stats. Use <action> -h for help on each action'
+actions:
+  'project':  'Stats grouped by project type'
+  'users':    'Stats grouped by user email domain'
+  'org':      'Stats grouped by user organization'
+  'user':     'List all user instances. FIXME: This does not look at home here'
+opt_args:
+  '-n':
+    'sub':      'user'
+    'dest':     'email'
+    'help':     'user name (email)'
+    'required': true
+  '-o':
+    'sub':      ['users', 'project', 'org']
+    'dest':     'output'
+    'metavar':
+    'help':     'output data type (instance count or percentage)'
+    'choices':  ['count', 'pct']
+    'default':  'count'
