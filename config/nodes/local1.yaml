@@ -68,7 +68,7 @@ nodes:
     compute_profile: 1
     compute_resource: controller-02
   novactrl-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-02
   proxy-01:
     compute_profile: 1
