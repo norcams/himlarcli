@@ -49,8 +49,9 @@ def project():
         printer.output_dict(stats)
     else:
         percent = dict()
-        for s in sorted(stats):
-            percent[s] = (float(stats[s])/float(stats['total']))*100
+        if stats['total'] > 0:
+            for s in sorted(stats):
+                percent[s] = (float(stats[s])/float(stats['total']))*100
         percent['header'] = 'Percent of instances grouped by instance type:'
         printer.output_dict(percent)
 
@@ -79,8 +80,9 @@ def users():
         printer.output_dict(stats)
     else:
         percent = dict()
-        for s in sorted(stats):
-            percent[s] = (float(stats[s])/float(stats['total']))*100
+        if stats['total'] > 0:
+            for s in sorted(stats):
+                percent[s] = (float(stats[s])/float(stats['total']))*100
         percent['header'] = 'Percentage of instances grouped by users email domain:'
         printer.output_dict(percent)
 
@@ -110,8 +112,9 @@ def org():
         printer.output_dict(stats)
     else:
         percent = dict()
-        for s in sorted(stats):
-            percent[s] = (float(stats[s])/float(stats['total']))*100
+        if stats['total'] > 0:
+            for s in sorted(stats):
+                percent[s] = (float(stats[s])/float(stats['total']))*100
         percent['header'] = 'Percentage of instances grouped by users organization:'
         printer.output_dict(percent)
 
