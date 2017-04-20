@@ -1,61 +1,65 @@
 #!/usr/bin/env python
 import sys
-import utils
-import pprint
-from datetime import datetime, timedelta
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
+from himlarcli.parser import Parser
+from himlarcli.printer import Printer
 from himlarcli import utils as himutils
-from himlarcli.notify import Notify
-from email.mime.text import MIMEText
 
 himutils.is_virtual_env()
 
-desc = 'Mange users and user grups'
-actions = ['list','show','delete']
-opt_args = { '-n': { 'dest': 'user', 'help': 'user email (case sensitive)', 'required': False } }
-#             '-m': { 'dest': 'date', 'help': 'date message', 'default': date, 'metavar': 'date'} }
+# Load parser config from config/parser/*
+parser = Parser()
+options = parser.parse_args()
 
-options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
 ksclient = Keystone(options.config, debug=options.debug)
+logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
-domain='Dataporten'
+printer = Printer(options.format)
+domain = 'Dataporten'
 
-if options.action[0] == 'show':
+def action_show():
     if not ksclient.is_valid_user(user=options.user, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.user
         sys.exit(1)
-    pp = pprint.PrettyPrinter(indent=1)
     obj = ksclient.get_user_objects(email=options.user, domain=domain)
-    obj_types = [ 'api', 'dataporten', 'group', 'projects']
-    for type in obj_types:
-        if type not in obj:
-            continue
-        print "\n%s:\n---------" % type.upper()
-        if type == 'projects':
-            for project in obj[type]:
-                pp.pprint(project.to_dict())
-                print "\n"
-        else:
-            pp.pprint(obj[type].to_dict())
-elif options.action[0] == 'list':
+    obj_type = options.obj_type
+    if obj_type not in obj:
+        return
+    if obj_type == 'projects':
+        for project in obj[obj_type]:
+            objects = project.to_dict()
+            objects['__obj_type'] = type(project).__name__
+            objects['header'] = "%s (%s)" % (objects['__obj_type'], obj_type.upper())
+            printer.output_dict(objects)
+    else:
+        objects = obj[obj_type].to_dict()
+        objects['__obj_type'] = type(obj[obj_type]).__name__
+        objects['header'] = "%s (%s)" % (objects['__obj_type'], obj_type.upper())
+        printer.output_dict(objects)
+
+def action_list():
     users = ksclient.list_users(domain=domain)
     domains = dict()
-    print "\nRegistered users:"
-    print "-----------------"
+    output = dict({'users': list()})
     for user in users:
         if '@' in user:
-            print user
+            output['users'].append(user)
             org = user.split("@")[1]
             if org in domains:
                 domains[org] += 1
             else:
                 domains[org] = 1
-    print "\nEmail domains:"
-    print "--------------"
-    for k,v in domains.iteritems():
-        print '%s = %s' % (k, v)
-elif options.action[0] == 'delete':
+    output['header'] = 'Registered users:'
+    printer.output_dict(output)
+    domains['header'] = 'Email domains:'
+    printer.output_dict(domains)
+
+def action_rename():
+    print options.new
+    print options.old
+
+def action_delete():
     if not ksclient.is_valid_user(user=options.user, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.user
         sys.exit(1)
@@ -67,3 +71,10 @@ elif options.action[0] == 'delete':
         ksclient.delete_user(email=options.user, domain=domain, dry_run=options.dry_run)
     else:
         print "You just dodged a bullet my friend!"
+
+# Run local function with the same name as the action
+action = locals().get('action_' + options.action)
+if not action:
+    logger.error("Action %s not implemented" % options.action)
+    sys.exit(1)
+action()

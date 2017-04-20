@@ -1,0 +1,4 @@
+---
+regions:
+  local1:
+    domain: 'dataporten'

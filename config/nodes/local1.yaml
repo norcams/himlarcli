@@ -5,12 +5,14 @@ nodes:
   api-01:
     compute_profile: 1
     compute_resource: controller-01
-  compute-01:
+  compute-01: #8
     mac: 00:23:24:5e:33:b5
+  compute-02: #2
+    mac: 00:23:24:5e:35:20
   console-01:
     compute_profile: 1
     compute_resource: controller-02
-  controller-02:
+  controller-02: #7
     mac: 00:23:24:5e:32:7e
   dashboard-01:
     compute_profile: 1
@@ -68,7 +70,7 @@ nodes:
     compute_profile: 1
     compute_resource: controller-02
   novactrl-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-02
   proxy-01:
     compute_profile: 1
