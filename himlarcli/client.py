@@ -1,12 +1,8 @@
 import sys
-import os.path
 import ConfigParser
-import logging
-import utils
-from state import State
 from keystoneclient.auth.identity import v3
 from keystoneclient import session
-from novaclient import client
+from himlarcli import utils
 from abc import ABCMeta, abstractmethod
 
 
@@ -22,12 +18,7 @@ class Client(object):
         self.logger.debug('=> config file: %s' % config_path)
         self.debug = debug
 
-        try:
-            openstack = self.config._sections['openstack']
-        except KeyError as e:
-            self.logger.exception('missing [openstack]')
-            self.logger.critical('Could not find section [openstack] in %s', config_path)
-            sys.exit(1)
+        openstack = self.get_config_section('openstack')
         auth = v3.Password(auth_url=openstack['auth_url'],
                            username=openstack['username'],
                            password=openstack['password'],
@@ -52,14 +43,26 @@ class Client(object):
     def get_client(self):
         pass
 
+    def get_region(self):
+        return self.get_config('openstack', 'region')
+
+    def get_config_section(self, section):
+        try:
+            openstack = self.config.items(section)
+        except ConfigParser.NoSectionError:
+            self.logger.exception('missing [%s]' % section)
+            self.logger.critical('Could not find section [%s] in %s', section, self.config_path)
+            sys.exit(1)
+        return dict(openstack)
+
     def get_config(self, section, option):
         try:
             value = self.config.get(section, option)
             return value
-        except ConfigParser.NoOptionError as e:
+        except ConfigParser.NoOptionError:
             self.logger.debug('=> config file section [%s] missing option %s'
-                               % (section, option))
-        except ConfigParser.NoSectionError as e:
+                              % (section, option))
+        except ConfigParser.NoSectionError:
             self.logger.debug('=> config file missing section %s' % section)
         return None
 
