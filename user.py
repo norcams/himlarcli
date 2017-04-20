@@ -56,8 +56,29 @@ def action_list():
     printer.output_dict(domains)
 
 def action_rename():
-    print options.new
-    print options.old
+    print "\nYou are about to rename user with email %s to %s" % (options.old, options.new)
+    print "\nWhen a user changes affilation we need to change the following:"
+    print " * Delete %s-group if it exists" % options.new
+    print " * Delete %s api user if it exists" % options.new.lower()
+    print " * Delete %s dataporten user if it exists" % options.new.lower()
+    print " * Delete %s personal project if it exists" % options.new.lower()
+    print " * !!! DELETE OLD DATAPORTEN USER %s !!!" % (options.old)
+    print " * Rename group from %s-group to %s-group" % (options.old, options.new)
+    print " * Rename api user from %s to %s" % (options.old.lower(), options.new.lower())
+    print " * Rename personal project from %s to %s" % (options.old.lower(), options.new.lower())
+    q = "\nAre you sure you will continue (yes|no)? "
+    answer = raw_input(q)
+    if answer.lower() == 'yes':
+        print 'Please wait...'
+        ksclient.delete_user(email=options.new,
+                             domain=domain,
+                             dry_run=options.dry_run)
+        ksclient.rename_user(new_email=options.new,
+                             old_email=options.old,
+                             domain=domain,
+                             dry_run=options.dry_run)
+    else:
+        print "You just dodged a bullet my friend!"
 
 def action_delete():
     if not ksclient.is_valid_user(user=options.user, domain=domain):
