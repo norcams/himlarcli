@@ -8,39 +8,22 @@ from himlarcli.glance import Glance
 from himlarcli import utils as himutils
 from himlarcli.notify import Notify
 from himlarcli.state import State
+from himlarcli.parser import Parser
 import novaclient.exceptions as novaexc
 import time
 import sys
-import utils
-
 
 himutils.is_virtual_env()
 
-desc = 'Mange host aggregate groups of compute nodes. \
-        Note that notify sends email to users!'
-actions = ['show', 'instances', 'users', 'notify', 'migrate', 'activate']
-# Default date for notify are today at 14:00 + 5 days
-d = datetime.today()
-date = datetime(d.year, d.month, d.day, 14, 0) + timedelta(days=5)
-date = date.strftime('%Y-%m-%d around %H:00')
-opt_args = {
-    '-n': {
-        'dest': 'aggregate',
-        'help': 'aggregate name',
-        'required': True,
-        'metavar': 'name'},
-    '-m': {
-        'dest': 'date',
-        'help': 'date message',
-        'default': date,
-        'metavar': 'date'},
-    '--stage': {
-        'dest': 'stage',
-        'help': 'migration stage',
-        'default': 'reactivate'}}
+# Default value for date: today + 5 days at 14:00
+today = datetime.today()
+date = datetime(today.year, today.month, today.day, 14, 0) + timedelta(days=5)
 
-options = utils.get_action_options(desc, actions,
-                                   opt_args=opt_args, dry_run=True)
+# Load parser config from config/parser/*
+parser = Parser()
+parser.update_default('-m', date.strftime('%Y-%m-%d around %H:00'))
+options = parser.parse_args()
+
 ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=logger)
@@ -50,7 +33,7 @@ msg_file = 'misc/notify_reboot.txt'
 
 """ ACTIONS """
 
-def show():
+def action_show():
     aggregate = novaclient.get_aggregate(options.aggregate)
     print '\nMETADATA:'
     for key, value in aggregate.metadata.iteritems():
@@ -60,7 +43,7 @@ def show():
         services = novaclient.get_service(host)
         print '%s (%s)' % (host, services[0].status)
 
-def instances():
+def action_instances():
     instances = novaclient.get_instances(options.aggregate)
     pp = pprint.PrettyPrinter(indent=1)
     stats = dict()
@@ -74,12 +57,12 @@ def instances():
     print "======="
     pp.pprint(stats)
 
-def users():
+def action_users():
     users = novaclient.get_users(options.aggregate, simple=True)
     for user in users:
         print user
 
-def activate():
+def action_activate():
     aggregates = novaclient.get_aggregates()
     for aggregate in aggregates:
         print '=============== %s ================' % aggregate
@@ -100,7 +83,7 @@ def activate():
             tags = {'disabled': datetime.today()}
             novaclient.update_aggregate(aggregate, tags)
 
-def migrate():
+def action_migrate():
     state = State(options.config, debug=options.debug, log=logger)
     glclient = Glance(options.config, debug=options.debug, log=logger)
     print 'STAGE=%s' % options.stage
@@ -144,7 +127,7 @@ def migrate():
             glclient.deactivate(image_id=image[0])
 
 
-def notify():
+def action_notify():
     users = dict()
     instances = novaclient.get_instances(options.aggregate)
     # update metadata
@@ -190,8 +173,8 @@ def notify():
     pp.pprint(users)
 
 # Run local function with the same name as the action
-action = locals().get(options.action[0])
+action = locals().get('action_' + options.action)
 if not action:
-    logger.error("Action %s not implemented" % options.action[0])
+    logger.error("Function action_%s not implemented" % options.action)
     sys.exit(1)
 action()

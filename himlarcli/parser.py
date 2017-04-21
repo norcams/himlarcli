@@ -51,6 +51,10 @@ class Parser(object):
         elif option in self.SHOW and not self.SHOW[option]:
             self.SHOW[option] = True
 
+    def update_default(self, name, value):
+        if name in self.opt_args:
+            self.opt_args[name]['default'] = value
+
     def parse_args(self):
         self.__setup_parser()
         self.__add_config()

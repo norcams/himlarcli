@@ -26,7 +26,7 @@ class Printer(object):
 
     @staticmethod
     def __dict_to_text(objects, order_by=0):
-        print "\n"
+        print ""
         sorted_objects = sorted(objects.items(), key=operator.itemgetter(order_by))
         if 'header' in objects:
             print "".ljust(80, "=")
