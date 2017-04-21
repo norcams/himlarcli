@@ -57,7 +57,7 @@ def action_list():
 
 def action_rename():
     if not ksclient.is_valid_user(user=options.old, domain=domain):
-        print "%s is not a valid user. Please check your spelling or case." % options.user
+        print "%s is not a valid user. Please check your spelling or case." % options.old
         sys.exit(1)
     print "\nYou are about to rename user with email %s to %s" % (options.old, options.new)
     print "\nWhen a user changes affilation we need to change the following:"
