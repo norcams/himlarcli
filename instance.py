@@ -44,7 +44,7 @@ def project():
                         stats[project.type] += 1
                 else:
                     stats['admin'] += 1
-    if options.output == 'instances':
+    if options.output == 'count':
         stats['header'] = 'Number of instances grouped by instance type:'
         printer.output_dict(stats)
     else:
@@ -67,6 +67,7 @@ def users():
             user = ksclient.get_user_by_id(i.user_id)
             if not user:
                 org = 'unknown'
+                logger.debug('=> unknown user for %s (id=%s)' % (i.name, i.id))
             elif '@' not in user.name:
                 org = 'sysuser'
             else:
@@ -75,7 +76,7 @@ def users():
                 stats[org] += 1
             else:
                 stats[org] = 1
-    if options.output == 'instances':
+    if options.output == 'count':
         stats['header'] = 'Usage grouped by user email domain:'
         printer.output_dict(stats)
     else:
@@ -98,6 +99,7 @@ def org():
             user = ksclient.get_user_by_id(i.user_id)
             if not user:
                 org = 'unknown'
+                logger.debug('=> unknown user for %s (id=%s)' % (i.name, i.id))
             elif '@' not in user.name:
                 org = 'sysuser'
             else:
@@ -107,7 +109,7 @@ def org():
                 stats[org] += 1
             else:
                 stats[org] = 1
-    if options.output == 'instances':
+    if options.output == 'count':
         stats['header'] = 'Usage grouped by user organization:'
         printer.output_dict(stats)
     else:
