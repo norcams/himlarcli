@@ -80,6 +80,12 @@ def action_rename():
     else:
         print "You just dodged a bullet my friend!"
 
+def action_password():
+    if not ksclient.is_valid_user(user=options.user, domain=domain):
+        print "%s is not a valid user. Please check your spelling or case." % options.user
+        sys.exit(1)
+    ksclient.reset_password(email=options.user, domain=domain, dry_run=options.dry_run)
+
 def action_delete():
     if not ksclient.is_valid_user(user=options.user, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.user

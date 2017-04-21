@@ -2,6 +2,8 @@ from himlarcli.client import Client
 from himlarcli.nova import Nova
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as exceptions
+import random
+import string
 
 class Keystone(Client):
 
@@ -175,6 +177,19 @@ class Keystone(Client):
         elif dry_run:
             self.logger.debug('=> DRY-RUN: rename project to %s' % new_email)
 
+    def reset_password(self, email, domain=None, dry_run=False):
+        obj = self.get_user_objects(email=email, domain=domain)
+        password = self.generate_password()
+        if not dry_run and 'api' in obj and obj['api']:
+            self.logger.debug('=> reset password for user %s' % email)
+            self.client.users.update(obj['api'], password=password)
+        elif dry_run:
+            self.logger.debug('=> DRY-RUN: reset password for user %s' % email)
+        else:
+            print 'Reset password failed! User %s not found.' % email
+            return
+        print "New password: %s" % password
+
     """
     Grant a role to a project for a user """
     def grant_role(self, user, project, role, domain=None):
@@ -264,6 +279,12 @@ class Keystone(Client):
                                                 domain=domain,
                                                 description=description)
         return project
+
+    @staticmethod
+    def generate_password(size=16, chars=None):
+        if not chars:
+            chars = string.ascii_letters + string.digits
+        return ''.join(random.choice(chars) for _ in range(size))
 
     def __get_project(self, project, domain=None, user=None):
         projects = self.client.projects.list(domain=domain, user=user)
