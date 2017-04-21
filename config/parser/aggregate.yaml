@@ -1,0 +1,25 @@
+---
+desc:           'Manage host aggregate groups of compute nodes'
+actions:
+  'show':       'Show aggregate information'
+  'instances':  'List instances in aggregate'
+  'users':      'List users with instances in aggregate'
+  'notify':     'Notify all users with instances in aggregate of migration'
+  'migrate':    'Migrate all instances out of aggreate'
+  'activate':   'Enable aggregate and disable all other aggregates'
+opt_args:
+  '-n':
+    'dest':     'aggregate'
+    'help':     'aggregate name'
+    'required': True
+    'metavar':  'name'
+  '-m':
+    'sub':      'notify'
+    'dest':     'date'
+    'help':     'date message'
+    'metavar':  'date'
+  '--stage':
+    'sub':      'migrate'
+    'dest':     'stage'
+    'help':     'migration stage'
+    'required': True
