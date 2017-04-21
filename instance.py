@@ -32,6 +32,9 @@ def project():
         stats['total'] += len(instances)
         for i in instances:
             project = ksclient.get_project_by_id(i.tenant_id)
+            if not project:
+                sys.stderr.write("MISSING PROJECT! id=%s for instance %s\n" % (i.tenant_id, i.name))
+                continue
             if hasattr(project, 'course'):
                 stats['education'] += 1
             elif '@' in project.name:

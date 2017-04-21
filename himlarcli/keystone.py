@@ -5,6 +5,7 @@ import keystoneauth1.exceptions as exceptions
 import random
 import string
 
+# pylint: disable=R0904
 class Keystone(Client):
 
     #version = 3
@@ -19,6 +20,13 @@ class Keystone(Client):
 
     def get_client(self):
         return self.client
+
+    def get_project_by_id(self, project_id):
+        try:
+            project = self.client.projects.get(project_id)
+        except exceptions.http.NotFound:
+            project = dict()
+        return project
 
     def get_user_by_id(self, user_id):
         try:
@@ -62,8 +70,7 @@ class Keystone(Client):
         users = self.__get_users(domain)
         return len(users)
 
-    def get_project_by_id(self, project_id):
-        return self.client.projects.get(project_id)
+
 
     def get_project(self, project, domain=None):
         domain = self.__get_domain(domain)
