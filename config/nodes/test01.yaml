@@ -88,6 +88,10 @@ nodes:
   mq-01:
     compute_profile: 1
     compute_resource: controller-01
+  nat-01:
+    compute_profile: 1
+    hostgroup: 4
+    compute_resource: controller-01
   network-01:
     compute_profile: 1
     compute_resource: controller-03
