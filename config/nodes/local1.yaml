@@ -5,7 +5,7 @@ nodes:
   api-01:
     compute_profile: 1
     compute_resource: controller-01
-  builder:
+  builder-01:
     compute_profile: 1
     compute_resource: controller-01
   compute-01: #8
