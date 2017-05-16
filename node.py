@@ -28,7 +28,7 @@ if options.action[0] == 'show':
     if not options.node:
         print "Missing node name"
         sys.exit(1)
-    node_name =  '%s-%s' % (keystone.region, options.node)
+    node_name = '%s-%s' % (keystone.region, options.node)
     node = client.get_host(node_name)
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(node)
@@ -49,17 +49,19 @@ elif options.action[0] == 'install':
     if not options.node:
         print "Missing node name"
         sys.exit(1)
-    node_name =  '%s-%s' % (keystone.region, options.node)
+    node_name = '%s-%s' % (keystone.region, options.node)
     if options.node in nodes:
         client.create_node(name=node_name,
                            node_data=nodes[options.node],
                            region=keystone.region,
                            dry_run=options.dry_run)
     else:
-        logger.debug('=> %s not found in config/nodes/*' % options.node)
+        sys.stderr.write("Node %s not found in config/nodes/%s.yaml\n" %
+                         (options.node, keystone.region))
+        sys.exit(1)
 elif options.action[0] == 'full':
     for name, node_data in sorted(nodes.iteritems()):
-        node_name =  '%s-%s' % (keystone.region, name)
+        node_name = '%s-%s' % (keystone.region, name)
         client.create_node(name=node_name,
                            node_data=node_data,
                            region=keystone.region,
