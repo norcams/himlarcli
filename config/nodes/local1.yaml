@@ -5,6 +5,9 @@ nodes:
   api-01:
     compute_profile: 1
     compute_resource: controller-01
+  builder:
+    compute_profile: 1
+    compute_resource: controller-01
   compute-01: #8
     mac: 00:23:24:5e:33:b5
   compute-02: #2
