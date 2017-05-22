@@ -8,6 +8,16 @@ nodes:
   builder-01:
     compute_profile: 1
     compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   compute-01: #8
     mac: 00:23:24:5e:33:b5
   compute-02: #2
