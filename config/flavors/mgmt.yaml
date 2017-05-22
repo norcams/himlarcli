@@ -1,0 +1,8 @@
+---
+public: false
+mgmt:
+  'mgmt.small':
+    ram:    1024
+    vcpus:  1
+    disk:   3
+
