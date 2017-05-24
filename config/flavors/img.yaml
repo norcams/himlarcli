@@ -10,4 +10,7 @@ img:
     ram:    1024
     vcpus:  1
     disk:   8
-
+  'img.cirros':
+    ram:    512
+    vcpus:  1
+    disk:   0
