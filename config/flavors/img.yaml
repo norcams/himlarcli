@@ -2,14 +2,6 @@
 # flavors used for image builder
 public: false
 img:
-  'img.fedora':
-    ram:    1024
-    vcpus:  1
-    disk:   3
-  'img.centos':
-    ram:    1024
-    vcpus:  1
-    disk:   8
   'img.zerodisk':
     ram:    1024
     vcpus:  1
