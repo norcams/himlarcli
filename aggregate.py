@@ -116,7 +116,7 @@ def action_migrate():
                     logger.debug('=> migrate instance %s' % unicode(instance.name))
                     try:
                         instance.migrate()
-                        if count%options.limit:
+                        if count%options.limit == 0:
                             logger.debug('=> sleep for %s seconds', options.sleep)
                             time.sleep(options.sleep)
                     except novaexc.BadRequest as e:
