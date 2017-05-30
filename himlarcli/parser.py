@@ -4,6 +4,7 @@ import os
 from himlarcli.printer import Printer
 from himlarcli import utils
 import sys
+from pydoc import locate
 
 class Parser(object):
 
@@ -172,12 +173,16 @@ class Parser(object):
         - metavar: help text example variable name
         - action: store for variable and store_const for boolean
         - required: boolean
+        - type: string value of type
     """
     def __add_opt_args(self):
         for name, arg in self.opt_args.iteritems():
             if not 'dest' in arg:
                 print 'missing dest in opt_args'
                 continue
+            if 'type' in arg:
+                # Use locate to find buildt-in types
+                arg['type'] = locate(arg['type'])
             # Find the parse to use (some, all, or default parser)
             parsers = dict()
             if 'sub' in arg: # one or more sub parsers

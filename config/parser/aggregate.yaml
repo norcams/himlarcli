@@ -25,11 +25,13 @@ opt_args:
     'required': True
   '--limit':
     'sub':      'migrate'
+    'type':     int
     'dest':     'limit'
     'help':     'number of instances to migrate before sleep'
     'default':  25
   '--sleep':
     'sub':      'migrate'
     'dest':     'sleep'
+    'type':     int
     'help':     'number of seconds to sleep'
     'default':  120
