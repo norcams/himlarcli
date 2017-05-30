@@ -107,14 +107,18 @@ def action_migrate():
         answer = raw_input(q)
         if answer.lower() == 'yes':
             instances = novaclient.get_instances(options.aggregate)
+            count = 0
             for instance in instances:
+                count += 1
                 if options.dry_run:
                     logger.debug('=> DRY-RUN: migrate instance %s' % unicode(instance.name))
                 else:
                     logger.debug('=> migrate instance %s' % unicode(instance.name))
                     try:
                         instance.migrate()
-                        time.sleep(5)
+                        if count%options.limit:
+                            logger.debug('=> sleep for %s seconds', options.sleep)
+                            time.sleep(options.sleep)
                     except novaexc.BadRequest as e:
                         print e
                         print "exit 1"
