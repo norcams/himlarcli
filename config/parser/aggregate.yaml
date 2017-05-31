@@ -34,4 +34,11 @@ opt_args:
     'dest':     'sleep'
     'type':     int
     'help':     'number of seconds to sleep'
-    'default':  120
+    'default':  180
+  '--hard-limit':
+    'sub':      'migrate'
+    'dest':     'hard_limit'
+    'action':   'store_const'
+    'const':    true
+    'help':     'exit script after migration of --limit instances'
+    'default':  false

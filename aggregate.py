@@ -110,6 +110,9 @@ def action_migrate():
             count = 0
             for instance in instances:
                 count += 1
+                if options.hard_limit and count > options.limit:
+                    logger.debug('=> use of hard limit and exit after %s instances', options.limit)
+                    sys.exit(0)
                 if options.dry_run:
                     logger.debug('=> DRY-RUN: migrate instance %s' % unicode(instance.name))
                 else:
