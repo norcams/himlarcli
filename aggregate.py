@@ -117,7 +117,7 @@ def action_migrate():
                     try:
                         instance.migrate()
                         time.sleep(2)
-                        if count%options.limit == 0:
+                        if count%options.limit == 0 and (options.hard_limit and count < options.limit):
                             logger.debug('=> sleep for %s seconds', options.sleep)
                             time.sleep(options.sleep)
                     except novaexc.BadRequest as e:
