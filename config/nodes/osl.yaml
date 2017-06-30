@@ -42,6 +42,8 @@ nodes:
     mac: ec:f4:bb:c8:cb:fc
   controller-03:
     mac: ec:f4:bb:c8:01:cc
+  controller-04:
+    mac: e0:db:55:09:09:96
   dashboard-01:
     compute_profile: 3
     compute_resource: controller-02
