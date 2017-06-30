@@ -168,7 +168,9 @@ def action_notify():
         for server, info in instances.iteritems():
             user_instances += "%s (current status %s)\n" % (server, info['status'])
         msg = MIMEText(user_instances + body_content, 'plain', 'utf-8')
-        msg['Subject'] = 'UH-IaaS: Rebooting instance (%s)' % ksclient.region
+        msg['Subject'] = ('UH-IaaS: Your instances will be rebooted on %s (%s)'
+                          % (options.date, ksclient.region))
+
         if not options.dry_run:
             notify.send_mail(user, msg)
             print "Sending email to user %s" % user
