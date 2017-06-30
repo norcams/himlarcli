@@ -2,6 +2,8 @@
 Due to scheduled maintenance these instances in UH-IaaS region $region
 will be rebooted on $date if they are running.
 
+If you are not using an instance any more we would appreciate if you delete it.
+
 Read more at http://docs.uh-iaas.no/en/latest/terms-of-service.html#availability
 
 Support and contact information can be found at http://docs.uh-iaas.no
