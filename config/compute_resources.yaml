@@ -1,6 +1,8 @@
 ---
 default:
   num_resources: 3
+osl:
+  num_resources: 4
 bgo:
   num_resources: 4
 test01:
