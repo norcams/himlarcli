@@ -80,7 +80,7 @@ nodes:
         '1':
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '50G'
+          capacity:     '100G'
           format_type:  'qcow2'
     host_parameters_attributes:
       - name:           'installdevice'
