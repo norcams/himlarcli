@@ -27,7 +27,7 @@ default:
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '10G'
-          format_type:  'raw'
+          format_type:  'qcow2'
   2: # medium
     vm_attrs:
       cpus:   '1'
@@ -46,7 +46,7 @@ default:
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '10G'
-          format_type:  'raw'
+          format_type:  'qcow2'
   3: # large
     vm_attrs:
       cpus:   '2'
@@ -65,4 +65,4 @@ default:
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '10G'
-          format_type:  'raw'
+          format_type:  'qcow2'
