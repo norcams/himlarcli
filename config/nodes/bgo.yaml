@@ -12,9 +12,9 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '50G'
-          format_type:  'raw'
+          format_type:  'qcow2'
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
@@ -77,20 +77,20 @@ nodes:
     compute_resource: controller-02
   logger-01:
     compute_profile: 3
-    compute_resource: controller-01
+    compute_resource: controller-04
     compute_attributes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '50G'
-          format_type:  'raw'
+          pool_name:    'masstorage'
+          capacity:     '100G'
+          format_type:  'qcow2'
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
   monitor-01:
     compute_profile: 2
-    compute_resource: controller-01
+    compute_resource: controller-04
   mq-01:
     compute_profile: 1
     compute_resource: controller-01
