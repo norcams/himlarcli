@@ -2,13 +2,13 @@ import sys
 import os
 import ConfigParser
 import logging
-import logging
 import logging.config
-import warnings
+#import warnings
 import yaml
 import hashlib
 import functools
-import mimetypes
+#import mimetypes
+import urllib
 from string import Template
 
 def get_config(config_path):
@@ -127,6 +127,18 @@ def load_config(configfile, log=None):
             print(exc)
             config = None
     return config
+
+def download_file(target, source, logger):
+    """ Download a file from a source url """
+    target = get_abs_path(target)
+    if not os.path.isfile(target):
+        (filename, headers) = urllib.urlretrieve(source, target)
+        print filename
+        if int(headers['content-length']) < 1000:
+            logger.debug("=> file is too small: %s" % source)
+            os.remove(source)
+            return None
+    return target
 
 def checksum_file(file_path, type='sha256', chunk_size=65336):
     # Read the file in small pieces, so as to prevent failures to read particularly large files.
