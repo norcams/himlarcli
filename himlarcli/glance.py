@@ -25,11 +25,20 @@ class Glance(Client):
 
 
     """ Get images.
-    To filter use filters dict with key value pairs """
+    To filter use filters dict with key value pairs.
+    E.G. get_images(filters={'key': 'value'}) """
     def get_images(self, **kwargs):
         return self.client.images.list(**kwargs)
 
+    def find_image(self, **kwargs):
+        """ Same as get_images but return a list.
+            This should only be used for small sets!
+            This can be achieved by using limit=1 in filters """
+        images = self.client.images.list(**kwargs)
+        return list(images)
+
     def get_image(self, name):
+        """ depricated use find_image"""
         if not self.images:
             self.__get_images()
         # Make sure we loop a new generator from the start
