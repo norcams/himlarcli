@@ -13,21 +13,24 @@ class Printer(object):
         else:
             sys.exit('Printer(): Unknown format %s' % output_format)
 
-    def output_dict(self, objects):
+    def output_dict(self, objects, sort=True):
         if self.format == 'text':
-            self.__dict_to_text(objects)
+            self.__dict_to_text(objects=objects, sort=sort)
         elif self.format == 'json':
-            self.__dict_to_json(objects)
+            self.__dict_to_json(objects=objects, sort=sort)
 
-    def __dict_to_json(self, objects):
+    def __dict_to_json(self, objects, sort=True):
         if 'header' in objects:
             del objects['header']
-        print json.dumps(objects, sort_keys=True, indent=self.INDENT)
+        print json.dumps(objects, sort_keys=sort, indent=self.INDENT)
 
     @staticmethod
-    def __dict_to_text(objects, order_by=0):
+    def __dict_to_text(objects, order_by=0, sort=True):
         print ""
-        sorted_objects = sorted(objects.items(), key=operator.itemgetter(order_by))
+        if sort:
+            sorted_objects = sorted(objects.items(), key=operator.itemgetter(order_by))
+        else:
+            sorted_objects = objects.items()
         if 'header' in objects:
             print "".ljust(80, "=")
             print "  %s" % objects['header'].ljust(76)
