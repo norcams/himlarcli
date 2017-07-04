@@ -1,0 +1,15 @@
+---
+# Use empty value for None
+desc: 'Manage gold images. Use <action> -h for help on each action'
+actions:
+  'list':     'List all active gold images (public)'
+  'update':   'Update images from config file'
+opt_args:
+  '--region':
+    'dest':     'region'
+    'help':     'override current region'
+  '-i':
+    'sub':      'update'
+    'dest':     'image_config'
+    'help':     'config file under config/images/'
+    'default':  'gold.yaml'
