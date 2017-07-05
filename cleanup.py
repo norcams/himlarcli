@@ -61,6 +61,32 @@ def action_list():
                     #print '%s %s %s (%s)' % (i.id, i.status, unicode(i.name), project.name)
     print "\nTotal number of instances for cleanup: %s" % count
 
+def action_delete():
+    q = "Delete these instances? (yes|no) "
+    answer = raw_input(q)
+    if answer.lower() != 'yes':
+        print "Abort delete!"
+        return
+    search_filter = dict()
+    if options.type:
+        search_filter['type'] = options.type
+    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+    count = 0
+    for region in regions:
+        #print "==============\n REGION=%s\n==============" % region
+        novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
+        for project in projects:
+            if not options.filter or options.filter in project.name:
+                #print "found %s" % project.name
+                #printer.output_dict(project.to_dict())
+                instances = novaclient.get_project_instances(project.id)
+                for i in instances:
+                    logger.debug('=> DELETE %s (%s)' % (i.name, project.name))
+                    if not options.dry_run:
+                        i.delete()
+                        count += 1
+    print "\nTotal number of instances deleted: %s" % count
+
 def action_notify():
     search_filter = dict()
     if options.type:
@@ -94,6 +120,11 @@ def action_notify():
                 sys.exit(1)
             notify = Notify(options.config, debug=options.debug)
         # Email each users
+        q = "Send mail to all users of these instances about termination? (yes|no) "
+        answer = raw_input(q)
+        if answer.lower() != 'yes':
+            print "Abort sending mail!"
+            return
         for user, instances in users.iteritems():
             user_instances = ""
             for server, info in instances.iteritems():
