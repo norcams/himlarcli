@@ -66,7 +66,7 @@ class Nova(Client):
         aggregate = self.__get_aggregate(aggregate)
         return self.client.aggregates.set_metadata(aggregate.id, metadata)
 
-    def get_instances(self, aggregate=None, simple=False):
+    def get_instances(self, aggregate=None, host=None, simple=False):
         if not aggregate:
             instances = self.__get_instances()
         else:
@@ -77,9 +77,14 @@ class Nova(Client):
             else:
                 instances = list()
                 for h in agg.hosts:
+                    if host and host != h:
+                        self.logger.debug('=> single host spesified. Drop %s in %s'
+                                          % (h, aggregate))
+                        continue
                     self.logger.debug('=> hosts %s found in aggregate %s' % (h, aggregate))
                     instances += self.__get_instances(h)
-        self.logger.debug("=> found %s instances in %s" % (len(instances), aggregate))
+        host_txt = ' (host=%s)' % host if host else None
+        self.logger.debug("=> found %s instances in %s%s" % (len(instances), aggregate, host_txt))
         if not simple:
             return instances
         else:
