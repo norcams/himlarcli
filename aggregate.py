@@ -59,7 +59,7 @@ def action_instances():
             stats[i.status] += 1
         else:
             stats[i.status] = 1
-        print '%s (status=%s)' % (unicode(i.name), i.status)
+        print '%s %s (status=%s)' % (i.id, unicode(i.name), i.status)
     print "\nSTATUS:"
     print "======="
     pp.pprint(stats)
