@@ -23,7 +23,6 @@ opt_args:
     'dest':     'stage'
     'default':  'all'
     'help':     'migration stage'
-    'required': True
   '--limit':
     'sub':      'migrate'
     'type':     int
