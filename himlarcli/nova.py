@@ -136,7 +136,9 @@ class Nova(Client):
         self.__change_status(action='delete', state='SHUTOFF', instances=instances)
 
     def list_quota(self, project_id, detail=False):
-        return self.client.quotas.get(tenant_id=project_id, detail=detail)
+        # This require novaclient version > mitaka
+        #return self.client.quotas.get(tenant_id=project_id, detail=detail)
+        return self.client.quotas.get(tenant_id=project_id)
 
     def set_quota(self, project_id, quota):
         self.logger.debug('=> quota set to %s' % quota)
