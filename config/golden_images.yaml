@@ -70,7 +70,7 @@ default:
     'name':             'GOLD Debian Jessie 8'
     'depricated':       'Outdated (Debian)'
     'url':              'http://cdimage.debian.org/cdimage/openstack/current-8/'
-    'latest':           'debian-8-20170521-openstack-amd64.qcow2'
+    'latest':           'debian-8-openstack-amd64.qcow2'
     'checksum_file':    'SHA256SUMS'
     'checksum':         'sha256'
     'visibility':       'public'
