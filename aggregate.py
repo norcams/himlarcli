@@ -128,7 +128,7 @@ def action_migrate():
                             logger.debug('=> sleep for %s seconds', options.sleep)
                             time.sleep(options.sleep)
                     except novaexc.BadRequest as e:
-                        print e
+                        sys.stderr.write("%s\n" % e)
                         sys.stderr.write("Error found. Cancel migration!\n")
                         break
                 if options.hard_limit and count >= options.limit:
