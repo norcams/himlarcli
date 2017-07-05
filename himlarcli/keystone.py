@@ -35,6 +35,9 @@ class Keystone(Client):
             user = dict()
         return user
 
+    def get_regions(self):
+        return self.client.regions.list()
+
     """
     Return all users, groups and project for this email """
     def get_user_objects(self, email, domain):
