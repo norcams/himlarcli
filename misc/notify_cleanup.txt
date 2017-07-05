@@ -1,0 +1,11 @@
+
+These instances running in UH-IaaS region $region will be terminated
+as per the agreement with your organization.
+
+Images and volumes for your project will not be affected.
+
+Support and contact information can be found at http://docs.uh-iaas.no
+
+--
+UH-IaaS team
+http://www.uh-iaas.no
