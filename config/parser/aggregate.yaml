@@ -21,6 +21,7 @@ opt_args:
   '--stage':
     'sub':      'migrate'
     'dest':     'stage'
+    'default':  'all'
     'help':     'migration stage'
     'required': True
   '--limit':

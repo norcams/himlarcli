@@ -46,9 +46,9 @@ def action_show():
     for key, value in aggregate.metadata.iteritems():
         print "%s = %s" % (key, value)
     print '\nHOSTS:'
-    for host in aggregate.hosts:
-        services = novaclient.get_service(host)
-        print '%s (%s)' % (host, services[0].status)
+    for h in aggregate.hosts:
+        services = novaclient.get_service(h)
+        print '%s (%s)' % (h, services[0].status)
 
 def action_instances():
     instances = novaclient.get_instances(options.aggregate, host)
@@ -96,10 +96,10 @@ def action_migrate():
     print 'STAGE=%s' % options.stage
 
     # stage: purge state
-    if options.stage == 'purge':
+    if options.stage == 'purge' or options.stage == 'all':
         state.purge(state.IMAGE_TABLE)
     # stage: reactivate images
-    if options.stage == 'reactivate':
+    if options.stage == 'reactivate' or options.stage == 'all':
         filters = {'status': 'deactivated'}
         images = glclient.get_images(filters=filters)
         for image in images:
@@ -109,7 +109,7 @@ def action_migrate():
             # Reactivate image
             glclient.reactivate(image.id)
     # stage: migrate
-    if options.stage == 'migrate':
+    if options.stage == 'migrate' or options.stage == 'all':
         q = "Make sure all images are active! Migrate %s (yes|no)? " % options.aggregate
         answer = raw_input(q)
         if answer.lower() == 'yes':
@@ -133,9 +133,10 @@ def action_migrate():
                         sys.exit(1)
                 if options.hard_limit and count >= options.limit:
                     logger.debug('=> use of hard limit and exit after %s instances', options.limit)
-                    sys.exit(0)
+                    break
+                    #sys.exit(0)
     # stage: deactivate images
-    if options.stage == 'deactivate':
+    if options.stage == 'deactivate' or options.stage == 'all':
         images = state.fetch(state.IMAGE_TABLE, columns='id, status', status='deactivated')
         for image in images:
             glclient.deactivate(image_id=image[0])
