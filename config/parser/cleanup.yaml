@@ -2,7 +2,8 @@
 # Use empty value for None
 desc: 'Reclaim and remove instances. Use <action> -h for help on each action'
 actions:
-  'list': 'List instances for removal'
+  'list':   'List instances for removal'
+  'notify': 'Email users about instances for removal'
 opt_args:
   '--domain':
     'dest':     'domain'
