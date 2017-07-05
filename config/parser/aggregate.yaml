@@ -43,6 +43,6 @@ opt_args:
     'help':     'exit script after migration of --limit instances'
     'default':  false
   '--host':
-    'sub':      ['migrate','instances']
+    'sub':      ['migrate','instances','activate']
     'dest':     'host'
     'help':     'only use this host in the aggregate'

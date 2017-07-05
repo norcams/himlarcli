@@ -76,9 +76,13 @@ def action_activate():
         metadata = novaclient.get_aggregate(aggregate)
         # Enable this aggregate
         if aggregate == options.aggregate:
-            for host in metadata.hosts:
+            if host:
                 print 'Enable %s' % host
                 novaclient.enable_host(host)
+            else:
+                for h in metadata.hosts:
+                    print 'Enable %s' % h
+                    novaclient.enable_host(h)
             tags = {'enabled': datetime.today()}
             novaclient.update_aggregate(aggregate, tags)
         else: # Disable everything else
@@ -113,7 +117,7 @@ def action_migrate():
         q = "Make sure all images are active! Migrate %s (yes|no)? " % options.aggregate
         answer = raw_input(q)
         if answer.lower() == 'yes':
-            instances = novaclient.get_instances(options.aggregate)
+            instances = novaclient.get_instances(options.aggregate, host)
             count = 0
             for instance in instances:
                 count += 1
