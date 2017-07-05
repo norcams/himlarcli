@@ -13,9 +13,9 @@ class Printer(object):
         else:
             sys.exit('Printer(): Unknown format %s' % output_format)
 
-    def output_dict(self, objects, sort=True):
+    def output_dict(self, objects, sort=True, one_line=False):
         if self.format == 'text':
-            self.__dict_to_text(objects=objects, sort=sort)
+            self.__dict_to_text(objects=objects, sort=sort, one_line=one_line)
         elif self.format == 'json':
             self.__dict_to_json(objects=objects, sort=sort)
 
@@ -25,7 +25,7 @@ class Printer(object):
         print json.dumps(objects, sort_keys=sort, indent=self.INDENT)
 
     @staticmethod
-    def __dict_to_text(objects, order_by=0, sort=True):
+    def __dict_to_text(objects, order_by=0, sort=True, one_line=False):
         print ""
         if sort:
             sorted_objects = sorted(objects.items(), key=operator.itemgetter(order_by))
@@ -35,11 +35,16 @@ class Printer(object):
             print "".ljust(80, "=")
             print "  %s" % objects['header'].ljust(76)
             print "".ljust(80, "=")
+        out_line = str()
         for k, v in sorted_objects:
             if k == 'header':
                 continue
             elif isinstance(v, list):
                 for i in v:
                     print i
+            elif one_line:
+                out_line += '%s ' % v
             else:
                 print "%s = %s" % (k, v)
+        if out_line:
+            print out_line.strip()
