@@ -31,7 +31,14 @@ domain = 'Dataporten'
 zone = '%s-default-1' % ksclient.region
 msg_file = 'misc/notify_reboot.txt'
 
-""" ACTIONS """
+if options.host:
+    if '.' in options.host:
+        host = options.host
+    else:
+        domain = ksclient.get_config('openstack', 'domain')
+        host = options.host + '.' + domain
+else:
+    host = None
 
 def action_show():
     aggregate = novaclient.get_aggregate(options.aggregate)
@@ -44,7 +51,7 @@ def action_show():
         print '%s (%s)' % (host, services[0].status)
 
 def action_instances():
-    instances = novaclient.get_instances(options.aggregate)
+    instances = novaclient.get_instances(options.aggregate, host)
     pp = pprint.PrettyPrinter(indent=1)
     stats = dict()
     for i in instances:
