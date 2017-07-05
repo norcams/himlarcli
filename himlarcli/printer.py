@@ -26,7 +26,6 @@ class Printer(object):
 
     @staticmethod
     def __dict_to_text(objects, order_by=0, sort=True, one_line=False):
-        print ""
         if sort:
             sorted_objects = sorted(objects.items(), key=operator.itemgetter(order_by))
         else:

@@ -40,6 +40,7 @@ def action_list():
         search_filter['type'] = options.type
     projects = ksclient.get_projects(domain=options.domain, **search_filter)
     #regions = ksclient.get_regions()
+    count = 0
     for region in regions:
         #print "==============\n REGION=%s\n==============" % region
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
@@ -49,6 +50,7 @@ def action_list():
                 #printer.output_dict(project.to_dict())
                 instances = novaclient.get_project_instances(project.id)
                 for i in instances:
+                    count += 1
                     output = dict()
                     output['_region'] = region
                     output['id'] = i.id
@@ -57,6 +59,7 @@ def action_list():
                     output['project'] = project.name
                     printer.output_dict(objects=output, one_line=True)
                     #print '%s %s %s (%s)' % (i.id, i.status, unicode(i.name), project.name)
+    print "\nTotal number of instances for cleanup: %s" % count
 
 def action_notify():
     search_filter = dict()
