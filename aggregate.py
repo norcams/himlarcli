@@ -31,7 +31,7 @@ domain = 'Dataporten'
 zone = '%s-default-1' % ksclient.region
 msg_file = 'misc/notify_reboot.txt'
 
-if options.host:
+if 'host' in options and options.host:
     if '.' in options.host:
         host = options.host
     else:
