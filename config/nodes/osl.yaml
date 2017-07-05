@@ -33,6 +33,12 @@ nodes:
     mac: ec:f4:bb:ce:27:24
   compute-03:
     mac: ec:f4:bb:ce:28:24
+  compute-04:
+    mac: 24:6e:96:32:2d:34
+  compute-05:
+    mac: 24:6e:96:32:1e:2c
+  compute-06:
+    mac: 24:6e:96:32:28:ec
   console-01:
     compute_profile: 2
     compute_resource: controller-03
