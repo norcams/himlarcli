@@ -79,7 +79,7 @@ def action_activate():
             for h in metadata.hosts:
                 print 'Enable %s' % h
                 novaclient.enable_host(h)
-            tags = {'enabled': datetime.today(), 'disabled': None}
+            tags = {'enabled': datetime.today(), 'disabled': None, 'notify': None}
             novaclient.update_aggregate(aggregate, tags)
         else: # Disable everything else
             for h in metadata.hosts:
