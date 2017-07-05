@@ -76,21 +76,17 @@ def action_activate():
         metadata = novaclient.get_aggregate(aggregate)
         # Enable this aggregate
         if aggregate == options.aggregate:
-            if host:
-                print 'Enable %s' % host
-                novaclient.enable_host(host)
-            else:
-                for h in metadata.hosts:
-                    print 'Enable %s' % h
-                    novaclient.enable_host(h)
+            for h in metadata.hosts:
+                print 'Enable %s' % h
+                novaclient.enable_host(h)
             tags = {'enabled': datetime.today()}
             novaclient.update_aggregate(aggregate, tags)
         else: # Disable everything else
-            for host in metadata.hosts:
-                services = novaclient.get_service(host)
+            for h in metadata.hosts:
+                services = novaclient.get_service(h)
                 if services[0].status == 'enabled':
-                    print 'Disable %s' % host
-                    novaclient.disable_host(host)
+                    print 'Disable %s' % h
+                    novaclient.disable_host(h)
             tags = {'disabled': datetime.today()}
             novaclient.update_aggregate(aggregate, tags)
 
