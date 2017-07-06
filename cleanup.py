@@ -84,7 +84,7 @@ def action_delete():
                     if not options.dry_run:
                         i.delete()
                         count += 1
-                        time.sleep(5)
+                        time.sleep(2)
     print "\nTotal number of instances deleted: %s" % count
 
 def action_notify():
