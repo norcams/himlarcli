@@ -76,6 +76,7 @@ class Notify(object):
             else:
                 log_msg = 'DRY-RUN: ' + log_msg
             self.logger.debug('=> %s', log_msg)
+        return users
 
     @staticmethod
     def __get_user_email(user):
