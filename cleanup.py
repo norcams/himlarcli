@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import sys
-from email.mime.text import MIMEText
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.parser import Parser
@@ -16,7 +15,6 @@ options = parser.parse_args()
 ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
 printer = Printer(options.format)
-msg_file = 'misc/notify_cleanup.txt'
 
 # Project type
 project_types = himutils.load_config('config/type.yaml', log=logger)
@@ -88,58 +86,33 @@ def action_delete():
     print "\nTotal number of instances deleted: %s" % count
 
 def action_notify():
+    q = "Send mail to all users of these instances about termination? (yes|no) "
+    answer = raw_input(q)
+    if answer.lower() != 'yes':
+        print "Abort sending mail!"
+        return
+
     search_filter = dict()
     if options.type:
         search_filter['type'] = options.type
     projects = ksclient.get_projects(domain=options.domain, **search_filter)
     for region in regions:
-        users = dict()
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         for project in projects:
             if not options.filter or options.filter in project.name:
                 instances = novaclient.get_project_instances(project.id)
-                # Generate instance list per user
-                for i in instances:
-                    user = ksclient.get_user_by_id(i.user_id)
-                    if not hasattr(user, 'name'):
-                        continue
-                    if "@" not in user.name:
-                        continue
-                    email = user.name.lower()
-                    if email not in users:
-                        users[email] = dict()
-                    users[email][i.name] = {'status': i.status}
-        if users:
-            mapping = dict(region=region)
-            body_content = himutils.load_template(inputfile=msg_file,
-                                                  mapping=mapping,
-                                                  log=logger)
-            if not body_content:
-                print 'ERROR! Could not find and parse mail body in \
-                      %s' % options.msg
-                sys.exit(1)
-            notify = Notify(options.config, debug=options.debug)
-        # Email each users
-        q = "Send mail to all users of these instances about termination? (yes|no) "
-        answer = raw_input(q)
-        if answer.lower() != 'yes':
-            print "Abort sending mail!"
-            return
-        for user, instances in users.iteritems():
-            user_instances = ""
-            for server, info in instances.iteritems():
-                user_instances += "%s (current status %s)\n" % (server, info['status'])
-            msg = MIMEText(user_instances + body_content, 'plain', 'utf-8')
-            msg['Subject'] = ('UH-IaaS: Your instances will be terminated (%s)' % (region))
+                mapping = dict(region=region.upper(), project=project.name)
+                body_content = himutils.load_template(inputfile=options.template,
+                                                      mapping=mapping,
+                                                      log=logger)
+                subject = ('UH-IaaS: Your instances will be terminated (%s)' % (region))
 
-            if not options.dry_run:
-                notify.send_mail(user, msg)
-                print "Sending email to user %s" % user
-            else:
-                print "Dry-run: Mail would be sendt to user %s" % user
-        print "\nComplete list of users and instances:"
-        print "====================================="
-        printer.output_dict(users)
+                notify = Notify(options.config, debug=False, log=logger)
+                notify.set_keystone_client(ksclient)
+                notify.set_dry_run(options.dry_run)
+                users = notify.mail_instance_owner(instances, body_content, subject)
+                notify.close()
+                print users
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

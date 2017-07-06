@@ -1,4 +1,6 @@
 
+in project $project
+
 These instances running in UH-IaaS region $region will be terminated
 as per the agreement with your organization.
 

@@ -19,3 +19,8 @@ opt_args:
   '-f':
     'dest':     'filter'
     'help':     'project filter'
+  '--template':
+    'sub':      'notify'
+    'dest':     'template'
+    'default':  'misc/notify_cleanup.txt'
+    'help':     'mail body template file'
