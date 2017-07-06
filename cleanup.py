@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import time
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.parser import Parser
@@ -83,6 +84,7 @@ def action_delete():
                     if not options.dry_run:
                         i.delete()
                         count += 1
+                        time.sleep(5)
     print "\nTotal number of instances deleted: %s" % count
 
 def action_notify():
