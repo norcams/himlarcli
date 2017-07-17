@@ -114,11 +114,10 @@ class Nova(Client):
 # ============================== INSTANCES ====================================
 
     def get_all_instances(self, search_opts=None):
-        if 'all_tenants' not in search_opts:
-            if not search_opts:
-                search_opts = {'all_tenants': 1}
-            else:
-                search_opts.update({'all_tenants': 1})
+        if not search_opts:
+            search_opts = {'all_tenants': 1}
+        elif 'all_tenants' not in search_opts:
+            search_opts.update({'all_tenants': 1})
         return self.__get_all_instances(search_opts)
 
     def get_project_instances(self, project_id):
