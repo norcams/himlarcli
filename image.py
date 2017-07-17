@@ -27,6 +27,8 @@ def action_purge():
     for image in images.itervalues():
         if options.visibility and options.visibility != image['visibility']:
             continue
+        if options.type and options.type not in image['tags']:
+            continue
         if options.deactive and image['status'] == 'active':
             continue
         if image['count'] > 0:
@@ -43,6 +45,8 @@ def action_usage():
     output = image_usage()
     for image in output.itervalues():
         if options.visibility and options.visibility != image['visibility']:
+            continue
+        if options.type and options.type not in image['tags']:
             continue
         if options.deactive and image['status'] == 'active':
             continue
