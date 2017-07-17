@@ -7,7 +7,54 @@ images:
     'latest':           'cirros-0.3.5-x86_64-disk.img'
     'checksum_file':    'MD5SUMS'
     'checksum':         'md5'
-    'visibility':       'private'
-    'disk_format':      'qcow2'
     'min_ram':          256
     'min_disk':         1
+    'visibility':       'private'
+  'debian8':
+    'name':             'GOLD Debian 8'
+    'depricated':       'Outdated (Debian)'
+    'url':              'http://builder/'
+    'latest':           'debian8-latest.qcow2'
+    'min_ram':          768
+    'min_disk':         8
+    'visibility':       'private'
+    'tags':             ['gold']
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
+  'debian9':
+    'name':             'GOLD Debian 9'
+    'depricated':       'Outdated (Debian)'
+    'url':              'http://builder/'
+    'latest':           'debian9-latest.qcow2'
+    'min_ram':          768
+    'min_disk':         8
+    'visibility':       'private'
+    'tags':             ['gold']
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
+  'centos6':
+    'name':             'GOLD CentOS 6'
+    'depricated':       'Outdated (CentOS 6)'
+    'url':              'http://builder/'
+    'latest':           'centos6-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'private'
+    'tags':             ['gold']
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
+  'centos7':
+    'name':             'GOLD CentOS 7'
+    'depricated':       'Outdated (CentOS 7)'
+    'url':              'http://builder/'
+    'latest':           'centos7-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'private'
+    'tags':             ['gold']
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
