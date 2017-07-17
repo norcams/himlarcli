@@ -61,15 +61,17 @@ class Glance(Client):
         self.logger.debug('=> image delete %s' % self.image.name)
         self.client.images.delete(self.image.id)
 
-    def update_image(self, name, **kwargs):
-        if not self.image:
+    def update_image(self, name, image_id=None, **kwargs):
+        if not self.image and not image_id:
             self.logger.debug('=> image not found %s' % name)
             if name:
                 self.get_image(name)
             else:
                 self.logger.critical('Image must exist before upload.')
                 sys.exit(1)
-        self.client.images.update(self.image.id, **kwargs)
+        if not image_id:
+            image_id = self.image.id
+        self.client.images.update(image_id=image_id, name=name, **kwargs)
 
     def deactivate(self, name=None, image_id=None):
         if not self.image and not image_id:
