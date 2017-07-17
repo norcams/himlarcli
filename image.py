@@ -89,6 +89,9 @@ def image_usage():
     novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
     instances = novaclient.get_all_instances()
     for i in instances:
+        if not i.image['id'] in image_usage:
+            logger.debug('=> missing image for instance %s (%s)', (i.name, i.id))
+            continue
         image_usage[i.image['id']]['count'] += 1
     return image_usage
 
