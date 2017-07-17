@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 from himlarcli import utils as himutils
 from himlarcli.glance import Glance
+from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 
@@ -19,10 +20,33 @@ printer = Printer(options.format)
 glclient = Glance(options.config, debug=options.debug, region=options.region)
 logger = glclient.get_logger()
 
+def action_usage():
+    output = dict()
+    images = glclient.get_images()
+    for image in images:
+        output[image.id] = image
+        output[image.id]['count'] = 0
+    novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
+    instances = novaclient.get_all_instances()
+    for i in instances:
+        output[i.image['id']]['count'] += 1
+    for image in output.itervalues():
+        if options.visibility and options.visibility != image['visibility']:
+            continue
+        if options.deactive and image['status'] == 'active':
+            continue
+
+        out_image = {
+            'name': image['name'],
+            'id': image['id'],
+            'created': image['created_at'],
+            'count': image['count']}
+        printer.output_dict(out_image, sort=True)
+
 def action_list():
     filters = {'status': 'active', 'visibility': 'public'}
     images = glclient.get_images(filters=filters)
-    output = output = dict({'images': list()})
+    output = dict({'images': list()})
     output['header'] = 'Public active images:'
     for image in images:
         out_image = {'name': image.name, 'created': image.created_at}

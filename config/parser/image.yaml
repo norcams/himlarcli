@@ -4,6 +4,7 @@ desc: 'Manage gold images. Use <action> -h for help on each action'
 actions:
   'list':     'List all active gold images (public)'
   'update':   'Update images from config file'
+  'usage':    'Check image usage'
 opt_args:
   '--region':
     'dest':     'region'
@@ -22,3 +23,13 @@ opt_args:
     'dest':     'type'
     'help':     'image type'
     'default':  'gold'
+  '-v':
+    'sub':      'usage'
+    'dest':     'visibility'
+    'help':     'image visibility'
+  '--deactive':
+    'sub':      'usage'
+    'dest':     'deactive'
+    'help':     'only deactivated images'
+    'action':   'store_const'
+    'const':    true
