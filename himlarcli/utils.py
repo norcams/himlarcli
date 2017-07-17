@@ -12,6 +12,15 @@ import urllib
 import urllib2
 from string import Template
 
+
+def confirm_action(question):
+    question = "%s (yes|no)? " % question
+    answer = raw_input(question)
+    if answer.lower() == 'yes':
+        return True
+    sys.stderr.write('Action aborted by user.\n')
+    return False
+
 def get_config(config_path):
     if not os.path.isfile(config_path):
         logging.critical("Could not find config file: %s" %config_path)

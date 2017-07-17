@@ -21,6 +21,8 @@ glclient = Glance(options.config, debug=options.debug, region=options.region)
 logger = glclient.get_logger()
 
 def action_purge():
+    if not himutils.confirm_action('Purge unused images'):
+        return
     images = image_usage()
     for image in images.itervalues():
         if options.visibility and options.visibility != image['visibility']:
