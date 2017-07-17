@@ -55,6 +55,8 @@ def update_image(name, image_data):
     url = (image_data['url'] + image_data['latest'])
     imagefile = himutils.download_file(image_data['latest'], url, logger,
                                        checksum_type, checksum_url)
+    if not imagefile: # if download or checksum failed
+        return
     tags = list(image_data['tags']) if 'tags' in image_data else list()
     tags.append(options.type)
     filters = {'name': image_data['name'], 'tag': tags}
