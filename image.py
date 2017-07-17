@@ -20,16 +20,25 @@ printer = Printer(options.format)
 glclient = Glance(options.config, debug=options.debug, region=options.region)
 logger = glclient.get_logger()
 
+def action_purge():
+    images = image_usage()
+    for image in images.itervalues():
+        if options.visibility and options.visibility != image['visibility']:
+            continue
+        if options.deactive and image['status'] == 'active':
+            continue
+        if image['count'] > 0:
+            sys.stderr.write('Image %s in use! Could not purge\n' % image['name'])
+            continue
+        log_msg = "delete image %s" % image['name']
+        if not options.dry_run:
+            glclient.delete_image(image['id'])
+        else:
+            log_msg = "DRY-RUN: %s" % log_msg
+        logger.debug('=> %s', log_msg)
+
 def action_usage():
-    output = dict()
-    images = glclient.get_images()
-    for image in images:
-        output[image.id] = image
-        output[image.id]['count'] = 0
-    novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
-    instances = novaclient.get_all_instances()
-    for i in instances:
-        output[i.image['id']]['count'] += 1
+    output = image_usage()
     for image in output.itervalues():
         if options.visibility and options.visibility != image['visibility']:
             continue
@@ -42,6 +51,7 @@ def action_usage():
             'created': image['created_at'],
             'count': image['count']}
         printer.output_dict(out_image, sort=True)
+    return output
 
 def action_list():
     filters = {'status': 'active', 'visibility': 'public'}
@@ -69,6 +79,18 @@ def action_update():
             logger.debug('=> missing attributes in image hash for %s' % name)
             continue
         update_image(name, image_data)
+
+def image_usage():
+    image_usage = dict()
+    images = glclient.get_images()
+    for image in images:
+        image_usage[image.id] = image
+        image_usage[image.id]['count'] = 0
+    novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
+    instances = novaclient.get_all_instances()
+    for i in instances:
+        image_usage[i.image['id']]['count'] += 1
+    return image_usage
 
 def update_image(name, image_data):
     if 'checksum' in image_data and 'checksum_file' in image_data:

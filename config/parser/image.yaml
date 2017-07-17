@@ -5,6 +5,7 @@ actions:
   'list':     'List all active gold images (public)'
   'update':   'Update images from config file'
   'usage':    'Check image usage'
+  'purge':    'Delete images'
 opt_args:
   '--region':
     'dest':     'region'
@@ -24,12 +25,13 @@ opt_args:
     'help':     'image type'
     'default':  'gold'
   '-v':
-    'sub':      'usage'
+    'sub':      ['usage', 'purge']
     'dest':     'visibility'
     'help':     'image visibility'
   '--deactive':
-    'sub':      'usage'
+    'sub':      ['usage', 'purge']
     'dest':     'deactive'
     'help':     'only deactivated images'
     'action':   'store_const'
     'const':    true
+    'default':  false
