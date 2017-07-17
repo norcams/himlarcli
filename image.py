@@ -55,7 +55,9 @@ def update_image(name, image_data):
     url = (image_data['url'] + image_data['latest'])
     imagefile = himutils.download_file(image_data['latest'], url, logger,
                                        checksum_type, checksum_url)
-    filters = {'name': image_data['name'], 'tag': image_data['tags']}
+    tags = list(image_data['tags']) if 'tags' in image_data else list()
+    tags.append(options.type)
+    filters = {'name': image_data['name'], 'tag': tags}
     images = glclient.find_image(filters=filters, limit=1)
     if images and len(images) == 1:
         logger.debug('=> image %s found' % name)
@@ -93,6 +95,7 @@ def create_image(source_path, image):
         for key, value in image['properties'].iteritems():
             properties[key] = value
     tags = list()
+    # Tag all images with type
     tags.append(options.type)
     if 'tags' in image:
         for tag in image['tags']:
