@@ -28,7 +28,7 @@ def action_purge():
         if options.deactive and image['status'] == 'active':
             continue
         if image['count'] > 0:
-            sys.stderr.write('Image %s in use! Could not purge\n' % image['name'])
+            logger.debug('=> no purge: image %s in use!' % image['name'])
             continue
         log_msg = "delete image %s" % image['name']
         if not options.dry_run:
