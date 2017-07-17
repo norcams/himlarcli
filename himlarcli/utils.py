@@ -9,6 +9,7 @@ import hashlib
 import functools
 #import mimetypes
 import urllib
+import urllib2
 from string import Template
 
 def get_config(config_path):
@@ -128,16 +129,25 @@ def load_config(configfile, log=None):
             config = None
     return config
 
-def download_file(target, source, logger):
+def download_file(target, source, logger, checksum_type=None, checksum_url=None):
     """ Download a file from a source url """
     target = get_abs_path(target)
     if not os.path.isfile(target):
         (filename, headers) = urllib.urlretrieve(source, target)
-        print filename
+        #print filename
         if int(headers['content-length']) < 1000:
             logger.debug("=> file is too small: %s" % source)
             os.remove(source)
             return None
+    if checksum_type and checksum_url:
+        checksum = checksum_file(target, checksum_type)
+        response = urllib2.urlopen(checksum_url)
+        checksum_all = response.read()
+        if checksum not in checksum_all:
+            logger.debug("=> checksum failed: %s" % checksum)
+            return None
+        else:
+            logger.debug("=> checksum ok: %s" % checksum)
     return target
 
 def checksum_file(file_path, type='sha256', chunk_size=65336):
