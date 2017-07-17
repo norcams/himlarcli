@@ -66,7 +66,7 @@ class Glance(Client):
             return
         if not image_id:
             image_id = self.image.id
-        self.logger.debug('=> image delete %s' % self.image.name)
+        self.logger.debug('=> image delete %s' % image_id)
         self.client.images.delete(image_id)
 
     def update_image(self, name, image_id=None, **kwargs):
