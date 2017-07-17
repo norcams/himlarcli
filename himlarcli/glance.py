@@ -23,6 +23,8 @@ class Glance(Client):
     def get_client(self):
         return self.client
 
+    def get_image_by_id(self, image_id):
+        return self.client.images.get(image_id)
 
     """ Get images.
     To filter use filters dict with key value pairs.
@@ -36,6 +38,7 @@ class Glance(Client):
             This can be achieved by using limit=1 in filters """
         images = self.client.images.list(**kwargs)
         return list(images)
+
 
     def get_image(self, name):
         """ depricated use find_image"""
