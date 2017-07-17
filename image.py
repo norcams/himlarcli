@@ -82,7 +82,7 @@ def action_update():
 
 def image_usage():
     image_usage = dict()
-    images = glclient.get_images()
+    images = glclient.get_images(limit=1000, page_size=999)
     for image in images:
         image_usage[image.id] = image
         image_usage[image.id]['count'] = 0
