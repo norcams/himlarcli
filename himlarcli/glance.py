@@ -39,7 +39,6 @@ class Glance(Client):
         images = self.client.images.list(**kwargs)
         return list(images)
 
-
     def get_image(self, name):
         """ depricated use find_image"""
         if not self.images:
@@ -80,6 +79,12 @@ class Glance(Client):
         if not image_id:
             image_id = self.image.id
         self.client.images.update(image_id=image_id, name=name, **kwargs)
+
+    def set_access(self, image_id, project_id):
+        return self.client.image_members.create(image_id, project_id)
+
+    def get_access(self, image_id):
+        return self.client.image_members.list(image_id)
 
     def deactivate(self, name=None, image_id=None):
         if not self.image and not image_id:
