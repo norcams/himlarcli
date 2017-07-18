@@ -10,8 +10,8 @@ class Keystone(Client):
 
     #version = 3
 
-    def __init__(self, config_path, debug=False):
-        super(Keystone, self).__init__(config_path, debug)
+    def __init__(self, config_path, debug=False, log=None):
+        super(Keystone, self).__init__(config_path, debug, log)
         self.client = keystoneclient.Client(session=self.sess,
                                             region_name=self.region)
 
