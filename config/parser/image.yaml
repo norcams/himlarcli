@@ -6,24 +6,40 @@ actions:
   'update':   'Update images from config file'
   'usage':    'Check image usage'
   'purge':    'Delete images'
+  'grant':    'Grant access to private image from project'
 opt_args:
   '--region':
     'dest':     'region'
     'help':     'override current region'
+  '--domain':
+    'sub':      'grant'
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--detailed':
+    'sub':      'list'
+    'dest':     'detailed'
+    'help':     'show detailed list'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   '-i':
     'sub':      'update'
     'dest':     'image_config'
     'help':     'config file under config/images/'
     'default':  'gold.yaml'
   '-n':
-    'sub':      'update'
+    'sub':      ['update', 'grant']
     'dest':     'name'
     'help':     'only use image with this name'
   '-t':
-#    'sub':      ['update', 'usage', 'purge']
     'dest':     'type'
     'help':     'image type'
     'default':  'gold'
+  '-p':
+    'sub':      'grant'
+    'dest':     'project'
+    'help':     'project name to grant access to'
   '-v':
     'sub':      ['usage', 'purge', 'list']
     'dest':     'visibility'

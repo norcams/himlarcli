@@ -6,6 +6,7 @@ import sys
 import os
 from datetime import datetime
 from himlarcli import utils as himutils
+from himlarcli.keystone import Keystone
 from himlarcli.glance import Glance
 from himlarcli.nova import Nova
 from himlarcli.parser import Parser
@@ -24,6 +25,23 @@ logger = glclient.get_logger()
 tags = list()
 if options.type != 'all':
     tags.append(options.type)
+
+def action_grant():
+    ksclient = Keystone(options.config, debug=options.debug, log=logger)
+    project = ksclient.get_project(project=options.project, domain=options.domain)
+    filters = {'status': 'active', 'tag': tags, 'visibility': 'private'}
+    if options.name:
+        filters['name'] = options.name
+    logger.debug('=> filter: %s' % filters)
+    images = glclient.get_images(filters=filters)
+    for image in images:
+        log_msg = 'grant access to %s from %s' % (image.name, project.name)
+        if not options.dry_run:
+            glclient.set_access(image.id, project.id)
+        else:
+            log_msg = 'DRY-RUN: %s' % log_msg
+        logger.debug('=> %s' % log_msg)
+
 
 def action_purge():
     if not himutils.confirm_action('Purge unused images'):
@@ -60,15 +78,26 @@ def action_usage():
     return output
 
 def action_list():
+    ksclient = Keystone(options.config, debug=options.debug, log=logger)
     status = 'deactivated' if options.deactive else 'active'
     filters = {'status': status, 'visibility': options.visibility, 'tag': tags}
     logger.debug('=> filter: %s' % filters)
     images = glclient.get_images(filters=filters)
     out_image = {'header': 'Image list (id, name, created_at)'}
-    printer.output_dict(out_image)
+    if options.format == 'text':
+        printer.output_dict(out_image)
     for image in images:
         out_image = {'name': image.name, 'created': image.created_at, 'id': image.id}
-        printer.output_dict(out_image, sort=False, one_line=True)
+        if options.detailed and image.visibility == 'private':
+            access = glclient.get_access(image.id)
+            if access:
+                access_list = list()
+                for member in access:
+                    project = ksclient.get_project_by_id(member['member_id'])
+                    access_list.append(project.name)
+                out_image['projects'] = access_list
+        one_line = False if options.detailed else True
+        printer.output_dict(out_image, sort=False, one_line=one_line)
 
 def action_update():
     image_templates = himutils.load_config('config/images/%s' % options.image_config)
