@@ -11,7 +11,7 @@ images:
     'min_disk':         1
     'visibility':       'private'
   'ubuntu_1604':
-    'name':             'GOLD Ubuntu server 16.04'
+    'name':             'NEW GOLD Ubuntu server 16.04'
     'depricated':       'Outdated (Ubuntu)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1604-latest.qcow2'
@@ -22,7 +22,7 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'debian8':
-    'name':             'GOLD Debian 8'
+    'name':             'NEW GOLD Debian 8'
     'depricated':       'Outdated (Debian)'
     'url':              'http://builder/'
     'latest':           'debian8-latest.qcow2'
@@ -33,7 +33,7 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'debian9':
-    'name':             'GOLD Debian 9'
+    'name':             'NEW GOLD Debian 9'
     'depricated':       'Outdated (Debian)'
     'url':              'http://builder/'
     'latest':           'debian9-latest.qcow2'
@@ -44,7 +44,7 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'centos6':
-    'name':             'GOLD CentOS 6'
+    'name':             'NEW GOLD CentOS 6'
     'depricated':       'Outdated (CentOS)'
     'url':              'http://builder/'
     'latest':           'centos6-latest.qcow2'
@@ -55,7 +55,7 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'centos7':
-    'name':             'GOLD CentOS 7'
+    'name':             'NEW GOLD CentOS 7'
     'depricated':       'Outdated (CentOS)'
     'url':              'http://builder/'
     'latest':           'centos7-latest.qcow2'
@@ -66,7 +66,7 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'fedora_25':
-    'name':             'GOLD Fedora 25'
+    'name':             'NEW GOLD Fedora 25'
     'depricated':       'Outdated (Fedora)'
     'url':              'http://builder/'
     'latest':           'fedora_25-latest.qcow2'
@@ -77,7 +77,7 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'fedora_26':
-    'name':             'GOLD Fedora 26'
+    'name':             'NEW GOLD Fedora 26'
     'depricated':       'Outdated (Fedora)'
     'url':              'http://builder/'
     'latest':           'fedora_26-latest.qcow2'
