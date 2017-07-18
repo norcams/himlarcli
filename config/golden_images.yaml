@@ -67,7 +67,7 @@ default:
     'min_ram':          768
     'min_disk':         8
   'debian':
-    'name':             'GOLD Debian Jessie 8'
+    'name':             'GOLD Debian 8'
     'depricated':       'Outdated (Debian)'
     'url':              'http://cdimage.debian.org/cdimage/openstack/current-8/'
     'latest':           'debian-8-openstack-amd64.qcow2'
