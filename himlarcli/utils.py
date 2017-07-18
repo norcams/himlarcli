@@ -148,14 +148,14 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None)
             logger.warn('=> ERROR: could not download %s' % source)
             sys.stderr.write(str(exc)+'\n')
             return None
-        except OSError as exc:
-            logger.warn('=> ERROR: could not download %s' % source)
-            sys.stderr.write(str(exc)+'\n')
-            return None
         #print filename
         if int(headers['content-length']) < 1000:
             logger.debug("=> file is too small: %s" % source)
-            os.remove(source)
+            try:
+                os.remove(source)
+            except OSError as exc:
+                logger.warn('=> ERROR: could not download %s' % source)
+                sys.stderr.write(str(exc)+'\n')
             return None
     if checksum_type and checksum_url:
         checksum = checksum_file(target, checksum_type)
