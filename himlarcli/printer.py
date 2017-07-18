@@ -39,8 +39,9 @@ class Printer(object):
             if k == 'header':
                 continue
             elif isinstance(v, list):
+                print '%s =' % k
                 for i in v:
-                    print i
+                    print "  %s" % i
             elif one_line:
                 out_line += '%s ' % v
             else:
