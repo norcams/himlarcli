@@ -24,7 +24,6 @@ logger = glclient.get_logger()
 tags = list()
 if options.type != 'all':
     tags.append(options.type)
-status = 'deactivated' if options.deactive else 'active'
 
 def action_purge():
     if not himutils.confirm_action('Purge unused images'):
@@ -54,6 +53,7 @@ def action_usage():
     return output
 
 def action_list():
+    status = 'deactivated' if options.deactive else 'active'
     filters = {'status': status, 'visibility': options.visibility, 'tag': tags}
     logger.debug('=> filter: %s' % filters)
     images = glclient.get_images(filters=filters)
@@ -80,6 +80,7 @@ def action_update():
         update_image(name, image_data)
 
 def image_usage():
+    status = 'deactivated' if options.deactive else 'active'
     novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
     filters = {'status': status, 'visibility': options.visibility, 'tag': tags}
     logger.debug('=> filter: %s' % filters)
@@ -114,7 +115,7 @@ def update_image(name, image_data):
         checksum = himutils.checksum_file(imagefile, 'md5')
         if checksum != images[0]['checksum']:
             logger.debug('=> update image: new checksum found %s' % checksum)
-            result = create_image(imagefile, image_data)
+            result = create_image(name, imagefile, image_data)
             if not options.dry_run:
                 timestamp = datetime.utcnow().isoformat()
                 glclient.update_image(image_id=images[0]['id'],
@@ -126,7 +127,7 @@ def update_image(name, image_data):
             logger.debug('=> no new image needed: checksum match found')
     else:
         logger.debug('=> image %s not found' % name)
-        result = create_image(imagefile, image_data)
+        result = create_image(name, imagefile, image_data)
     if result:
         logger.debug('=> %s' % result)
 
@@ -134,7 +135,7 @@ def update_image(name, image_data):
     if os.path.isfile(imagefile):
         os.remove(imagefile)
 
-def create_image(source_path, image):
+def create_image(name, source_path, image):
     # Populate input with default values if not defined in config
     visibility = image['visibility'] if 'visibility' in image else 'private'
     disk_format = image['disk_format'] if 'disk_format' in image else 'qcow2'
@@ -145,8 +146,9 @@ def create_image(source_path, image):
         for key, value in image['properties'].iteritems():
             properties[key] = value
     tags = list()
-    # Tag all images with type
+    # Tag all images with type and name
     tags.append(options.type)
+    tags.append(name)
     if 'tags' in image:
         for tag in image['tags']:
             tags.append(tag)
