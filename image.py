@@ -44,12 +44,19 @@ def action_usage():
     output = image_usage()
     out_image = {'header': 'Image usage (count, id, name)'}
     printer.output_dict(out_image)
+    distros = {'fedora': 0, 'centos': 0, 'ubuntu': 0, 'debian': 0, 'cirros': 0}
+    distros['header'] = 'Distros'
     for image in output.itervalues():
         out_image = {
             'name': image['name'],
             'id': image['id'],
             'count': image['count']}
         printer.output_dict(out_image, sort=False, one_line=True)
+        for distro in distros.iterkeys():
+            if distro in image['name'].lower():
+                distros[distro] += image['count']
+                continue
+    printer.output_dict(distros)
     return output
 
 def action_list():
