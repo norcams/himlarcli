@@ -36,6 +36,7 @@ opt_args:
     'dest':     'type'
     'help':     'image type'
     'default':  'gold'
+    'choices':  ['all', 'gold']
   '-p':
     'sub':      'grant'
     'dest':     'project'
@@ -44,7 +45,8 @@ opt_args:
     'sub':      ['usage', 'purge', 'list']
     'dest':     'visibility'
     'help':     'image visibility'
-    default:    'public'
+    'default':  'public'
+    'choices':  ['public', 'private']
   '--deactive':
     'sub':      ['usage', 'purge', 'list']
     'dest':     'deactive'
