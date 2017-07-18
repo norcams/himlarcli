@@ -36,7 +36,7 @@ opt_args:
     'dest':     'type'
     'help':     'image type'
     'default':  'gold'
-    'choices':  ['all', 'gold']
+    'choices':  ['all', 'gold', 'test']
   '-p':
     'sub':      'grant'
     'dest':     'project'

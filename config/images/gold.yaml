@@ -1,15 +1,5 @@
 ---
 images:
-  'cirros':
-    'name':             'CirrOS debug image'
-    'depricated':       'Outdated (CirrOS)'
-    'url':              'http://download.cirros-cloud.net/0.3.5/'
-    'latest':           'cirros-0.3.5-x86_64-disk.img'
-    'checksum_file':    'MD5SUMS'
-    'checksum':         'md5'
-    'min_ram':          256
-    'min_disk':         1
-    'visibility':       'private'
   'ubuntu_1604':
     'name':             'NEW GOLD Ubuntu server 16.04'
     'depricated':       'Outdated (Ubuntu)'
