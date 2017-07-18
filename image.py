@@ -60,7 +60,10 @@ def action_usage():
     return output
 
 def action_list():
-    filters = {'status': 'active', 'visibility': 'public'}
+    tags = list()
+    tags.append(options.type)
+    print tags
+    filters = {'status': 'active', 'visibility': 'public', 'tag': tags}
     images = glclient.get_images(filters=filters)
     output = dict({'images': list()})
     output['header'] = 'Public active images:'

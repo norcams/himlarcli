@@ -20,7 +20,7 @@ opt_args:
     'dest':     'name'
     'help':     'only use image with this name'
   '-t':
-    'sub':      ['update', 'usage', 'purge']
+#    'sub':      ['update', 'usage', 'purge']
     'dest':     'type'
     'help':     'image type'
     'default':  'gold'
