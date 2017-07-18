@@ -113,9 +113,13 @@ def update_image(name, image_data):
                                        checksum_type, checksum_url)
     if not imagefile: # if download or checksum failed
         return
-    tags = list(image_data['tags']) if 'tags' in image_data else list()
+    #tags = list(image_data['tags']) if 'tags' in image_data else list()
+    tags = list()
     tags.append(options.type)
-    filters = {'name': image_data['name'], 'tag': tags}
+    tags.append(name)
+    # Filter based on tags: type and name (only one of each type should exists)
+    filters = {'tag': tags, 'status': 'active'}
+    logger.debug('=> filter: %s' % filters)
     images = glclient.find_image(filters=filters, limit=1)
     if images and len(images) == 1:
         logger.debug('=> image %s found' % name)
