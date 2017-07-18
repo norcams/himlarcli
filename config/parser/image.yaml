@@ -25,11 +25,12 @@ opt_args:
     'help':     'image type'
     'default':  'gold'
   '-v':
-    'sub':      ['usage', 'purge']
+    'sub':      ['usage', 'purge', 'list']
     'dest':     'visibility'
     'help':     'image visibility'
+    default:    'public'
   '--deactive':
-    'sub':      ['usage', 'purge']
+    'sub':      ['usage', 'purge', 'list']
     'dest':     'deactive'
     'help':     'only deactivated images'
     'action':   'store_const'

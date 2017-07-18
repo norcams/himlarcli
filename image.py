@@ -20,17 +20,17 @@ printer = Printer(options.format)
 glclient = Glance(options.config, debug=options.debug, region=options.region)
 logger = glclient.get_logger()
 
+# Filters
+tags = list()
+if options.type != 'all':
+    tags.append(options.type)
+status = 'deactivated' if options.deactive else 'active'
+
 def action_purge():
     if not himutils.confirm_action('Purge unused images'):
         return
     images = image_usage()
     for image in images.itervalues():
-        if options.visibility and options.visibility != image['visibility']:
-            continue
-        if options.type and options.type not in image['tags']:
-            continue
-        if options.deactive and image['status'] == 'active':
-            continue
         if image['count'] > 0:
             logger.debug('=> no purge: image %s in use!' % image['name'])
             continue
@@ -43,34 +43,25 @@ def action_purge():
 
 def action_usage():
     output = image_usage()
+    out_image = {'header': 'Image usage (count, id, name)'}
+    printer.output_dict(out_image)
     for image in output.itervalues():
-        if options.visibility and options.visibility != image['visibility']:
-            continue
-        if options.type and options.type not in image['tags']:
-            continue
-        if options.deactive and image['status'] == 'active':
-            continue
-
         out_image = {
             'name': image['name'],
             'id': image['id'],
-            'created': image['created_at'],
             'count': image['count']}
-        printer.output_dict(out_image, sort=True)
+        printer.output_dict(out_image, sort=False, one_line=True)
     return output
 
 def action_list():
-    tags = list()
-    tags.append(options.type)
-    filters = {'status': 'active', 'visibility': 'public', 'tag': tags}
+    filters = {'status': status, 'visibility': options.visibility, 'tag': tags}
+    logger.debug('=> filter: %s' % filters)
     images = glclient.get_images(filters=filters)
-    output = dict({'images': list()})
-    output['header'] = 'Public active images:'
+    out_image = {'header': 'Image list (id, name, created_at)'}
+    printer.output_dict(out_image)
     for image in images:
-        out_image = {'name': image.name, 'created': image.created_at}
-#        out_image['header'] = image.name
-        printer.output_dict(out_image, sort=False)
-        output['images'].append(image.name)
+        out_image = {'name': image.name, 'created': image.created_at, 'id': image.id}
+        printer.output_dict(out_image, sort=False, one_line=True)
 
 def action_update():
     image_templates = himutils.load_config('config/images/%s' % options.image_config)
@@ -89,18 +80,18 @@ def action_update():
         update_image(name, image_data)
 
 def image_usage():
+    novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
+    filters = {'status': status, 'visibility': options.visibility, 'tag': tags}
+    logger.debug('=> filter: %s' % filters)
     image_usage = dict()
-    images = glclient.get_images(limit=1000, page_size=999)
+    images = glclient.get_images(limit=1000, page_size=999, filters=filters)
     for image in images:
         image_usage[image.id] = image
         image_usage[image.id]['count'] = 0
-    novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
-    instances = novaclient.get_all_instances()
-    for i in instances:
-        if not i.image['id'] in image_usage:
-            sys.stderr.write('Missing image for instance %s (%s)\n' % (i.name, i.id))
-            continue
-        image_usage[i.image['id']]['count'] += 1
+        search_opts = {'image': image.id}
+        instances = novaclient.get_all_instances(search_opts=search_opts)
+        for i in instances:
+            image_usage[i.image['id']]['count'] += 1
     return image_usage
 
 def update_image(name, image_data):
