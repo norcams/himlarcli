@@ -142,7 +142,16 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None)
     """ Download a file from a source url """
     target = get_abs_path(target)
     if not os.path.isfile(target):
-        (filename, headers) = urllib.urlretrieve(source, target)
+        try:
+            (filename, headers) = urllib.urlretrieve(source, target)
+        except IOError as exc:
+            logger.warn('=> ERROR: could not download %s' % source)
+            sys.stderr.write(str(exc)+'\n')
+            return None
+        except OSError as exc:
+            logger.warn('=> ERROR: could not download %s' % source)
+            sys.stderr.write(str(exc)+'\n')
+            return None
         #print filename
         if int(headers['content-length']) < 1000:
             logger.debug("=> file is too small: %s" % source)
