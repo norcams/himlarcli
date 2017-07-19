@@ -1,4 +1,5 @@
 ---
+type: 'test'
 images:
   'cirros':
     'name':             'CirrOS debug image'

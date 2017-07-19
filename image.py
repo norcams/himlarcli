@@ -23,8 +23,9 @@ logger = glclient.get_logger()
 
 # Filters
 tags = list()
-if options.type != 'all':
-    tags.append(options.type)
+if hasattr(options, 'type'):
+    if options.type != 'all':
+        tags.append(options.type)
 
 def action_grant():
     ksclient = Keystone(options.config, debug=options.debug, log=logger)
@@ -41,7 +42,6 @@ def action_grant():
         else:
             log_msg = 'DRY-RUN: %s' % log_msg
         logger.debug('=> %s' % log_msg)
-
 
 def action_purge():
     if not himutils.confirm_action('Purge unused images'):
@@ -101,10 +101,11 @@ def action_list():
 
 def action_update():
     image_templates = himutils.load_config('config/images/%s' % options.image_config)
-    if not image_templates or 'images' not in image_templates:
+    if not image_templates or 'images' not in image_templates or 'type' not in image_templates:
         sys.stderr.write("Invalid yaml file (config/images/%s): images hash not found\n"
                          % options.image_config)
         sys.exit(1)
+    image_type = image_templates['type']
     for name, image_data in image_templates['images'].iteritems():
         if options.name and name != options.name:
             logger.debug('=> dropped %s: image name spesified', name)
@@ -113,7 +114,7 @@ def action_update():
         if not bool(all(k in image_data for k in mandatory)):
             logger.debug('=> missing attributes in image hash for %s' % name)
             continue
-        update_image(name, image_data)
+        update_image(name, image_data, image_type)
 
 def image_usage():
     status = 'deactivated' if options.deactive else 'active'
@@ -131,7 +132,7 @@ def image_usage():
             image_usage[i.image['id']]['count'] += 1
     return image_usage
 
-def update_image(name, image_data):
+def update_image(name, image_data, image_type):
     if 'checksum' in image_data and 'checksum_file' in image_data:
         checksum_url = "%s%s" % (image_data['url'], image_data['checksum_file'])
         checksum_type = image_data['checksum']
@@ -144,7 +145,7 @@ def update_image(name, image_data):
         return
     #tags = list(image_data['tags']) if 'tags' in image_data else list()
     tags = list()
-    tags.append(options.type)
+    tags.append(image_type)
     tags.append(name)
     # Filter based on tags: type and name (only one of each type should exists)
     filters = {'tag': tags, 'status': 'active'}
@@ -155,7 +156,7 @@ def update_image(name, image_data):
         checksum = himutils.checksum_file(imagefile, 'md5')
         if checksum != images[0]['checksum']:
             logger.debug('=> update image: new checksum found %s' % checksum)
-            result = create_image(name, imagefile, image_data)
+            result = create_image(name, imagefile, image_data, image_type)
             if not options.dry_run:
                 timestamp = datetime.utcnow().isoformat()
                 glclient.update_image(image_id=images[0]['id'],
@@ -167,7 +168,7 @@ def update_image(name, image_data):
             logger.debug('=> no new image needed: checksum match found')
     else:
         logger.debug('=> image %s not found' % name)
-        result = create_image(name, imagefile, image_data)
+        result = create_image(name, imagefile, image_data, image_type)
     if result:
         logger.debug('=> %s' % result)
 
@@ -175,7 +176,7 @@ def update_image(name, image_data):
     if os.path.isfile(imagefile):
         os.remove(imagefile)
 
-def create_image(name, source_path, image):
+def create_image(name, source_path, image, image_type):
     # Populate input with default values if not defined in config
     visibility = image['visibility'] if 'visibility' in image else 'private'
     disk_format = image['disk_format'] if 'disk_format' in image else 'qcow2'
@@ -187,7 +188,7 @@ def create_image(name, source_path, image):
             properties[key] = value
     tags = list()
     # Tag all images with type and name
-    tags.append(options.type)
+    tags.append(image_type)
     tags.append(name)
     if 'tags' in image:
         for tag in image['tags']:

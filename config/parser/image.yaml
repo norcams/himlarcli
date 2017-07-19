@@ -27,12 +27,13 @@ opt_args:
     'sub':      'update'
     'dest':     'image_config'
     'help':     'config file under config/images/'
-    'default':  'gold.yaml'
+    'default':  'default.yaml'
   '-n':
     'sub':      ['update', 'grant']
     'dest':     'name'
     'help':     'only use image with this name'
   '-t':
+    'sub':      ['usage', 'purge', 'list', 'grant']
     'dest':     'type'
     'help':     'image type'
     'default':  'gold'

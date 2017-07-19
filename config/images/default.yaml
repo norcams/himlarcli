@@ -1,4 +1,5 @@
 ---
+type: 'gold'
 images:
   'ubuntu_1604':
     'name':             'NEW GOLD Ubuntu server 16.04'
