@@ -17,7 +17,7 @@ opt_args:
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   '--detailed':
-    'sub':      'list'
+    'sub':      ['list', 'usage']
     'dest':     'detailed'
     'help':     'show detailed list'
     'action':   'store_const'

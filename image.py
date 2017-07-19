@@ -59,8 +59,8 @@ def action_purge():
         logger.debug('=> %s', log_msg)
 
 def action_usage():
-    output = image_usage()
-    out_image = {'header': 'Image usage (count, id, name)'}
+    output = image_usage(options.detailed)
+    out_image = {'header': 'Images with usage count'}
     printer.output_dict(out_image)
     distros = {'fedora': 0, 'centos': 0, 'ubuntu': 0, 'debian': 0, 'cirros': 0}
     distros['header'] = 'Distros'
@@ -69,7 +69,11 @@ def action_usage():
             'name': image['name'],
             'id': image['id'],
             'count': image['count']}
-        printer.output_dict(out_image, sort=False, one_line=True)
+        if options.detailed:
+            out_image['instances'] = image['instances']
+            out_image['created_at'] = image['created_at']
+        one_line = False if options.detailed else True
+        printer.output_dict(out_image, sort=True, one_line=one_line)
         for distro in distros.iterkeys():
             if distro in image['name'].lower():
                 distros[distro] += image['count']
@@ -120,7 +124,7 @@ def action_update():
             continue
         update_image(name, image_data, image_type)
 
-def image_usage():
+def image_usage(detailed=False):
     status = 'deactivated' if options.deactive else 'active'
     novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
     filters = {'status': status, 'visibility': options.visibility, 'tag': tags}
@@ -132,8 +136,12 @@ def image_usage():
         image_usage[image.id]['count'] = 0
         search_opts = {'image': image.id}
         instances = novaclient.get_all_instances(search_opts=search_opts)
+        if detailed:
+            image_usage[image.id]['instances'] = list()
         for i in instances:
-            image_usage[i.image['id']]['count'] += 1
+            image_usage[image.id]['count'] += 1
+            if detailed:
+                image_usage[image.id]['instances'].append(i.id)
     return image_usage
 
 def update_image(name, image_data, image_type):
