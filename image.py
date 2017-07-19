@@ -98,6 +98,8 @@ def action_list():
                 out_image['projects'] = access_list
         if options.detailed and hasattr(image, 'depricated'):
             out_image['depricated'] = image.depricated
+        if options.detailed:
+            out_image['tags'] = image.tags
         one_line = False if options.detailed else True
         printer.output_dict(out_image, sort=True, one_line=one_line)
 
