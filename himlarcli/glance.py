@@ -80,8 +80,29 @@ class Glance(Client):
             image_id = self.image.id
         self.client.images.update(image_id=image_id, name=name, **kwargs)
 
-    def set_access(self, image_id, project_id):
-        return self.client.image_members.create(image_id, project_id)
+    def set_access(self, image_id, project_id, action='create'):
+        if action not in ['create', 'delete']:
+            self.logger.warn('=> unknown action %s' % action)
+            return
+        members = self.client.image_members.list(image_id)
+        found = False
+        for member in members:
+            if member.member_id == project_id:
+                found = True
+                continue
+        if found and action == 'create':
+            self.logger.debug('=> access to image %s allready exists' % image_id)
+            return
+        if not found and action == 'delete':
+            self.logger.debug('=> no access to delete for image %s' % image_id)
+            return
+        if action == 'create':
+            result = self.client.image_members.create(image_id, project_id)
+            self.logger.debug('=> %s' % result)
+            self.client.image_members.update(image_id, project_id, 'accepted')
+        if action == 'delete':
+            result = self.client.image_members.delete(image_id, project_id)
+            self.logger.debug('=> %s' % result)
 
     def get_access(self, image_id):
         return self.client.image_members.list(image_id)
