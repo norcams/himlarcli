@@ -20,13 +20,13 @@ class Nova(Client):
         `**host`` fqdn for the nova compute host
         `**config_path`` path to ini file with config
         """
-        super(Nova,self).__init__(config_path, debug, log, region)
+        super(Nova, self).__init__(config_path, debug, log, region)
         self.client = novaclient.Client(self.version,
                                         session=self.sess,
                                         region_name=self.region)
 
-    """ Create a new keystone client if needed and then return the client """
     def get_keystone_client(self):
+        """ Create a new keystone client if needed and then return the client """
         if not self.ksclient:
             self.ksclient = keystoneclient.Client(session=self.sess,
                                                   region_name=self.region)
@@ -143,7 +143,9 @@ class Nova(Client):
         self.logger.debug('=> quota set to %s' % quota)
         self.client.quotas.update(project_id, **quota)
 
-    def update_quota_class(self, class_name='default', updates={}):
+    def update_quota_class(self, class_name='default', updates=None):
+        if not updates:
+            updates = {}
         return self.client.quota_classes.update(class_name, **updates)
 
     def get_quota_class(self, class_name='default'):
@@ -154,7 +156,7 @@ class Nova(Client):
         instances = self.__get_instances()
         emails = set()
         for i in instances:
-            email = urllib2.unquote(i._info['user_id'])
+            email = urllib2.unquote(i.user_id)
             # avoid system users in list
             if "@" in email:
                 emails.add(email.lower())
@@ -211,7 +213,7 @@ class Nova(Client):
         count = 0
         for i in instances:
             instance = self.client.servers.get(i[0])
-            if instance._info['status'] != 'ACTIVE':
+            if instance.status != 'ACTIVE':
                 instance.start()
                 count += 1
                 self.logger.debug("=> starting %s" % i[1])
@@ -231,30 +233,30 @@ class Nova(Client):
 
 ################################### FLAVOR ####################################
 
-    """ Update is not an option. We delete and create a new flavor! """
     def update_flavor(self, name, spec, public=True, dry_run=False):
+        """ Update is not an option. We delete and create a new flavor! """
         flavors = self.get_flavors()
         found = False
         for f in flavors:
-            if f._info['name'] != name:
+            if f.name != name:
                 continue
             found = True
             update = False
             if f._info['os-flavor-access:is_public'] != public:
                 update = True
-            for k,v in spec.iteritems():
+            for k, v in spec.iteritems():
                 if v != f._info[k]:
                     update = True
             if update and not dry_run:
                 self.logger.debug('=> updated flavor %s' % name)
                 # delete old
-                self.client.flavors.delete(f._info['id'])
+                self.client.flavors.delete(f.id)
                 # create new
                 self.client.flavors.create(name=name,
-                                            ram=spec['ram'],
-                                            vcpus=spec['vcpus'],
-                                            disk=spec['disk'],
-                                            is_public=public)
+                                           ram=spec['ram'],
+                                           vcpus=spec['vcpus'],
+                                           disk=spec['disk'],
+                                           is_public=public)
             elif update and dry_run:
                 self.logger.debug('=> dry-run: update %s: %s' % (name, spec))
             else:
@@ -269,12 +271,12 @@ class Nova(Client):
                                            is_public=public)
 
 
-    def get_flavors(self, filter=None):
+    def get_flavors(self, filters=None):
         flavors = self.client.flavors.list(detailed=True, is_public=None)
         flavors_filtered = list()
-        if filter:
+        if filters:
             for flavor in flavors:
-                if filter in flavor.name:
+                if filters in flavor.name:
                     self.logger.debug('=> added %s to list' % flavor.name)
                     flavors_filtered.append(flavor)
                 else:
@@ -283,23 +285,23 @@ class Nova(Client):
         else:
             return flavors
 
-    def purge_flavors(self, filter, flavors, dry_run=False):
+    def purge_flavors(self, filters, flavors, dry_run=False):
         dry_run_txt = 'DRY-RUN: ' if dry_run else ''
-        current_flavors = self.get_flavors(filter)
+        current_flavors = self.get_flavors(filters)
         for flavor in current_flavors:
-            if flavor.name not in flavors[filter]:
+            if flavor.name not in flavors[filters]:
                 if not dry_run:
                     self.client.flavors.delete(flavor.id)
                 self.logger.debug('=> %sdelete flavor %s' %
                                   (dry_run_txt, flavor.name))
 
-    def update_flavor_access(self, filter, project_id, action, dry_run=False):
+    def update_flavor_access(self, filters, project_id, action, dry_run=False):
         dry_run_txt = 'DRY-RUN: ' if dry_run else ''
         if action == 'revoke':
             action_func = 'remove_tenant_access'
         else:
             action_func = 'add_tenant_access'
-        flavors = self.get_flavors(filter)
+        flavors = self.get_flavors(filters)
         for flavor in flavors:
             try:
                 if not dry_run:
@@ -308,10 +310,10 @@ class Nova(Client):
                 self.logger.debug('=> %s%s access to %s' %
                                   (dry_run_txt, action, flavor.name))
 
-            except (novaclient.exceptions.Conflict) as e:
+            except novaclient.exceptions.Conflict:
                 self.logger.debug('=> access exsists for %s' %
                                   (flavor.name))
-            except (novaclient.exceptions.NotFound) as e:
+            except novaclient.exceptions.NotFound:
                 self.logger.debug('=> unable to %s %s' %
                                   (action, flavor.name))
 
@@ -322,7 +324,7 @@ class Nova(Client):
             instances = self.__get_instances()
         count = 0
         for i in instances:
-            if i._info['status'] == state:
+            if i.status == state:
                 getattr(i, action)()
                 count += 1
                 self.instances[i.name] = i.id
@@ -339,7 +341,9 @@ class Nova(Client):
                                              search_opts=search_opts)
         return instances
 
-    def __get_all_instances(self, search_opts=dict(all_tenants=1)):
+    def __get_all_instances(self, search_opts=None):
+        if not search_opts:
+            search_opts = dict(all_tenants=1)
         instances = self.client.servers.list(detailed=True,
                                              search_opts=search_opts)
         return instances

@@ -12,18 +12,18 @@ himutils.is_virtual_env()
 # Input args
 desc = 'Manage flavors'
 actions = ['update', 'purge', 'list', 'grant', 'revoke']
-opt_args = { '-n': { 'dest': 'name', 'help': 'flavor class (mandatory)', 'required': True },
-             '-p': { 'dest': 'project', 'help': 'project to grant or revoke access'} }
+opt_args = {'-n': {'dest': 'name', 'help': 'flavor class (mandatory)', 'required': True},
+            '-p': {'dest': 'project', 'help': 'project to grant or revoke access'}}
 
 options = utils.get_action_options(desc, actions, dry_run=True, opt_args=opt_args)
 ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=logger)
-domain='Dataporten'
+domain = 'Dataporten'
 
 if options.action[0] == 'list':
     pp = pprint.PrettyPrinter(indent=1)
-    flavors = novaclient.get_flavors(filter=options.name)
+    flavors = novaclient.get_flavors(filters=options.name)
     for flavor in flavors:
         #print flavor.__dict__.keys()
         if not getattr(flavor, 'OS-FLV-DISABLED:disabled'):
@@ -66,7 +66,7 @@ elif options.action[0] == 'grant' or options.action[0] == 'revoke':
         print 'Could not find project %s' % options.project
         sys.exit(0)
     print "%s access to %s for %s" % (options.action[0], options.name, options.project)
-    novaclient.update_flavor_access(filter=options.name,
+    novaclient.update_flavor_access(filters=options.name,
                                     project_id=project.id,
                                     action=options.action[0],
                                     dry_run=options.dry_run)
