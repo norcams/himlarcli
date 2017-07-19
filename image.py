@@ -96,8 +96,10 @@ def action_list():
                     project = ksclient.get_project_by_id(member['member_id'])
                     access_list.append(project.name)
                 out_image['projects'] = access_list
+        if options.detailed and hasattr(image, 'depricated'):
+            out_image['depricated'] = image.depricated
         one_line = False if options.detailed else True
-        printer.output_dict(out_image, sort=False, one_line=one_line)
+        printer.output_dict(out_image, sort=True, one_line=one_line)
 
 def action_update():
     image_templates = himutils.load_config('config/images/%s' % options.image_config)
@@ -158,7 +160,7 @@ def update_image(name, image_data, image_type):
             logger.debug('=> update image: new checksum found %s' % checksum)
             result = create_image(name, imagefile, image_data, image_type)
             if not options.dry_run:
-                timestamp = datetime.utcnow().isoformat()
+                timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
                 glclient.update_image(image_id=images[0]['id'],
                                       name=image_data['depricated'],
                                       depricated=timestamp)
