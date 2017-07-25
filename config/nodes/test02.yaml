@@ -7,7 +7,7 @@ nodes:
     compute_resource: controller-01
   admin-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-03
   builder-01:
     compute_profile: 2
     compute_resource: controller-03
