@@ -32,10 +32,13 @@ nodes:
     compute_resource: controller-03
   compute-01:
     mac: 00:24:e8:38:a4:19
+    hostgroup: 3
   compute-02:
     mac: b8:ac:6f:86:b6:6d
+    hostgroup: 3
   compute-03:
     mac: b8:ac:6f:91:62:ed
+    hostgroup: 3
   console-01:
     compute_profile: 1
     compute_resource: controller-03
