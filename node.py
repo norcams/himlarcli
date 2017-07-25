@@ -1,38 +1,36 @@
 #!/usr/bin/env python
-import utils
 import sys
 import time
 import pprint
-#from himlarcli.nova import Nova
-from himlarcli.keystone import Keystone
-#import himlarcli.foremanclient as foreman
-from himlarcli.foremanclient import Client
 from himlarcli import utils as himutils
+from himlarcli.foremanclient import Client
+from himlarcli.parser import Parser
+#from himlarcli.printer import Printer
 
-desc = 'Perform action on node (use short nodename without region or domain)'
-actions = ['install', 'show', 'list', 'full']
+himutils.is_virtual_env()
 
-options = utils.get_node_action_options(desc, actions, dry_run=True)
-keystone = Keystone(options.config, debug=options.debug)
-logger = keystone.get_logger()
+# Load parser config from config/parser/*
+parser = Parser()
+options = parser.parse_args()
 
-client = Client(options.config, options.debug, log=logger)
+
+client = Client(options.config, options.debug)
+region = client.get_config('openstack', 'region')
+logger = client.get_logger()
 
 # Load node config
-node_config = himutils.load_config('config/nodes/%s.yaml' % keystone.region)
+node_config = himutils.load_config('config/nodes/%s.yaml' % region)
 if not node_config:
     node_config = himutils.load_config('config/nodes/default.yaml')
 nodes = node_config['nodes']
 
-if options.action[0] == 'show':
-    if not options.node:
-        print "Missing node name"
-        sys.exit(1)
-    node_name = '%s-%s' % (keystone.region, options.node)
+def action_show():
+    node_name = '%s-%s' % (region, options.node)
     node = client.get_host(node_name)
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(node)
-elif options.action[0] == 'list':
+
+def action_list():
     count = dict()
     print "These nodes can be intalled:"
     for name, node in sorted(nodes.iteritems()):
@@ -45,25 +43,31 @@ elif options.action[0] == 'list':
             print "node: %s (%s)" % (name, node['mac'])
     print "Stats:"
     print count
-elif options.action[0] == 'install':
-    if not options.node:
-        print "Missing node name"
-        sys.exit(1)
-    node_name = '%s-%s' % (keystone.region, options.node)
+
+def action_install():
+    node_name = '%s-%s' % (region, options.node)
     if options.node in nodes:
         client.create_node(name=node_name,
                            node_data=nodes[options.node],
-                           region=keystone.region,
+                           region=region,
                            dry_run=options.dry_run)
     else:
         sys.stderr.write("Node %s not found in config/nodes/%s.yaml\n" %
-                         (options.node, keystone.region))
+                         (options.node, region))
         sys.exit(1)
-elif options.action[0] == 'full':
+
+def action_full():
     for name, node_data in sorted(nodes.iteritems()):
-        node_name = '%s-%s' % (keystone.region, name)
+        node_name = '%s-%s' % (region, name)
         client.create_node(name=node_name,
                            node_data=node_data,
-                           region=keystone.region,
+                           region=region,
                            dry_run=options.dry_run)
         time.sleep(10)
+
+# Run local function with the same name as the action
+action = locals().get('action_' + options.action)
+if not action:
+    logger.error("Function action_%s not implemented" % options.action)
+    sys.exit(1)
+action()

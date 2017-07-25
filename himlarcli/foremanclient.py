@@ -1,14 +1,14 @@
+import sys
 import ConfigParser
-import warnings
 from foreman.client import Foreman
-import utils
+from himlarcli import utils
 
 class Client(object):
 
     def __init__(self, config_path, debug=False, version='1', log=None):
         self.config = utils.get_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug, log)
-        config = self.config._sections['foreman']
+        config = self.get_config_section('foreman')
         self.logger.debug('=> config file: %s' % config_path)
         self.logger.debug('=> foreman url: %s' % config['url'])
 
@@ -17,6 +17,30 @@ class Client(object):
                                api_version=2,
                                version=version,
                                verify=False)
+
+    def get_config(self, section, option):
+        try:
+            value = self.config.get(section, option)
+            return value
+        except ConfigParser.NoOptionError:
+            self.logger.debug('=> config file section [%s] missing option %s'
+                              % (section, option))
+        except ConfigParser.NoSectionError:
+            self.logger.debug('=> config file missing section %s' % section)
+        return None
+
+    def get_config_section(self, section):
+        try:
+            openstack = self.config.items(section)
+        except ConfigParser.NoSectionError:
+            self.logger.exception('missing [%s]' % section)
+            self.logger.critical('Could not find section [%s] in %s', section, self.config_path)
+            sys.exit(1)
+        return dict(openstack)
+
+    def get_logger(self):
+        return self.logger
+
     def get_client(self):
         return self.foreman
 
@@ -37,10 +61,10 @@ class Client(object):
             self.foreman.update_hosts(id=host, host={'build': build})
 
     def get_hosts(self, search=None):
-      hosts = self.foreman.index_hosts()
-      self.logger.debug("=> fetch %s page(s) with a total of %s hosts" %
-          (hosts['page'], hosts['total']))
-      return hosts
+        hosts = self.foreman.index_hosts()
+        self.logger.debug("=> fetch %s page(s) with a total of %s hosts" %
+                          (hosts['page'], hosts['total']))
+        return hosts
 
     def create_host(self, host):
         if 'name' not in host:
@@ -61,11 +85,11 @@ class Client(object):
         host['hostgroup_id'] = self.__get_node_data('hostgroup', node_data, '1')
         host['compute_profile_id'] = self.__get_node_data('compute_profile', node_data, '1')
         host['interfaces_attributes'] = self.__get_node_data(
-             'interfaces_attributes', node_data, {})
+            'interfaces_attributes', node_data, {})
         host['compute_attributes'] = self.__get_node_data(
-             'compute_attributes', node_data, {})
+            'compute_attributes', node_data, {})
         host['host_parameters_attributes'] = self.__get_node_data(
-             'host_parameters_attributes', node_data, {})
+            'host_parameters_attributes', node_data, {})
         if 'mac' in node_data:
             host['mac'] = node_data['mac']
         if 'compute_resource' in node_data:
@@ -96,13 +120,9 @@ class Client(object):
             host = host + '.' + domain
         return host
 
-    def __get_node_data(self, var, node_data, default=None):
+    @staticmethod
+    def __get_node_data(var, node_data, default=None):
         if var in node_data:
             return node_data[var]
         else:
             return default
-
-    def _print_attr():
-        attr = self.foreman.__dict__
-        for a in attr:
-            print a
