@@ -380,7 +380,7 @@ class Keystone(Client):
                           debug=self.debug,
                           log=self.logger,
                           region=self.region)
-        novaclient.delete_project_instances(project.id, dry_run)
+        novaclient.delete_project_instances(project, dry_run)
 
     def __list_compute_quota(self, project):
         self.novaclient = Nova(config_path=self.config_path,
