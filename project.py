@@ -40,7 +40,7 @@ if options.action[0] == 'create':
         if not options.dry_run:
             project = ksclient.create_project(domain=domain,
                                               project=options.project,
-                                              admin=options.user,
+                                              admin=options.user.lower(),
                                               test=test,
                                               type=options.type,
                                               quota=quota[options.quota])
