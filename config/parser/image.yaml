@@ -42,6 +42,7 @@ opt_args:
     'sub':      'grant'
     'dest':     'project'
     'help':     'project name to grant access to'
+    'required': true
   '-v':
     'sub':      ['usage', 'purge', 'list']
     'dest':     'visibility'
