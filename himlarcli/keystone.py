@@ -111,27 +111,23 @@ class Keystone(Client):
         compute = self.__list_compute_quota(project)
         return dict({'compute':compute})
 
-    """
-    Delete project and all instances """
     def delete_project(self, project, domain=None, dry_run=False):
+        """  Delete project and all instances """
         # Map str to objects
         domain = self.__get_domain(domain)
         project_obj = self.__get_project(project, domain=domain)
-        # TODO FIXME!!!!!!!
-        self.logger.debug('=> instances NOT deleted! Make sure you delete them!')
-        #self.__delete_instances(project_obj)
+        self.__delete_instances(project_obj, dry_run)
         if not dry_run:
             self.logger.debug('=> delete project %s' % project)
             self.client.projects.delete(project_obj)
         elif dry_run:
             self.logger.debug('=> DRY-RUN: delete project %s' % project)
 
-    """
-    Delete both users, the users group and personal project. """
-    def delete_user(self, email, domain=None, dry_run=False):
+    def remove_user(self, email, domain=None, dry_run=False):
+        """ Remove all object related to this email """
         if not self.is_valid_user(email, domain):
             self.logger.debug('=> user %s is not valid. Dropping delete' % email)
-            return
+            return False
         obj = self.get_user_objects(email=email, domain=domain)
         # Delete api user
         if not dry_run and 'api' in obj and obj['api']:
@@ -151,13 +147,18 @@ class Keystone(Client):
             self.client.groups.delete(obj['group'])
         elif dry_run:
             self.logger.debug('=> DRY-RUN: delete group %s' % obj['group'].name)
-        # Delete personal project and instances
-        self.delete_project(project=email.lower(), domain=domain, dry_run=dry_run)
+        # Delete demo/personal projects and instances
         if 'projects' in obj:
             for project in obj['projects']:
-                if hasattr(project, 'admin') and email == project.admin:
-                    print "This user is also admin for %s" % project.name
-                    print "Make sure to update admin to valid user!"
+                if project.type == 'demo' or project.type == 'peronal':
+                    self.logger.debug('=> delete instances from %s' % project.name)
+                    self.__delete_instances(project, dry_run)
+                    if not dry_run:
+                        self.logger.debug('=> delete project %s' % project.name)
+                        self.client.projects.delete(project)
+                    else:
+                        self.logger.debug('=> DRY-RUN: delete project %s' % project.name)
+        return True
 
     def rename_user(self, new_email, old_email, domain=None, dry_run=False):
         obj = self.get_user_objects(email=old_email, domain=domain)
@@ -329,9 +330,8 @@ class Keystone(Client):
         self.logger.debug('=> role %s NOT found' % role)
         return None
 
-    """ Return group object
-    """
     def __get_group(self, group, domain=None, user=None):
+        """ Return FIRST group that maches group name """
         groups = self.client.groups.list(domain=domain, user=user)
         for g in groups:
             if g.name == group:
@@ -374,12 +374,13 @@ class Keystone(Client):
             users = self.client.users.list(**kwargs)
         return users
 
-    def __delete_instances(self, project):
-        self.novaclient = Nova(config_path=self.config_path,
-                               debug=self.debug,
-                               log=self.logger,
-                               region=self.region)
-        self.novaclient.delete_project_instances(project.id)
+    def __delete_instances(self, project, dry_run=False):
+        """ Use novaclient to delete all instances for a project """
+        novaclient = Nova(config_path=self.config_path,
+                          debug=self.debug,
+                          log=self.logger,
+                          region=self.region)
+        novaclient.delete_project_instances(project.id, dry_run)
 
     def __list_compute_quota(self, project):
         self.novaclient = Nova(config_path=self.config_path,
