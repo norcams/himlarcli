@@ -126,13 +126,20 @@ class Nova(Client):
         self.logger.debug('=> found %s instances for project %s' % (len(instances), project_id))
         return instances
 
-    def delete_project_instances(self, project_id):
-        search_opts = dict(tenant_id=project_id, all_tenants=1)
+    def delete_project_instances(self, project, dry_run=False):
+        """ Delete all instances for a project """
+        search_opts = dict(tenant_id=project.id, all_tenants=1)
         instances = self.__get_all_instances(search_opts=search_opts)
-        self.__change_status(action='stop', state='ACTIVE', instances=instances)
-        if len(instances) > 0:
-            time.sleep(60)
-        self.__change_status(action='delete', state='SHUTOFF', instances=instances)
+        if not instances:
+            self.logger.debug('=> no instances found for project %s' % project.name)
+            return
+        for i in instances:
+            if not dry_run:
+                self.logger.debug('=> delete instance %s (%s)' % (i.name, project.name))
+                i.delete()
+                time.sleep(5)
+            else:
+                self.logger.debug('=> DRY-RUN: delete instance %s (%s)' % (i.name, project.name))
 
     def list_quota(self, project_id, detail=False):
         # This require novaclient version > mitaka
@@ -330,10 +337,8 @@ class Nova(Client):
                 self.instances[i.name] = i.id
                 self.logger.debug('=> change status to %s on %s' % (action, i.name))
             else:
-                print i.id
                 self.logger.debug('=> %s had not status %s' % (i.name, state))
-
-        print "Run %s on %s instances with state %s" % (action, count, state)
+        self.logger.debug("=> Run %s on %s instances with state %s" % (action, count, state))
 
     def __get_instances(self, host=None):
         search_opts = dict(all_tenants=1, host=host)
