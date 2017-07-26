@@ -11,18 +11,18 @@ himutils.is_virtual_env()
 # Input args
 desc = 'Mange student course project'
 actions = ['create', 'list', 'delete']
-opt_args = { '-n': { 'dest': 'name', 'help': 'course name (mandatory)', 'required': True, 'metavar': 'name'},
-             '-u': { 'dest': 'user', 'help': 'email of teacher', 'metavar': 'user'},
-             '-q': { 'dest': 'quota', 'help': 'project quota', 'default': 'course', 'metavar': 'quota'},
-             '-F': { 'dest': 'flavor', 'help': 'grant access to extra flavor', 'metavar': 'flavor'},
-             '-f': { 'dest': 'file', 'help': 'file with students', 'metavar': 'file'}}
+opt_args = {'-n': {'dest': 'name', 'help': 'course name (mandatory)', 'required': True, 'metavar': 'name'},
+            '-u': {'dest': 'user', 'help': 'email of teacher', 'metavar': 'user'},
+            '-q': {'dest': 'quota', 'help': 'project quota', 'default': 'course', 'metavar': 'quota'},
+            '-F': {'dest': 'flavor', 'help': 'grant access to extra flavor', 'metavar': 'flavor'},
+            '-f': {'dest': 'file', 'help': 'file with students', 'metavar': 'file'}}
 
 options = utils.get_action_options(desc, actions, dry_run=True, opt_args=opt_args)
 ksclient = Keystone(options.config, debug=options.debug)
 novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
 quota = himutils.load_config('config/quota.yaml', log=ksclient.get_logger())
 project_types = himutils.load_config('config/type.yaml', log=ksclient.get_logger())
-domain='Dataporten'
+domain = 'Dataporten'
 
 if options.action[0] == 'create':
     if options.user and options.file:
@@ -44,7 +44,7 @@ if options.action[0] == 'create':
             print "Created project %s" % project.name
             # Grant flavor access
             if options.flavor and project:
-                novaclient.update_flavor_access(filter=options.flavor,
+                novaclient.update_flavor_access(filters=options.flavor,
                                                 project_id=project.id,
                                                 action='grant')
             # Grant project access
@@ -67,7 +67,7 @@ if options.action[0] == 'create':
                 print "Created project %s" % project.name
                 # Grant flavor access
                 if options.flavor and project:
-                    novaclient.update_flavor_access(filter=options.flavor,
+                    novaclient.update_flavor_access(filters=options.flavor,
                                                     project_id=project.id,
                                                     action='grant')
                 # Grant student access
