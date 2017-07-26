@@ -30,9 +30,9 @@ if hasattr(options, 'type'):
 def action_grant():
     ksclient = Keystone(options.config, debug=options.debug, log=logger)
     project = ksclient.get_project(project=options.project, domain=options.domain)
-    filters = {'status': 'active', 'tag': tags, 'visibility': 'private'}
     if options.name:
-        filters['name'] = options.name
+        tags.append = options.name
+    filters = {'status': 'active', 'tag': tags, 'visibility': 'private'}
     logger.debug('=> filter: %s' % filters)
     images = glclient.get_images(filters=filters)
     for image in images:

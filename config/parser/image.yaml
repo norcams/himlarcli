@@ -31,7 +31,7 @@ opt_args:
   '-n':
     'sub':      ['update', 'grant']
     'dest':     'name'
-    'help':     'only use image with this name'
+    'help':     'only use image with this name (use short name)'
   '-t':
     'sub':      ['usage', 'purge', 'list', 'grant']
     'dest':     'type'
