@@ -64,7 +64,8 @@ def action_rename():
     print " * Delete %s-group if it exists" % options.new
     print " * Delete %s api user if it exists" % options.new.lower()
     print " * Delete %s dataporten user if it exists" % options.new.lower()
-    print " * Delete %s personal project if it exists" % options.new.lower()
+    print " * Delete %s demo/personal project if it exists" % options.new.lower()
+    print " * Delete %s instances in demo/personal project if it exists" % options.new.lower()
     print " * !!! DELETE OLD DATAPORTEN USER %s !!!" % (options.old)
     print " * Rename group from %s-group to %s-group" % (options.old, options.new)
     print " * Rename api user from %s to %s" % (options.old.lower(), options.new.lower())
@@ -73,7 +74,7 @@ def action_rename():
     answer = raw_input(q)
     if answer.lower() == 'yes':
         print 'Please wait...'
-        ksclient.delete_user(email=options.new,
+        ksclient.remove_user(email=options.new,
                              domain=domain,
                              dry_run=options.dry_run)
         ksclient.rename_user(new_email=options.new,
@@ -90,17 +91,15 @@ def action_password():
     ksclient.reset_password(email=options.user, domain=domain, dry_run=options.dry_run)
 
 def action_delete():
-    if not ksclient.is_valid_user(user=options.user, domain=domain):
-        print "%s is not a valid user. Please check your spelling or case." % options.user
-        sys.exit(1)
-    q = "Delete user and all instances for %s (yes|no)? " % options.user
-    answer = raw_input(q)
-    if answer.lower() == 'yes':
-        print "We are now deleting user, project and instances for %s" % options.user
-        print 'Please wait...'
-        ksclient.delete_user(email=options.user, domain=domain, dry_run=options.dry_run)
+    if not himutils.confirm_action('Delete user and all instances for %s' % options.user):
+        return
+    print "We are now deleting user, group, project and instances for %s" % options.user
+    print 'Please wait...'
+    result = ksclient.remove_user(email=options.user, domain=domain, dry_run=options.dry_run)
+    if not result:
+        print 'Delete failed! Run with debug for more information'
     else:
-        print "You just dodged a bullet my friend!"
+        print 'Delete successfull'
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
