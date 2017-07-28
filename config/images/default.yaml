@@ -2,7 +2,7 @@
 type: 'gold'
 images:
   'ubuntu_1604':
-    'name':             'NEW GOLD Ubuntu server 16.04'
+    'name':             'NEW GOLD Ubuntu 16.04 LTS'
     'depricated':       'Outdated (Ubuntu)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1604-latest.qcow2'
@@ -12,22 +12,11 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
-  'debian8':
-    'name':             'NEW GOLD Debian 8'
-    'depricated':       'Outdated (Debian)'
+  'ubuntu_1704':
+    'name':             'NEW GOLD Ubuntu 17.04'
+    'depricated':       'Outdated (Ubuntu)'
     'url':              'http://builder/'
-    'latest':           'debian8-latest.qcow2'
-    'min_ram':          768
-    'min_disk':         8
-    'visibility':       'private'
-    'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
-  'debian9':
-    'name':             'NEW GOLD Debian 9'
-    'depricated':       'Outdated (Debian)'
-    'url':              'http://builder/'
-    'latest':           'debian9-latest.qcow2'
+    'latest':           'ubuntu_1704-latest.qcow2'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'private'
@@ -56,12 +45,12 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
-  'fedora_25':
-    'name':             'NEW GOLD Fedora 25'
-    'depricated':       'Outdated (Fedora)'
+  'debian9':
+    'name':             'NEW GOLD Debian 9'
+    'depricated':       'Outdated (Debian)'
     'url':              'http://builder/'
-    'latest':           'fedora_25-latest.qcow2'
-    'min_ram':          1024
+    'latest':           'debian9-latest.qcow2'
+    'min_ram':          768
     'min_disk':         8
     'visibility':       'private'
     'properties':
