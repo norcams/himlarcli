@@ -13,6 +13,10 @@ import urllib2
 from string import Template
 
 
+def sys_error(text, code=1):
+    sys.stderr.write("%s\n" % text)
+    sys.exit(code)
+
 def confirm_action(question):
     question = "%s (yes|no)? " % question
     answer = raw_input(question)

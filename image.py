@@ -30,6 +30,9 @@ if hasattr(options, 'type'):
 def action_grant():
     ksclient = Keystone(options.config, debug=options.debug, log=logger)
     project = ksclient.get_project(project=options.project, domain=options.domain)
+    if not project:
+        himutils.sys_error('Unknown project %s in domain %s' %
+                           (options.project, options.domain))
     if options.name:
         tags.append(options.name)
     filters = {'status': 'active', 'tag': tags, 'visibility': 'private'}
