@@ -93,6 +93,7 @@ def action_list():
     out_image = {'header': 'Image list (id, name, created_at)'}
     if options.format == 'text':
         printer.output_dict(out_image)
+    count = 0
     for image in images:
         out_image = {'name': image.name, 'created': image.created_at, 'id': image.id}
         if options.detailed and image.visibility == 'private':
@@ -109,6 +110,9 @@ def action_list():
             out_image['tags'] = image.tags
         one_line = False if options.detailed else True
         printer.output_dict(out_image, sort=True, one_line=one_line)
+        count += 1
+    out_image = {'header': 'Image count', 'count': count}
+    printer.output_dict(out_image)
 
 def action_update():
     image_templates = himutils.load_config('config/images/%s' % options.image_config)
