@@ -11,6 +11,9 @@ import utils
 from himlarcli import utils as himutils
 from himlarcli.glance import Glance
 
+print "Depricated! Use image.py"
+print "This will only set images to outdated"
+
 options = utils.get_options('Create and update golden images',
                              hosts=0, dry_run=True)
 glclient = Glance(options.config, debug=options.debug)
@@ -74,13 +77,14 @@ for name, image_data in images.iteritems():
                                       depricated=timestamp)
                 glclient.deactivate()
             logger.debug("=> depricated old image for %s" % image['name'])
-            create_image(glclient, source_path, image_data)
+            #create_image(glclient, source_path, image_data)
         else:
             logger.debug("=> no new image for %s" % image['name'])
     else:
         source_path = download_and_check(image_data)
         if source_path:
-            create_image(glclient, source_path, image_data)
+            pass
+            #create_image(glclient, source_path, image_data)
         else:
             logger.error("=> checksum failed for %s" % name)
     # Clean up
