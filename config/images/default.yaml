@@ -2,68 +2,68 @@
 type: 'gold'
 images:
   'ubuntu_1604':
-    'name':             'NEW GOLD Ubuntu 16.04 LTS'
+    'name':             'GOLD Ubuntu 16.04 LTS'
     'depricated':       'Outdated (Ubuntu)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1604-latest.qcow2'
     'min_ram':          768
     'min_disk':         8
-    'visibility':       'private'
+    'visibility':       'public'
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'ubuntu_1704':
-    'name':             'NEW GOLD Ubuntu 17.04'
+    'name':             'GOLD Ubuntu 17.04'
     'depricated':       'Outdated (Ubuntu)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1704-latest.qcow2'
     'min_ram':          768
     'min_disk':         8
-    'visibility':       'private'
+    'visibility':       'public'
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'centos6':
-    'name':             'NEW GOLD CentOS 6'
+    'name':             'GOLD CentOS 6'
     'depricated':       'Outdated (CentOS)'
     'url':              'http://builder/'
     'latest':           'centos6-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
-    'visibility':       'private'
+    'visibility':       'public'
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'centos7':
-    'name':             'NEW GOLD CentOS 7'
+    'name':             'GOLD CentOS 7'
     'depricated':       'Outdated (CentOS)'
     'url':              'http://builder/'
     'latest':           'centos7-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
-    'visibility':       'private'
+    'visibility':       'public'
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'debian9':
-    'name':             'NEW GOLD Debian 9'
+    'name':             'GOLD Debian 9'
     'depricated':       'Outdated (Debian)'
     'url':              'http://builder/'
     'latest':           'debian9-latest.qcow2'
     'min_ram':          768
     'min_disk':         8
-    'visibility':       'private'
+    'visibility':       'public'
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'fedora_26':
-    'name':             'NEW GOLD Fedora 26'
+    'name':             'GOLD Fedora 26'
     'depricated':       'Outdated (Fedora)'
     'url':              'http://builder/'
     'latest':           'fedora_26-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
-    'visibility':       'private'
+    'visibility':       'public'
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
