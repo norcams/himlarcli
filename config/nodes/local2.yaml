@@ -1,8 +1,8 @@
 ---
 nodes:
-  dashboard-01:
-    compute_resource:     'controller-01'
+  api-01:
     compute_profile:      1
+    compute_resource:     'controller-01'
   db-01:
     compute_resource:     'controller-01'
     compute_profile:      1
@@ -15,19 +15,6 @@ nodes:
   image-01:
     compute_resource:     'controller-01'
     compute_profile:      1
-  logger-01:
-    compute_resource:     'controller-01'
-    comptue_profile:      1
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '10G'
-          format_type:  'qcow2'
-    host_parameters_attributes:
-      - name:   'installdevice'
-        value:  'vda'
   mq-01:
     compute_resource:     'controller-01'
     compute_profile:      1
