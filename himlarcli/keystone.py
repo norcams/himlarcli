@@ -150,7 +150,9 @@ class Keystone(Client):
         # Delete demo/personal projects and instances
         if 'projects' in obj:
             for project in obj['projects']:
-                if project.type == 'demo' or project.type == 'peronal':
+                if not hasattr(project, 'type'):
+                    self.logger.debug('=> project not marked demo or personal %s' % project.name)
+                elif project.type == 'demo' or project.type == 'peronal':
                     self.logger.debug('=> delete instances from %s' % project.name)
                     self.__delete_instances(project, dry_run)
                     if not dry_run:
