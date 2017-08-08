@@ -151,7 +151,7 @@ class Keystone(Client):
         if 'projects' in obj:
             for project in obj['projects']:
                 if not hasattr(project, 'type'):
-                    self.logger.debug('=> project not marked demo or personal %s' % project.name)
+                    self.logger.debug('=> unknown project type %s' % project.name)
                 elif project.type == 'demo' or project.type == 'peronal':
                     self.logger.debug('=> delete instances from %s' % project.name)
                     self.__delete_instances(project, dry_run)
@@ -160,6 +160,9 @@ class Keystone(Client):
                         self.client.projects.delete(project)
                     else:
                         self.logger.debug('=> DRY-RUN: delete project %s' % project.name)
+                else:
+                    self.logger.debug('=> project type not demo or personal %s' % project.name)
+
         return True
 
     def rename_user(self, new_email, old_email, domain=None, dry_run=False):
