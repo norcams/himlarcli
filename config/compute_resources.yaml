@@ -6,7 +6,7 @@ osl:
 bgo:
   num_resources: 4
 test01:
-  num_resources: 4
+  num_resources: 3
 local1:
   num_resources: 2
 local2:
