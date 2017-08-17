@@ -37,7 +37,11 @@ def get_logger(name, config, debug, log=None):
     if log:
         mylog = log
     else:
-        mylog = setup_logger(name, debug)
+        try:
+            path = config.get('log', 'path')
+        except ConfigParser.NoOptionError:
+            path = '/opt/himlarcli/'
+        mylog = setup_logger(name, debug, path)
     return mylog
 
 def is_virtual_env():
