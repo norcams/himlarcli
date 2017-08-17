@@ -39,9 +39,10 @@ def get_logger(name, config, debug, log=None):
     else:
         try:
             path = config.get('log', 'path')
-        except ConfigParser.NoOptionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             path = '/opt/himlarcli/'
         mylog = setup_logger(name, debug, path)
+    mylog.debug('=> logger config loaded from logging.yaml')
     return mylog
 
 def is_virtual_env():
@@ -49,16 +50,14 @@ def is_virtual_env():
         print "Remember to source bin/activate!"
         sys.exit(1)
 
-def setup_logger(name, debug,
-                 log_path = '/opt/himlarcli/',
-                 configfile = 'logging.yaml'):
-    if not os.path.isabs(configfile):
+def setup_logger(name, debug, log_path='/opt/himlarcli/', configfile='logging.yaml'):
+    if not os.path.isfile(configfile):
         configfile = log_path + '/' + configfile
     with open(configfile, 'r') as stream:
         try:
             config = yaml.load(stream)
         except yaml.YAMLError as exc:
-            print(exc)
+            print exc
 
     # Always use absolute paths
     if not os.path.isabs(config['handlers']['file']['filename']):
