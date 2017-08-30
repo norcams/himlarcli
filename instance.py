@@ -24,7 +24,13 @@ regions = himutils.load_region_config('config/stats',
 """ ACTIONS """
 
 def project():
-    stats = {'personal': 0, 'research': 0, 'education': 0, 'admin': 0, 'test': 0, 'total': 0}
+    stats = {'demo': 0,
+             'personal': 0,
+             'research': 0,
+             'education': 0,
+             'admin': 0,
+             'test': 0,
+             'total': 0}
     for name in sorted(regions['regions'].iterkeys()):
         logger.debug('=> count region %s' % name)
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
