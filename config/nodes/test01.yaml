@@ -116,11 +116,15 @@ nodes:
     compute_profile: 1
     compute_resource: controller-03
   storage-01:
-    mac: 00:22:19:af:51:61
+    mac: d0:67:e5:ef:12:29
   storage-02:
-    mac: 00:1d:09:03:34:98
+    mac: 00:24:e8:3f:90:e8
   storage-03:
-    mac: 00:22:19:af:51:66
+    mac: bc:30:5b:e0:4f:90
+  storage-04:
+    mac: bc:30:5b:e0:0c:0f
+  storage-05:
+    mac: bc:30:5b:e0:4e:4f
   volume-01:
     compute_profile: 1
     compute_resource: controller-03
