@@ -38,6 +38,18 @@ class Keystone(Client):
     def get_regions(self):
         return self.client.regions.list()
 
+    def find_regions(self, region_name=None):
+        region_list = list()
+        regions = self.client.regions.list()
+        for region in regions:
+            if region_name and region_name == region.id:
+                region_list.append(region.id)
+                self.logger.debug('=> filter region: only use %s' % region_name)
+                break
+            elif not region_name:
+                region_list.append(region.id)
+        return region_list
+
     """
     Return all users, groups and project for this email """
     def get_user_objects(self, email, domain):

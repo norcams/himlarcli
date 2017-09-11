@@ -1,0 +1,19 @@
+---
+desc: 'Manage default quota'
+actions:
+  'update': 'Update default quota'
+  'show':   'Show default quota'
+opt_args:
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
+  '-s':
+    'dest':     'service'
+    'metavar':  'service type'
+    'help':     'openstack service type'
+    'choices':  ['all', 'nova', 'cinder']
+    'default':  'all'
+#  '--domain':
+#    'dest':     'domain'
+#    'help':     'openstack domain to use'
+#    'default':  'Dataporten'

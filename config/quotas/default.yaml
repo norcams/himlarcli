@@ -1,3 +1,4 @@
+---
 cinder:
   default:
     gigabytes:            100
