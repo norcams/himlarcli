@@ -57,8 +57,8 @@ def action_update():
             updates = dict()
             for k, v in defaults[comp]['default'].iteritems():
                 if getattr(current, k) != v:
-                    logger.debug("=> %sUpdated %s: from %s to %s" %
-                                 (dry_run_txt, k, getattr(current, k), v))
+                    logger.debug("=> %sUpdated %s: from %s to %s in %s" %
+                                 (dry_run_txt, k, getattr(current, k), v, region))
                     updates[k] = v
             if updates:
                 if not options.dry_run:
