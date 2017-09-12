@@ -85,7 +85,11 @@ class Keystone(Client):
         users = self.__get_users(domain)
         return len(users)
 
-
+    def get_users(self, domain=False, **kwargs):
+        """ Safe way to get users. Use limit or filter to
+            avoid running out of memory! """
+        users = self.__get_users(domain, **kwargs)
+        return users
 
     def get_project(self, project, domain=None):
         domain = self.__get_domain(domain)

@@ -40,6 +40,25 @@ def action_validate():
             }
         if output_project:
             printer.output_dict(output_project, sort=True, one_line=True)
+    users = ksclient.get_users(domain=options.domain)
+    printer.output_dict({'header': 'Users without demo project'})
+    for user in users:
+        if not hasattr(user, 'email'):
+            logger.debug('=> %s user missing email' % user.name)
+            continue
+        obj = ksclient.get_user_objects(email=user.email, domain=options.domain)
+        demo_project = False
+        for project in obj['projects']:
+            if hasattr(project, 'type') and project.type == 'demo':
+                # user has demo project continue with next user
+                demo_project = True
+                break
+        if not demo_project:
+            output_user = {
+                'id': user.id,
+                'name': user.name,
+            }
+            printer.output_dict(output_user, sort=True, one_line=True)
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
