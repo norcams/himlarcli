@@ -22,7 +22,8 @@ class Printer(object):
     def __dict_to_json(self, objects, sort=True):
         if 'header' in objects:
             del objects['header']
-        print json.dumps(objects, sort_keys=sort, indent=self.INDENT)
+        if objects:
+            print json.dumps(objects, sort_keys=sort, indent=self.INDENT)
 
     @staticmethod
     def __dict_to_text(objects, order_by=0, sort=True, one_line=False):
