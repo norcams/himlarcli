@@ -7,12 +7,17 @@ opt_args:
   '--region':
     'dest':     'region'
     'help':     'only use this region'
-  '-s':
+  '-n':
     'dest':     'service'
     'metavar':  'service type'
     'help':     'openstack service type'
     'choices':  ['all', 'nova', 'cinder', 'neutron']
     'default':  'all'
+  '--default':
+    'sub':      'update'
+    'dest':     'quota_config'
+    'help':     'config file under config/quotas/'
+    'default':  'default.yaml'
 #  '--domain':
 #    'dest':     'domain'
 #    'help':     'openstack domain to use'
