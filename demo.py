@@ -57,6 +57,7 @@ def action_validate():
             output_user = {
                 'id': user.id,
                 'name': user.name,
+                'reason': '(missing demo project)'
             }
             printer.output_dict(output_user, sort=True, one_line=True)
 
