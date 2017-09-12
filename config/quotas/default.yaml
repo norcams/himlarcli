@@ -1,12 +1,28 @@
 ---
+# Updated to work with newton. Use neutron for sec groups not nova!
 cinder:
-  default:
-    gigabytes:            100
-    per_volume_gigabytes: 100
-    volumes:              4
-    snapshots:            12
+  backup_gigabytes:             1000
+  backups:                      10
+  gigabytes:                    100
+  per_volume_gigabytes:         -1
+  snapshots:                    12
+  volumes:                      4
 nova:
-  default:
-    instances:            2
-    cores:                4
-    ram:                  8192
+  instances:                    2
+  cores:                        4
+  ram:                          8192
+  injected_file_content_bytes:  10240
+  injected_file_path_bytes:     255
+  injected_files:               5
+  key_pairs:                    100
+  metadata_items:               128
+neutron:
+  floatingip:                   50
+  network:                      10
+  port:                         50
+  rbac_policy:                  10
+  router:                       10
+  security_group:               10
+  security_group_rule:          100
+  subnet:                       10
+  subnetpool:                   -1

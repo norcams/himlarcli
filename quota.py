@@ -4,6 +4,7 @@ import sys
 from himlarcli.keystone import Keystone
 from himlarcli.cinder import Cinder
 from himlarcli.nova import Nova
+from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
@@ -25,7 +26,8 @@ def action_show():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
-        components = {'nova': novaclient, 'cinder': cinderclient}
+        neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
+        components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
         for comp, client in components.iteritems():
             if options.service != 'all' and comp != options.service:
                 continue
@@ -33,7 +35,9 @@ def action_show():
                 current = getattr(client, 'get_quota_class')()
             else:
                 logger.debug('=> function get_quota_class not found for %s' % comp)
-            current = current.to_dict()
+                continue
+            if not isinstance(current, dict):
+                current = current.to_dict()
             current['header'] = 'Quota for %s in %s' % (comp, region)
             printer.output_dict(current)
 
@@ -43,10 +47,11 @@ def action_update():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
-        components = {'nova': novaclient, 'cinder': cinderclient}
+        neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
+        components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
         for comp, client in components.iteritems():
             if comp not in defaults:
-                logger.debug('=> could not find quota for %s in default' % comp)
+                logger.debug('=> could not find quota for %s in default.yaml' % comp)
                 continue
             if options.service != 'all' and comp != options.service:
                 continue
@@ -54,11 +59,14 @@ def action_update():
                 current = getattr(client, 'get_quota_class')()
             else:
                 logger.debug('=> function get_quota_class not found for %s' % comp)
+                continue
+            if not isinstance(current, dict):
+                current = current.to_dict()
             updates = dict()
-            for k, v in defaults[comp]['default'].iteritems():
-                if getattr(current, k) != v:
+            for k, v in defaults[comp].iteritems():
+                if k in current and current[k] != v:
                     logger.debug("=> %sUpdated %s: from %s to %s in %s" %
-                                 (dry_run_txt, k, getattr(current, k), v, region))
+                                 (dry_run_txt, k, current[k], v, region))
                     updates[k] = v
             if updates:
                 if not options.dry_run:
