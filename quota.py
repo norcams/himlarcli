@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import sys
 from himlarcli.keystone import Keystone
 from himlarcli.cinder import Cinder
 from himlarcli.nova import Nova
@@ -79,6 +78,5 @@ def action_update():
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
 if not action:
-    logger.error("Function action_%s not implemented" % options.action)
-    sys.exit(1)
+    himutils.sys_error("Function action_%s() not implemented" % options.action)
 action()
