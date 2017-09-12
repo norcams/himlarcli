@@ -18,6 +18,7 @@ def action_validate():
     projects = ksclient.get_projects(domain=options.domain)
     # validate all projects
     printer.output_dict({'header': 'Projects with failed validation'})
+    count = 0
     for project in projects:
         output_project = dict()
         if not hasattr(project, 'type'):
@@ -39,9 +40,12 @@ def action_validate():
                 'reason': '(%s not valid type)' % project.type
             }
         if output_project:
+            count += 1
             printer.output_dict(output_project, sort=True, one_line=True)
+    printer.output_dict({'Projects with failed validation': count})
     users = ksclient.get_users(domain=options.domain)
     printer.output_dict({'header': 'Users without demo project'})
+    count = 0
     for user in users:
         if not hasattr(user, 'email'):
             logger.debug('=> %s user missing email' % user.name)
@@ -59,7 +63,9 @@ def action_validate():
                 'name': user.name,
                 'reason': '(missing demo project)'
             }
+            count += 1
             printer.output_dict(output_user, sort=True, one_line=True)
+    printer.output_dict({'Users without demo project': count})
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
