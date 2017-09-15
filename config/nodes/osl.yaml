@@ -45,6 +45,12 @@ nodes:
   compute-06:
     mac: 24:6e:96:32:28:ec
     hostgroup: 3
+  compute-07:
+    mac: 00:0a:f7:b6:b6:88
+    hostgroup: 3
+  compute-08:
+    mac: 00:0a:f7:b6:aa:5E
+    hostgroup: 3
   console-01:
     compute_profile: 2
     compute_resource: controller-03
