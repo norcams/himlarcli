@@ -97,6 +97,9 @@ nodes:
   network-01:
     compute_profile: 1
     compute_resource: controller-01
+  network-02:
+    compute_profile: 1
+    compute_resource: controller-02
   novactrl-01:
     compute_profile: 1
     compute_resource: controller-02
