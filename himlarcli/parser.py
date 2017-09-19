@@ -177,8 +177,8 @@ class Parser(object):
     """
     def __add_opt_args(self):
         for name, arg in self.opt_args.iteritems():
-            if not 'dest' in arg:
-                print 'missing dest in opt_args'
+            if not 'dest' in arg and '-' in name:
+                print 'missing dest in opt_args %s' % name
                 continue
             if 'type' in arg:
                 # Use locate to find buildt-in types
@@ -203,11 +203,18 @@ class Parser(object):
 
     @staticmethod
     def __add_argument(parser, name, **kwargs):
-        if 'dest' not in kwargs:
-            print 'missing dest in opt_args'
+        if 'dest' not in kwargs and '-' in name:
+            print 'missing dest in opt_args %s' % name
             sys.exit(1)
+        elif 'dest' not in kwargs:
+            dest = ''
+        else:
+            dest = kwargs['dest']
         kwargs['action'] = kwargs['action'] if 'action' in kwargs else 'store'
-        kwargs['help'] = kwargs['help'] if 'help' in kwargs else kwargs['dest']
-        kwargs['metavar'] = kwargs['metavar'] if 'metavar' in kwargs else kwargs['dest']
+        kwargs['help'] = kwargs['help'] if 'help' in kwargs else dest
+        kwargs['metavar'] = kwargs['metavar'] if 'metavar' in kwargs else dest
         kwargs['const'] = True if kwargs['action'] == 'store_const' else None
-        parser.add_argument(name, **kwargs)
+        try:
+            parser.add_argument(name, **kwargs)
+        except TypeError as e:
+            print e
