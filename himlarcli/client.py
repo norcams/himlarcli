@@ -17,6 +17,7 @@ class Client(object):
         self.logger = utils.get_logger(__name__, self.config, debug, log)
         self.logger.debug('=> config file: %s' % config_path)
         self.debug = debug
+        self.dry_run = False
 
         openstack = self.get_config_section('openstack')
         auth = v3.Password(auth_url=openstack['auth_url'],
@@ -42,6 +43,10 @@ class Client(object):
     @abstractmethod
     def get_client(self):
         pass
+
+    def set_dry_run(self, dry_run):
+        self.logger.debug('=> set dry_run to %s in %s' % (dry_run, type(self).__name__))
+        self.dry_run = True if dry_run else False
 
     def get_region(self):
         return self.get_config('openstack', 'region')
@@ -72,3 +77,14 @@ class Client(object):
     def log(self, msg):
         print "client.log is depricated"
         self.logger.debug(msg)
+
+    def log_dry_run(self, function, **kwargs):
+        if self.dry_run:
+            output = '=> DRY-RUN %s: %s' % (function, kwargs)
+            self.logger.debug(output)
+
+    @staticmethod
+    def log_error(msg, code=0):
+        sys.stderr.write("%s\n" % msg)
+        if code > 0:
+            sys.exit(code)
