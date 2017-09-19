@@ -19,7 +19,7 @@ nova:
 neutron:
   floatingip:                   50
   network:                      10
-  port:                         50
+  port:                         -1
   rbac_policy:                  10
   router:                       10
   security_group:               10
