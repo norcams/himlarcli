@@ -19,7 +19,7 @@ printer = Printer(options.format)
 domain = 'Dataporten'
 
 def action_show():
-    if not ksclient.is_valid_user(user=options.user, domain=domain):
+    if not ksclient.is_valid_user(email=options.user, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.user
         sys.exit(1)
     obj = ksclient.get_user_objects(email=options.user, domain=domain)
@@ -56,7 +56,7 @@ def action_list():
     printer.output_dict(domains)
 
 def action_rename():
-    if not ksclient.is_valid_user(user=options.old, domain=domain):
+    if not ksclient.is_valid_user(email=options.old, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.old
         sys.exit(1)
     print "\nYou are about to rename user with email %s to %s" % (options.old, options.new)
@@ -85,7 +85,7 @@ def action_rename():
         print "You just dodged a bullet my friend!"
 
 def action_password():
-    if not ksclient.is_valid_user(user=options.user, domain=domain):
+    if not ksclient.is_valid_user(email=options.user, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.user
         sys.exit(1)
     ksclient.reset_password(email=options.user, domain=domain, dry_run=options.dry_run)

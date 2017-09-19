@@ -8,6 +8,8 @@ from himlarcli import utils as himutils
 
 himutils.is_virtual_env()
 
+himutils.sys_error('code review needed!!!!')
+
 # Input args
 desc = 'Mange student course project'
 actions = ['create', 'list', 'delete']

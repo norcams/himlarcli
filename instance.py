@@ -37,7 +37,7 @@ def project():
         instances = novaclient.get_instances()
         stats['total'] += len(instances)
         for i in instances:
-            project = ksclient.get_project_by_id(i.tenant_id)
+            project = ksclient.get_by_id('project', i.tenant_id)
             if not project:
                 sys.stderr.write("MISSING PROJECT! id=%s for instance %s\n" % (i.tenant_id, i.name))
                 continue
@@ -73,7 +73,7 @@ def users():
         instances = novaclient.get_instances()
         stats['total'] += len(instances)
         for i in instances:
-            user = ksclient.get_user_by_id(i.user_id)
+            user = ksclient.get_by_id('user', i.user_id)
             if not user:
                 org = 'unknown'
                 logger.debug('=> unknown user for %s (id=%s)' % (i.name, i.id))
@@ -105,7 +105,7 @@ def org():
         instances = novaclient.get_instances()
         stats['total'] += len(instances)
         for i in instances:
-            user = ksclient.get_user_by_id(i.user_id)
+            user = ksclient.get_by_id('user', i.user_id)
             if not user:
                 org = 'unknown'
                 logger.debug('=> unknown user for %s (id=%s)' % (i.name, i.id))
@@ -130,7 +130,7 @@ def org():
         printer.output_dict(percent)
 
 def user():
-    if not ksclient.is_valid_user(user=options.email, domain=domain):
+    if not ksclient.is_valid_user(email=options.email, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.email
         sys.exit(1)
     obj = ksclient.get_user_objects(email=options.email, domain=domain)

@@ -5,7 +5,7 @@ import keystoneauth1.exceptions as exceptions
 import random
 import string
 
-# pylint: disable=R0904
+
 class Keystone(Client):
 
     #version = 3
@@ -15,25 +15,15 @@ class Keystone(Client):
         self.client = keystoneclient.Client(session=self.sess,
                                             region_name=self.region)
 
-    def get_domain_id(self, domain):
-        return self.__get_domain(domain)
-
     def get_client(self):
         return self.client
 
-    def get_project_by_id(self, project_id):
-        try:
-            project = self.client.projects.get(project_id)
-        except exceptions.http.NotFound:
-            project = dict()
-        return project
+################################### DOMAIN #####################################
 
-    def get_user_by_id(self, user_id):
-        try:
-            user = self.client.users.get(user_id)
-        except exceptions.http.NotFound:
-            user = dict()
-        return user
+    def get_domain_id(self, domain):
+        return self.__get_domain(domain)
+
+################################## REGIONS #####################################
 
     def get_regions(self):
         return self.client.regions.list()
@@ -50,31 +40,95 @@ class Keystone(Client):
                 region_list.append(region.id)
         return region_list
 
+#################################### OBJECTS ###################################
+
+    def get_by_id(self, obj_type, obj_id):
+        """ Get valid openstack object by type and id.
+            version: 2 """
+        valid_objects = ['project', 'group', 'user']
+        if obj_type not in valid_objects:
+            self.logger.debug('=> %s is not a valid object type' % obj_type)
+            return dict()
+        try:
+            result = getattr(self.client, '%ss' % obj_type).get(obj_id)
+        except exceptions.http.NotFound:
+            self.logger.debug('=> %s with id %s not found' % (obj_type, obj_id))
+            result = dict()
+        return result
+
+    def get_project_by_name(self, project_name, domain=None):
+        domain_id = self.get_domain_id(domain)
+        try:
+            project = self.client.projects.list(domain=domain_id, name=project_name)
+        except exceptions.http.NotFound:
+            project = dict()
+        if project:
+            return project[0]
+        return None
+
+    def get_user_by_email(self, email, user_type, domain=None):
+        """ Get dataporten (dp) or api user from email.
+            version: 2 """
+        domain_id = self.get_domain_id(domain)
+        email = self.__get_uib_email(email)
+        user = dict()
+        if user_type == 'api':
+            try:
+                user = self.client.users.list(domain=domain_id, name=email)
+            except exceptions.http.NotFound:
+                user = dict()
+        elif user_type == 'dp':
+            users = self.client.users.list(domain=None)
+            user_found = list()
+            for user in users:
+                # To find dataporten user we need to match email and domain = None
+                if user.name == email and user.domain_id is None:
+                    self.logger.debug('=> user %s found by email' % email)
+                    user_found.append(user)
+                    break
+            if not user_found:
+                self.logger.debug('=> no dataporten user found for email %s' % email)
+            user = user_found
+        if user:
+            return user[0]
+        return dict()
+
+    def get_group_by_email(self, email, domain=None):
+        """ Return group object based on email for user.
+            version: 2 """
+        domain_id = self.get_domain_id(domain)
+        email = self.__get_uib_email(email)
+        self.logger.debug('=> email used to find group %s' % email)
+        group_name = self.__get_group_name(email)
+        try:
+            group = self.client.groups.list(domain=domain_id, name=group_name)
+        except exceptions.http.NotFound:
+            self.logger.debug('=> group %s not found' % group_name)
+            group = dict()
+        if group:
+            return group[0]
+        return None
+
     """
     Return all users, groups and project for this email """
     def get_user_objects(self, email, domain):
         domain_id = self.__get_domain(domain)
         obj = dict()
-        user_id = None
-        api = self.__get_user_by_email(email=email.lower(), domain_id=domain_id)
-        if len(api) == 1:
-            obj['api'] = api[0]
-            user_id = api[0].id
-        elif len(api) > 1:
-            self.logger.warning('=> More than one api user found for %s' % email)
-        dp = self.__get_user_by_email(email=email, domain_id=None)
-        if len(dp) == 1:
-            obj['dataporten'] = dp[0]
-        elif len(dp) > 1:
-            self.logger.warning('=> More than one dataporten user found for %s' % email)
-        group = self.__get_group(group='%s-group' % email, domain=domain_id)
+        api = self.get_user_by_email(email=email, user_type='api', domain=domain)
+        if not api:
+            self.logger.warning('=> could not find api user for email %s' % email)
+        dp = self.get_user_by_email(email=email, user_type='dp', domain=None)
+        if not dp:
+            self.logger.warning('=> could not find dataporten user for email %s' % email)
+        group = self.get_group_by_email(email, domain)
+        obj['api'] = api
+        obj['dataporten'] = dp
         obj['group'] = group
-        if user_id:
-            projects = self.client.projects.list(domain=domain_id, user=user_id)
+        if group:
+            projects = self.client.projects.list(domain=domain_id, group=group.id)
         else:
             projects = []
         obj['projects'] = projects
-
         return obj
 
     def get_project_count(self, domain=False):
@@ -92,6 +146,7 @@ class Keystone(Client):
         return users
 
     def get_project(self, project, domain=None):
+        self.logger.debug('=> DEPRICATED: get_project() use get_project_by_name()')
         domain = self.__get_domain(domain)
         project = self.__get_project(project, domain=domain)
         return project
@@ -102,9 +157,9 @@ class Keystone(Client):
 
     """
     Check if a user has registered with access """
-    def is_valid_user(self, user, domain=None):
-        domain_id = self.__get_domain(domain)
-        group = self.__get_group(group='%s-group' % user, domain=domain_id)
+    def is_valid_user(self, email, domain=None):
+        email = self.__get_uib_email(email)
+        group = self.get_group_by_email(email, domain)
         return bool(group)
 
     def list_users(self, domain=False, **kwargs):
@@ -127,17 +182,18 @@ class Keystone(Client):
         compute = self.__list_compute_quota(project)
         return dict({'compute':compute})
 
-    def delete_project(self, project, domain=None, dry_run=False):
+    def delete_project(self, project, domain=None):
         """  Delete project and all instances """
         # Map str to objects
         domain = self.__get_domain(domain)
         project_obj = self.__get_project(project, domain=domain)
-        self.__delete_instances(project_obj, dry_run)
-        if not dry_run:
+        self.__delete_instances(project_obj, self.dry_run)
+        if not self.dry_run:
             self.logger.debug('=> delete project %s' % project)
-            self.client.projects.delete(project_obj)
-        elif dry_run:
+            return self.client.projects.delete(project_obj)
+        elif self.dry_run:
             self.logger.debug('=> DRY-RUN: delete project %s' % project)
+            return None
 
     def remove_user(self, email, domain=None, dry_run=False):
         """ Remove all object related to this email """
@@ -222,49 +278,76 @@ class Keystone(Client):
             return
         print "New password: %s" % password
 
-    """
-    Grant a role to a project for a user """
-    def grant_role(self, user, project, role, domain=None):
-        self.logger.debug('=> grant role %s for %s to %s' % (role, user, project))
-        # Map str to objects
-        domain = self.__get_domain(domain)
-        group = self.__get_group(group='%s-group' % user, domain=domain)
+
+    def grant_role(self, email, project_name, role='user', domain=None):
+        """ Grant a role to a project for a user.
+            version: 2 """
+        if not self.dry_run:
+            project = self.get_project_by_name(project_name=project_name, domain=domain)
+        if not self.dry_run and not project:
+            self.log_error("could not find project %s" % project_name, 1)
+        group = self.get_group_by_email(email=email, domain=domain)
         if not group:
-            print 'Group %s-group not found!'  % user
-            print 'Remember email for users is case sensitive.'
-            return None
-        project = self.__get_project(project, domain=domain)
+            self.log_error('Group %s-group not found!'  % email)
+            return
         role = self.__get_role(role)
         try:
-            exists = self.client.roles.list(project=project,
-                                            group=group)
+            if not self.dry_run:
+                exists = self.client.roles.list(project=project, group=group)
+            else:
+                exists = None
         except exceptions.http.NotFound:
             exists = None
+        self.logger.debug('=> grant role %s to %s for %s' % (role.name, email, project_name))
         if exists:
-            print 'Access exist for %s in project %s' % (user, project.name)
+            self.log_error('Access exist for %s in project %s' % (email, project_name))
+        elif self.dry_run:
+            data = {'user':group.name, 'project': project_name, 'role':role.name}
+            self.log_dry_run(function='grant_role', **data)
         else:
             self.client.roles.grant(role=role,
                                     project=project,
                                     group=group)
 
-    """
-    Create new project """
-    def create_project(self, domain, project, quota, description=None, **kwargs):
+    def list_roles(self, project_name, domain=None):
+        """ List all roles for a project based on project name.
+            version: 2 """
+        project = self.get_project_by_name(project_name=project_name, domain=domain)
+        roles = self.client.role_assignments.list(project=project)
+        role_list = list()
+        for role in roles:
+            group = self.get_by_id('group', role.group['id']) if hasattr(role, 'group') else None
+            role = self.client.roles.get(role.role['id']) if hasattr(role, 'role') else None
+            if hasattr(group, 'name'):
+                role_list.append(dict({'group': group.name, 'role': role.name}))
+            else:
+                self.logger.debug('=> could not find group %s' % (role.group['id']))
+        return role_list
+
+    def create_project(self, domain, project, quota=None, description=None, **kwargs):
+        """ Create new project in domain.
+            version: 2 """
         parent_id = self.__get_domain(domain)
-        project_found = self.__get_project(project, domain=parent_id)
+        project_found = self.get_project_by_name(project_name=project, domain=domain)
         if project_found:
-            print 'Project %s exists!' % project_found.name
-            self.logger.debug('=> updating quota for project %s' % project_found.name)
-            self.__set_compute_quota(project_found, quota)
-            return project_found
-        project = self.client.projects.create(name=project,
-                                              domain=parent_id,
-                                              parent=parent_id,
-                                              enabled=True,
-                                              description=description,
-                                              **kwargs)
+            #self.logger.debug('=> project %s exists' % project)
+            self.log_error("WARNING: project %s exists!" % project)
+            return None
+        if self.dry_run:
+            data = kwargs.copy()
+            data.update({'domain': domain, 'name': project, 'description': description})
+            self.log_dry_run('create_project', **data)
+            return data
+        else:
+            project = self.client.projects.create(name=project,
+                                                  domain=parent_id,
+                                                  parent=parent_id,
+                                                  enabled=True,
+                                                  description=description,
+                                                  **kwargs)
         self.logger.debug('=> create new project %s' % project)
-        self.__set_compute_quota(project, quota)
+        if quota:
+            self.__set_compute_quota(project, quota)
         return project
 
     """
@@ -416,3 +499,16 @@ class Keystone(Client):
                                log=self.logger,
                                region=self.region)
         return self.novaclient.set_quota(project.id, quota)
+
+    @staticmethod
+    def __get_group_name(email):
+        """ Map email for user to group name.
+            The groups are created in himlar-dp_prep. """
+        return '%s-group' % email
+
+    @staticmethod
+    def __get_uib_email(email):
+        if not email or not 'uib.no' in email:
+            return email
+        (user, domain) = email.split('@')
+        return '%s@%s' % (user.title(), domain)

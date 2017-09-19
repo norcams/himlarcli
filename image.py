@@ -101,8 +101,9 @@ def action_list():
             if access:
                 access_list = list()
                 for member in access:
-                    project = ksclient.get_project_by_id(member['member_id'])
-                    access_list.append(project.name)
+                    project = ksclient.get_by_id('project', member['member_id'])
+                    if project:
+                        access_list.append(project.name)
                 out_image['projects'] = access_list
         if options.detailed and hasattr(image, 'depricated'):
             out_image['depricated'] = image.depricated

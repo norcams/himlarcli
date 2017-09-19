@@ -151,7 +151,7 @@ def action_notify():
         novaclient.update_aggregate(options.aggregate, metadata=metadata)
     # Generate instance list per user
     for i in instances:
-        user = ksclient.get_user_by_id(i.user_id)
+        user = ksclient.get_by_id('user', i.user_id)
         if not hasattr(user, 'name'):
             continue
         if "@" not in user.name:

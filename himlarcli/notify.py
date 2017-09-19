@@ -52,10 +52,10 @@ class Notify(object):
         users = dict()
         for i in instances:
             if not admin:
-                user = self.ksclient.get_user_by_id(i.user_id)
+                user = self.ksclient.get_by_id('user', i.user_id)
                 email = self.__get_user_email(user)
             if admin or not email:
-                project = self.ksclient.get_project_by_id(i.tenant_id)
+                project = self.ksclient.get_by_id('project', i.tenant_id)
                 email = self.__get_project_email(project)
             if not email:
                 self.logger.debug('=> unable to find owner of %s (%s)', i.name, i.id)
