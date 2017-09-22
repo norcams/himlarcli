@@ -1,12 +1,12 @@
 ---
 nova:
-  instances:                    10
-  cores:                        20
-  ram:                          32768
+  instances:                    20
+  cores:                        40
+  ram:                          65536
 cinder:
   gigabytes:                    200
-  snapshots:                    20
-  volumes:                      10
+  snapshots:                    40
+  volumes:                      20
 neutron:
-  security_group:               20
-  security_group_rule:          200
+  security_group:               40
+  security_group_rule:          400
