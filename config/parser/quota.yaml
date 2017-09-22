@@ -11,7 +11,7 @@ opt_args:
     'dest':     'service'
     'metavar':  'service type'
     'help':     'openstack service type'
-    'choices':  ['all', 'nova', 'cinder', 'neutron']
+    'choices':  ['all', 'nova', 'cinder']
     'default':  'all'
   '--default':
     'sub':      'update'
