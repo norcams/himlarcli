@@ -130,6 +130,7 @@ def action_show():
         neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
         components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
         for comp, client in components.iteritems():
+            quota = dict()
             if hasattr(client, 'get_quota_class'):
                 quota = getattr(client, 'list_quota')(project.id)
             else:
