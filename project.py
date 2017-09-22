@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
+from himlarcli.cinder import Cinder
+from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
@@ -14,13 +16,19 @@ printer = Printer(options.format)
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
 logger = ksclient.get_logger()
-novaclient = Nova(options.config, debug=options.debug, log=logger)
+#novaclient = Nova(options.config, debug=options.debug, log=logger)
+if hasattr(options, 'region'):
+    regions = ksclient.find_regions(region_name=options.region)
+else:
+    regions = ksclient.find_regions()
+
+if not regions:
+    himutils.sys_error('no regions found!')
 
 def action_create():
-#    TODO: implement quota
-#    quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
-#    if options.quota and not quota:
-#        himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
+    quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
+    if options.quota and not quota:
+        himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
     test = 1 if options.type == 'test' else 0
     project = ksclient.create_project(domain=options.domain,
                                       project=options.project,
@@ -43,6 +51,27 @@ def action_create():
             printer.output_dict(output)
     elif project:
         himutils.sys_error("admin %s not found as a user. no access granted!" % options.admin, 0)
+
+    # Quotas
+    for region in regions:
+        novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
+        cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
+        neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
+        cinderclient.set_dry_run(options.dry_run)
+        novaclient.set_dry_run(options.dry_run)
+        neutronclient.set_dry_run(options.dry_run)
+        if project and not isinstance(project, dict):
+            project_id = project.id
+        elif project and isinstance(project, dict) and 'id' in project:
+            project_id = project['id']
+        else:
+            project_id = None
+        if 'cinder' in quota and project:
+            cinderclient.update_quota(project_id=project_id, updates=quota['cinder'])
+        if 'nova' in quota and project:
+            novaclient.update_quota(project_id=project_id, updates=quota['nova'])
+        if 'neutron' in quota and project:
+            neutronclient.update_quota(project_id=project_id, updates=quota['neutron'])
 
 def action_grant():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
@@ -95,92 +124,21 @@ def action_show():
     printer.output_dict({'header': 'Roles in project %s' % options.project})
     for role in roles:
         printer.output_dict(role, sort=True, one_line=True)
-
-#         project = ksclient.get_project(project=options.project, domain=domain)
-#         pp = pprint.PrettyPrinter(indent=1)
-#         pp.pprint(project.to_dict())
-#     else:
-#         print 'project name must be set to show project'
-
-
-
-
-# # Input args
-# desc = 'Perform action on shared project (not course and personal)'
-# actions = ['list', 'show', 'create', 'grant', 'delete', 'quota']
-# opt_args = { '-p': { 'dest': 'project', 'help': 'project name', 'metavar': 'name'},
-#              '-u': { 'dest': 'user', 'help': 'email of user', 'metavar': 'user'},
-#              '-q': { 'dest': 'quota', 'help': 'project quota', 'default': 'default', 'metavar': 'quota'},
-#              '-t': { 'dest': 'type', 'help': 'project type (default admin)', 'default': 'admin', 'metavar': 'type'}}
-# options = utils.get_action_options(desc, actions, opt_args=opt_args, dry_run=True)
-# ksclient = Keystone(options.config, debug=options.debug)
-# novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
-# quota = himutils.load_config('config/quota.yaml')
-# project_types = himutils.load_config('config/type.yaml', log=ksclient.get_logger())
-# domain='Dataporten'
-#
-# if options.action[0] == 'create':
-#     if options.quota not in quota:
-#         print 'ERROR! Quota %s unknown. Check valid quota in config/quota.yaml' % options.quota
-#         sys.exit(1)
-#     if options.type not in project_types['types']:
-#         print 'ERROR! Type %s is not valid. Check valid types in config/type.yaml' % options.type
-#         sys.exit(1)
-#     if options.project and options.user:
-#         if not ksclient.is_valid_user(email=options.user, domain=domain):
-#             print "ERROR! %s is not a valid user. Group from access not found!" % options.user
-#             sys.exit(1)
-#         if options.type == 'test':
-#             test = 1
-#         else:
-#             test = 0
-#         if not options.dry_run:
-#             project = ksclient.create_project(domain=domain,
-#                                               project=options.project,
-#                                               admin=options.user.lower(),
-#                                               test=test,
-#                                               type=options.type,
-#                                               quota=quota[options.quota])
-#             pp = pprint.PrettyPrinter(indent=1)
-#             if project:
-#                 pp.pprint(project.to_dict())
-#                 ksclient.grant_role(project=options.project,
-#                                     user=options.user,
-#                                     role='user',
-#                                     domain=domain)
-#         else:
-#             print 'Run in dry-run mode. No project created'
-#     else:
-#         print 'ERROR! user and project name must be set to create project'
-#         sys.exit(1)
-# if options.action[0] == 'grant':
-#     if options.project and options.user:
-#         ksclient.grant_role(project=options.project,
-#                                     user=options.user,
-#                                     role='user',
-#                                     domain=domain)
-#     else:
-#         print 'user and project name must be set to grant project access'
-# if options.action[0] == 'delete':
-#     if options.project:
-#         q = "Delete project and all instances for %s (yes|no)? " % options.project
-#         answer = raw_input(q)
-#         if answer.lower() == 'yes':
-#             print "We are now deleting project and instances for %s" % options.project
-#             print 'Please wait...'
-#             ksclient.delete_project(options.project, domain=domain)
-#         else:
-#             print "You just dodged a bullet my friend!"
-#     else:
-#         print 'project name must be set to delete project'
-# if options.action[0] == 'quota':
-#     if options.project:
-#         quota = ksclient.list_quota(project=options.project, domain=domain)
-#         pp = pprint.PrettyPrinter(indent=1)
-#         if 'compute' in quota:
-#             pp.pprint(quota['compute'].to_dict())
-#     else:
-#         print 'project name must be set to show quota'
+    for region in regions:
+        novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
+        cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
+        neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
+        components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
+        for comp, client in components.iteritems():
+            if hasattr(client, 'get_quota_class'):
+                quota = getattr(client, 'list_quota')(project.id)
+            else:
+                logger.debug('=> function get_quota_class not found for %s' % comp)
+                continue
+            if quota:
+                quota.update({'header': '%s quota' % comp})
+                #printer.output_dict({'header': 'Roles in project %s' % options.project})
+                printer.output_dict(quota)
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

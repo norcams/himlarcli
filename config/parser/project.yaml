@@ -8,6 +8,7 @@ actions:
   'delete': 'Delete project and all resources'
 #  'update': 'TODO'
 #  'revoke': 'TODO'
+#  'instances': 'TODO list all instances in project'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -16,6 +17,10 @@ opt_args:
   'project':
    'sub':       ['show', 'create', 'grant', 'delete']
    'metavar':   project
+  '--region':
+    'sub':      ['create']
+    'dest':     'region'
+    'help':     'only use this region'
   '-f':
     'sub':      ['list']
     'dest':     'filter'
@@ -38,6 +43,11 @@ opt_args:
     'dest':     'desc'
     'metavar':  'description'
     'help':     'project project description'
+  '-q':
+    'sub':      ['create']
+    'dest':     'quota'
+    'help':     'quota class'
+    'choices':  ['small', 'medium', 'large']
   '-u':
     'sub':      ['grant']
     'dest':     'user'

@@ -1,0 +1,12 @@
+---
+nova:
+  instances:                    10
+  cores:                        20
+  ram:                          32768
+cinder:
+  gigabytes:                    200
+  snapshots:                    20
+  volumes:                      10
+neutron:
+  security_group:               20
+  security_group_rule:          200
