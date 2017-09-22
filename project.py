@@ -137,7 +137,7 @@ def action_show():
                 logger.debug('=> function get_quota_class not found for %s' % comp)
                 continue
             if quota:
-                quota.update({'header': '%s quota in %s' % (comp, region)})
+                quota.update({'header': '%s quota in %s' % (comp, region), 'region': region})
                 #printer.output_dict({'header': 'Roles in project %s' % options.project})
                 printer.output_dict(quota)
 
