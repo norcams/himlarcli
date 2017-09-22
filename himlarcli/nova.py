@@ -142,13 +142,32 @@ class Nova(Client):
                 self.logger.debug('=> DRY-RUN: delete instance %s (%s)' % (i.name, project.name))
 
     def list_quota(self, project_id, detail=False):
+        """ List a projects nova quota.
+
+            :return: a dictionary with quota information
+        """
         # This require novaclient version > mitaka
-        #return self.client.quotas.get(tenant_id=project_id, detail=detail)
-        return self.client.quotas.get(tenant_id=project_id)
+        result = self.client.quotas.get(tenant_id=project_id, detail=detail)
+        if result:
+            return result.to_dict()
+        return dict()
 
     def set_quota(self, project_id, quota):
         self.logger.debug('=> quota set to %s' % quota)
         self.client.quotas.update(project_id, **quota)
+
+    def update_quota(self, project_id, updates):
+        """ Update project nova quota
+            version: 2 """
+        dry_run_txt = 'DRY-RUN: ' if self.dry_run else ''
+        self.logger.debug('=> %supdate quota for %s = %s' % (dry_run_txt, project_id, updates))
+        result = None
+        try:
+            if not self.dry_run:
+                result = self.client.quotas.update(tenant_id=project_id, **updates)
+        except novaclient.exceptions.NotFound as e:
+            self.log_error(e)
+        return result
 
     def update_quota_class(self, class_name='default', updates=None):
         if not updates:
