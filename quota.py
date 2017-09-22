@@ -25,8 +25,7 @@ def action_show():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
-        neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
-        components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
+        components = {'nova': novaclient, 'cinder': cinderclient}
         for comp, client in components.iteritems():
             if options.service != 'all' and comp != options.service:
                 continue
@@ -48,8 +47,7 @@ def action_update():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
-        neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
-        components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
+        components = {'nova': novaclient, 'cinder': cinderclient}
         for comp, client in components.iteritems():
             if options.service != 'all' and comp != options.service:
                 continue
