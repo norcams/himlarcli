@@ -101,6 +101,12 @@ nodes:
   network-01:
     compute_profile: 2
     compute_resource: controller-03
+  network-02:
+    compute_profile: 2
+    compute_resource: controller-01
+  network-03:
+    compute_profile: 2
+    compute_resource: controller-02
   novactrl-01:
     compute_profile: 2
     compute_resource: controller-02
