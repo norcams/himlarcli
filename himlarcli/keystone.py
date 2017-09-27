@@ -66,6 +66,36 @@ class Keystone(Client):
             return project[0]
         return None
 
+    def get_user_projects(self, email, domain=None, **kwargs):
+        """
+            Get project based on user group (based on email) and domain.
+            Version: 2
+            :param email: user email address (str)
+            :param domain: domain name (str)
+            :param kwargs: extra project fields to match for
+            :return: a list of project objects
+        """
+        domain_id = self.get_domain_id(domain)
+        group = self.get_group_by_email(email, domain)
+        projects = list()
+        if group:
+            try:
+                projects = self.client.projects.list(domain=domain_id, group=group.id)
+            except exceptions.http.NotFound:
+                pass
+        if not projects:
+            self.logger.debug('=> no projects found for email %s' % email)
+        project_list = list()
+        for project in projects:
+            for k, v in kwargs.iteritems():
+                if hasattr(project, k) and getattr(project, k) == v:
+                    project_list.append(project)
+                elif not hasattr(project, k):
+                    self.logger.debug('=> project %s do not have %s to filter' % (project.name, k))
+            if not kwargs:
+                project_list.append(project)
+        return project_list
+
     def get_user_by_email(self, email, user_type, domain=None):
         """ Get dataporten (dp) or api user from email.
             version: 2 """

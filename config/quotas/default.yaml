@@ -1,6 +1,6 @@
 ---
-# Updated to work with newton. neutron quotas must be set in neutron.conf
-# with puppet!
+# neutron quotas must be set in neutron.conf with puppet!
+# https://github.com/norcams/himlar/blob/master/hieradata/common/modules/neutron.yaml
 cinder:
   backup_gigabytes:             1000
   backups:                      10
