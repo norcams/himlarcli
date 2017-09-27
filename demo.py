@@ -11,7 +11,29 @@ options = parser.parse_args()
 printer = Printer(options.format)
 
 ksclient = Keystone(options.config, debug=options.debug)
+ksclient.set_dry_run(options.dry_run)
 logger = ksclient.get_logger()
+
+def action_create():
+    users = ksclient.get_users(domain=options.domain)
+    printer.output_dict({'header': 'Created demo project'})
+    count = 0
+    for user in users:
+        if not hasattr(user, 'email'):
+            logger.debug('=> %s user missing email' % user.name)
+            continue
+        search_filter = dict({'type': 'demo'})
+        projects = ksclient.get_user_projects(email=user.email,
+                                              domain=options.domain,
+                                              **search_filter)
+        if not projects:
+            output_user = {
+                'id': user.id,
+                'name': user.name,
+            }
+            count += 1
+            printer.output_dict(output_user, sort=True, one_line=True)
+    printer.output_dict({'Users without demo project': count})
 
 def action_validate():
     valid_projects = ['demo', 'research', 'education', 'admin', 'test']
@@ -50,9 +72,13 @@ def action_validate():
         if not hasattr(user, 'email'):
             logger.debug('=> %s user missing email' % user.name)
             continue
-        obj = ksclient.get_user_objects(email=user.email, domain=options.domain)
+        search_filter = dict({'type': 'demo'})
+        projects = ksclient.get_user_projects(email=user.email,
+                                              domain=options.domain,
+                                              **search_filter)
+
         demo_project = False
-        for project in obj['projects']:
+        for project in projects:
             if hasattr(project, 'type') and project.type == 'demo':
                 # user has demo project continue with next user
                 demo_project = True
