@@ -154,8 +154,8 @@ class Keystone(Client):
         obj['api'] = api
         obj['dataporten'] = dp
         obj['group'] = group
-        if group:
-            projects = self.client.projects.list(domain=domain_id, group=group.id)
+        if api:
+            projects = self.client.projects.list(domain=domain_id, user=api)
         else:
             projects = []
         obj['projects'] = projects
