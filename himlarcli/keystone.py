@@ -354,30 +354,61 @@ class Keystone(Client):
                 self.logger.debug('=> could not find group %s' % (role.group['id']))
         return role_list
 
-    def create_project(self, domain, project, quota=None, description=None, **kwargs):
-        """ Create new project in domain.
-            version: 2 """
+    def update_project(self, project_id, project_name=None, description=None, **kwargs):
+        if self.dry_run:
+            data = kwargs.copy()
+            data.update({'id': project_id})
+            if project_name:
+                data['name'] = project_name
+            if description:
+                data['description'] = description
+            self.log_dry_run('update_project', **data)
+            return
+        try:
+            project = self.client.projects.update(project=project_id,
+                                                  name=project_name,
+                                                  description=description,
+                                                  **kwargs)
+            self.logger.debug('=> updated new project %s' % project.name)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('Project %s not updated' % project_id)
+
+    def create_project(self, domain, project_name, admin=None, description=None, **kwargs):
+        """
+        Create new project in domain and grant user role to admin if valid user.
+        Works with dry_run
+        version: 2
+
+        :return: dictionary with project data
+        """
         parent_id = self.__get_domain(domain)
-        project_found = self.get_project_by_name(project_name=project, domain=domain)
+        project_found = self.get_project_by_name(project_name=project_name, domain=domain)
+        grant_role = True if admin and self.is_valid_user(admin, domain) else False
         if project_found:
             #self.logger.debug('=> project %s exists' % project)
-            self.log_error("WARNING: project %s exists!" % project)
+            self.log_error("WARNING: project %s exists!" % project_name)
             return None
         if self.dry_run:
             data = kwargs.copy()
-            data.update({'domain': domain, 'name': project, 'description': description})
+            data.update({'domain': domain, 'name': project_name, 'description': description})
             self.log_dry_run('create_project', **data)
-            return data
         else:
-            project = self.client.projects.create(name=project,
-                                                  domain=parent_id,
-                                                  parent=parent_id,
-                                                  enabled=True,
-                                                  description=description,
-                                                  **kwargs)
-        self.logger.debug('=> create new project %s' % project)
-        if quota:
-            self.__set_compute_quota(project, quota)
+            try:
+                project = self.client.projects.create(name=project_name,
+                                                      domain=parent_id,
+                                                      parent=parent_id,
+                                                      enabled=True,
+                                                      description=description,
+                                                      **kwargs)
+                self.logger.debug('=> create new project %s' % project_name)
+            except exceptions.http.BadRequest as e:
+                self.log_error(e)
+                self.log_error('Project %s not created' % project_name)
+        if grant_role:
+            self.grant_role(project_name=project_name, email=admin, domain=domain)
+        if self.dry_run:
+            return data
         return project
 
     """
@@ -538,7 +569,7 @@ class Keystone(Client):
 
     @staticmethod
     def __get_uib_email(email):
-        if not email or not 'uib.no' in email:
+        if not email or not 'uib.no' in email or not '@' in email:
             return email
         (user, domain) = email.split('@')
         return '%s@%s' % (user.title(), domain)
