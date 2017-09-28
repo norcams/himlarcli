@@ -4,7 +4,7 @@ Your personal project $personal will be terminated
 on $date along with all resources (instances, images, storage).
 
 You have been given a new demo project called $demo
-with a limited quota for testing purposes. More information is avalible here:
+with a limited quota for testing purposes. More information is available here:
 
 http://docs.uh-iaas.no/en/latest/known-issues.html#demo-projects
 
