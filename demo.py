@@ -68,7 +68,7 @@ def action_notify():
             count += 1
             found = True
         elif '@' in project.name:
-            print "%s (old personal project)"
+            print "%s (old personal project)" % project.name
             count += 1
             found = True
         if found:
