@@ -41,16 +41,6 @@ def action_create():
         output = project.to_dict() if not isinstance(project, dict) else project
         output['header'] = "Show information for %s" % options.project
         printer.output_dict(output)
-    if project and ksclient.is_valid_user(email=options.admin, domain=options.domain):
-        role = ksclient.grant_role(project_name=options.project,
-                                   email=options.admin,
-                                   domain=options.domain)
-        if role:
-            output = role.to_dict() if not isinstance(role, dict) else role
-            output['header'] = "Roles for %s" % options.project
-            printer.output_dict(output)
-    elif project:
-        himutils.sys_error("admin %s not found as a user. no access granted!" % options.admin, 0)
 
     # Quotas
     for region in regions:
