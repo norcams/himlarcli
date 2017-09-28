@@ -56,11 +56,11 @@ def action_create():
             project_id = project['id']
         else:
             project_id = None
-        if 'cinder' in quota and project:
+        if quota and 'cinder' in quota and project:
             cinderclient.update_quota(project_id=project_id, updates=quota['cinder'])
-        if 'nova' in quota and project:
+        if quota and 'nova' in quota and project:
             novaclient.update_quota(project_id=project_id, updates=quota['nova'])
-        if 'neutron' in quota and project:
+        if quota and 'neutron' in quota and project:
             neutronclient.update_quota(project_id=project_id, updates=quota['neutron'])
 
 def action_grant():
