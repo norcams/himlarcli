@@ -45,6 +45,16 @@ class Notify(object):
             self.logger.debug('=> config file missing section %s' % section)
         return None
 
+    def mail_user(self, body, subject, user):
+        msg = MIMEText(body, 'plain', 'utf-8')
+        msg['Subject'] = subject
+        log_msg = 'sending mail to %s' % user
+        if not self.dry_run:
+            self.send_mail(user, msg)
+            self.logger.debug('=> %s', log_msg)
+        else:
+            log_msg = 'DRY-RUN: ' + log_msg
+
     def mail_instance_owner(self, instances, body, subject, admin=False):
         if not self.ksclient:
             self.logger.error('=> notify aborted: unable to find keystone client')
