@@ -76,11 +76,11 @@ class Keystone(Client):
             :return: a list of project objects
         """
         domain_id = self.get_domain_id(domain)
-        group = self.get_group_by_email(email, domain)
+        user = self.get_user_by_email(email=email, user_type='api', domain=domain)
         projects = list()
-        if group:
+        if user:
             try:
-                projects = self.client.projects.list(domain=domain_id, group=group.id)
+                projects = self.client.projects.list(domain=domain_id, user=user)
             except exceptions.http.NotFound:
                 pass
         if not projects:
