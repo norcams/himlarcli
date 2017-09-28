@@ -28,7 +28,10 @@ def action_create():
         projects = ksclient.get_user_projects(email=user.email.lower(),
                                               domain=options.domain,
                                               **search_filter)
-        if not projects:
+        if projects:
+            logger.debug('=> user %s has demo project' % user.email.lower())
+        else:
+            logger.debug('=> create demo project for user %s' % user.email.lower())
             project_name = user.email.lower().replace('@', '.')
             project_name = 'DEMO-%s' % project_name
             desc = ('Personal demo project for %s. Resources might be '
