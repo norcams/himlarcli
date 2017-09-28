@@ -31,12 +31,12 @@ def action_create():
         himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
     test = 1 if options.type == 'test' else 0
     project = ksclient.create_project(domain=options.domain,
-                                      project=options.project,
+                                      project_name=options.project,
                                       admin=options.admin.lower(),
                                       test=test,
                                       type=options.type,
                                       description=options.desc,
-                                      quota={})
+                                      quota=options.quota)
     if project:
         output = project.to_dict() if not isinstance(project, dict) else project
         output['header'] = "Show information for %s" % options.project
@@ -120,6 +120,8 @@ def action_show():
     output_project = project.to_dict()
     output_project['header'] = "Show information for %s" % project.name
     printer.output_dict(output_project)
+    if not options.detailed:
+        return
     roles = ksclient.list_roles(project_name=options.project)
     printer.output_dict({'header': 'Roles in project %s' % options.project})
     for role in roles:

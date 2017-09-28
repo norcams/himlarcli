@@ -60,3 +60,10 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '--detailed':
+    'sub':      ['show']
+    'dest':     'detailed'
+    'help':     'also show roles and quota for project'
+    'action':   'store_const'
+    'const':    true
+    'default':  False
