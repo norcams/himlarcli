@@ -212,17 +212,21 @@ class Keystone(Client):
         compute = self.__list_compute_quota(project)
         return dict({'compute':compute})
 
-    def delete_project(self, project, domain=None):
-        """  Delete project and all instances """
-        # Map str to objects
-        domain = self.__get_domain(domain)
-        project_obj = self.__get_project(project, domain=domain)
-        self.__delete_instances(project_obj, self.dry_run)
+    def delete_project(self, project_name, domain=None):
+        """
+            Delete project based on name and all instances
+            Version: 2
+            :param project_name: name of project to delete
+        """
+        project = self.get_project_by_name(project_name=project_name, domain=domain)
+        if not project:
+            self.log_error('Project %s not found. Unable to delete project!' % project_name)
+        self.__delete_instances(project, self.dry_run)
         if not self.dry_run:
-            self.logger.debug('=> delete project %s' % project)
-            return self.client.projects.delete(project_obj)
+            self.logger.debug('=> delete project %s' % project_name)
+            return self.client.projects.delete(project)
         elif self.dry_run:
-            self.logger.debug('=> DRY-RUN: delete project %s' % project)
+            self.logger.debug('=> DRY-RUN: delete project %s' % project_name)
             return None
 
     def remove_user(self, email, domain=None, dry_run=False):
