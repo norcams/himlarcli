@@ -4,14 +4,14 @@
 cinder:
   backup_gigabytes:             1000
   backups:                      10
-  gigabytes:                    100
+  gigabytes:                    20
   per_volume_gigabytes:         -1
-  snapshots:                    12
-  volumes:                      4
+  snapshots:                    3
+  volumes:                      1
 nova:
   instances:                    2
-  cores:                        4
-  ram:                          8192
+  cores:                        2
+  ram:                          2048
   injected_file_content_bytes:  10240
   injected_file_path_bytes:     255
   injected_files:               5
