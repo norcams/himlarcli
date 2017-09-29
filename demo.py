@@ -101,7 +101,6 @@ def action_notify():
             notify.mail_user(body_content, subject, user.email)
             notify.close()
             time.sleep(3)
-            print body_content
     printer.output_dict({'Personal projects': count})
 
 def action_validate():
