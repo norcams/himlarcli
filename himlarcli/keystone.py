@@ -221,6 +221,7 @@ class Keystone(Client):
         project = self.get_project_by_name(project_name=project_name, domain=domain)
         if not project:
             self.log_error('Project %s not found. Unable to delete project!' % project_name)
+            return None
         self.__delete_instances(project, self.dry_run)
         if not self.dry_run:
             self.logger.debug('=> delete project %s' % project_name)
