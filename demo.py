@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import time
 from himlarcli.keystone import Keystone
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
@@ -94,11 +95,12 @@ def action_notify():
             body_content = himutils.load_template(inputfile='misc/notify_demo.txt',
                                                   mapping=mapping,
                                                   log=logger)
-            subject = ('UH-IaaS: Your personal project will be deleted')
+            subject = ('[UH-IaaS] Your personal project will be deleted')
             notify = Notify(options.config, debug=False, log=logger)
             notify.set_dry_run(options.dry_run)
             notify.mail_user(body_content, subject, user.email)
             notify.close()
+            time.sleep(3)
             print body_content
     printer.output_dict({'Personal projects': count})
 
