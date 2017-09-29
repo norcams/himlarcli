@@ -8,7 +8,7 @@ with a limited quota for testing purposes. More information is available here:
 
 http://docs.uh-iaas.no/en/latest/intro.html#demo-projects
 
-If you are in need of a larger quota for more permanent usage you can request
+If you are in need of a larger quota for more permanent usage you may request
 one here:
 
 https://skjema.uio.no/iaas-project
