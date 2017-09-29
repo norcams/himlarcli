@@ -67,7 +67,7 @@ def action_notify():
             print "%s (new personal project)" % project.name
             count += 1
             found = True
-        elif '@' in project.name:
+        elif '@' in project.name and not hasattr(project, 'type'):
             print "%s (old personal project)" % project.name
             count += 1
             found = True
