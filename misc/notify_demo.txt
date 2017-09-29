@@ -13,7 +13,7 @@ one here:
 
 https://skjema.uio.no/iaas-project
 
-For more detils about UH-IaaS and contact information, please visit
+For more details about UH-IaaS and contact information, please visit
 
 http://docs.uh-iaas.no
 
