@@ -6,10 +6,12 @@ from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
+from datetime import datetime
 
 himutils.is_virtual_env()
 
 parser = Parser()
+parser.set_autocomplete(True)
 options = parser.parse_args()
 printer = Printer(options.format)
 
@@ -30,12 +32,22 @@ def action_create():
     if options.quota and not quota:
         himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
     test = 1 if options.type == 'test' else 0
+    if options.enddate:
+        try:
+            enddate = datetime.strptime(options.enddate, '%d.%m.%y').date()
+        except ValueError:
+            himutils.sys_error('date format DD.MM.YY not valid for %s' % options.enddate, 1)
+    else:
+        enddate = None
+    createdate = datetime.today()
     project = ksclient.create_project(domain=options.domain,
                                       project_name=options.project,
                                       admin=options.admin.lower(),
                                       test=test,
                                       type=options.type,
                                       description=options.desc,
+                                      enddate=str(enddate),
+                                      createdate=createdate.isoformat(),
                                       quota=options.quota)
     if project:
         output = project.to_dict() if not isinstance(project, dict) else project

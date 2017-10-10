@@ -21,6 +21,10 @@ opt_args:
     'sub':      ['create']
     'dest':     'region'
     'help':     'only use this region'
+  '--end':
+    'sub':      ['create']
+    'dest':     'enddate'
+    'help':     'set end date for projects (DD.MM.YY)'
   '-f':
     'sub':      ['list']
     'dest':     'filter'
