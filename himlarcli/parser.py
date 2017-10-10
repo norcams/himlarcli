@@ -1,4 +1,5 @@
 import argparse
+import argcomplete
 import inspect
 import os
 from himlarcli.printer import Printer
@@ -37,6 +38,7 @@ class Parser(object):
         self.parser = None
         self.subparser = None
         self.parsers = None
+        self.autocomplete = False
         if autoload:
             self.__autoload()
 
@@ -45,6 +47,9 @@ class Parser(object):
 
     def add_actions(self, actions):
         self.actions = actions
+
+    def set_autocomplete(self, autocomplete):
+        self.autocomplete = True if autocomplete else False
 
     def toggle_show(self, option):
         if option in self.SHOW and self.SHOW[option]:
@@ -63,6 +68,7 @@ class Parser(object):
         self.__add_dry_run()
         self.__add_format()
         self.__add_opt_args()
+        self.__setup_autocomplete()
         return self.parser.parse_args()
 
     # ------------------------------- PRIVATE FUNCTIONS ------------------------
@@ -72,10 +78,12 @@ class Parser(object):
         if self.actions:
             self.__add_actions(self.actions)
 
-    """
-    Load parser config from yaml.
-    """
+    def __setup_autocomplete(self):
+        if self.autocomplete:
+            argcomplete.autocomplete(self.parser)
+
     def __autoload(self):
+        """ Load parser config from yaml. """
         parser_config = utils.load_config('config/parser/%s.yaml' % self.name)
         if 'desc' in parser_config:
             self.desc = parser_config['desc']
