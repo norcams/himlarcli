@@ -20,7 +20,7 @@ opt_args:
   '--region':
     'sub':      ['create']
     'dest':     'region'
-    'help':     'only use this region'
+    'help':     'only set quota for this region'
   '--end':
     'sub':      ['create']
     'dest':     'enddate'
