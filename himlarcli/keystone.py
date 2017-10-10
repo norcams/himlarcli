@@ -405,6 +405,7 @@ class Keystone(Client):
                                                       parent=parent_id,
                                                       enabled=True,
                                                       description=description,
+                                                      admin=admin,
                                                       **kwargs)
                 self.logger.debug('=> create new project %s' % project_name)
             except exceptions.http.BadRequest as e:
