@@ -1,7 +1,36 @@
 [openstack]
-auth_url: https://dashboard.himlar.local:5000/v3
+auth_url: https://api.vagrant.iaas.intern:5000/v3
 username: admin
 password: admin_pass
 project_name: openstack
 default_domain: Default
-keystone_cachain: /opt/himlar/provision/ca/certs/ca.cert.pem
+region: vagrant
+domain: mgmt.vagrant.iaas.intern
+#keystone_cachain: /opt/himlar/provision/ca/certs/ca.cert.pem
+#keystone_cachain: <absolute path to himlar>/provision/ca/certs/ca.cert.pem
+
+[foreman]
+url=https://foreman.mgmt.vagrant.iaas.intern
+user=admin
+password=changeme
+
+[maintenance]
+instance_file=active_instances.txt
+
+[statsd]
+server=172.31.0.14
+port = 8125
+
+[state]
+db=db/state.db
+
+[mail]
+smtp=smtp.uib.no
+from_addr=no-reply@uib.no
+
+[ldap]
+server=ldap.uib.no
+base_dn=dc=uib,dc=no
+
+[log]
+path=./
