@@ -10,6 +10,11 @@ source bin/activate
 
 ## Development
 
+You will need to install some OS packages. Example for packages
+needed for CentOS 7 can be found here:
+
+https://github.com/norcams/ansible/blob/master/lib/deploy_himlarcli.yaml
+
 Use virtualenv with global site packages:
 
 ```bash
