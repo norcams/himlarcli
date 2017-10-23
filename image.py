@@ -253,13 +253,11 @@ def action_test():
                 timeout -= 5
                 server = novaclient.get_instance(server.id)
             if timeout <= 0:
-                print '* Could not start instance from image %s in %s seconds' %
-                    (image.name, timeout)
+                print '* Could not start instance from image %s in %s seconds' % (image.name, timeout)
             if server.addresses:
                 for net in server.addresses[network]:
                     ip = IP(net['addr'])
-                    print '* Instance startet with IPv%s %s (%s)' %
-                        (net['version'], ip, ip.iptype())
+                    print '* Instance startet with IPv%s %s (%s)' % (net['version'], ip, ip.iptype())
             try:
                 server.delete()
                 print '* Instance deleted'
