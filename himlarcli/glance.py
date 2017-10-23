@@ -143,5 +143,13 @@ class Glance(Client):
             self.logger.critical('Upload of %s failed' % self.image.name)
             sys.exit(1)
 
+    @staticmethod
+    def find_optimal_flavor(image, flavors):
+        # If the flavors are sorted by size this will work
+        for flavor in flavors:
+            if flavor.ram >= image['min_ram'] and flavor.disk >= image['min_disk']:
+                return flavor
+        return None
+
     def __get_images(self):
         self.images = self.client.images.list()
