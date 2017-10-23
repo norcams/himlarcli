@@ -31,6 +31,16 @@ class Nova(Client):
             self.ksclient = keystoneclient.Client(session=self.sess,
                                                   region_name=self.region)
         return self.ksclient
+# =============================== SERVER ======================================
+
+    def create_server(self, name, flavor, image_id, **kwargs):
+        """ Create a server. Server will be crated by the user and project
+            used in config.ini (default admin and openstack) """
+        server = self.client.servers.create(name=name,
+                                            flavor=flavor,
+                                            image=image_id,
+                                            **kwargs)
+        return server
 
 # =============================== HOSTS =======================================
     def get_hosts(self, zone=None):
@@ -112,6 +122,9 @@ class Nova(Client):
         return emails
 
 # ============================== INSTANCES ====================================
+
+    def get_instance(self, server_id):
+        return self.client.servers.get(server=server_id)
 
     def get_all_instances(self, search_opts=None):
         if not search_opts:
@@ -298,7 +311,12 @@ class Nova(Client):
 
 
     def get_flavors(self, filters=None):
-        flavors = self.client.flavors.list(detailed=True, is_public=None)
+        # Setting sort_key=id and sort_dir='desc' seem to sort by flavor size!
+        # DO NOT TRUST THIS SORTING
+        flavors = self.client.flavors.list(detailed=True,
+                                           is_public=None,
+                                           sort_key='id',
+                                           sort_dir='desc')
         flavors_filtered = list()
         if filters:
             for flavor in flavors:
