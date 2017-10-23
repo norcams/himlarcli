@@ -4,6 +4,8 @@
 
 import sys
 import os
+import time
+from IPy import IP
 from datetime import datetime
 from himlarcli import utils as himutils
 from himlarcli.keystone import Keystone
@@ -229,6 +231,42 @@ def create_image(name, source_path, image, image_type):
         result = None
     logger.debug('=> %s' % log_msg)
     return result
+
+def action_test():
+    novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
+    filters = {'visibility': options.visibility, 'tag': tags}
+    logger.debug('=> filter: %s' % filters)
+    images = glclient.get_images(filters=filters)
+    flavors = novaclient.get_flavors('m1')
+    networks = ['public']
+    for image in images:
+        for network in networks:
+            print '* Create instance from %s with network %s' % (image.name, network)
+            flavor = glclient.find_optimal_flavor(image, flavors)
+            server = novaclient.create_server('test', flavor, image)
+            timeout = 360 # 5 min timeout
+            if not server:
+                continue
+            server = novaclient.get_instance(server.id)
+            while timeout > 0 and server.status == 'BUILD':
+                time.sleep(5)
+                timeout -= 5
+                server = novaclient.get_instance(server.id)
+            if timeout <= 0:
+                print '* Could not start instance from image %s in %s seconds' %
+                    (image.name, timeout)
+            if server.addresses:
+                for net in server.addresses[network]:
+                    ip = IP(net['addr'])
+                    print '* Instance startet with IPv%s %s (%s)' %
+                        (net['version'], ip, ip.iptype())
+            try:
+                server.delete()
+                print '* Instance deleted'
+            except:
+                pass
+            print '-------------------------------------------------------------'
+            #print server.to_dict()
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

@@ -7,6 +7,7 @@ actions:
   'usage':    'Check image usage'
   'purge':    'Delete images'
   'grant':    'Grant access to private image from project'
+  'test':     'Create instances base on images'
 opt_args:
   '--region':
     'dest':     'region'
@@ -29,11 +30,11 @@ opt_args:
     'help':     'config file under config/images/'
     'default':  'default.yaml'
   '-n':
-    'sub':      ['update', 'grant']
+    'sub':      ['update', 'grant', 'test']
     'dest':     'name'
     'help':     'only use image with this name (use short name)'
   '-t':
-    'sub':      ['usage', 'purge', 'list', 'grant']
+    'sub':      ['usage', 'purge', 'list', 'grant', 'test']
     'dest':     'type'
     'help':     'image type'
     'default':  'gold'
@@ -44,7 +45,7 @@ opt_args:
     'help':     'project name to grant access to'
     'required': true
   '-v':
-    'sub':      ['usage', 'purge', 'list']
+    'sub':      ['usage', 'purge', 'list', 'test']
     'dest':     'visibility'
     'help':     'image visibility'
     'default':  'public'
