@@ -281,6 +281,9 @@ def action_test():
                     ip = IP(net['addr'])
                     print ('* Instance started with IPv%s %s (%s)' %
                            (net['version'], ip, ip.iptype()))
+                    if ip.iptype() == 'ALLOCATED RIPE NCC':
+                        print ('* Drop connection check for IPv6 for now')
+                        continue
                     timeout = 90
                     port = False
                     while timeout > 0 and not port:
