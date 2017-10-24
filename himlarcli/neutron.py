@@ -63,7 +63,7 @@ class Neutron(Client):
         if not networks:
             return list()
         for network in networks['networks']:
-            network_list.append(network['name'])
+            network_list.append(network)
         return network_list
 
 # ==================================== QUOTA ==================================
