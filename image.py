@@ -277,18 +277,23 @@ def action_test():
                 print '* Instance started after %s sec' % used_time
             if server.addresses:
                 for net in server.addresses[network['name']]:
+                    starttime = int(time.time())
                     ip = IP(net['addr'])
                     print ('* Instance started with IPv%s %s (%s)' %
                            (net['version'], ip, ip.iptype()))
-                    timeout = 60
+                    timeout = 90
                     port = False
                     while timeout > 0 and not port:
-                        port = himutils.check_port(address=str(ip), port=22, timeout=5, log=logger)
-                        timeout -= 5
+                        start = int(time.time())
+                        port = himutils.check_port(address=str(ip), port=22, timeout=2, log=logger)
+                        time.sleep(3)
+                        timeout -= (int(time.time()) - start)
+                    used_time = int(time.time()) - starttime
                     if port:
                         print '* Port 22 open on %s (%s)' % (ip, ip.iptype())
                     else:
-                        print '* Unable to reach port 22 on %s (%s)' % (ip, ip.iptype())
+                        print ('* Unable to reach port 22 on %s after %s sec (%s)'
+                               % (ip, used_time, ip.iptype()))
             else:
                 print '* No IP found for instances %s' % server.name
             try:
