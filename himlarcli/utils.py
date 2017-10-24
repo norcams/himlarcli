@@ -19,13 +19,13 @@ def sys_error(text, code=1):
         sys.exit(code)
 
 def check_port(address, port, timeout=60, log=None):
-    s = socket.socket()
-    s.settimeout(timeout)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(timeout)
     try:
-        s.connect((address, int(port)))
+        sock.connect((address, int(port)))
         if log:
             log.debug("=> Connected to %s on port %s" % (address, port))
-        s.shutdown(2)
+        sock.close()
         return True
     except socket.error, e:
         if log:
