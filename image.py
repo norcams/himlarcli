@@ -282,7 +282,10 @@ def action_test():
                     print ('* Instance started with IPv%s %s (%s)' %
                            (net['version'], ip, ip.iptype()))
                     if ip.iptype() == 'ALLOCATED RIPE NCC':
-                        print ('* Drop connection check for IPv6 for now')
+                        print '* Drop connection check for IPv6 for now'
+                        continue
+                    elif ip.iptype() == 'PRIVATE':
+                        print '* Drop connection check for rfc1918 address for now'
                         continue
                     timeout = 90
                     port = False
