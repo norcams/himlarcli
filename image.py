@@ -11,6 +11,7 @@ from himlarcli import utils as himutils
 from himlarcli.keystone import Keystone
 from himlarcli.glance import Glance
 from himlarcli.nova import Nova
+from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 
@@ -234,35 +235,58 @@ def create_image(name, source_path, image, image_type):
 
 def action_test():
     novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
+    neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=options.region)
     filters = {'visibility': options.visibility, 'tag': tags}
     logger.debug('=> filter: %s' % filters)
     images = glclient.get_images(filters=filters)
     flavors = novaclient.get_flavors('m1')
-    networks = ['public']
+    networks = neutronclient.list_networks()
+    secgroup_name = 'image_test-' + str(int(time.time()))
+    secgroup = neutronclient.create_security_port_group(secgroup_name, 22)
     for image in images:
         for network in networks:
+            starttime = int(time.time())
             print '* Create instance from %s with network %s' % (image.name, network)
             flavor = glclient.find_optimal_flavor(image, flavors)
-            server = novaclient.create_server('test', flavor, image)
-            timeout = 360 # 5 min timeout
+            logger.debug('=> use %s flavor' % flavor.name)
+            server = novaclient.create_server(name='image_test'+ str(int(time.time())),
+                                              flavor=flavor,
+                                              image_id=image.id,
+                                              security_groups=[secgroup['name']])
+            timeout = 300 # 5 min timeout
             if not server:
                 continue
             server = novaclient.get_instance(server.id)
             while timeout > 0 and server.status == 'BUILD':
-                time.sleep(5)
-                timeout -= 5
+                time.sleep(2)
+                timeout -= 2
                 server = novaclient.get_instance(server.id)
             if timeout <= 0:
-                print '* Could not start instance from image %s in %s seconds' % (image.name, timeout)
+                print ('* Could not start instance from image %s in %s seconds' %
+                       (image.name, timeout))
+            if server.status == 'ERROR':
+                print '* Instances started with error'
+                print server.fault
             if server.addresses:
                 for net in server.addresses[network]:
                     ip = IP(net['addr'])
-                    print '* Instance startet with IPv%s %s (%s)' % (net['version'], ip, ip.iptype())
+                    used_time = int(time.time()) - starttime
+                    print ('* Instance startet after %s sec with IPv%s %s (%s)' %
+                           (used_time, net['version'], ip, ip.iptype()))
+                    port = himutils.check_port(address=str(ip), port=22, log=logger)
+                    if port:
+                        print '* Port 22 open on %s (%s)' % (ip, ip.iptype())
+                    else:
+                        print '* Unable to reach port 22 on %s (%s)' % (ip, ip.iptype())
+            else:
+                print '* No IP found for instances %s' % server.name
             try:
                 server.delete()
+                time.sleep(3)
                 print '* Instance deleted'
             except:
-                pass
+                himutils.sys_error('error!!!')
+            neutronclient.delete_security_group(secgroup['id'])
             print '-------------------------------------------------------------'
             #print server.to_dict()
 
