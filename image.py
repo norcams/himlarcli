@@ -278,9 +278,13 @@ def action_test():
             if server.addresses:
                 for net in server.addresses[network['name']]:
                     ip = IP(net['addr'])
-                    print ('* Instance startet with IPv%s %s (%s)' %
+                    print ('* Instance started with IPv%s %s (%s)' %
                            (net['version'], ip, ip.iptype()))
-                    port = himutils.check_port(address=str(ip), port=22, log=logger)
+                    timeout = 60
+                    port = False
+                    while timeout > 0 and not port:
+                        port = himutils.check_port(address=str(ip), port=22, timeout=5, log=logger)
+                        timeout -= 5
                     if port:
                         print '* Port 22 open on %s (%s)' % (ip, ip.iptype())
                     else:

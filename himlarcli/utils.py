@@ -22,9 +22,10 @@ def check_port(address, port, timeout=60, log=None):
     s = socket.socket()
     s.settimeout(timeout)
     try:
-        s.connect((address, port))
+        s.connect((address, int(port)))
         if log:
             log.debug("=> Connected to %s on port %s" % (address, port))
+        s.shutdown(2)
         return True
     except socket.error, e:
         if log:
