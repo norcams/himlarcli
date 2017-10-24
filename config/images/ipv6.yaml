@@ -67,14 +67,14 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
-  'fedora_26':
-    'name':             'IPv6 Fedora 26'
-    'depricated':       'Outdated (Fedora)'
-    'url':              'http://builder/ipv6/'
-    'latest':           'fedora_26-latest.qcow2'
-    'min_ram':          1024
-    'min_disk':         8
-    'visibility':       'private'
-    'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+#  'fedora_26':
+#    'name':             'IPv6 Fedora 26'
+#    'depricated':       'Outdated (Fedora)'
+#    'url':              'http://builder/ipv6/'
+#    'latest':           'fedora_26-latest.qcow2'
+#    'min_ram':          1024
+#    'min_disk':         8
+#    'visibility':       'private'
+#    'properties':
+#      'hw_disk_bus':    'scsi'
+#      'hw_scsi_model':  'virtio-scsi'
