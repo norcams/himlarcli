@@ -56,17 +56,6 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
-  'winsrv2016std':
-    'name':             'IPv6 Windows Server 2016 Standard'
-    'depricated':       'Outdated (Windows)'
-    'url':              'http://genisys.uib.no/images/'
-    'latest':           'win2016-server.qcow2'
-    'min_ram':          4090
-    'min_disk':         39
-    'visibility':       'private'
-    'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
 #  'fedora_26':
 #    'name':             'IPv6 Fedora 26'
 #    'depricated':       'Outdated (Fedora)'
