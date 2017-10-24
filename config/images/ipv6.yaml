@@ -63,7 +63,7 @@ images:
     'latest':           'win2016-server.qcow2'
     'min_ram':          4090
     'min_disk':         39
-    'visibility':       'public'
+    'visibility':       'private'
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
