@@ -245,6 +245,8 @@ def action_test():
     secgroup = neutronclient.create_security_port_group(secgroup_name, 22)
     for image in images:
         for network in networks:
+            if network['name'] == 'imagebuilder':
+                continue
             starttime = int(time.time())
             print '* Create instance from %s with network %s' % (image.name, network['name'])
             flavor = glclient.find_optimal_flavor(image, flavors)
@@ -268,14 +270,16 @@ def action_test():
                 print ('* Could not start instance from image %s in %s seconds' %
                        (image.name, timeout))
             if server.status == 'ERROR':
-                print '* Instances started with error'
+                print '* Instance started with error'
                 print server.fault
+            else:
+                used_time = int(time.time()) - starttime
+                print '* Instance started after %s sec' % used_time
             if server.addresses:
                 for net in server.addresses[network['name']]:
                     ip = IP(net['addr'])
-                    used_time = int(time.time()) - starttime
-                    print ('* Instance startet after %s sec with IPv%s %s (%s)' %
-                           (used_time, net['version'], ip, ip.iptype()))
+                    print ('* Instance startet with IPv%s %s (%s)' %
+                           (net['version'], ip, ip.iptype()))
                     port = himutils.check_port(address=str(ip), port=22, log=logger)
                     if port:
                         print '* Port 22 open on %s (%s)' % (ip, ip.iptype())
