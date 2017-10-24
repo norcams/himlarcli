@@ -1,8 +1,8 @@
 from client import Client
 from novaclient import client as novaclient
+import novaclient.exceptions as exceptions
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as keyexc
-from novaclient.exceptions import NotFound
 from datetime import datetime, date
 import urllib2
 import json
@@ -36,10 +36,14 @@ class Nova(Client):
     def create_server(self, name, flavor, image_id, **kwargs):
         """ Create a server. Server will be crated by the user and project
             used in config.ini (default admin and openstack) """
-        server = self.client.servers.create(name=name,
-                                            flavor=flavor,
-                                            image=image_id,
-                                            **kwargs)
+        try:
+            server = self.client.servers.create(name=name,
+                                                flavor=flavor,
+                                                image=image_id,
+                                                **kwargs)
+        except exceptions.Conflict as e:
+            self.sys_error(e, 0)
+            server = None
         return server
 
 # =============================== HOSTS =======================================
