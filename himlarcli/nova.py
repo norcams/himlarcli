@@ -41,8 +41,8 @@ class Nova(Client):
                                                 flavor=flavor,
                                                 image=image_id,
                                                 **kwargs)
-        except (exceptions.Conflict,exceptions.Forbidden) as e:
-            self.sys_error(e, 0)
+        except (exceptions.Conflict, exceptions.Forbidden) as e:
+            self.log_error(e)
             server = None
         return server
 
