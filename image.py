@@ -246,13 +246,16 @@ def action_test():
     for image in images:
         for network in networks:
             starttime = int(time.time())
-            print '* Create instance from %s with network %s' % (image.name, network)
+            print '* Create instance from %s with network %s' % (image.name, network['name'])
             flavor = glclient.find_optimal_flavor(image, flavors)
             logger.debug('=> use %s flavor' % flavor.name)
+            nics = list()
+            nics.append({'net-id': network['id']})
             server = novaclient.create_server(name='image_test'+ str(int(time.time())),
                                               flavor=flavor,
                                               image_id=image.id,
-                                              security_groups=[secgroup['name']])
+                                              security_groups=[secgroup['id']],
+                                              nics=nics)
             timeout = 300 # 5 min timeout
             if not server:
                 continue
@@ -268,7 +271,7 @@ def action_test():
                 print '* Instances started with error'
                 print server.fault
             if server.addresses:
-                for net in server.addresses[network]:
+                for net in server.addresses[network['name']]:
                     ip = IP(net['addr'])
                     used_time = int(time.time()) - starttime
                     print ('* Instance startet after %s sec with IPv%s %s (%s)' %
