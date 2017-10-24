@@ -293,9 +293,9 @@ def action_test():
                 print '* Instance deleted'
             except:
                 himutils.sys_error('error!!!')
-            neutronclient.delete_security_group(secgroup['id'])
             print '-------------------------------------------------------------'
-            #print server.to_dict()
+    print '* Delete security group'
+    neutronclient.delete_security_group(secgroup['id'])
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
