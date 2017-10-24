@@ -11,12 +11,25 @@ import functools
 import urllib
 import urllib2
 from string import Template
-
+import socket
 
 def sys_error(text, code=1):
     sys.stderr.write("%s\n" % text)
     if code > 0:
         sys.exit(code)
+
+def check_port(address, port, timeout=60, log=None):
+    s = socket.socket()
+    s.settimeout(timeout)
+    try:
+        s.connect((address, port))
+        if log:
+            log.debug("=> Connected to %s on port %s" % (address, port))
+        return True
+    except socket.error, e:
+        if log:
+            log.debug("=> Connection to %s on port %s failed: %s" % (address, port, e))
+        return False
 
 def confirm_action(question):
     question = "%s (yes|no)? " % question
