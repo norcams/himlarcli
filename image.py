@@ -251,68 +251,74 @@ def action_test():
         for network in networks:
             if network['name'] == 'imagebuilder':
                 continue
-            starttime = int(time.time())
-            print '* Create instance from %s with network %s' % (image.name, network['name'])
-            flavor = glclient.find_optimal_flavor(image, flavors)
-            logger.debug('=> use %s flavor' % flavor.name)
-            nics = list()
-            nics.append({'net-id': network['id']})
-            server = novaclient.create_server(name='image_test'+ str(int(time.time())),
-                                              flavor=flavor,
-                                              image_id=image.id,
-                                              security_groups=[secgroup['id']],
-                                              nics=nics)
-            timeout = 300 # 5 min timeout
-            if not server:
-                continue
-            server = novaclient.get_instance(server.id)
-            while timeout > 0 and server.status == 'BUILD':
-                time.sleep(2)
-                timeout -= 2
-                server = novaclient.get_instance(server.id)
-            if timeout <= 0:
-                print ('* Could not start instance from image %s in %s seconds' %
-                       (image.name, timeout))
-            if server.status == 'ERROR':
-                print '* Instance started with error'
-                print server.fault
-            else:
-                used_time = int(time.time()) - starttime
-                print '* Instance started after %s sec' % used_time
-            if server.addresses:
-                for net in server.addresses[network['name']]:
-                    starttime = int(time.time())
-                    ip = IP(net['addr'])
-                    print ('* Instance started with IPv%s %s (%s)' %
-                           (net['version'], ip, ip.iptype()))
-                    if ip.iptype() == 'ALLOCATED RIPE NCC':
-                        print '* Drop connection check for IPv6 for now'
-                        continue
-                    elif ip.iptype() == 'PRIVATE':
-                        print '* Drop connection check for rfc1918 address for now'
-                        continue
-                    timeout = 90
-                    port = False
-                    while timeout > 0 and not port:
-                        start = int(time.time())
-                        port = himutils.check_port(address=str(ip), port=22, timeout=2, log=logger)
-                        time.sleep(3)
-                        timeout -= (int(time.time()) - start)
-                    used_time = int(time.time()) - starttime
-                    if port:
-                        print '* Port 22 open on %s (%s)' % (ip, ip.iptype())
-                    else:
-                        print ('* Unable to reach port 22 on %s after %s sec (%s)'
-                               % (ip, used_time, ip.iptype()))
-            else:
-                print '* No IP found for instances %s' % server.name
             try:
-                server.delete()
-                time.sleep(3)
-                print '* Instance deleted'
-            except:
-                himutils.sys_error('error!!!')
-            print '-------------------------------------------------------------'
+                starttime = int(time.time())
+                print '* Create instance from %s with network %s' % (image.name, network['name'])
+                flavor = glclient.find_optimal_flavor(image, flavors)
+                logger.debug('=> use %s flavor' % flavor.name)
+                nics = list()
+                nics.append({'net-id': network['id']})
+                server = novaclient.create_server(name='image_test'+ str(int(time.time())),
+                                                  flavor=flavor,
+                                                  image_id=image.id,
+                                                  security_groups=[secgroup['id']],
+                                                  nics=nics)
+                timeout = 300 # 5 min timeout
+                if not server:
+                    continue
+                server = novaclient.get_instance(server.id)
+                while timeout > 0 and server.status == 'BUILD':
+                    time.sleep(2)
+                    timeout -= 2
+                    server = novaclient.get_instance(server.id)
+                if timeout <= 0:
+                    print ('* Could not start instance from image %s in %s seconds' %
+                           (image.name, timeout))
+                if server.status == 'ERROR':
+                    print '* Instance started with error'
+                    print server.fault
+                else:
+                    used_time = int(time.time()) - starttime
+                    print '* Instance started after %s sec' % used_time
+                if server.addresses:
+                    for net in server.addresses[network['name']]:
+                        starttime = int(time.time())
+                        ip = IP(net['addr'])
+                        print ('* Instance started with IPv%s %s (%s)' %
+                               (net['version'], ip, ip.iptype()))
+                        if ip.iptype() == 'ALLOCATED RIPE NCC':
+                            print '* Drop connection check for IPv6 for now'
+                            continue
+                        elif ip.iptype() == 'PRIVATE':
+                            print '* Drop connection check for rfc1918 address for now'
+                            continue
+                        timeout = 90
+                        port = False
+                        while timeout > 0 and not port:
+                            start = int(time.time())
+                            port = himutils.check_port(address=str(ip), port=22, timeout=2, log=logger)
+                            time.sleep(3)
+                            timeout -= (int(time.time()) - start)
+                        used_time = int(time.time()) - starttime
+                        if port:
+                            print '* Port 22 open on %s (%s)' % (ip, ip.iptype())
+                        else:
+                            print ('* Unable to reach port 22 on %s after %s sec (%s)'
+                                   % (ip, used_time, ip.iptype()))
+                else:
+                    print '* No IP found for instances %s' % server.name
+                try:
+                    server.delete()
+                    time.sleep(3)
+                    print '* Instance deleted'
+                except:
+                    himutils.sys_error('error!!!')
+                print '-------------------------------------------------------------'
+            except KeyboardInterrupt:
+                if server:
+                    server.delete()
+                    time.sleep(5)
+                    print '* Instance deleted'
     print '* Delete security group'
     neutronclient.delete_security_group(secgroup['id'])
 
