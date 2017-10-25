@@ -244,6 +244,10 @@ def action_test():
     secgroup_name = 'image_test-' + str(int(time.time()))
     secgroup = neutronclient.create_security_port_group(secgroup_name, 22)
     for image in images:
+        if options.name and options.name not in image.tags:
+            logger.debug('=> dropped: image name %s not in tags %s', options.name,
+                         ', '.join(image.tags))
+            continue
         for network in networks:
             if network['name'] == 'imagebuilder':
                 continue
