@@ -176,14 +176,14 @@ def action_convert():
     project_name = options.project.lower().replace('@', '.')
     project_name = 'PRIVATE-%s' % project_name
 
-    update = ksclient.update_project(project_id=project.id,
-                                     project_name=project_name,
-                                     description=desc,
-                                     type=project_type,
-                                     notify=notify,
-                                     admin=admin,
-                                     test=test)
-    print update
+    ksclient.update_project(project_id=project.id,
+                            project_name=project_name,
+                            description=desc,
+                            type=project_type,
+                            notify=notify,
+                            admin=admin,
+                            test=test)
+    printer.output_dict({'Converted project': options.project})
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
