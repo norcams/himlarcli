@@ -171,6 +171,7 @@ def action_convert():
     desc = 'Personal project for %s' % options.project
     admin = options.project
     notify = 'converted'
+    project_type = 'perosnal'
     test = 0
     project_name = options.project.lower().replace('@', '.')
     project_name = 'PRIVATE-%s' % project_name
@@ -178,6 +179,7 @@ def action_convert():
     update = ksclient.update_project(project_id=project.id,
                                      project_name=project_name,
                                      description=desc,
+                                     type=project_type,
                                      notify=notify,
                                      admin=admin,
                                      test=test)
