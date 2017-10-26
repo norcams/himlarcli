@@ -104,7 +104,7 @@ def action_notify():
     printer.output_dict({'Personal projects': count})
 
 def action_validate():
-    valid_projects = ['demo', 'research', 'education', 'admin', 'test']
+    valid_projects = ['personal', 'demo', 'research', 'education', 'admin', 'test']
     projects = ksclient.get_projects(domain=options.domain)
     # validate all projects
     printer.output_dict({'header': 'Projects with failed validation'})
@@ -160,6 +160,28 @@ def action_validate():
             count += 1
             printer.output_dict(output_user, sort=True, one_line=True)
     printer.output_dict({'Users without demo project': count})
+
+def action_convert():
+    project = ksclient.get_project_by_name(options.project, options.domain)
+    if not project:
+        himutils.sys_error('No project found with name %s' % options.project)
+    if not hasattr(project, 'notify'):
+        himutils.sys_error('Project not old personal project %s (missing notify)'
+                           % options.project)
+    desc = 'Personal project for %s' % options.project
+    admin = options.project
+    notify = 'converted'
+    test = 0
+    project_name = options.project.lower().replace('@', '.')
+    project_name = 'PRIVATE-%s' % project_name
+
+    update = ksclient.update_project(project_id=project.id,
+                                     project_name=project_name,
+                                     description=desc,
+                                     notify=notify,
+                                     admin=admin,
+                                     test=test)
+    print update
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
