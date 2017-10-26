@@ -171,7 +171,7 @@ def action_convert():
     desc = 'Personal project for %s' % options.project
     admin = options.project
     notify = 'converted'
-    project_type = 'perosnal'
+    project_type = 'personal'
     test = 0
     project_name = options.project.lower().replace('@', '.')
     project_name = 'PRIVATE-%s' % project_name
