@@ -92,7 +92,7 @@ def action_notify():
 
             sent_email = himutils.load_file('temp_email.txt', log=ksclient.get_logger())
             if user.email in sent_email:
-                himutils.sys_error('%s email sent, dropping' % user.email)
+                himutils.sys_error('%s email sent, dropping' % user.email, 0)
                 continue
             #ksclient.update_project(project_id=project.id, notify=delete_date)
             #mapping = dict(region=region.upper(), project=project.name)
