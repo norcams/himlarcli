@@ -60,8 +60,8 @@ def action_notify():
     projects = ksclient.get_projects(domain=options.domain)
     count = 0
     for project in projects:
-        if hasattr(project, 'notify'):
-            himutils.sys_error('user %s allready notified %s' % (project.name, project.notify), 0)
+        if hasattr(project, 'notify') and project.notify == 'converted':
+            himutils.sys_error('personal project %s converted' % (project.name), 0)
             continue
         found = False
         if hasattr(project, 'type') and project.type == 'personal':
@@ -73,7 +73,7 @@ def action_notify():
             count += 1
             found = True
         if found:
-            if not '@' in project.name:
+            if '@' not in project.name:
                 himutils.sys_error('unable to find email for project %s' % project.name, 0)
                 continue
             user = ksclient.get_user_by_email(project.name, 'api', options.domain)
@@ -92,7 +92,7 @@ def action_notify():
             ksclient.update_project(project_id=project.id, notify=delete_date)
             #mapping = dict(region=region.upper(), project=project.name)
             mapping = {'personal': project.name, 'date': delete_date, 'demo': demo_project.name}
-            body_content = himutils.load_template(inputfile='misc/notify_demo.txt',
+            body_content = himutils.load_template(inputfile='misc/notify_demo2.txt',
                                                   mapping=mapping,
                                                   log=logger)
             subject = ('[UH-IaaS] Your personal project will be deleted')
