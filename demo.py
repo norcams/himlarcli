@@ -89,6 +89,11 @@ def action_notify():
                 himutils.sys_error('unable to find demo project for %s' % user.name, 0)
                 continue
             delete_date = '2017-10-31'
+
+            sent_email = himutils.load_file('temp_email.txt', log=ksclient.get_logger())
+            if user.email in sent_email:
+                imutils.sys_error('%s email sent, dropping' % user.email)
+                continue
             #ksclient.update_project(project_id=project.id, notify=delete_date)
             #mapping = dict(region=region.upper(), project=project.name)
             mapping = {'personal': project.name, 'date': delete_date, 'demo': demo_project.name}
