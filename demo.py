@@ -89,7 +89,7 @@ def action_notify():
                 himutils.sys_error('unable to find demo project for %s' % user.name, 0)
                 continue
             delete_date = '2017-10-31'
-            ksclient.update_project(project_id=project.id, notify=delete_date)
+            #ksclient.update_project(project_id=project.id, notify=delete_date)
             #mapping = dict(region=region.upper(), project=project.name)
             mapping = {'personal': project.name, 'date': delete_date, 'demo': demo_project.name}
             body_content = himutils.load_template(inputfile='misc/notify_demo2.txt',
