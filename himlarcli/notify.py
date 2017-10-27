@@ -23,7 +23,10 @@ class Notify(object):
         from_addr = self.get_config('mail', 'from_addr')
         msg['From'] = from_addr
         msg['To'] = toaddr
-        self.server.sendmail(from_addr, toaddr, msg.as_string())
+        try:
+            self.server.sendmail(from_addr, toaddr, msg.as_string())
+        except smtplib.SMTPRecipientsRefused as e:
+            self.log_error(e)
 
     def close(self):
         self.server.quit()
@@ -87,6 +90,12 @@ class Notify(object):
                 log_msg = 'DRY-RUN: ' + log_msg
             self.logger.debug('=> %s', log_msg)
         return users
+
+    @staticmethod
+    def log_error(msg, code=0):
+        sys.stderr.write("%s\n" % msg)
+        if code > 0:
+            sys.exit(code)
 
     @staticmethod
     def __get_user_email(user):
