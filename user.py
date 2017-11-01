@@ -59,30 +59,34 @@ def action_rename():
     if not ksclient.is_valid_user(email=options.old, domain=domain):
         print "%s is not a valid user. Please check your spelling or case." % options.old
         sys.exit(1)
+    obj = ksclient.get_user_objects(email=options.old, domain=domain)
+    print obj['projects']
+    new_demo_project = ksclient.get_project_name(options.new)
+    old_demo_project = ksclient.get_project_name(options.old)
     print "\nYou are about to rename user with email %s to %s" % (options.old, options.new)
     print "\nWhen a user changes affilation we need to change the following:"
     print " * Delete %s-group if it exists" % options.new
     print " * Delete %s api user if it exists" % options.new.lower()
     print " * Delete %s dataporten user if it exists" % options.new.lower()
-    print " * Delete %s demo/personal project if it exists" % options.new.lower()
-    print " * Delete %s instances in demo/personal project if it exists" % options.new.lower()
-    print " * !!! DELETE OLD DATAPORTEN USER %s !!!" % (options.old)
+    print " * Delete all personal project for user %s" % options.new.lower()
+    print " * Delete %s demo project" % new_demo_project
+    print " * Delete %s instances in demo project if it exists" % new_demo_project
     print " * Rename group from %s-group to %s-group" % (options.old, options.new)
     print " * Rename api user from %s to %s" % (options.old.lower(), options.new.lower())
-    print " * Rename personal project from %s to %s" % (options.old.lower(), options.new.lower())
-    q = "\nAre you sure you will continue (yes|no)? "
-    answer = raw_input(q)
-    if answer.lower() == 'yes':
-        print 'Please wait...'
-        ksclient.remove_user(email=options.new,
-                             domain=domain,
-                             dry_run=options.dry_run)
-        ksclient.rename_user(new_email=options.new,
-                             old_email=options.old,
-                             domain=domain,
-                             dry_run=options.dry_run)
-    else:
-        print "You just dodged a bullet my friend!"
+    print " * Rename demo project from %s to %s" % (old_demo_project, new_demo_project)
+    print " * Delete old dataporten user %s" % (options.old)
+
+    question = "\nAre you sure you will continue"
+    if not himutils.confirm_action(question):
+        return
+    print 'Please wait...'
+    ksclient.remove_user(email=options.new,
+                         domain=domain,
+                         dry_run=options.dry_run)
+    ksclient.rename_user(new_email=options.new,
+                         old_email=options.old,
+                         domain=domain,
+                         dry_run=options.dry_run)
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=domain):

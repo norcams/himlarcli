@@ -292,11 +292,15 @@ class Keystone(Client):
             self.client.groups.update(group=obj['group'], name='%s-group' % new_email)
         elif dry_run:
             self.logger.debug('=> DRY-RUN: rename group to %s-group' % new_email)
-        # Rename personal project #FIXME demo project
         if not dry_run:
-            self.logger.debug('=> rename project to %s' % new_email)
-            project = self.get_project(project=old_email.lower(), domain=domain)
-            self.client.projects.update(project=project, name=new_email.lower())
+            # Rename old peronal project
+            old_project_name = self.get_project_name(old_email, 'PRIVATE')
+            new_project_name = self.get_project_name(new_email, 'PRIVATE')
+            self.logger.debug('=> rename %s to %s', old_project_name, new_project_name)
+            project = self.get_project_by_name(project_name=old_project_name,
+                                               domain=domain)
+            if project:
+                self.client.projects.update(project=project, name=new_project_name)
         elif dry_run:
             self.logger.debug('=> DRY-RUN: rename project to %s' % new_email)
 
@@ -468,6 +472,12 @@ class Keystone(Client):
             chars = string.ascii_letters + string.digits
         return ''.join(random.choice(chars) for _ in range(size))
 
+    @staticmethod
+    def get_project_name(email, prefix='DEMO'):
+        project_name = email.lower().replace('@', '.')
+        project_name = '%s-%s' % (prefix, project_name)
+        return project_name
+
     def __get_project(self, project, domain=None, user=None):
         projects = self.client.projects.list(domain=domain, user=user)
         for p in projects:
@@ -575,7 +585,7 @@ class Keystone(Client):
 
     @staticmethod
     def __get_uib_email(email):
-        if not email or not 'uib.no' in email or not '@' in email:
+        if not email or 'uib.no' not in email or '@' not in email:
             return email
         (user, domain) = email.split('@')
         return '%s@%s' % (user.title(), domain)
