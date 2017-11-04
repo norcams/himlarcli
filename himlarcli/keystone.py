@@ -379,7 +379,7 @@ class Keystone(Client):
                                                   name=project_name,
                                                   description=description,
                                                   **kwargs)
-            self.logger.debug('=> updated new project %s' % project.name)
+            self.logger.debug('=> updated project %s' % project.name)
         except exceptions.http.BadRequest as e:
             self.log_error(e)
             self.log_error('Project %s not updated' % project_id)
