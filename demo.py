@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import time
 from himlarcli.keystone import Keystone
+from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.notify import Notify
@@ -15,6 +16,14 @@ printer = Printer(options.format)
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
 logger = ksclient.get_logger()
+
+if hasattr(options, 'region'):
+    regions = ksclient.find_regions(region_name=options.region)
+else:
+    regions = ksclient.find_regions()
+
+if not regions:
+    himutils.sys_error('no valid regions found!')
 
 
 def action_create():
@@ -49,6 +58,59 @@ def action_create():
             count += 1
             printer.output_dict(output_user, sort=True, one_line=True)
     printer.output_dict({'Users without demo project': count})
+
+def action_disable():
+    projects = ksclient.get_projects(domain=options.domain)
+    project_list = list()
+    for project in projects:
+        found = False
+        if hasattr(project, 'notify') and project.notify == 'converted':
+            logger.debug('=> keep personal project. %s converted', project.name)
+            continue
+        if not project.enabled:
+            logger.debug('=> personal project %s already disabled', project.name)
+            continue
+
+        if (hasattr(project, 'type') and project.type == 'personal'
+                and 'PRIVATE' not in project.name):
+            print "%s (new old personal project)" % project.name
+            found = True
+        elif '@' in project.name and not hasattr(project, 'type'):
+            print "%s (old old personal project)" % project.name
+            found = True
+        #else:
+        #    logger.debug('=> project %s not old personal', project.name)
+        if found:
+            project_list.append(project)
+    if len(project_list) == 0:
+        print 'No project to disable'
+        return
+    question = 'Disable all personal project in list above'
+    if options.dry_run:
+        question = 'DRY-RUN: %s' % question
+    if not himutils.confirm_action(question):
+        return
+    for project in project_list:
+        # stop instances
+        for region in regions:
+            novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
+            instances = novaclient.get_project_instances(project.id)
+            for instance in instances:
+                if not options.dry_run:
+                    if instance.status == 'ACTIVE':
+                        instance.stop()
+                        logger.debug('=> stop instance %s' % instance.name)
+                        time.sleep(2)
+                else:
+                    logger.debug('=> DRY-RUN: stop instance %s' % instance.name)
+        # disable project
+        if not options.dry_run:
+            ksclient.update_project(project_id=project.id, enabled=False)
+            print 'Disable project %s' % project.name
+        else:
+            print 'DRY-RUN: disable project %s' % project.name
+
+
 
 def action_notify():
     question = 'Send mail to all users about demo projects'

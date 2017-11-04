@@ -5,6 +5,7 @@ actions:
   'notify':   'Notify users and tag personal project for removal'
   'convert':  'Rename and tag an old personal project to a new valid one'
   'validate': 'Check that all users have demo project and old personal projects are removed'
+  'disable':  'Disable old personal project and stop running instances in project'
 opt_args:
   '--domain':
     'dest':     'domain'
