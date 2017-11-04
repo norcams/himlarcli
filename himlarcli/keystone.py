@@ -288,8 +288,9 @@ class Keystone(Client):
             self.logger.debug('=> DRY-RUN: delete old dataporten user %s' % old_email)
         # Rename group
         if not dry_run and 'group' in obj and obj['group']:
-            self.logger.debug('=> rename group to %s-group' % new_email)
-            self.client.groups.update(group=obj['group'], name='%s-group' % new_email)
+            new_group_mail = self.__get_group_name(self.__get_uib_email(new_email))
+            self.logger.debug('=> rename group to %s' % new_group_mail)
+            self.client.groups.update(group=obj['group'], name='%s' % new_group_mail)
         elif dry_run:
             self.logger.debug('=> DRY-RUN: rename group to %s-group' % new_email)
         if not dry_run:
