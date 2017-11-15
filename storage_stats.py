@@ -22,17 +22,27 @@ def action_disabled():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         instances = novaclient.get_instances()
-        printer.output_dict({'header': '%s: Instances in disabled project (name, project, state)'
+        printer.output_dict({'header': '%s: Instances in disabled project (host, name, project)'
                                        % region})
+        groups = {'group1': 0, 'group2': 0, 'group3': 0}
         count = 0
         for i in instances:
             project = ksclient.get_by_id('project', i.tenant_id)
             if project.enabled:
                 continue
-            output = {'name': i.name, 'project': project.name, 'status': i.status}
+            host = getattr(i, 'OS-EXT-SRV-ATTR:host').split('.')[0]
+            output = {'name': i.name, 'project': project.name, 'status': host}
             printer.output_dict(output, sort=True, one_line=True)
+            if '01' in host or '04' in host:
+                groups['group1'] += 1
+            elif '02' in host or '05' in host:
+                groups['group2'] += 1
+            elif '03' in host or '06' in host:
+                groups['group3'] += 1
             count += 1
-        printer.output_dict({'header': 'Instance count', 'count': count})
+        output = {'header': 'Instance count', 'total': count}
+        output.update(groups)
+        printer.output_dict(output)
 
 def action_nodiscard():
     for region in regions:
