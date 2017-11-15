@@ -33,12 +33,12 @@ def action_disabled():
             count += 1
         printer.output_dict({'header': 'Instance count', 'count': count})
 
-def action_oldimage():
+def action_nodiscard():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         glclient = Glance(options.config, debug=options.debug, log=logger, region=region)
         instances = novaclient.get_instances()
-        printer.output_dict({'header': 'Instances with old image  (image, name, visibility)'})
+        printer.output_dict({'header': 'Instances without discard (image, name, visibility)'})
         count = 0
         for i in instances:
             image = glclient.get_image_by_id(i.image['id'])
