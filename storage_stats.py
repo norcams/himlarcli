@@ -22,7 +22,8 @@ def action_disabled():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         instances = novaclient.get_instances()
-        printer.output_dict({'header': 'Instances in disabled project (name, project, state)'})
+        printer.output_dict({'header': '%s: Instances in disabled project (name, project, state)'
+                                       % region})
         count = 0
         for i in instances:
             project = ksclient.get_by_id('project', i.tenant_id)
@@ -38,7 +39,8 @@ def action_nodiscard():
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         glclient = Glance(options.config, debug=options.debug, log=logger, region=region)
         instances = novaclient.get_instances()
-        printer.output_dict({'header': 'Instances without discard (image, name, visibility)'})
+        printer.output_dict({'header': '%s: Instances without discard (image, name, visibility)'
+                                       % region})
         count = 0
         for i in instances:
             image = glclient.get_image_by_id(i.image['id'])
