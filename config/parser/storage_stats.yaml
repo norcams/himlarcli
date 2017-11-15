@@ -1,0 +1,6 @@
+---
+desc:       'Misc stats for OS-disk storage migration'
+actions:
+  'disabled': 'Show instances in disabled project'
+  'discard':  'Show instances without image with discard support'
+opt_args: {}
