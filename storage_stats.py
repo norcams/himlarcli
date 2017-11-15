@@ -54,7 +54,11 @@ def action_nodiscard():
         count = 0
         for i in instances:
             image = glclient.get_image_by_id(i.image['id'])
-            # Asume that hw_disk_bus == discard
+            # Remove instances in disabled project
+            project = ksclient.get_by_id('project', i.tenant_id)
+            if project.enabled:
+                continue
+            # Assume that hw_disk_bus == discard
             if 'hw_disk_bus' in image:
                 continue
             output = {'name': i.name, 'image': image['name'], 'status': image['visibility']}
