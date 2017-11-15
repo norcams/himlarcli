@@ -24,7 +24,12 @@ class Glance(Client):
         return self.client
 
     def get_image_by_id(self, image_id):
-        return self.client.images.get(image_id)
+        try:
+            image = self.client.images.get(image_id)
+        except exc.HTTPNotFound:
+            image = None
+            self.log_error('Image with ID %s not found!' % image_id)
+        return image
 
     """ Get images.
     To filter use filters dict with key value pairs.

@@ -59,8 +59,12 @@ def action_nodiscard():
             if project.enabled:
                 continue
             # Assume that hw_disk_bus == discard
-            if 'hw_disk_bus' in image:
+            if image and 'hw_disk_bus' in image:
                 continue
+            if not image:
+                image = dict()
+                image['name'] = 'unknown'
+                image['visibility'] = 'unknown'
             output = {'name': i.name, 'image': image['name'], 'status': image['visibility']}
             printer.output_dict(output, sort=True, one_line=True)
             count += 1
