@@ -79,6 +79,7 @@ def action_cleanup():
         question = 'DRY-RUN: %s' % question
     if not himutils.confirm_action(question):
         return
+    count = 0
     for project in project_list:
         # stop instances
         for region in regions:
@@ -87,13 +88,15 @@ def action_cleanup():
             for instance in instances:
                 if instance.status == 'SHUTOFF':
                     if not options.dry_run:
-                        logger.debug('=> delete instance %s' % instance.name)
+                        logger.debug('=> delete instance %s (%s)' % (instance.name. instance.id))
                         instance.delete()
+                        count += 1
                         time.sleep(5)
                 else:
                     himutils.sys_error('instance %s not deleted! (%s)'
                                        % (instance.name, instance.id), 0)
         ksclient.delete_project(project_name=project.name, domain=options.domain)
+    print "Deleted %s instances from %s projects" (count, len(project_list))
 
 def action_disable():
     projects = ksclient.get_projects(domain=options.domain)
@@ -145,8 +148,6 @@ def action_disable():
             print 'Disable project %s' % project.name
         else:
             print 'DRY-RUN: disable project %s' % project.name
-
-
 
 def action_notify():
     question = 'Send mail to all users about demo projects'
