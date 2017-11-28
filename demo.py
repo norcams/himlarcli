@@ -59,6 +59,42 @@ def action_create():
             printer.output_dict(output_user, sort=True, one_line=True)
     printer.output_dict({'Users without demo project': count})
 
+def action_cleanup():
+    projects = ksclient.get_projects(domain=options.domain)
+    project_list = list()
+    for project in projects:
+        # Only list disabled projects
+        if project.enabled:
+            continue
+        if hasattr(project, 'notify'):
+            print "%s (notified=%s)" % (project.name, project.notify)
+        else:
+            print "%s (disabled project)" % project.name
+        project_list.append(project)
+    if len(project_list) == 0:
+        print 'No project to cleanup'
+        return
+    question = 'Cleanup all personal project in list above'
+    if options.dry_run:
+        question = 'DRY-RUN: %s' % question
+    if not himutils.confirm_action(question):
+        return
+    for project in project_list:
+        # stop instances
+        for region in regions:
+            novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
+            instances = novaclient.get_project_instances(project.id)
+            for instance in instances:
+                if instance.status == 'SHUTOFF':
+                    if not options.dry_run:
+                        logger.debug('=> delete instance %s' % instance.name)
+                        instance.delete()
+                        time.sleep(5)
+                else:
+                    himutils.sys_error('instance %s not deleted! (%s)'
+                                       % (instance.name, instance.id), 0)
+        ksclient.delete_project(project_name=project.name, domain=options.domain)
+
 def action_disable():
     projects = ksclient.get_projects(domain=options.domain)
     project_list = list()
@@ -183,6 +219,12 @@ def action_validate():
                 'id': project.id,
                 'name': project.name,
                 'reason': '(missing project type)'
+            }
+        elif not project.enabled:
+            output_project = {
+                'id': project.id,
+                'name': project.name,
+                'reason': '(disabled)'
             }
         elif project.type == 'personal' and '@' in project.name:
             output_project = {
