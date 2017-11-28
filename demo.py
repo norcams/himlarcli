@@ -214,17 +214,17 @@ def action_validate():
     count = 0
     for project in projects:
         output_project = dict()
-        if not hasattr(project, 'type'):
-            output_project = {
-                'id': project.id,
-                'name': project.name,
-                'reason': '(missing project type)'
-            }
-        elif not project.enabled:
+        if not project.enabled:
             output_project = {
                 'id': project.id,
                 'name': project.name,
                 'reason': '(disabled)'
+            }
+        elif not hasattr(project, 'type'):
+            output_project = {
+                'id': project.id,
+                'name': project.name,
+                'reason': '(missing project type)'
             }
         elif project.type == 'personal' and '@' in project.name:
             output_project = {
