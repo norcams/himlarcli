@@ -87,16 +87,16 @@ def action_cleanup():
             instances = novaclient.get_project_instances(project.id)
             for instance in instances:
                 if instance.status == 'SHUTOFF':
+                    count += 1
                     if not options.dry_run:
                         logger.debug('=> delete instance %s (%s)' % (instance.name. instance.id))
                         instance.delete()
-                        count += 1
                         time.sleep(5)
                 else:
                     himutils.sys_error('instance %s not deleted! (%s)'
                                        % (instance.name, instance.id), 0)
         ksclient.delete_project(project_name=project.name, domain=options.domain)
-    print "Deleted %s instances from %s projects" (count, len(project_list))
+    print "Deleted %s instances from %s projects" % (count, len(project_list))
 
 def action_disable():
     projects = ksclient.get_projects(domain=options.domain)
