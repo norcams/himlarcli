@@ -89,7 +89,7 @@ def action_cleanup():
                 if instance.status == 'SHUTOFF':
                     count += 1
                     if not options.dry_run:
-                        logger.debug('=> delete instance %s (%s)' % (instance.name. instance.id))
+                        logger.debug('=> delete instance %s (%s)' % (instance.name, instance.id))
                         instance.delete()
                         time.sleep(5)
                 else:
