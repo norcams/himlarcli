@@ -39,6 +39,14 @@ nodes:
     mac: 18:66:da:82:b5:49
   compute-06:
     mac: 18:66:da:82:be:7a
+  compute-07:
+    mac: 00:0a:f7:79:c5:df
+  compute-08:
+    mac: 00:0a:f7:79:c5:e3
+  compute-09:
+    mac: 00:0a:f7:82:54:23
+  compute-10:
+    mac: 00:0a:f7:79:c5:f3
   console-01:
     compute_profile: 2
     compute_resource: controller-03
