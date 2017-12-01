@@ -236,7 +236,7 @@ def create_image(name, source_path, image, image_type):
 def action_test():
     novaclient = Nova(options.config, debug=options.debug, log=logger, region=options.region)
     neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=options.region)
-    filters = {'visibility': options.visibility, 'tag': tags}
+    filters = {'status': 'active', 'visibility': options.visibility, 'tag': tags}
     logger.debug('=> filter: %s' % filters)
     images = glclient.get_images(filters=filters)
     flavors = novaclient.get_flavors('m1')
@@ -256,7 +256,8 @@ def action_test():
                 print '* Create instance from %s with network %s' % (image.name, network['name'])
                 flavor = glclient.find_optimal_flavor(image, flavors)
                 if not flavor:
-                    print '* could not optimal find flavor for %s' % image.name
+                    print '* Could not optimal find flavor for %s' % image.name
+                    print '-------------------------------------------------------------'
                     continue
                 logger.debug('=> use %s flavor' % flavor.name)
                 nics = list()
@@ -268,6 +269,7 @@ def action_test():
                                                   nics=nics)
                 timeout = 300 # 5 min timeout
                 if not server:
+                    print '-------------------------------------------------------------'
                     continue
                 server = novaclient.get_instance(server.id)
                 while timeout > 0 and server.status == 'BUILD':
