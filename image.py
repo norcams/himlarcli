@@ -255,6 +255,9 @@ def action_test():
                 starttime = int(time.time())
                 print '* Create instance from %s with network %s' % (image.name, network['name'])
                 flavor = glclient.find_optimal_flavor(image, flavors)
+                if not flavor:
+                    print '* could not optimal find flavor for %s' % image.name
+                    continue
                 logger.debug('=> use %s flavor' % flavor.name)
                 nics = list()
                 nics.append({'net-id': network['id']})
