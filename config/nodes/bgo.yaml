@@ -117,6 +117,21 @@ nodes:
   novactrl-01:
     compute_profile: 2
     compute_resource: controller-02
+  object-01:
+    mac: d0:94:66:09:0d:6c
+    hostgroup: 8
+  object-02:
+    mac: d0:94:66:09:17:a7
+    hostgroup: 8
+  object-03:
+    mac: d0:94:66:09:53:bc
+    hostgroup: 8
+  object-04:
+    mac: d0:94:66:09:2a:b7
+    hostgroup: 8
+  object-05:
+    mac: d0:94:66:09:41:d5
+    hostgroup: 8
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
