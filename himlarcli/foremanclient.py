@@ -104,6 +104,9 @@ class Client(object):
             return
         if not dry_run:
             result = self.foreman.create_hosts(host)
+            if not result:
+                self.log_error('Could not create host. Check production.log on foreman host!')
+                return
             if 'mac' not in node_data:
                 self.foreman.hosts.power(id=result['name'], power_action='start')
             self.logger.debug('=> create host %s' % result)
@@ -119,6 +122,12 @@ class Client(object):
             self.logger.debug("=> prepend %s to %s" % (domain, host))
             host = host + '.' + domain
         return host
+
+    @staticmethod
+    def log_error(msg, code=0):
+        sys.stderr.write("%s\n" % msg)
+        if code > 0:
+            sys.exit(code)
 
     @staticmethod
     def __get_node_data(var, node_data, default=None):
