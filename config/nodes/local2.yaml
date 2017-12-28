@@ -28,7 +28,9 @@ nodes:
     compute_resource:     'controller-01'
     compute_profile:      1
   compute-01:
-    mac:                  '00:23:24:5e:35:20'
+    mac: 00:23:24:5e:35:20 #2
+  controller-02:
+    mac: 00:23:24:5e:35:20 #2
   volume-01:
     compute_resource:     'controller-01'
     compute_profile:      1

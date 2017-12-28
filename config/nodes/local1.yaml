@@ -18,15 +18,19 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
-  compute-01: #8
-    mac: 00:23:24:5e:33:b5
-  compute-02: #2
-    mac: 00:23:24:5e:35:20
+  compute-01:
+    mac: 00:23:24:5e:32:7e #6
+  compute-02:
+    mac: 00:23:24:5e:35:20 #2
   console-01:
     compute_profile: 1
     compute_resource: controller-02
-  controller-02: #7
-    mac: 00:23:24:5e:32:7e
+  controller-01:
+    mac: 00:23:24:5e:34:f1 #8
+  controller-02:
+    mac: 00:23:24:5e:33:b5 #7
+  controller-03:
+    mac: 00:23:24:5e:35:20 #2
   dashboard-01:
     compute_profile: 1
     compute_resource: controller-01
@@ -64,7 +68,7 @@ nodes:
         value:          'vda'
   logger-01:
     compute_profile: 1
-    compute_resource: controller-02
+    compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
         '1':
@@ -79,7 +83,7 @@ nodes:
         value:          'vda'
   monitor-01:
     compute_profile: 1
-    compute_resource: controller-02
+    compute_resource: controller-01
     compute_attributes:
       nics_attributes:
         'br1': {}
