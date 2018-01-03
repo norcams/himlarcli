@@ -8,7 +8,7 @@ bgo:
 test01:
   num_resources: 3
 local1:
-  num_resources: 2
+  num_resources: 3
 local2:
   num_resources: 1
 vagrant:
