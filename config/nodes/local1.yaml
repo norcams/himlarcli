@@ -4,7 +4,7 @@ nodes:
     compute_resource: controller-02
   api-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   builder-01:
     compute_profile: 1
     compute_resource: controller-01
@@ -33,7 +33,7 @@ nodes:
     mac: 00:23:24:5e:35:20 #2
   dashboard-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
     compute_attributes:
       volumes_attributes:
         '1':
@@ -46,16 +46,16 @@ nodes:
         value:          'vda'
   db-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   db-02:
     compute_profile: 1
-    compute_resource: controller-02
+    compute_resource: controller-03
   identity-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   image-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
     compute_attributes:
       volumes_attributes:
         '1':
@@ -75,7 +75,7 @@ nodes:
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '50G'
-          format_type:  'raw'
+          format_type:  'qcow2'
       nics_attributes:
         'br1': {}
     host_parameters_attributes:
@@ -89,19 +89,19 @@ nodes:
         'br1': {}
   mq-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   mq-02:
     compute_profile: 1
-    compute_resource: controller-02
+    compute_resource: controller-03
   network-01:
     compute_profile: 1
-    compute_resource: controller-02
+    compute_resource: controller-03
   novactrl-01:
     compute_profile: 2
-    compute_resource: controller-02
+    compute_resource: controller-03
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
   volume-01:
     compute_profile: 1
-    compute_resource: controller-02
+    compute_resource: controller-03
