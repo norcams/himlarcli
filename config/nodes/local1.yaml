@@ -1,7 +1,7 @@
 nodes:
   access-01:
     compute_profile: 1
-    compute_resource: controller-02
+    compute_resource: controller-03
   api-01:
     compute_profile: 1
     compute_resource: controller-02
