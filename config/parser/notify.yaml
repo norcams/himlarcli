@@ -1,0 +1,22 @@
+---
+desc: 'Notify users'
+actions:
+  all:        'Notify all users'
+  instance:   'Notify users with instances'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '-s':
+    'dest':     'subject'
+    'help':     'mail subject'
+    'required': True
+  '-t':
+    'dest':     'template'
+    'help':     'mail body template file, eg. misc/notify_cleanup.txt'
+    'required': True
+  '--region':
+    'sub':      ['instance']
+    'dest':     'region'
+    'help':     'only use this region'
