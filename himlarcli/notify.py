@@ -1,5 +1,6 @@
 import ConfigParser
 import smtplib
+import sys
 from email.mime.text import MIMEText
 from himlarcli import utils
 
@@ -58,7 +59,7 @@ class Notify(object):
         else:
             log_msg = 'DRY-RUN: ' + log_msg
 
-    def mail_instance_owner(self, instances, body, subject, admin=False):
+    def mail_instance_owner(self, instances, body, subject, admin=False, options=['status']):
         if not self.ksclient:
             self.logger.error('=> notify aborted: unable to find keystone client')
             return
@@ -75,12 +76,20 @@ class Notify(object):
                 continue
             if email not in users:
                 users[email] = dict()
-            users[email][i.name] = {'status': i.status}
+            users[email][i.name] = {
+                'status': i.status,
+                'az': getattr(i, 'OS-EXT-AZ:availability_zone')
+            }
+            if admin:
+                users[email][i.name]['project'] = project.name
         # Send mail
         for user, instances in users.iteritems():
-            user_instances = ""
+            user_instances = "Your instances in UH-IaaS:\n\n"
             for server, info in instances.iteritems():
-                user_instances += "%s (current status %s)\n" % (server, info['status'])
+                extra = list()
+                for option in options:
+                    extra.append(info[option])
+                user_instances += '%s (' % server + ', '.join(extra) + ')\n'
             msg = MIMEText(user_instances + body, 'plain', 'utf-8')
             msg['Subject'] = subject
             log_msg = 'sending mail to %s' % user
