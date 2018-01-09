@@ -47,17 +47,7 @@ def action_instance():
                                            admin=True,
                                            options=['project', 'az'])
         notify.close()
-        print users
-
-        #admins = dict()
-        #for i in instances:
-        #    project = ksclient.get_by_id('project', i.tenant_id)
-        #    if not hasattr(project, 'admin'):
-        #        himutils.sys_error('ERROR! Project %s missing admin' % project.name, 0)
-        #        continue
-        #    print i.tenant_id
-
-
+        printer.output_dict(users)
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
