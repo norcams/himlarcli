@@ -84,7 +84,10 @@ class Notify(object):
                 users[email][i.name]['project'] = project.name
         # Send mail
         for user, instances in users.iteritems():
-            user_instances = "Your instances in UH-IaaS:\n\n"
+            user_instances = (
+                "You are receiving this e-mail because you (or a team you're part of)\n"
+                "have the following instances running in UH-IaaS:\n\n"
+            )
             for server, info in instances.iteritems():
                 extra = list()
                 for option in options:

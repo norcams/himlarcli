@@ -33,7 +33,7 @@ def action_instance():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         instances = novaclient.get_instances()
-        mapping = dict(region=region.upper(), project='test')
+        mapping = dict(region=region.upper())
         body_content = himutils.load_template(inputfile=options.template,
                                               mapping=mapping,
                                               log=logger)
