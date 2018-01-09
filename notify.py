@@ -27,16 +27,18 @@ if not regions:
 
 def action_users():
     users = ksclient.get_users(domain=options.domain)
+    body_content = himutils.load_template(inputfile=options.template,
+                                          mapping={},
+                                          log=logger)
+    subject = options.subject
+    notify = Notify(options.config, debug=False, log=logger)
+    notify.set_dry_run(options.dry_run)
+
     for user in users:
         if hasattr(user, 'email'):
-            body_content = himutils.load_template(inputfile=options.template,
-                                                  mapping={},
-                                                  log=logger)
-            subject = options.subject
-            notify = Notify(options.config, debug=False, log=logger)
-            notify.set_dry_run(options.dry_run)
             notify.mail_user(body_content, subject, user.email)
-            notify.close()
+            time.sleep(2)
+    notify.close()
 
 def action_instance():
     for region in regions:
