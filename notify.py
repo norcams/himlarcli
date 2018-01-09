@@ -25,9 +25,18 @@ else:
 if not regions:
     himutils.sys_error('no valid regions found!')
 
-
-def action_all():
-    pass
+def action_users():
+    users = ksclient.get_users(domain=options.domain)
+    for user in users:
+        if hasattr(user, 'email'):
+            body_content = himutils.load_template(inputfile=options.template,
+                                                  mapping={},
+                                                  log=logger)
+            subject = options.subject
+            notify = Notify(options.config, debug=False, log=logger)
+            notify.set_dry_run(options.dry_run)
+            notify.mail_user(body_content, subject, user.email)
+            notify.close()
 
 def action_instance():
     for region in regions:

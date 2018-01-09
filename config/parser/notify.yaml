@@ -1,7 +1,7 @@
 ---
 desc: 'Notify users'
 actions:
-  all:        'Notify all users'
+  users:      'Notify all users'
   instance:   'Notify users with instances'
 opt_args:
   '--domain':
