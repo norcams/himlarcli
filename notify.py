@@ -34,8 +34,15 @@ def action_users():
     notify = Notify(options.config, debug=False, log=logger)
     notify.set_dry_run(options.dry_run)
 
+    sent_email = himutils.load_file('temp_email2.txt', log=ksclient.get_logger())
+
     for user in users:
+        if user.email in sent_email:
+            logger.debug('=> %s email sent, dropping' % user.email)
+            continue
         if hasattr(user, 'email'):
+            if options.dry_run:
+                logger.debug('=> DRY-RUN: sending mail to %s' % user.email)
             notify.mail_user(body_content, subject, user.email)
             time.sleep(2)
     notify.close()
