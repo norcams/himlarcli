@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import utils
 import ConfigParser
 from himlarcli.foremanclient import Client
 
@@ -12,7 +11,12 @@ hosts = foreman.get_hosts('*')
 hostlist = dict()
 for host in hosts['results']:
     hostname = host['name'].split('.')[0]
-    loc, role, num = hostname.split('-')
+    check = hostname.count('-')
+    if check == 2:
+        loc, role, num = hostname.split('-')
+    #Example if test01-nat-linux-01
+    if check == 3:
+        loc, role, var, num = hostname.split('-')
     group = "%s-%s" % (loc, role)
     if not group in hostlist:
         hostlist[group] = []
