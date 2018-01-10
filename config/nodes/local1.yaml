@@ -107,37 +107,123 @@ nodes:
         value:          'vda'
     compute_attributes:
       volumes_attributes:
-        'ssd1':
+        '1': # SSD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '1G'
           format_type:  'qcow2'
-        'ssd2':
+        '2': # SSD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '1G'
           format_type:  'qcow2'
-        'hdd1':
+        '3': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        'hdd2':
+        '4': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        'hdd3':
+        '5': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        'hdd4':
+        '6': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        'hdd5':
+        '7': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+  object-02:
+    compute-profile: 1
+    compute_resource: controller-02
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+    compute_attributes:
+      volumes_attributes:
+        '1': # SSD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '1G'
+          format_type:  'qcow2'
+        '2': # SSD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '1G'
+          format_type:  'qcow2'
+        '3': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '4': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '5': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '6': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '7': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+  object-03:
+    compute-profile: 1
+    compute_resource: controller-03
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+    compute_attributes:
+      volumes_attributes:
+        '1': # SSD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '1G'
+          format_type:  'qcow2'
+        '2': # SSD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '1G'
+          format_type:  'qcow2'
+        '3': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '4': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '5': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '6': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '7': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
