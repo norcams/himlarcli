@@ -27,6 +27,8 @@ nodes:
   proxy-01:
     compute_resource:     'controller-01'
     compute_profile:      1
+  controller-01:
+    mac: 00:23:24:5e:34:c8 #1
   compute-01:
     mac: 00:23:24:5e:35:20 #2
   controller-02:
