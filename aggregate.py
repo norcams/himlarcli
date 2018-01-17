@@ -9,6 +9,7 @@ from himlarcli import utils as himutils
 from himlarcli.notify import Notify
 from himlarcli.state import State
 from himlarcli.parser import Parser
+from himlarcli.parser import Printer
 import novaclient.exceptions as novaexc
 import time
 import sys
@@ -23,6 +24,7 @@ date = datetime(today.year, today.month, today.day, 14, 0) + timedelta(days=5)
 parser = Parser()
 parser.update_default('-m', date.strftime('%Y-%m-%d around %H:00'))
 options = parser.parse_args()
+printer = Printer(options.format)
 
 ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
@@ -49,6 +51,14 @@ def action_show():
     for h in aggregate.hosts:
         services = novaclient.get_service(h)
         print '%s (%s)' % (h, services[0].status)
+
+def action_list():
+    aggregates = novaclient.get_aggregates(simple=False)
+    for aggregate in aggregates:
+        header = '%s (%s)' % (aggregate.name, aggregate.availability_zone)
+        printer.output_dict({'header': header})
+        printer.output_dict(aggregate.to_dict())
+    #print aggregates
 
 def action_instances():
     instances = novaclient.get_instances(options.aggregate, host)
