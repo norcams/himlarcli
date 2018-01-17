@@ -53,12 +53,14 @@ def action_show():
         print '%s (%s)' % (h, services[0].status)
 
 def action_list():
-    aggregates = novaclient.get_aggregates(simple=False)
+    filters = dict()
+    if options.az:
+        filters['availability_zone'] = options.az
+    aggregates = novaclient.get_filtered_aggregates(**filters)
     for aggregate in aggregates:
         header = '%s (%s)' % (aggregate.name, aggregate.availability_zone)
         printer.output_dict({'header': header})
         printer.output_dict(aggregate.to_dict())
-    #print aggregates
 
 def action_instances():
     instances = novaclient.get_instances(options.aggregate, host)

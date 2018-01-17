@@ -20,6 +20,10 @@ opt_args:
     'dest':     'date'
     'help':     'date message'
     'metavar':  'date'
+  '--az':
+    'sub':      'list'
+    'dest':     'az'
+    'help':     'availability zone'
   '--stage':
     'sub':      'migrate'
     'dest':     'stage'

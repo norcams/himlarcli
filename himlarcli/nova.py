@@ -63,6 +63,10 @@ class Nova(Client):
 
 ################################## AGGREGATE ##################################
 
+    def get_filtered_aggregates(self, **kwargs):
+        aggregates = self.client.aggregates.findall(**kwargs)
+        return aggregates
+
     def get_aggregates(self, simple=True):
         aggregates = self.client.aggregates.list()
         if not simple:
