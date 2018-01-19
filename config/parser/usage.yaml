@@ -1,0 +1,12 @@
+---
+desc:       'Show usage compared to quotas'
+actions:
+  'volume':   'Show volume storage usage'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
