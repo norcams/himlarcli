@@ -25,13 +25,28 @@ if not regions:
     himutils.sys_error('no valid regions found!')
 
 def action_volume():
+#    if options.filter and options.filter != 'all':
+#        search_filter['type'] = options.filter
+#    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+
+    projects = ksclient.get_projects(domain=options.domain)
     for region in regions:
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
+        # Quotas
+        quotas = dict({'in_use': 0, 'quota': 0})
+        for project in projects:
+            quota = cinderclient.list_quota(project_id=project.id, usage=True)
+            quotas['in_use'] += quota['gigabytes']['in_use']
+            quotas['quota'] += quota['gigabytes']['limit']
+        # Pools
         client = cinderclient.get_client()
         pools = client.volumes.get_pools(detail=True)
         out_pools = pools.to_dict()
+        out_pools = out_pools['pools'][0]['capabilities']
+        out_pools['in_use_gb'] = quotas['in_use']
+        out_pools['quota_gb'] = quotas['quota']
         printer.output_dict({'header': '%s volumes' % region})
-        printer.output_dict(out_pools['pools'][0]['capabilities'])
+        printer.output_dict(out_pools)
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
