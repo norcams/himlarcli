@@ -30,6 +30,7 @@ def action_volume():
         client = cinderclient.get_client()
         pools = client.volumes.get_pools(detail=True)
         out_pools = pools.to_dict()
+        printer.output_dict({'header': '%s volumes' % region})
         printer.output_dict(out_pools['pools'][0]['capabilities'])
 
 # Run local function with the same name as the action
