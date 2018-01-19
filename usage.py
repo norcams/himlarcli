@@ -41,10 +41,12 @@ def action_volume():
         # Pools
         client = cinderclient.get_client()
         pools = client.volumes.get_pools(detail=True)
-        out_pools = pools.to_dict()
-        out_pools = out_pools['pools'][0]['capabilities']
-        out_pools['in_use_gb'] = quotas['in_use']
-        out_pools['quota_gb'] = quotas['quota']
+        tmp = pools.to_dict()
+        out_pools = dict()
+        out_pools['total_capacity_gb'] = tmp['pools'][0]['capabilities']['total_capacity_gb']
+        out_pools['free_capacity_gb'] = tmp['pools'][0]['capabilities']['free_capacity_gb']
+        out_pools['used_in_volume_gb'] = quotas['in_use']
+        out_pools['total_quota_gb'] = quotas['quota']
         printer.output_dict({'header': '%s volumes' % region})
         printer.output_dict(out_pools)
 
