@@ -45,8 +45,8 @@ def action_volume():
         out_pools = dict()
         out_pools['total_capacity_gb'] = tmp['pools'][0]['capabilities']['total_capacity_gb']
         out_pools['free_capacity_gb'] = tmp['pools'][0]['capabilities']['free_capacity_gb']
-        out_pools['used_in_volume_gb'] = quotas['in_use']
-        out_pools['total_quota_gb'] = quotas['quota']
+        out_pools['used_in_volume_gb'] = float(quotas['in_use'])
+        out_pools['total_quota_gb'] = float(quotas['quota'])
         printer.output_dict({'header': '%s volumes' % region})
         printer.output_dict(out_pools)
 
