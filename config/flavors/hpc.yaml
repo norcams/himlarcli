@@ -5,4 +5,4 @@ hpc:
   'hpc.webmo':
     ram:    262144
     vcpus:  20
-    disk:   0
+    disk:   20
