@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.cinder import Cinder
@@ -25,16 +26,15 @@ if not regions:
     himutils.sys_error('no valid regions found!')
 
 def action_volume():
-#    if options.filter and options.filter != 'all':
-#        search_filter['type'] = options.filter
-#    projects = ksclient.get_projects(domain=options.domain, **search_filter)
-
     projects = ksclient.get_projects(domain=options.domain)
     for region in regions:
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
         # Quotas
         quotas = dict({'in_use': 0, 'quota': 0})
         for project in projects:
+            # Filter demo
+            if not options.demo and project.type == 'demo':
+                continue
             quota = cinderclient.list_quota(project_id=project.id, usage=True)
             quotas['in_use'] += quota['gigabytes']['in_use']
             quotas['quota'] += quota['gigabytes']['limit']
@@ -49,6 +49,25 @@ def action_volume():
         out_pools['total_quota_gb'] = float(quotas['quota'])
         printer.output_dict({'header': '%s volumes' % region})
         printer.output_dict(out_pools)
+
+def action_instance():
+    for region in regions:
+        flavors = dict()
+        cores = ram = 0
+        novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
+        instances = novaclient.get_instances()
+        for i in instances:
+            flavor = novaclient.get_by_id('flavor', i.flavor['id'])
+            if not flavor:
+                himutils.sys_error('Flavor with ID %s not found' % i.flavor['id'], 0)
+                continue
+            flavors[flavor.name] = flavors.get(flavor.name, 0) + 1
+            cores += flavor.vcpus
+            ram += flavor.ram
+        printer.output_dict({'header': '%s instances' % region})
+        printer.output_dict(flavors)
+        printer.output_dict({'header': '%s resources' % region})
+        printer.output_dict({'cores': cores, 'ram': '%.1f MB' % int(ram)})
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

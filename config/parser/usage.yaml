@@ -1,7 +1,8 @@
 ---
-desc:       'Show usage compared to quotas'
+desc:           'Show usage compared to quotas'
 actions:
-  'volume':   'Show volume storage usage'
+  'volume':     'Show volume storage usage'
+  'instance':   'Show instance compute usage'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -10,3 +11,9 @@ opt_args:
   '--region':
     'dest':     'region'
     'help':     'only use this region'
+  '--demo':
+    'dest':     'demo'
+    'help':     'include demo project in usage'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
