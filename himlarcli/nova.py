@@ -1,12 +1,9 @@
-from client import Client
+from himlarcli.client import Client
 from novaclient import client as novaclient
 import novaclient.exceptions as exceptions
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as keyexc
-from datetime import datetime, date
 import urllib2
-import json
-import pprint
 import time
 
 
@@ -14,6 +11,8 @@ class Nova(Client):
     version = 2
     instances = dict()
     ksclient = None
+
+    valid_objects = ['flavor']
 
     def __init__(self, config_path, host=None, debug=False, log=None, region=None):
         """ Create a new nova client to manaage a host
@@ -31,6 +30,21 @@ class Nova(Client):
             self.ksclient = keystoneclient.Client(session=self.sess,
                                                   region_name=self.region)
         return self.ksclient
+
+
+    def get_by_id(self, obj_type, obj_id):
+        """ Get valid openstack object by type and id.
+            version: 2 """
+        if obj_type not in self.valid_objects:
+            self.logger.debug('=> %s is not a valid object type', obj_type)
+            return dict()
+        try:
+            result = getattr(self.client, '%ss' % obj_type).get(obj_id)
+        except novaclient.exceptions.NotFound:
+            self.logger.debug('=> %s with id %s not found', obj_type, obj_id)
+            result = dict()
+        return result
+
 # =============================== SERVER ======================================
 
     def create_server(self, name, flavor, image_id, **kwargs):
