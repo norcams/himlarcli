@@ -30,7 +30,7 @@ nodes:
   compute-01:
     mac: 00:23:ae:ec:1d:30
   compute-02:
-    mac: 00:23:ae:ec:47:98
+    mac: 78:45:c4:f8:5d:db
   compute-03:
     mac: 00:1e:c9:d1:67:68
   compute-04:
