@@ -26,7 +26,7 @@ for host in hosts['results']:
 children = "%s:children" % loc
 filename = "hostfile.%s" % loc
 nodes = "%s-nodes:children" % loc
-exclude_nodes = {'storage', 'compute', 'controller', 'leaf', 'login', 'nat'}
+exclude_nodes = {'storage', 'object', 'compute', 'controller', 'leaf', 'login', 'mgmt'}
 
 parser = ConfigParser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
