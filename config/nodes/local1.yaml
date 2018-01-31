@@ -67,7 +67,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   logger-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -242,6 +242,9 @@ nodes:
           capacity:     '5G'
           format_type:  'qcow2'
   proxy-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  status-01:
     compute_profile: 1
     compute_resource: controller-01
   volume-01:
