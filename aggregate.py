@@ -85,6 +85,8 @@ def action_users():
 def action_activate():
     aggregates = novaclient.get_aggregates()
     for aggregate in aggregates:
+        if aggregate == 'central1': # do not use on central1
+            continue
         print '=============== %s ================' % aggregate
         metadata = novaclient.get_aggregate(aggregate)
         # Enable this aggregate
