@@ -84,26 +84,30 @@ def action_users():
 
 def action_activate():
     aggregates = novaclient.get_aggregates()
+    dry_run_txt = 'DRY-RUN: ' if options.dry_run else ''
     for aggregate in aggregates:
-        if aggregate == 'central1': # do not use on central1
+        # do not use on central1 or placeholder1
+        if aggregate == 'central1' or aggregate == 'placeholder1':
             continue
         print '=============== %s ================' % aggregate
         metadata = novaclient.get_aggregate(aggregate)
         # Enable this aggregate
         if aggregate == options.aggregate:
             for h in metadata.hosts:
-                print 'Enable %s' % h
+                print '%sEnable %s' % (dry_run_txt, h)
                 novaclient.enable_host(h)
             tags = {'enabled': datetime.today(), 'disabled': None, 'notify': None}
-            novaclient.update_aggregate(aggregate, tags)
+            if not options.dry_run:
+                novaclient.update_aggregate(aggregate, tags)
         else: # Disable everything else
             for h in metadata.hosts:
                 services = novaclient.get_service(h)
                 if services[0].status == 'enabled':
-                    print 'Disable %s' % h
+                    print '%sDisable %s' % (dry_run_txt, h)
                     novaclient.disable_host(h)
             tags = {'disabled': datetime.today()}
-            novaclient.update_aggregate(aggregate, tags)
+            if not options.dry_run:
+                novaclient.update_aggregate(aggregate, tags)
 
 def action_migrate():
     state = State(options.config, debug=options.debug, log=logger)
@@ -176,7 +180,9 @@ def action_notify():
             users[email] = dict()
         users[email][i.name] = {'status': i.status}
     if users:
-        mapping = dict(region=ksclient.region.upper(), date=options.date)
+        mapping = dict(region=ksclient.region.upper(),
+                       date=options.date,
+                       region_lower=ksclient.region.lower())
         body_content = himutils.load_template(inputfile=msg_file,
                                               mapping=mapping,
                                               log=ksclient.get_logger())
@@ -191,7 +197,7 @@ def action_notify():
         for server, info in instances.iteritems():
             user_instances += "%s (current status %s)\n" % (server, info['status'])
         msg = MIMEText(user_instances + body_content, 'plain', 'utf-8')
-        msg['Subject'] = ('UH-IaaS: Your instances will be rebooted on %s (%s)'
+        msg['Subject'] = ('[UH-IaaS]: Your instances will be rebooted on %s (%s)'
                           % (options.date, ksclient.region))
 
         if not options.dry_run:
