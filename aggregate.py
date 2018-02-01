@@ -18,7 +18,7 @@ himutils.is_virtual_env()
 
 # Default value for date: today + 5 days at 14:00
 today = datetime.today()
-date = datetime(today.year, today.month, today.day, 14, 0) + timedelta(days=5)
+date = datetime(today.year, today.month, today.day, 15, 0) + timedelta(days=5)
 
 # Load parser config from config/parser/*
 parser = Parser()
