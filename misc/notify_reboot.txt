@@ -4,7 +4,7 @@ will be rebooted on $date if they are running.
 
 These instances have now been moved to availability zone (AZ) $region_lower-legacy-1.
 This AZ will continue with the scheduled maintenance as before. New instances in
-$region_lower-default-1 will not have scehduled maintenance. Please note than an
+$region_lower-default-1 will not have scheduled maintenance. Please note than an
 instance cannot move between AZ.
 
 We would also appreciate if you delete unused instances.
