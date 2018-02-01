@@ -243,6 +243,7 @@ def action_test():
     networks = neutronclient.list_networks()
     secgroup_name = 'image_test-' + str(int(time.time()))
     secgroup = neutronclient.create_security_port_group(secgroup_name, 22)
+    tests = dict({'passed': 0, 'failed': 0, 'dropped': 0})
     for image in images:
         if options.name and options.name not in image.tags:
             logger.debug('=> dropped: image name %s not in tags %s', options.name,
@@ -293,9 +294,11 @@ def action_test():
                                (net['version'], ip, ip.iptype()))
                         if ip.iptype() == 'ALLOCATED RIPE NCC':
                             print '* Drop connection check for IPv6 for now'
+                            tests['dropped'] += 1
                             continue
                         elif ip.iptype() == 'PRIVATE':
                             print '* Drop connection check for rfc1918 address for now'
+                            tests['dropped'] += 1
                             continue
                         timeout = 90
                         port = False
@@ -307,9 +310,11 @@ def action_test():
                         used_time = int(time.time()) - starttime
                         if port:
                             print '* Port 22 open on %s (%s)' % (ip, ip.iptype())
+                            tests['passed'] += 1
                         else:
                             print ('* Unable to reach port 22 on %s after %s sec (%s)'
                                    % (ip, used_time, ip.iptype()))
+                            tests['failed'] += 1
                 else:
                     print '* No IP found for instances %s' % server.name
                 try:
@@ -326,6 +331,8 @@ def action_test():
                     print '* Instance deleted'
     print '* Delete security group'
     neutronclient.delete_security_group(secgroup['id'])
+    printer.output_dict({'header': 'Result'})
+    printer.output_dict(tests)
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
