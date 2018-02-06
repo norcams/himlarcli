@@ -115,7 +115,7 @@ class Nova(Client):
                         continue
                     self.logger.debug('=> hosts %s found in aggregate %s' % (h, aggregate))
                     instances += self.__get_instances(h)
-        host_txt = ' (host=%s)' % host if host else None
+        host_txt = ' (host=%s)' % host if host else ''
         self.logger.debug("=> found %s instances in %s%s" % (len(instances), aggregate, host_txt))
         if not simple:
             return instances

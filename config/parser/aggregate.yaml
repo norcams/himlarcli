@@ -9,12 +9,9 @@ actions:
   'migrate':    'Migrate all instances out of aggregate'
   'activate':   'Enable aggregate and disable all other aggregates'
 opt_args:
-  '-n':
+  'aggregate':
     'sub':      ['show', 'instances', 'users', 'notify', 'migrate', 'activate']
-    'dest':     'aggregate'
-    'help':     'aggregate name'
-    'required': True
-    'metavar':  'name'
+    'metavar':  'aggregate'
   '-m':
     'sub':      'notify'
     'dest':     'date'
@@ -24,11 +21,6 @@ opt_args:
     'sub':      'list'
     'dest':     'az'
     'help':     'availability zone'
-  '--stage':
-    'sub':      'migrate'
-    'dest':     'stage'
-    'default':  'all'
-    'help':     'migration stage'
   '--limit':
     'sub':      'migrate'
     'type':     int
@@ -52,3 +44,10 @@ opt_args:
     'sub':      ['migrate','instances']
     'dest':     'host'
     'help':     'only use this host in the aggregate'
+  '--detailed':
+    'sub':      ['list']
+    'dest':     'detailed'
+    'help':     'also show aggregate metadata'
+    'action':   'store_const'
+    'const':    true
+    'default':  False
