@@ -16,13 +16,12 @@ ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
 printer = Printer(options.format)
-domain = 'Dataporten'
 
 def action_show():
-    if not ksclient.is_valid_user(email=options.user, domain=domain):
+    if not ksclient.is_valid_user(email=options.user, domain=options.domain):
         print "%s is not a valid user. Please check your spelling or case." % options.user
         sys.exit(1)
-    obj = ksclient.get_user_objects(email=options.user, domain=domain)
+    obj = ksclient.get_user_objects(email=options.user, domain=options.domain)
     obj_type = options.obj_type
     if obj_type not in obj:
         return
@@ -39,7 +38,7 @@ def action_show():
         printer.output_dict(objects)
 
 def action_list():
-    users = ksclient.list_users(domain=domain)
+    users = ksclient.list_users(domain=options.domain)
     domains = dict()
     output = dict({'users': list()})
     for user in users:
@@ -56,10 +55,10 @@ def action_list():
     printer.output_dict(domains)
 
 def action_rename():
-    if not ksclient.is_valid_user(email=options.old, domain=domain):
+    if not ksclient.is_valid_user(email=options.old, domain=options.domain):
         print "%s is not a valid user. Please check your spelling or case." % options.old
         sys.exit(1)
-    obj = ksclient.get_user_objects(email=options.old, domain=domain)
+    obj = ksclient.get_user_objects(email=options.old, domain=options.domain)
     print obj['projects']
     new_demo_project = ksclient.get_project_name(options.new)
     old_demo_project = ksclient.get_project_name(options.old)
@@ -81,25 +80,25 @@ def action_rename():
         return
     print 'Please wait...'
     ksclient.remove_user(email=options.new,
-                         domain=domain,
+                         domain=options.domain,
                          dry_run=options.dry_run)
     ksclient.rename_user(new_email=options.new,
                          old_email=options.old,
-                         domain=domain,
+                         domain=options.domain,
                          dry_run=options.dry_run)
 
 def action_password():
-    if not ksclient.is_valid_user(email=options.user, domain=domain):
+    if not ksclient.is_valid_user(email=options.user, domain=options.domain):
         print "%s is not a valid user. Please check your spelling or case." % options.user
         sys.exit(1)
-    ksclient.reset_password(email=options.user, domain=domain, dry_run=options.dry_run)
+    ksclient.reset_password(email=options.user, domain=options.domain, dry_run=options.dry_run)
 
 def action_delete():
     if not himutils.confirm_action('Delete user and all instances for %s' % options.user):
         return
     print "We are now deleting user, group, project and instances for %s" % options.user
     print 'Please wait...'
-    result = ksclient.remove_user(email=options.user, domain=domain, dry_run=options.dry_run)
+    result = ksclient.remove_user(email=options.user, domain=options.domain, dry_run=options.dry_run)
     if not result:
         print 'Delete failed! Run with debug for more information'
     else:
