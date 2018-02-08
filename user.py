@@ -5,6 +5,7 @@ from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
+from datetime import datetime
 
 himutils.is_virtual_env()
 
@@ -13,6 +14,7 @@ parser = Parser()
 options = parser.parse_args()
 
 ksclient = Keystone(options.config, debug=options.debug)
+ksclient.set_dry_run(options.dry_run)
 logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
 printer = Printer(options.format)
@@ -89,16 +91,35 @@ def action_rename():
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
-        print "%s is not a valid user. Please check your spelling or case." % options.user
-        sys.exit(1)
+        himutils.sys_error("%s is not a valid user." % options.user, 1)
     ksclient.reset_password(email=options.user, domain=options.domain, dry_run=options.dry_run)
+
+def action_create():
+    if not ksclient.is_valid_user(email=options.admin, domain=options.domain):
+        himutils.sys_error('%s is not a valid user. Admin must be a valid user' % options.admin, 1)
+    if options.enddate:
+        try:
+            enddate = datetime.strptime(options.enddate, '%d.%m.%y').date()
+        except ValueError:
+            himutils.sys_error('date format DD.MM.YY not valid for %s' % options.enddate, 1)
+    else:
+        enddate = None
+    email = options.email if options.email else options.user
+    ksclient.create_user(name=options.user,
+                         domain=options.domain,
+                         email=email,
+                         admin=options.admin,
+                         description=options.description,
+                         enddate=str(enddate))
 
 def action_delete():
     if not himutils.confirm_action('Delete user and all instances for %s' % options.user):
         return
     print "We are now deleting user, group, project and instances for %s" % options.user
     print 'Please wait...'
-    result = ksclient.remove_user(email=options.user, domain=options.domain, dry_run=options.dry_run)
+    result = ksclient.remove_user(email=options.user,
+                                  domain=options.domain,
+                                  dry_run=options.dry_run)
     if not result:
         print 'Delete failed! Run with debug for more information'
     else:

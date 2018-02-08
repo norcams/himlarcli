@@ -4,7 +4,7 @@ from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as exceptions
 import random
 import string
-
+import re
 
 class Keystone(Client):
 
@@ -384,6 +384,7 @@ class Keystone(Client):
             self.log_error(e)
             self.log_error('Project %s not updated' % project_id)
 
+
     def create_project(self, domain, project_name, admin=None, description=None, **kwargs):
         """
         Create new project in domain and grant user role to admin if valid user.
@@ -421,6 +422,64 @@ class Keystone(Client):
         if self.dry_run:
             return data
         return project
+
+    def create_user(self, name, email, domain, user_type='api', **kwargs):
+        """
+        Create a new group and a new local user for the group.
+        version: 2
+
+        :return: clear text password for the new user
+        """
+        if not self.__validate_email(email):
+            self.log_error('%s is not a valid email address', email)
+            return
+        domain = self.__get_domain(domain)
+        group_name = self.__get_group_name(name)
+        password = self.generate_password()
+        group = user = None
+
+        # Create group
+        try:
+            if not self.dry_run:
+                group = self.client.groups.create(name=group_name, domain=domain)
+                self.logger.debug('=> create group %s', group.to_dict())
+            else:
+                self.log_dry_run('create group', **{'name': group_name})
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            return
+        except exceptions.http.Conflict as e:
+            self.logger.debug('=> create group %s already exists', group_name)
+
+        # Create user
+        try:
+            if not self.dry_run:
+                user = self.client.users.create(name=name,
+                                                domain=domain,
+                                                email=email,
+                                                type=user_type,
+                                                password=password,
+                                                **kwargs)
+                self.logger.debug('=> create user %s', user.to_dict())
+            else:
+                data = kwargs.copy()
+                data.update({'name': name, 'email': email, 'type': user_type})
+                self.log_dry_run('create user', **data)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            return
+        except exceptions.http.Conflict as e:
+            self.logger.debug('=> user %s already exists', name)
+            password = None
+        # Add to group
+        try:
+            if not self.dry_run and user and group:
+                self.client.users.add_to_group(user=user, group=group)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            return
+        if password:
+            print "New password: %s" % password
 
     """
     Federation settings for identity provider """
@@ -590,3 +649,10 @@ class Keystone(Client):
             return email
         (user, domain) = email.split('@')
         return '%s@%s' % (user.title(), domain)
+
+    @staticmethod
+    def __validate_email(email):
+        match = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
+        if re.match(match, email) != None:
+            return True
+        return False

@@ -7,12 +7,15 @@ actions:
   'delete':   'Delete user'
   'rename':   'Use this when user changes affiliation'
   'password': 'Reset API password for user'
+  'create':   'Create a user new local API only user'
 opt_args:
-  '-n':
-    'sub':      ['show', 'password', 'delete']
-    'dest':     'user'
-    'help':     'existing user email (case sensitive)'
-    'required': true
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  'user':
+    'sub':      ['show', 'password', 'delete', 'create']
+    'help':     'username should be email addresses'
     'metavar':  'username'
   '--new':
     'sub':      'rename'
@@ -33,3 +36,22 @@ opt_args:
     'help':     'user object type to show'
     'choices':   ['api', 'dataporten', 'group', 'projects']
     'default':  'projects'
+  '-a':
+    'sub':      'create'
+    'dest':     'admin'
+    'help':     'email to the FEIDE user responsible for the new local user'
+    'metavar':  'admin'
+    'required': true
+  '--email':
+    'sub':      'create'
+    'dest':     'email'
+    'help':     'email used for contact (otherwise same as username)'
+    'metavar':  'email'
+  '--desc':
+    'sub':      'create'
+    'dest':     'description'
+    'help':     'user description'
+  '--end':
+    'sub':      'create'
+    'dest':     'enddate'
+    'help':     'set end date for projects (DD.MM.YY)'
