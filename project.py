@@ -147,7 +147,7 @@ def action_show():
                 printer.output_dict(quota)
 
 def action_instances():
-    project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
+  #  project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
     for region in regions:
       novaclient = Nova(options.config, debug=options.debug, log=logger)
       instances = novaclient.get_project_instances(project_id=options.project)
