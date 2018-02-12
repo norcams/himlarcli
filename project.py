@@ -25,7 +25,7 @@ else:
     regions = ksclient.find_regions()
 
 if not regions:
-    himutils.sys_error('no regions found d with this name!')
+    himutils.sys_error('no regions found with this name!')
 
 def action_create():
     quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
