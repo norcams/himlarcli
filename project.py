@@ -78,7 +78,8 @@ def action_create():
 
 def action_grant():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
-        himutils.sys_error('User %s not found as a valid user.' % options.user)
+        log_error("WARNING: user %s not found as a valid user!" % options.user, 0)
+        himutils.sys_error('User %s not found as a valid user.' % options.user, 0)
     project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
     if not project:
         himutils.sys_error('No project found with name %s' % options.project)

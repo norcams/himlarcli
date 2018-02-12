@@ -74,5 +74,5 @@ opt_args:
   '--rt':
     'sub':      ['create']
     'dest':     'rt'
-    'metavar':  'request tracker ticket'
-    'help':     'RT ticket number or link'
+    'help':     'request tracker ticket number or link'
+    'metavar':  'request tracker'
