@@ -1,0 +1,12 @@
+nodes:
+  controller-01:
+    mac: 18:66:da:71:b1:d6
+  cephmon-01:
+    compute_profile: 2
+    compute_resource: controller-01
+  cephmon-02:
+    compute_profile: 2
+    compute_resource: controller-01
+  cephmon-03:
+    compute_profile: 2
+    compute_resource: controller-01

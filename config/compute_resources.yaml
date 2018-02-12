@@ -13,3 +13,5 @@ local2:
   num_resources: 1
 vagrant:
   num_resources: 1
+tos:
+  num_resources: 1
