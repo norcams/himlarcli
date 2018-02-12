@@ -25,7 +25,7 @@ else:
     regions = ksclient.find_regions()
 
 if not regions:
-    himutils.sys_error('no regions found!')
+    himutils.sys_error('no regions found d with this name!')
 
 def action_create():
     quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
@@ -34,9 +34,9 @@ def action_create():
     test = 1 if options.type == 'test' else 0
     if options.enddate:
         try:
-            enddate = datetime.strptime(options.enddate, '%d.%m.%y').date()
+            enddate = datetime.strptime(options.enddate, '%d.%m.%Y').date()
         except ValueError:
-            himutils.sys_error('date format DD.MM.YY not valid for %s' % options.enddate, 1)
+            himutils.sys_error('date format DD.MM.YYYY not valid for %s' % options.enddate, 1)
     else:
         enddate = None
     createdate = datetime.today()
@@ -48,7 +48,8 @@ def action_create():
                                       description=options.desc,
                                       enddate=str(enddate),
                                       createdate=createdate.isoformat(),
-                                      quota=options.quota)
+                                      quota=options.quota,
+                                      rt=options.rt)
     if project:
         output = project.to_dict() if not isinstance(project, dict) else project
         output['header'] = "Show information for %s" % options.project

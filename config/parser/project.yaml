@@ -16,11 +16,11 @@ opt_args:
     'default':  'Dataporten'
   'project':
    'sub':       ['show', 'create', 'grant', 'delete']
-   'metavar':   project
+   'metavar':   'project'
   '--region':
-    'sub':      ['create']
+    'sub':      ['show', 'create']
     'dest':     'region'
-    'help':     'only set quota for this region'
+    'help':     'specify region'
   '--end':
     'sub':      ['create']
     'dest':     'enddate'
@@ -71,3 +71,8 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  False
+  '--rt':
+    'sub':      ['create']
+    'dest':     'rt'
+    'metavar':  'request tracker ticket'
+    'help':     'rt ticket number or link'
