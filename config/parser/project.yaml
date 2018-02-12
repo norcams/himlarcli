@@ -6,25 +6,25 @@ actions:
   'create': 'Create a new project and grant admin access if valid user'
   'grant':  'Grant access to project for user.'
   'delete': 'Delete project and all resources'
+  'instances': 'List of all instances in project'
 #  'update': 'TODO'
 #  'revoke': 'TODO'
-#  'instances': 'TODO list all instances in project'
 opt_args:
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   'project':
-   'sub':       ['show', 'create', 'grant', 'delete']
+   'sub':       ['show', 'create', 'grant', 'delete', 'instances']
    'metavar':   'project'
   '--region':
-    'sub':      ['show', 'create']
+    'sub':      ['show', 'create', 'instances']
     'dest':     'region'
     'help':     'specify region'
   '--end':
     'sub':      ['create']
     'dest':     'enddate'
-    'help':     'set end date for projects (DD.MM.YY)'
+    'help':     'set end date for projects (DD.MM.YYYY)'
   '-f':
     'sub':      ['list']
     'dest':     'filter'
@@ -75,4 +75,4 @@ opt_args:
     'sub':      ['create']
     'dest':     'rt'
     'metavar':  'request tracker ticket'
-    'help':     'rt ticket number or link'
+    'help':     'RT ticket number or link'

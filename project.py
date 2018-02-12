@@ -146,6 +146,18 @@ def action_show():
                 #printer.output_dict({'header': 'Roles in project %s' % options.project})
                 printer.output_dict(quota)
 
+def action_instances():
+    project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
+    novaclient = Nova(options.config, debug=options.debug, log=logger)
+    instances = novaclient.get_project_instances(project_id=options.project)
+    if not instances:
+        himutils.sys_error('No instances found for the project %s' % options.project)
+    for element in instances:
+         print "======================="     
+         print element 
+    if options.region:
+        novaclient.get_all_instances()                
+
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
 if not action:
