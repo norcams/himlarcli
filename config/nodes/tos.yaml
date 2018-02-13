@@ -10,3 +10,18 @@ nodes:
   cephmon-03:
     compute_profile: 2
     compute_resource: controller-01
+  storage-01:
+    mac: d0:94:66:01:46:e6
+    hostgroup: 2
+  storage-02:
+    mac: d0:94:66:01:14:0f
+    hostgroup: 2
+  storage-03:
+    mac: d0:94:66:01:46:aa
+    hostgroup: 2
+  storage-04:
+    mac: d0:94:66:01:4c:fa
+    hostgroup: 2
+  storage-05:
+    mac: d0:94:66:01:4e:1a
+    hostgroup: 2
