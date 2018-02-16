@@ -168,13 +168,13 @@ nodes:
     hostgroup: 2
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdf'
+        value:          'sdg'
   storage-07:
     mac: d0:94:66:19:c1:eb
     hostgroup: 2
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdf'
+        value:          'sdg'
   volume-01:
     compute_profile: 2
     compute_resource: controller-03
