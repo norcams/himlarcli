@@ -50,6 +50,8 @@ def action_create():
                                       createdate=createdate.isoformat(),
                                       quota=options.quota,
                                       rt=options.rt)
+    if not ksclient.is_valid_user(options.admin, options.domain):
+        himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
     if project:
         output = project.to_dict() if not isinstance(project, dict) else project
         output['header'] = "Show information for %s" % options.project
@@ -78,10 +80,10 @@ def action_create():
 
 def action_grant():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
-        himutils.sys_error('User %s not found as a valid user.' % options.user)
+        himutils.sys_error('User "%s" not found as a valid user.' % options.user)
     project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
     if not project:
-        himutils.sys_error('No project found with name %s' % options.project)
+        himutils.sys_error('No project found with name "%s"' % options.project)
     if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
         himutils.sys_error('Project are %s. User access not allowed!' % project.type)
     role = ksclient.grant_role(project_name=options.project,
