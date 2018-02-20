@@ -18,7 +18,7 @@
 #     vcpus:  4
 #     disk:   20
 
-public: false
+public: true
 m1: # (4x)
   'm1.tiny': # [1-0,5-1]
     vcpus: 1
@@ -27,7 +27,7 @@ m1: # (4x)
   'm1.small': # [1-2-10]
     vcpus: 1
     ram: 2048
-    disk: 10jj
+    disk: 10
   'm1.medium': # [1-4-20] (updated)
     vcpus: 1
     ram: 4096
