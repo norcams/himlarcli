@@ -1,15 +1,38 @@
----
+# ---
+# public: false
+# d1:
+#   'd1.small':
+#     ram:    2048
+#     vcpus:  1
+#     disk:   20
+#   'd1.medium':
+#     ram:    4096
+#     vcpus:  2
+#     disk:   40
+#   'd1.large':
+#     ram:    8192
+#     vcpus:  4
+#     disk:   60
+
 public: false
-d1:
-  'd1.small':
-    ram:    2048
-    vcpus:  1
-    disk:   20
-  'd1.medium':
-    ram:    4096
-    vcpus:  2
-    disk:   40
-  'd1.large':
-    ram:    8192
-    vcpus:  4
-    disk:   60
+d1: # (4x)
+  'd1.medium': # [1-4-40] (updated)
+    vcpus: 1
+    ram: 4
+    disk: 40
+  'd1.large': # [2-8-60] (updated)
+    vcpus: 2
+    ram: 8
+    disk: 60
+  'd1.xlarge': # [4-16-80] (new)
+    vcpus: 4
+    ram: 16
+    disk: 80
+  'd1.x2large': # [8-32-80] (new)
+    vcpus: 8
+    ram: 32
+    disk: 80
+  'd1.x4large': # [16-64-80] (new)
+    vcpus: 16
+    ram: 64
+    disk: 80
