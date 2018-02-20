@@ -18,21 +18,21 @@ public: false
 d1: # (4x)
   'd1.medium': # [1-4-40] (updated)
     vcpus: 1
-    ram: 4
+    ram: 4096
     disk: 40
   'd1.large': # [2-8-60] (updated)
     vcpus: 2
-    ram: 8
+    ram: 8192
     disk: 60
   'd1.xlarge': # [4-16-80] (new)
     vcpus: 4
-    ram: 16
+    ram: 16384
     disk: 80
   'd1.x2large': # [8-32-80] (new)
     vcpus: 8
-    ram: 32
+    ram: 32768
     disk: 80
   'd1.x4large': # [16-64-80] (new)
     vcpus: 16
-    ram: 64
+    ram: 65536
     disk: 80

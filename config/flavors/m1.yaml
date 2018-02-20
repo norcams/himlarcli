@@ -22,21 +22,21 @@ public: false
 m1: # (4x)
   'm1.tiny': # [1-0,5-1]
     vcpus: 1
-    ram: 0.5
+    ram: 512
     disk: 1
   'm1.small': # [1-2-10]
     vcpus: 1
-    ram: 2
-    disk: 10
+    ram: 2048
+    disk: 10jj
   'm1.medium': # [1-4-20] (updated)
     vcpus: 1
-    ram: 4
+    ram: 4096
     disk: 20
   'm1.large': # [2-8-20] (updated)
     vcpus: 2
-    ram: 8
+    ram: 8192
     disk: 20
   'm1.xlarge': # [4-16-20] (new)
     vcpus: 4
-    ram: 16
+    ram: 16384
     disk: 20

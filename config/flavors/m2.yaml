@@ -22,13 +22,13 @@ public: false
 m2: # (4x)
   'm2.2xlarge': # [8-32-20]
     vcpus: 8
-    ram: 32
+    ram: 32768
     disk: 20
   'm2.4xlarge': # [16-64-20]
     vcpus: 16
-    ram: 64
+    ram: 65536
     disk: 20
   'm2.8xlarge' : # [32-128-20] (new)
     vcpus: 32
-    ram: 128
+    ram: 131072
     disk: 20
