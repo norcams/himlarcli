@@ -1,19 +1,4 @@
-# ---
-# public: false
-# d1:
-#   'd1.small':
-#     ram:    2048
-#     vcpus:  1
-#     disk:   20
-#   'd1.medium':
-#     ram:    4096
-#     vcpus:  2
-#     disk:   40
-#   'd1.large':
-#     ram:    8192
-#     vcpus:  4
-#     disk:   60
-
+---
 public: false
 d1: # (4x)
   'd1.medium': # [1-4-40] (updated)
