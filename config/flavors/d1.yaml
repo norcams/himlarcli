@@ -1,6 +1,10 @@
 ---
 public: false
 d1: # (4x)
+  'd1.small':
+    vcpus: 1
+    ram: 2048
+    disk: 20
   'd1.medium': # [1-4-40] (updated)
     vcpus: 1
     ram: 4096
