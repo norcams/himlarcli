@@ -6,6 +6,7 @@ from himlarcli.cinder import Cinder
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
+import re
 
 himutils.is_virtual_env()
 
@@ -64,6 +65,25 @@ def action_instance():
             flavors[flavor.name] = flavors.get(flavor.name, 0) + 1
             cores += flavor.vcpus
             ram += flavor.ram
+
+            flavoritems = (flavors.keys())
+            project = ksclient.get_by_id('project', i.tenant_id)
+            instance = novaclient.get_instance(i)
+
+            d = re.compile("^d1.*") 
+            m = re.compile("^m2.*")
+            r = re.compile("^r1.*") #test r
+            dlist = filter(d.match, flavoritems)
+            mlist = filter(m.match, flavoritems)
+            rlist = filter(r.match, flavoritems) #test
+
+            if rlist or dlist or mlist:
+                printer.output_dict({'header': 'Info (instance name, project name, project id, flavor name)'})
+                print instance.name
+                print project.name 
+                print project.id
+                print flavor.name
+        
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
         printer.output_dict({'header': '%s resources' % region})
