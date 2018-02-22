@@ -77,12 +77,21 @@ def action_instance():
             mlist = filter(m.match, flavoritems)
             rlist = filter(r.match, flavoritems) #test
 
-            if rlist or dlist or mlist:
-                printer.output_dict({'header': 'Info (instance name, project name, project id, flavor name)'})
+            if dlist:
+                printer.output_dict({'header': 'd-flavor(instance name, project name, project id, flavor name)'})
                 print instance.name
-                print project.name 
-                print project.id
+                #print project.name 
+                #print project.id
                 print flavor.name
+            elif mlist:
+                printer.output_dict({'header': 'm-flavor (instance name, project name, project id, flavor name)'})
+                print instance.name
+                #print project.name
+                #print project.id
+                print flavor.name
+            else:
+                print "found no project with m and d flavor."
+
         
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
