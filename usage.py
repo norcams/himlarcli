@@ -72,27 +72,26 @@ def action_instance():
 
             d = re.compile("^d1.*") 
             m = re.compile("^m2.*")
-            r = re.compile("^r1.*") #test r
+            r = re.compile("^m1.*") #test r
             dlist = filter(d.match, flavoritems)
             mlist = filter(m.match, flavoritems)
             rlist = filter(r.match, flavoritems) #test
 
-            if dlist:
-                printer.output_dict({'header': 'd-flavor(instance name, project name, project id, flavor name)'})
-                print instance.name
-                #print project.name 
-                #print project.id
-                print flavor.name
-            elif mlist:
-                printer.output_dict({'header': 'm-flavor (instance name, project name, project id, flavor name)'})
-                print instance.name
-                #print project.name
-                #print project.id
-                print flavor.name
-            else:
-                print "found no project with m and d flavor."
-
-        
+            if project:
+                if dlist:
+                    printer.output_dict({'header': 'd-flavor(instance name, project name, project id, flavor name)'})
+                    print instance.name
+                    print project.name 
+                    print project.id
+                    print flavor.name
+                elif mlist:
+                    printer.output_dict({'header': 'm-flavor (instance name, project name, project id, flavor name)'})
+                    print instance.name
+                    print project.name
+                    print project.id
+                    print flavor.name
+                else:
+                    pass
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
         printer.output_dict({'header': '%s resources' % region})
