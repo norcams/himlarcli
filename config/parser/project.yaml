@@ -24,7 +24,7 @@ opt_args:
   '--end':
     'sub':      ['create']
     'dest':     'enddate'
-    'help':     'set end date for projects (DD.MM.YY)'
+    'help':     'set end date for projects (DD.MM.YYYY)'
   '-f':
     'sub':      ['list']
     'dest':     'filter'
