@@ -52,6 +52,7 @@ def action_volume():
         printer.output_dict(out_pools)
 
 def action_instance():
+    file = open('instanceslist.txt', 'w')
     for region in regions:
         flavors = dict()
         cores = ram = 0
@@ -66,37 +67,55 @@ def action_instance():
             cores += flavor.vcpus
             ram += flavor.ram
 
+            # check which flavor each instance uses
             flavoritems = (flavors.keys())
             project = ksclient.get_by_id('project', i.tenant_id)
             instance = novaclient.get_instance(i)
 
             d = re.compile("^d1.*") 
             m = re.compile("^m2.*")
-            r = re.compile("^m1.*") #test r
+            r = re.compile("^c1.*") #test r
             dlist = filter(d.match, flavoritems)
             mlist = filter(m.match, flavoritems)
             rlist = filter(r.match, flavoritems) #test
 
             if project:
                 if dlist:
-                    printer.output_dict({'header': 'd-flavor(instance name, project name, project id, flavor name)'})
-                    print instance.name
-                    print project.name 
-                    print project.id
-                    print flavor.name
-                elif mlist:
-                    printer.output_dict({'header': 'm-flavor (instance name, project name, project id, flavor name)'})
-                    print instance.name
-                    print project.name
-                    print project.id
-                    print flavor.name
+                    # printer.output_dict({'header': 'd-flavor(instance name, project name, project id, flavor name)'})
+                    # print instance.name
+                    # print project.name 
+                    # print project.id
+                    # print flavor.name
+                    file.write('---------------------------------------------------------------\n')
+                    file.write('Flavor: (flavor name, instance name, project name, project id) \n')
+                    file.write('---------------------------------------------------------------\n')
+                    file.write(flavor.name   + '\n')
+                    file.write(instance.name + '\n')
+                    file.write(project.name  + '\n')
+                    file.write(project.id    + '\n')
+                    file.write('---------------------------------------------------------------\n')
+                elif rlist:
+                    # printer.output_dict({'header': 'm-flavor (instance name, project name, project id, flavor name)'})
+                    # print instance.name
+                    # print project.name
+                    # print project.id
+                    # print flavor.name
+                    file.write('---------------------------------------------------------------\n')
+                    file.write('Flavor: (flavor name, instance name, project name, project id) \n')
+                    file.write('---------------------------------------------------------------\n')
+                    file.write(flavor.name   + '\n')
+                    file.write(instance.name + '\n')
+                    file.write(project.name  + '\n')
+                    file.write(project.id    + '\n')
+                    file.write('---------------------------------------------------------------\n')
                 else:
                     pass
+
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
         printer.output_dict({'header': '%s resources' % region})
         printer.output_dict({'cores': cores, 'ram': '%.1f MB' % int(ram)})
-
+    file.close()
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
 if not action:
