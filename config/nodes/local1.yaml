@@ -83,7 +83,7 @@ nodes:
         value:          'vda'
   metric-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
         '1':
@@ -245,6 +245,9 @@ nodes:
     compute_profile: 1
     compute_resource: controller-01
   status-01:
+    compute_profile: 1
+    compute_resource: controller-01
+  telemetry-01:
     compute_profile: 1
     compute_resource: controller-01
   volume-01:
