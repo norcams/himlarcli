@@ -10,4 +10,5 @@ __all__ = ["keystone",
            "parser",
            "utils",
            "printer",
-           'foremanclient']
+           'foremanclient',
+           'tests']
