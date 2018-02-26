@@ -1,0 +1,16 @@
+---
+desc:           'Manage swift object storage'
+actions:
+  'grant':      'Grant all users of a project access to use object storage'
+  'revoke':     'Revoke all users of a project access to use object storage'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
+  'project':
+   'sub':       ['grant', 'revoke']
+   'metavar':   'project'
