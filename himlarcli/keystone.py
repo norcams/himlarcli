@@ -331,16 +331,19 @@ class Keystone(Client):
             self.log_error('Group %s-group not found!'  % email)
             return
         role = self.__get_role(role)
+        exists = None
         try:
             if not self.dry_run:
-                exists = self.client.roles.list(project=project, group=group)
-            else:
-                exists = None
-        except exceptions.http.NotFound:
-            exists = None
-        self.logger.debug('=> grant role %s to %s for %s' % (role.name, email, project_name))
+                roles = self.client.roles.list(project=project, group=group)
+                for r in roles:
+                    if r.name == role.name:
+                        exists = True
+                        continue
+        except exceptions.http.NotFound as e:
+            self.log_error(e)
+        self.logger.debug('=> grant role %s to %s for %s', role.name, email, project_name)
         if exists:
-            self.log_error('Access exist for %s in project %s' % (email, project_name))
+            self.log_error('Role %s exist for %s in project %s' % (role.name, email, project_name))
         elif self.dry_run:
             data = {'user':group.name, 'project': project_name, 'role':role.name}
             self.log_dry_run(function='grant_role', **data)
