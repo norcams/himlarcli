@@ -103,6 +103,9 @@ nodes:
   novactrl-01:
     compute_profile: 1
     compute_resource: controller-02
+  ns-01:
+    compute_profile: 1
+    compute_resource: controller-01
   proxy-01:
     compute_profile: 1
     compute_resource: controller-03
@@ -116,6 +119,12 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  resolver-01:
+    compute_profile: 1
+    compute_resource: controller-02
+  resolver-02:
+    compute_profile: 1
+    compute_resource: controller-03
   status-01:
     compute_profile: 1
     compute_resource: controller-02
@@ -137,12 +146,3 @@ nodes:
   volume-01:
     compute_profile: 1
     compute_resource: controller-01
-  ns-01:
-    compute_profile: 1
-    compute_resource: controller-01
-  resolver-01:
-    compute_profile: 1
-    compute_resource: controller-02
-  resolver-02:
-    compute_profile: 1
-    compute_resource: controller-03
