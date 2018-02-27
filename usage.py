@@ -6,6 +6,7 @@ from himlarcli.cinder import Cinder
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
+import re
 
 himutils.is_virtual_env()
 
@@ -51,6 +52,7 @@ def action_volume():
         printer.output_dict(out_pools)
 
 def action_instance():
+    file = open('instanceslist.txt', 'w')
     for region in regions:
         flavors = dict()
         cores = ram = 0
@@ -64,10 +66,42 @@ def action_instance():
             flavors[flavor.name] = flavors.get(flavor.name, 0) + 1
             cores += flavor.vcpus
             ram += flavor.ram
+
+            # Check which flavor each instance uses and write the result to a file
+            flavoritems = (flavors.keys())
+            project = ksclient.get_by_id('project', i.tenant_id)
+            instance = novaclient.get_instance(i)
+            d = re.compile("^d1.*")
+            m = re.compile("^m2.*")
+            dlist = filter(d.match, flavoritems)
+            mlist = filter(m.match, flavoritems)
+            if project:
+                if dlist:
+                    file.write('---------------------------------------------------------------\n')
+                    file.write('Flavor: (flavor name, instance name, project name, project id) \n')
+                    file.write('---------------------------------------------------------------\n')
+                    file.write(flavor.name   + '\n')
+                    file.write(instance.name + '\n')
+                    file.write(project.name  + '\n')
+                    file.write(project.id    + '\n')
+                    file.write('---------------------------------------------------------------\n')
+                elif mlist:
+                    file.write('---------------------------------------------------------------\n')
+                    file.write('Flavor: (flavor name, instance name, project name, project id) \n')
+                    file.write('---------------------------------------------------------------\n')
+                    file.write(flavor.name   + '\n')
+                    file.write(instance.name + '\n')
+                    file.write(project.name  + '\n')
+                    file.write(project.id    + '\n')
+                    file.write('---------------------------------------------------------------\n')
+                else:
+                    pass
+
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
         printer.output_dict({'header': '%s resources' % region})
         printer.output_dict({'cores': cores, 'ram': '%.1f MB' % int(ram)})
+    file.close()
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

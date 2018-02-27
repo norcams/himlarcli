@@ -1,0 +1,27 @@
+---
+public: false
+c1: # (2x) new
+  'c1.medium': # [1-2-20]
+    vcpus: 1
+    ram: 2048
+    disk: 20
+  'c1.large': #  [2-4-20]
+    vcpus: 1
+    ram: 4096
+    disk: 20
+  'c1.xlarge': # [4-8-20]
+    vcpus: 4
+    ram: 8192
+    disk: 20
+  'c1.2xlarge': # [8-16-20]
+    vcpus: 8
+    ram: 16384
+    disk: 20
+  'c1.4xlarge': # [16-32-20]
+    vcpus: 16
+    ram: 32768
+    disk: 20
+  'c1.8xlarge': # [32-64-20]
+    vcpus: 32
+    ram: 65536
+    disk: 20
