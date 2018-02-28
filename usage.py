@@ -6,7 +6,6 @@ from himlarcli.cinder import Cinder
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
-import re
 
 himutils.is_virtual_env()
 
@@ -74,36 +73,6 @@ def action_instance():
                     projects[project.name] = dict({'m2': False, 'd1': False})
                 projects[project.name]['m2'] = True if 'm2' in flavor.name else False
                 projects[project.name]['d1'] = True if 'd1' in flavor.name else False
-
-            # Check which flavor each instance uses and write the result to a file
-            flavoritems = (flavors.keys())
-            project = ksclient.get_by_id('project', i.tenant_id)
-            instance = novaclient.get_instance(i)
-            d = re.compile("^d1.*")
-            m = re.compile("^m2.*")
-            dlist = filter(d.match, flavoritems)
-            mlist = filter(m.match, flavoritems)
-            if project:
-                if dlist:
-                    file.write('---------------------------------------------------------------\n')
-                    file.write('Flavor: (flavor name, instance name, project name, project id) \n')
-                    file.write('---------------------------------------------------------------\n')
-                    file.write(flavor.name   + '\n')
-                    file.write(instance.name + '\n')
-                    file.write(project.name  + '\n')
-                    file.write(project.id    + '\n')
-                    file.write('---------------------------------------------------------------\n')
-                elif mlist:
-                    file.write('---------------------------------------------------------------\n')
-                    file.write('Flavor: (flavor name, instance name, project name, project id) \n')
-                    file.write('---------------------------------------------------------------\n')
-                    file.write(flavor.name   + '\n')
-                    file.write(instance.name + '\n')
-                    file.write(project.name  + '\n')
-                    file.write(project.id    + '\n')
-                    file.write('---------------------------------------------------------------\n')
-                else:
-                    pass
 
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
