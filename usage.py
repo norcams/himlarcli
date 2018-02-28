@@ -51,7 +51,7 @@ def action_volume():
         printer.output_dict(out_pools)
 
 def action_instance():
-    file = open('instanceslist.txt', 'w')
+    file = open('flavor-m2d1.txt', 'w')
     for region in regions:
         flavors = dict()
         cores = ram = 0
@@ -66,24 +66,23 @@ def action_instance():
             flavors[flavor.name] = flavors.get(flavor.name, 0) + 1
             cores += flavor.vcpus
             ram += flavor.ram
-
+            # Check which project uses d1 or m2 flavor type
             project = ksclient.get_by_id('project', i.tenant_id)
             if 'm2' in flavor.name or 'd1' in flavor.name:
                 if project.name not in projects:
                     projects[project.name] = dict({'m2': False, 'd1': False})
                 projects[project.name]['m2'] = True if 'm2' in flavor.name else False
                 projects[project.name]['d1'] = True if 'd1' in flavor.name else False
-
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
         printer.output_dict({'header': '%s resources' % region})
         printer.output_dict({'cores': cores, 'ram': '%.1f MB' % int(ram)})
+        # Write the result to a file
         for key, value in projects.iteritems():
             if value['m2']:
-                print './flavor.py grant -p %s m2' % key
+                file.write('./flavor.py grant -n m2 -p' + key + '\n')
             if value['d1']:
-                print './flavor.py grant -p %s d1' % key
-
+                file.write('./flavor.py grant -n d1 -p' + key + '\n')
     file.close()
 
 # Run local function with the same name as the action
