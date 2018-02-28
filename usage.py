@@ -80,9 +80,9 @@ def action_instance():
         # Write the result to a file
         for key, value in projects.iteritems():
             if value['m2']:
-                file.write('./flavor.py grant -n m2 -p' + key + '\n')
+                file.write('./flavor.py grant -n m2 -p ' + key + '\n')
             if value['d1']:
-                file.write('./flavor.py grant -n d1 -p' + key + '\n')
+                file.write('./flavor.py grant -n d1 -p ' + key + '\n')
     file.close()
 
 # Run local function with the same name as the action
