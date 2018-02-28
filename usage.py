@@ -51,7 +51,7 @@ def action_volume():
         printer.output_dict(out_pools)
 
 def action_instance():
-    file = open('flavorm2d1.txt', 'w')
+    file = open('flavor-m2d1.txt', 'w')
     for region in regions:
         flavors = dict()
         cores = ram = 0
