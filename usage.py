@@ -57,6 +57,7 @@ def action_instance():
         cores = ram = 0
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         instances = novaclient.get_instances()
+        projects = dict()
         for i in instances:
             flavor = novaclient.get_by_id('flavor', i.flavor['id'])
             if not flavor:
@@ -65,10 +66,24 @@ def action_instance():
             flavors[flavor.name] = flavors.get(flavor.name, 0) + 1
             cores += flavor.vcpus
             ram += flavor.ram
+
+            project = ksclient.get_by_id('project', i.tenant_id)
+            if 'm2' in flavor.name or 'd1' in flavor.name:
+                if project.name not in projects:
+                    projects[project.name] = dict({'m2': False, 'd1': False})
+                projects[project.name]['m2'] = True if 'm2' in flavor.name else False
+                projects[project.name]['d1'] = True if 'd1' in flavor.name else False
+
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
         printer.output_dict({'header': '%s resources' % region})
         printer.output_dict({'cores': cores, 'ram': '%.1f MB' % int(ram)})
+        for key, value in projects.iteritems():
+            if value['m2']:
+                print './flavor.py grant -p %s m2' % key
+            if value['d1']:
+                print './flavor.py grant -p %s d1' % key
+
     file.close()
 
 # Run local function with the same name as the action
