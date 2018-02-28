@@ -69,11 +69,11 @@ def action_instance():
             ram += flavor.ram
 
             project = ksclient.get_by_id('project', i.tenant_id)
-            if 'm2' in flavor.name or 'd1' in flavor.name:
-                if project.name not in project:
-                    projects[project.name] = dict('m2': False, 'd1': False)
-                projects[project.name]['m2'] = True if if 'm2' in flavor.name else False
-                projects[project.name]['d1'] = True if if 'd1' in flavor.name else False
+            if 'm1' in flavor.name or 'd1' in flavor.name:
+                if project.name not in projects:
+                    projects[project.name] = dict({'m2': False, 'd1': False})
+                projects[project.name]['m2'] = True if 'm1' in flavor.name else False
+                projects[project.name]['d1'] = True if 'd1' in flavor.name else False
 
             # Check which flavor each instance uses and write the result to a file
             flavoritems = (flavors.keys())
@@ -109,7 +109,7 @@ def action_instance():
         printer.output_dict(flavors)
         printer.output_dict({'header': '%s resources' % region})
         printer.output_dict({'cores': cores, 'ram': '%.1f MB' % int(ram)})
-        for key, value in projects.iteritems:
+        for key, value in projects.iteritems():
             if value['m2']:
                 print './flavor.py grant -p %s m2' % key
             if value['d1']:
