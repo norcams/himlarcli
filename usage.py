@@ -50,7 +50,7 @@ def action_volume():
         printer.output_dict({'header': '%s volumes' % region})
         printer.output_dict(out_pools)
 
-def action_instance(): 
+def action_instance():
     #ToDo 
     for region in regions:
         flavors = dict()
