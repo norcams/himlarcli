@@ -104,7 +104,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   metric-01:
-    compute_profile: 2
+    compute_profile: 3
     compute_resource: controller-01
   monitor-01:
     compute_profile: 2
