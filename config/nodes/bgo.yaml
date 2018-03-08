@@ -120,6 +120,9 @@ nodes:
   novactrl-01:
     compute_profile: 2
     compute_resource: controller-02
+  ns-01:
+    compute_profile: 1
+    compute_resource: controller-02
   object-01:
     mac: d0:94:66:09:0d:6c
     hostgroup: 9
@@ -148,6 +151,12 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  resolver-01:
+    compute_profile: 1
+    compute_resource: controller-03
+  resolver-02:
+    compute_profile: 1
+    compute_resource: controller-04
   status-01:
     compute_profile: 1
     compute_resource: controller-02
