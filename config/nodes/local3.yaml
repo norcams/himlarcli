@@ -50,7 +50,7 @@ nodes:
     compute_resource: controller-01
   identity-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   image-01:
     compute_profile: 1
     compute_resource: controller-01
@@ -242,6 +242,13 @@ nodes:
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
+      compute_attributes:
+      volumes_attributes:
+        '0':
+          allocation:   '0G'
+          pool_name:    'dirpoolocz'
+          capacity:     '11G'
+          format_type:  'raw'
   status-01:
     compute_profile: 1
     compute_resource: controller-01
