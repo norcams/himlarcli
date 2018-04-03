@@ -112,8 +112,10 @@ def org():
             elif '@' not in user.name:
                 org = 'sysuser'
             else:
-                domain = user.name.split("@")[1]
-                org = domain.split(".")[-2]
+                if len(domain.split(".")) > 1:
+                   org = domain.split(".")[-2]
+                else:
+                   org = 'unknown'
             if org in stats:
                 stats[org] += 1
             else:
