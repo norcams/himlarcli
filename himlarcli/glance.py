@@ -64,14 +64,20 @@ class Glance(Client):
         self.upload_image(source_path)
         return self.image
 
+    def delete_private_images(self, project_id):
+        images = self.get_images(filters={'owner': project_id})
+        for image in images:
+            self.delete_image(image.id)
+
     def delete_image(self, image_id):
         if not self.image and not image_id:
             self.logger.critical('Image must exist before deletion.')
             return
         if not image_id:
             image_id = self.image.id
-        self.logger.debug('=> image delete %s' % image_id)
-        self.client.images.delete(image_id)
+        self.debug_log('image delete %s' % image_id)
+        if not self.dry_run:
+            self.client.images.delete(image_id)
 
     def update_image(self, name, image_id=None, **kwargs):
         if not self.image and not image_id:

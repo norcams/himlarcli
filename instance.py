@@ -13,6 +13,7 @@ parser = Parser()
 options = parser.parse_args()
 
 ksclient = Keystone(options.config, debug=options.debug)
+ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 printer = Printer(options.format)
 domain = 'Dataporten'

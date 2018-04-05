@@ -1,5 +1,6 @@
 from himlarcli.client import Client
 from himlarcli.nova import Nova
+from himlarcli.glance import Glance
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as exceptions
 import random
@@ -14,14 +15,20 @@ class Keystone(Client):
         super(Keystone, self).__init__(config_path, debug, log)
         self.client = keystoneclient.Client(session=self.sess,
                                             region_name=self.region)
+        self.domain_id = None
 
     def get_client(self):
         return self.client
 
 ################################### DOMAIN #####################################
 
-    def get_domain_id(self, domain):
-        return self.__get_domain(domain)
+    def get_domain_id(self):
+        if not self.domain_id:
+            self.logger.warning('=> domain id not set in script')
+        return self.domain_id
+
+    def set_domain(self, domain):
+        self.domain_id = self.__get_domain(domain)
 
 ################################## REGIONS #####################################
 
@@ -56,8 +63,8 @@ class Keystone(Client):
             result = dict()
         return result
 
-    def get_project_by_name(self, project_name, domain=None):
-        domain_id = self.get_domain_id(domain)
+    def get_project_by_name(self, project_name):
+        domain_id = self.get_domain_id()
         try:
             project = self.client.projects.list(domain=domain_id, name=project_name)
         except exceptions.http.NotFound:
@@ -75,8 +82,8 @@ class Keystone(Client):
             :param kwargs: extra project fields to match for
             :return: a list of project objects
         """
-        domain_id = self.get_domain_id(domain)
-        user = self.get_user_by_email(email=email, user_type='api', domain=domain)
+        domain_id = self.get_domain_id()
+        user = self.get_user_by_email(email=email, user_type='api')
         projects = list()
         if user:
             try:
@@ -96,15 +103,14 @@ class Keystone(Client):
                 project_list.append(project)
         return project_list
 
-    def get_user_by_email(self, email, user_type, domain=None):
+    def get_user_by_email(self, email, user_type):
         """ Get dataporten (dp) or api user from email.
             version: 2 """
-        domain_id = self.get_domain_id(domain)
         email = self.__get_uib_email(email)
         user = dict()
         if user_type == 'api':
             try:
-                user = self.client.users.list(domain=domain_id, name=email)
+                user = self.client.users.list(domain=self.domain_id, name=email)
             except exceptions.http.NotFound:
                 user = dict()
         elif user_type == 'dp':
@@ -113,20 +119,20 @@ class Keystone(Client):
             for user in users:
                 # To find dataporten user we need to match email and domain = None
                 if user.name == email and user.domain_id is None:
-                    self.logger.debug('=> user %s found by email' % email)
+                    self.logger.debug('=> user %s found by email', email)
                     user_found.append(user)
                     break
             if not user_found:
-                self.logger.debug('=> no dataporten user found for email %s' % email)
+                self.logger.debug('=> no dataporten user found for email %s', email)
             user = user_found
         if user:
             return user[0]
         return dict()
 
-    def get_group_by_email(self, email, domain=None):
+    def get_group_by_email(self, email):
         """ Return group object based on email for user.
             version: 2 """
-        domain_id = self.get_domain_id(domain)
+        domain_id = self.get_domain_id()
         email = self.__get_uib_email(email)
         self.logger.debug('=> email used to find group %s' % email)
         group_name = self.__get_group_name(email)
@@ -144,13 +150,13 @@ class Keystone(Client):
     def get_user_objects(self, email, domain):
         domain_id = self.__get_domain(domain)
         obj = dict()
-        api = self.get_user_by_email(email=email, user_type='api', domain=domain)
+        api = self.get_user_by_email(email=email, user_type='api')
         if not api:
             self.logger.warning('=> could not find api user for email %s' % email)
-        dp = self.get_user_by_email(email=email, user_type='dp', domain=None)
+        dp = self.get_user_by_email(email=email, user_type='dp')
         if not dp:
             self.logger.warning('=> could not find dataporten user for email %s' % email)
-        group = self.get_group_by_email(email, domain)
+        group = self.get_group_by_email(email)
         obj['api'] = api
         obj['dataporten'] = dp
         obj['group'] = group
@@ -189,7 +195,7 @@ class Keystone(Client):
     Check if a user has registered with access """
     def is_valid_user(self, email, domain=None):
         email = self.__get_uib_email(email)
-        group = self.get_group_by_email(email, domain)
+        group = self.get_group_by_email(email)
         return bool(group)
 
     def list_users(self, domain=False, **kwargs):
@@ -212,98 +218,118 @@ class Keystone(Client):
         compute = self.__list_compute_quota(project)
         return dict({'compute':compute})
 
-    def delete_project(self, project_name, domain=None):
+############################# DELETE FUNCTIONS ################################
+
+    def delete_project(self, project_name):
         """
             Delete project based on name and all instances
-            Version: 2
+            Version: 2018-1
             :param project_name: name of project to delete
         """
-        project = self.get_project_by_name(project_name=project_name, domain=domain)
+        project = self.get_project_by_name(project_name=project_name)
         if not project:
-            self.log_error('Project %s not found. Unable to delete project!' % project_name)
+            self.logger.debug('=> could not delete project %s: not found',
+                              project_name)
             return None
-        self.__delete_instances(project, self.dry_run)
+        # Delete instances
+        self.__delete_instances(project)
+        # Delete images
+        self.__delete_images(project)
+        self.debug_log('=> delete project %s' % project_name)
         if not self.dry_run:
-            self.logger.debug('=> delete project %s' % project_name)
             return self.client.projects.delete(project)
-        elif self.dry_run:
-            self.logger.debug('=> DRY-RUN: delete project %s' % project_name)
-            return None
+        return None
 
-    def remove_user(self, email, domain=None, dry_run=False):
-        """ Remove all object related to this email """
-        if not self.is_valid_user(email, domain):
-            self.logger.debug('=> user %s is not valid. Dropping delete' % email)
-            return False
-        obj = self.get_user_objects(email=email, domain=domain)
-        # Delete api user
-        if not dry_run and 'api' in obj and obj['api']:
-            self.logger.debug('=> delete api user %s' % obj['api'].name)
-            self.client.users.delete(obj['api'])
-        elif dry_run:
-            self.logger.debug('=> DRY-RUN: delete api user %s' % obj['api'].name)
-        # Delete dataporten user
-        if not dry_run and 'dataporten' in obj and obj['dataporten']:
-            self.logger.debug('=> delete dataporten user %s' % obj['dataporten'].name)
-            self.client.users.delete(obj['dataporten'])
-        elif dry_run and 'dataporten' in obj:
-            self.logger.debug('=> DRY-RUN: delete dataporten user %s' % obj['dataporten'].name)
-        # Delete group
-        if not dry_run and 'group' in obj and obj['group']:
-            self.logger.debug('=> delete group %s' % obj['group'].name)
-            self.client.groups.delete(obj['group'])
-        elif dry_run:
-            self.logger.debug('=> DRY-RUN: delete group %s' % obj['group'].name)
-        # Delete demo/personal projects and instances
-        if 'projects' in obj:
-            for project in obj['projects']:
-                if not hasattr(project, 'type'):
-                    self.logger.debug('=> unknown project type %s' % project.name)
-                elif project.type == 'demo' or project.type == 'peronal':
-                    self.logger.debug('=> delete instances from %s' % project.name)
-                    self.__delete_instances(project, dry_run)
-                    if not dry_run:
-                        self.logger.debug('=> delete project %s' % project.name)
-                        self.client.projects.delete(project)
-                    else:
-                        self.logger.debug('=> DRY-RUN: delete project %s' % project.name)
-                else:
-                    self.logger.debug('=> project type not demo or personal %s' % project.name)
+    def delete_user(self, email, user_type):
+        """
+            Delete user by email if found
+            Version: 2018-1
+            :param email: user email or username if fake email
+        """
+        user = self.get_user_by_email(email, user_type)
+        if not user:
+            self.logger.debug('=> could not find user %s of type %s',
+                              email, user_type)
+            return
+        self.debug_log('delete user %s of type %s' % (email, user_type))
+        if not self.dry_run:
+            self.client.users.delete(user)
 
-        return True
+    def delete_group(self, email):
+        """
+            Delete group by email if found
+            Version: 2018-1
+            :param email: user email or username if fake email
+        """
+        group = self.get_group_by_email(email)
+        if not group:
+            self.logger.debug('=> could not find group for email %s ', email)
+            return
+        self.debug_log('delete group %s' % group.name)
+        if not self.dry_run:
+            self.client.groups.delete(group)
 
-    def rename_user(self, new_email, old_email, domain=None, dry_run=False):
-        obj = self.get_user_objects(email=old_email, domain=domain)
+    def user_cleanup(self, email):
+        """
+            Remove user objects.
+            Version: 2018-1
+            :param email: user email or username if fake email
+        """
+        self.delete_user(email, 'api')
+        self.delete_user(email, 'dp')
+        self.delete_group(email)
+
+        # Delete demo project
+        self.delete_project(self.get_project_name(email, prefix='DEMO'))
+        # Delete personal project
+        self.delete_project(self.get_project_name(email, prefix='PRIVATE'))
+
+    def rename_user(self, new_email, old_email):
+        """
+            Rename user objects:
+            * rename api user
+            * rename group (will keep project membership)
+            * delete dataporten user (autocreates on new login)
+            * rename demo project
+            * rename personal project
+            Version: 2018-1
+        """
         # Rename api user
-        if not dry_run and 'api' in obj and obj['api']:
-            self.logger.debug('=> rename api user to %s' % new_email.lower())
-            self.client.users.update(user=obj['api'], name=new_email.lower())
-        elif dry_run:
-            self.logger.debug('=> DRY-RUN: rename api user to %s' % new_email.lower())
-        # Delete dataporten user
-        if not dry_run and 'dataporten' in obj and obj['dataporten']:
-            self.logger.debug('=> delete old dataporten user %s' % old_email)
-            self.client.users.delete(user=obj['dataporten'])
-        elif dry_run and 'dataporten' in obj:
-            self.logger.debug('=> DRY-RUN: delete old dataporten user %s' % old_email)
+        api = self.get_user_by_email(old_email, 'api')
+        if not api:
+            self.log_error('Could not find api user for %s!', old_email)
+        self.debug_log('rename api user from %s to %s' % (old_email, new_email))
+        if not self.dry_run:
+            self.client.users.update(user=api, name=new_email.lower())
         # Rename group
-        if not dry_run and 'group' in obj and obj['group']:
-            new_group_mail = self.__get_group_name(self.__get_uib_email(new_email))
-            self.logger.debug('=> rename group to %s' % new_group_mail)
-            self.client.groups.update(group=obj['group'], name='%s' % new_group_mail)
-        elif dry_run:
-            self.logger.debug('=> DRY-RUN: rename group to %s-group' % new_email)
-        if not dry_run:
-            # Rename old peronal project
-            old_project_name = self.get_project_name(old_email, 'PRIVATE')
-            new_project_name = self.get_project_name(new_email, 'PRIVATE')
-            self.logger.debug('=> rename %s to %s', old_project_name, new_project_name)
-            project = self.get_project_by_name(project_name=old_project_name,
-                                               domain=domain)
-            if project:
-                self.client.projects.update(project=project, name=new_project_name)
-        elif dry_run:
-            self.logger.debug('=> DRY-RUN: rename project to %s' % new_email)
+        group = self.get_group_by_email(old_email)
+        if not group:
+            self.log_error('Could not find group for user %s!', old_email)
+        new_group_name = self.__get_group_name(self.__get_uib_email(new_email))
+        self.debug_log('rename group from %s to %s' % (group.name, new_group_name))
+        if not self.dry_run:
+            self.client.groups.update(group=group, name='%s' % new_group_name)
+        # Delete dataporten user
+        self.delete_user(old_email, 'dp')
+        # Rename old peronal project
+        personal = self.get_project_by_name(
+            self.get_project_name(old_email, prefix='PRIVATE'))
+        new_personal_name = self.get_project_name(new_email, prefix='PRIVATE')
+        if personal:
+            self.debug_log('rename personal project from %s to %s'
+                           % (personal.name, new_personal_name))
+            if not self.dry_run:
+                self.client.projects.update(project=personal,
+                                            name=new_personal_name)
+        # Rename old demo project
+        new_demo_name = self.get_project_name(new_email, prefix='DEMO')
+        demo = self.get_project_by_name(
+            self.get_project_name(old_email, prefix='DEMO'))
+        if demo:
+            self.debug_log('rename demo project from %s to %s'
+                           % (demo.name, new_demo_name))
+            if not self.dry_run:
+                self.client.projects.update(project=demo, name=new_demo_name)
 
     def reset_password(self, email, domain=None, dry_run=False):
         obj = self.get_user_objects(email=email, domain=domain)
@@ -319,14 +345,14 @@ class Keystone(Client):
         print "New password: %s" % password
 
 
-    def grant_role(self, email, project_name, role='user', domain=None):
+    def grant_role(self, email, project_name, role='user'):
         """ Grant a role to a project for a user.
             version: 2 """
         if not self.dry_run:
-            project = self.get_project_by_name(project_name=project_name, domain=domain)
+            project = self.get_project_by_name(project_name=project_name)
         if not self.dry_run and not project:
             self.log_error("could not find project %s" % project_name, 1)
-        group = self.get_group_by_email(email=email, domain=domain)
+        group = self.get_group_by_email(email=email)
         if not group:
             self.log_error('Group %s-group not found!'  % email)
             return
@@ -355,7 +381,7 @@ class Keystone(Client):
     def list_roles(self, project_name, domain=None):
         """ List all roles for a project based on project name.
             version: 2 """
-        project = self.get_project_by_name(project_name=project_name, domain=domain)
+        project = self.get_project_by_name(project_name=project_name)
         roles = self.client.role_assignments.list(project=project)
         role_list = list()
         for role in roles:
@@ -397,7 +423,7 @@ class Keystone(Client):
         :return: dictionary with project data
         """
         parent_id = self.__get_domain(domain)
-        project_found = self.get_project_by_name(project_name=project_name, domain=domain)
+        project_found = self.get_project_by_name(project_name=project_name)
         grant_role = True if admin and self.is_valid_user(admin, domain) else False
         if project_found:
             #self.logger.debug('=> project %s exists' % project)
@@ -421,7 +447,7 @@ class Keystone(Client):
                 self.log_error(e)
                 self.log_error('Project %s not created' % project_name)
         if grant_role:
-            self.grant_role(project_name=project_name, email=admin, domain=domain)
+            self.grant_role(project_name=project_name, email=admin)
         if self.dry_run:
             return data
         return project
@@ -584,14 +610,13 @@ class Keystone(Client):
         self.logger.debug('=> group %s NOT found' % group)
         return None
 
-    """ Return domain ID
-    """
     def __get_domain(self, domain):
-        domain = self.client.domains.list(name=domain)
-        if len(domain) > 0:
-            return domain[0].id
-        else:
-            return False
+        """ Get domain id from name """
+        if domain:
+            domain_obj = self.client.domains.find(name=domain)
+            if domain_obj:
+                return domain_obj.id
+        return None
 
     def __get_projects(self, domain=False, **kwargs):
         domain_id = self.__get_domain(domain) if domain else None
@@ -618,13 +643,22 @@ class Keystone(Client):
             users = self.client.users.list(**kwargs)
         return users
 
-    def __delete_instances(self, project, dry_run=False):
+    def __delete_instances(self, project):
         """ Use novaclient to delete all instances for a project """
         novaclient = Nova(config_path=self.config_path,
                           debug=self.debug,
                           log=self.logger,
                           region=self.region)
-        novaclient.delete_project_instances(project, dry_run)
+        novaclient.set_dry_run(self.dry_run)
+        novaclient.delete_project_instances(project, self.dry_run)
+
+    def __delete_images(self, project):
+        glclient = Glance(config_path=self.config_path,
+                          debug=self.debug,
+                          log=self.logger,
+                          region=self.region)
+        glclient.set_dry_run(self.dry_run)
+        glclient.delete_private_images(project.id)
 
     def __list_compute_quota(self, project):
         self.novaclient = Nova(config_path=self.config_path,
@@ -639,6 +673,7 @@ class Keystone(Client):
                                log=self.logger,
                                region=self.region)
         return self.novaclient.set_quota(project.id, quota)
+
 
     @staticmethod
     def __get_group_name(email):

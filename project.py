@@ -17,6 +17,7 @@ printer = Printer(options.format)
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
+ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 #novaclient = Nova(options.config, debug=options.debug, log=logger)
 if hasattr(options, 'region'):
@@ -79,14 +80,13 @@ def action_create():
 def action_grant():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
         himutils.sys_error('User %s not found as a valid user.' % options.user)
-    project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
+    project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
         himutils.sys_error('No project found with name %s' % options.project)
     if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
         himutils.sys_error('Project are %s. User access not allowed!' % project.type)
     role = ksclient.grant_role(project_name=options.project,
-                               email=options.user,
-                               domain=options.domain)
+                               email=options.user)
     if role:
         output = role.to_dict() if not isinstance(role, dict) else role
         output['header'] = "Roles for %s" % options.project
@@ -117,7 +117,7 @@ def action_list():
     printer.output_dict({'header': 'Project list count', 'count': count})
 
 def action_show():
-    project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
+    project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
         himutils.sys_error('No project found with name %s' % options.project)
     output_project = project.to_dict()
