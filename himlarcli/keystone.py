@@ -300,7 +300,9 @@ class Keystone(Client):
             self.log_error('Could not find api user for %s!', old_email)
         self.debug_log('rename api user from %s to %s' % (old_email, new_email))
         if not self.dry_run:
-            self.client.users.update(user=api, name=new_email.lower())
+            self.client.users.update(user=api,
+                                     name=new_email.lower(),
+                                     email=new_email.lower())
         # Rename group
         group = self.get_group_by_email(old_email)
         if not group:
@@ -320,6 +322,7 @@ class Keystone(Client):
                            % (personal.name, new_personal_name))
             if not self.dry_run:
                 self.client.projects.update(project=personal,
+                                            admin=new_email,
                                             name=new_personal_name)
         # Rename old demo project
         new_demo_name = self.get_project_name(new_email, prefix='DEMO')
@@ -329,7 +332,9 @@ class Keystone(Client):
             self.debug_log('rename demo project from %s to %s'
                            % (demo.name, new_demo_name))
             if not self.dry_run:
-                self.client.projects.update(project=demo, name=new_demo_name)
+                self.client.projects.update(project=demo,
+                                            admin=new_email,
+                                            name=new_demo_name)
 
     def reset_password(self, email, domain=None, dry_run=False):
         obj = self.get_user_objects(email=email, domain=domain)
