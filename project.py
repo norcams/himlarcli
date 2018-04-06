@@ -50,6 +50,8 @@ def action_create():
                                       createdate=createdate.isoformat(),
                                       quota=options.quota,
                                       rt=options.rt)
+    if not ksclient.is_valid_user(options.admin, options.domain):
+        himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
     if project:
         output = project.to_dict() if not isinstance(project, dict) else project
         output['header'] = "Show information for %s" % options.project
@@ -78,10 +80,10 @@ def action_create():
 
 def action_grant():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
-        himutils.sys_error('User %s not found as a valid user.' % options.user)
+        himutils.sys_error('User "%s" not found as a valid user.' % options.user)
     project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
     if not project:
-        himutils.sys_error('No project found with name %s' % options.project)
+        himutils.sys_error('No project found with name "%s"' % options.project)
     if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
         himutils.sys_error('Project are %s. User access not allowed!' % project.type)
     role = ksclient.grant_role(project_name=options.project,
@@ -145,6 +147,27 @@ def action_show():
                 quota.update({'header': '%s quota in %s' % (comp, region), 'region': region})
                 #printer.output_dict({'header': 'Roles in project %s' % options.project})
                 printer.output_dict(quota)
+
+def action_instances():
+  #  project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
+    for region in regions:
+      novaclient = Nova(options.config, debug=options.debug, log=logger)
+      instances = novaclient.get_project_instances(project_id=options.project)
+      if not instances:
+        himutils.sys_error('No instances found for the project %s' % options.project)
+
+  #  inst = dict()
+    printer.output_dict({'header': 'Instances list (id, name, region)'})
+    count = 0
+    for i in instances:
+      output = {
+            'id': i.id,
+            'name': i.name,
+            'region': ksclient.get_region(),
+      }
+      count += 1
+      printer.output_dict(output, sort=True, one_line=True)
+    printer.output_dict({'header': 'Total instances in this project', 'count': count})
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

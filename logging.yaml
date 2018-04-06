@@ -16,7 +16,7 @@ handlers:
     formatter: simple
     filename: logs/himlar.log
     backupCount: 10
-    when: h
+    when: H 
 root:
   level: DEBUG
   handlers: [console,file]
