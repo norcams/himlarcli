@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 import utils
-import sys
 #from himlarcli.nova import Nova
 from himlarcli.keystone import Keystone
 #import himlarcli.foremanclient as foreman
 from himlarcli.foremanclient import Client
 from himlarcli import utils as himutils
+
+# Fix foreman functions and logger not-callable
+# pylint: disable=E1101,E1102
 
 desc = 'Setup compute resources and profiles'
 options = utils.get_options(desc, hosts=False, dry_run=True)
