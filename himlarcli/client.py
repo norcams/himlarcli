@@ -72,11 +72,15 @@ class Client(object):
         return None
 
     def get_logger(self):
+        """
+            Return logger object
+            :rtype: logging.Logger
+        """
         return self.logger
 
-    def log(self, msg):
-        print "client.log is depricated"
-        self.logger.debug(msg)
+    def debug_log(self, msg):
+        prefix = '=> DRY-RUN:' if self.dry_run else '=>'
+        self.logger.debug('%s %s', prefix, msg)
 
     def log_dry_run(self, function, **kwargs):
         if self.dry_run:

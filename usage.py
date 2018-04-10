@@ -51,13 +51,12 @@ def action_volume():
         printer.output_dict(out_pools)
 
 def action_instance():
-    #ToDo 
+    #ToDo
     for region in regions:
         flavors = dict()
         cores = ram = 0
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         instances = novaclient.get_instances()
-        projects = dict()
         for i in instances:
             flavor = novaclient.get_by_id('flavor', i.flavor['id'])
             if not flavor:

@@ -1,0 +1,18 @@
+language: python
+
+sudo: false
+
+dist: trusty
+
+before_install:
+  - sudo apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev
+
+python:
+  - "2.7"
+
+install:
+  - pip install -r requirements.txt
+
+script:
+#  - pylint -E himlarcli
+  - find . -maxdepth 1 -type f  \( -iname "*.py" ! -iname "setup.py" \)  | xargs pylint -E

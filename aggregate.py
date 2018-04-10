@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 from email.mime.text import MIMEText
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
-from himlarcli.glance import Glance
+#from himlarcli.glance import Glance
 from himlarcli import utils as himutils
 from himlarcli.notify import Notify
-from himlarcli.state import State
+#from himlarcli.state import State
 from himlarcli.parser import Parser
 from himlarcli.parser import Printer
 import novaclient.exceptions as novaexc
@@ -157,11 +157,11 @@ def action_notify():
     # Generate instance list per user
     for i in instances:
         user = ksclient.get_by_id('user', i.user_id)
-        if not hasattr(user, 'name'):
+        if 'name' not in user:
             continue
-        if "@" not in user.name:
+        if "@" not in user['name']:
             continue
-        email = user.name.lower()
+        email = user['name'].lower()
         if email not in users:
             users[email] = dict()
         users[email][i.name] = {'status': i.status}

@@ -13,9 +13,9 @@ parser = Parser()
 options = parser.parse_args()
 
 ksclient = Keystone(options.config, debug=options.debug)
+ksclient.set_domain('Dataporten')
 logger = ksclient.get_logger()
 printer = Printer(options.format)
-domain = 'Dataporten'
 
 # Regions
 regions = himutils.load_region_config('config/stats',
@@ -41,6 +41,7 @@ def project():
             if not project:
                 sys.stderr.write("MISSING PROJECT! id=%s for instance %s\n" % (i.tenant_id, i.name))
                 continue
+            print type(project)
             if hasattr(project, 'course'):
                 stats['education'] += 1
             elif '@' in project.name:
@@ -112,10 +113,11 @@ def org():
             elif '@' not in user.name:
                 org = 'sysuser'
             else:
+                domain = user.name.split("@")[1]
                 if len(domain.split(".")) > 1:
-                   org = domain.split(".")[-2]
+                    org = domain.split(".")[-2]
                 else:
-                   org = 'unknown'
+                    org = 'unknown'
             if org in stats:
                 stats[org] += 1
             else:
@@ -132,10 +134,10 @@ def org():
         printer.output_dict(percent)
 
 def user():
-    if not ksclient.is_valid_user(email=options.email, domain=domain):
+    if not ksclient.is_valid_user(email=options.email):
         print "%s is not a valid user. Please check your spelling or case." % options.email
         sys.exit(1)
-    obj = ksclient.get_user_objects(email=options.email, domain=domain)
+    obj = ksclient.get_user_objects(email=options.email, domain='Dataporten')
     projects = obj['projects']
     total = 0
     for project in projects:

@@ -4,8 +4,6 @@ from himlarcli import tests as tests
 tests.is_virtual_env()
 
 from himlarcli.keystone import Keystone
-from himlarcli.nova import Nova
-from himlarcli.cinder import Cinder
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
@@ -16,6 +14,7 @@ printer = Printer(options.format)
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
+ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 
 if hasattr(options, 'region'):
@@ -27,7 +26,7 @@ if not regions:
     himutils.sys_error('No valid regions found!')
 
 def action_grant():
-    project = ksclient.get_project_by_name(project_name=options.project, domain=options.domain)
+    project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
         himutils.sys_error('No project found with name %s' % options.project)
     users = ksclient.get_users(domain=options.domain, project=project.id)

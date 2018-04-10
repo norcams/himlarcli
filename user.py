@@ -15,6 +15,7 @@ options = parser.parse_args()
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
+ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
 printer = Printer(options.format)
@@ -57,21 +58,20 @@ def action_list():
     printer.output_dict(domains)
 
 def action_rename():
-    if not ksclient.is_valid_user(email=options.old, domain=options.domain):
-        print "%s is not a valid user. Please check your spelling or case." % options.old
-        sys.exit(1)
-    obj = ksclient.get_user_objects(email=options.old, domain=options.domain)
-    print obj['projects']
+    if not ksclient.is_valid_user(email=options.old):
+        himutils.sys_error('User %s not found as a valid user.' % options.old)
+    personal = ksclient.get_project_name(options.new, prefix='PRIVATE')
     new_demo_project = ksclient.get_project_name(options.new)
     old_demo_project = ksclient.get_project_name(options.old)
     print "\nYou are about to rename user with email %s to %s" % (options.old, options.new)
     print "\nWhen a user changes affilation we need to change the following:"
+    # new
     print " * Delete %s-group if it exists" % options.new
     print " * Delete %s api user if it exists" % options.new.lower()
     print " * Delete %s dataporten user if it exists" % options.new.lower()
-    print " * Delete all personal project for user %s" % options.new.lower()
-    print " * Delete %s demo project" % new_demo_project
-    print " * Delete %s instances in demo project if it exists" % new_demo_project
+    print " * Delete %s demo project and instances if exists" % new_demo_project
+    print " * Delete %s personal project and instances if exist" % personal
+    # old
     print " * Rename group from %s-group to %s-group" % (options.old, options.new)
     print " * Rename api user from %s to %s" % (options.old.lower(), options.new.lower())
     print " * Rename demo project from %s to %s" % (old_demo_project, new_demo_project)
@@ -81,13 +81,9 @@ def action_rename():
     if not himutils.confirm_action(question):
         return
     print 'Please wait...'
-    ksclient.remove_user(email=options.new,
-                         domain=options.domain,
-                         dry_run=options.dry_run)
+    ksclient.user_cleanup(email=options.new)
     ksclient.rename_user(new_email=options.new,
-                         old_email=options.old,
-                         domain=options.domain,
-                         dry_run=options.dry_run)
+                         old_email=options.old)
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
@@ -113,17 +109,14 @@ def action_create():
                          enddate=str(enddate))
 
 def action_delete():
+    if not ksclient.is_valid_user(email=options.user):
+        himutils.sys_error('User %s not found as a valid user.' % options.user)
     if not himutils.confirm_action('Delete user and all instances for %s' % options.user):
         return
     print "We are now deleting user, group, project and instances for %s" % options.user
     print 'Please wait...'
-    result = ksclient.remove_user(email=options.user,
-                                  domain=options.domain,
-                                  dry_run=options.dry_run)
-    if not result:
-        print 'Delete failed! Run with debug for more information'
-    else:
-        print 'Delete successfull'
+    ksclient.user_cleanup(email=options.user)
+    print 'Delete successfull'
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
