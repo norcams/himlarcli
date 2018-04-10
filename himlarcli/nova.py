@@ -37,12 +37,12 @@ class Nova(Client):
             version: 2 """
         if obj_type not in self.valid_objects:
             self.logger.debug('=> %s is not a valid object type', obj_type)
-            return dict()
+            return None
         try:
             result = getattr(self.client, '%ss' % obj_type).get(obj_id)
         except novaclient.exceptions.NotFound:
             self.logger.debug('=> %s with id %s not found', obj_type, obj_id)
-            result = dict()
+            result = None
         return result
 
 # =============================== SERVER ======================================
