@@ -11,4 +11,5 @@ __all__ = ["keystone",
            "utils",
            "printer",
            'foremanclient',
+           'mqclient',
            'tests']

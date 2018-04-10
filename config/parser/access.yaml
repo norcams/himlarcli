@@ -1,0 +1,18 @@
+---
+desc:           'Temp script for rabbitmq jobs from access'
+actions:
+  'push':       'Add create order'
+  'pop':        'Remove create order'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--email':
+    'sub':      'push'
+    'dest':     'email'
+    'required': true
+  '--password':
+    'sub':      'push'
+    'dest':     'password'
+    'required': true
