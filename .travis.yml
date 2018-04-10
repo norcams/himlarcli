@@ -10,4 +10,9 @@ before_install:
 python:
   - "2.7"
 
-install: "pip install -r requirements.txt"
+install:
+  - pip install -r requirements.txt
+
+script:
+#  - pylint -E himlarcli
+  - find . -maxdepth 1 -type f  \( -iname "*.py" ! -iname "setup.py" \)  | xargs pylint -E
