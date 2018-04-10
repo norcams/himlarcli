@@ -98,7 +98,7 @@ def action_delete():
     question = 'Delete project %s and all resources' % options.project
     if not options.force and not himutils.confirm_action(question):
         return
-    ksclient.delete_project(options.project, domain=options.domain)
+    ksclient.delete_project(options.project)
 
 def action_list():
     search_filter = dict()
