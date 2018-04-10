@@ -7,6 +7,7 @@ import random
 import string
 import re
 
+# pylint: disable=R0904
 class Keystone(Client):
 
     #version = 3
