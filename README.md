@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/norcams/himlarcli.svg?branch=master)](https://travis-ci.org/norcams/himlarcli)
 # Himlar command line tool
 
 ## Examples
@@ -24,6 +25,19 @@ source bin/activate
 python setup.py develop
 pip install -r requirements.txt
 ```
+### pylint
+
+We supply a .pylintrc file that are used for automated tests and code validation.
+To check new or updated python files run:
+```
+pytlint <script>.py
+```
+
+#### disable
+
+“#pylint: disable=some-message,another-one” at the desired block level or at the
+end of the desired line of code. You can disable messages either by code or by
+symbolic name.
 
 ### Vagrant
 
