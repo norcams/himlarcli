@@ -72,6 +72,10 @@ class Client(object):
         return None
 
     def get_logger(self):
+        """
+            Return logger object
+            :rtype: logging.Logger
+        """
         return self.logger
 
     def debug_log(self, msg):

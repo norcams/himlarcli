@@ -50,17 +50,20 @@ class Keystone(Client):
 #################################### OBJECTS ###################################
 
     def get_by_id(self, obj_type, obj_id):
-        """ Get valid openstack object by type and id.
-            version: 2 """
+        """
+            Get valid openstack object by type and id.
+            version: 2
+            :rtype: object (?)
+        """
         valid_objects = ['project', 'group', 'user']
         if obj_type not in valid_objects:
             self.logger.debug('=> %s is not a valid object type' % obj_type)
-            return dict()
+            return None
         try:
             result = getattr(self.client, '%ss' % obj_type).get(obj_id)
         except exceptions.http.NotFound:
             self.logger.debug('=> %s with id %s not found' % (obj_type, obj_id))
-            result = dict()
+            result = None
         return result
 
     def get_project_by_name(self, project_name):
