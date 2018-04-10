@@ -20,11 +20,23 @@ Use virtualenv with global site packages:
 
 ```bash
 cd himlarcli
-virtualenv . --system-site-packages
+virtualenv .
 source bin/activate
 python setup.py develop
 pip install -r requirements.txt
 ```
+
+### Install on CentOS 7
+
+Requirements
+```
+yum install -y python-virtualenv PyYAML openldap-devel openssl-devel gcc
+```
+After virtualenv run 
+```
+pip install --upgrade setuptools
+```
+
 ### pylint
 
 We supply a .pylintrc file that are used for automated tests and code validation.
