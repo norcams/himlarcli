@@ -16,12 +16,13 @@ needed for CentOS 7 can be found here:
 
 https://github.com/norcams/ansible/blob/master/lib/deploy_himlarcli.yaml
 
-Use virtualenv with global site packages:
+Use virtualenv:
 
 ```bash
 cd himlarcli
 virtualenv .
 source bin/activate
+pip install --upgrade setuptools
 python setup.py develop
 pip install -r requirements.txt
 ```
