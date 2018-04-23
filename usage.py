@@ -57,6 +57,7 @@ def action_instance():
         cores = ram = 0
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         instances = novaclient.get_instances()
+        total = 0
         for i in instances:
             flavor = novaclient.get_by_id('flavor', i.flavor['id'])
             if not flavor:
@@ -65,10 +66,13 @@ def action_instance():
             flavors[flavor.name] = flavors.get(flavor.name, 0) + 1
             cores += flavor.vcpus
             ram += flavor.ram
+            total += 1
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
         printer.output_dict({'header': '%s resources' % region})
-        printer.output_dict({'cores': cores, 'ram': '%.1f MB' % int(ram)})
+        printer.output_dict({'cores': cores,
+                             'ram': '%.1f MB' % int(ram),
+                             'instances': total})
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
