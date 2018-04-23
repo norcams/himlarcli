@@ -59,6 +59,10 @@ def action_instance():
         instances = novaclient.get_instances()
         total = 0
         for i in instances:
+            # Filter demo
+            project = ksclient.get_by_id('project', i.tenant_id)
+            if not options.demo and project and 'DEMO' in project.name:
+                continue
             flavor = novaclient.get_by_id('flavor', i.flavor['id'])
             if not flavor:
                 himutils.sys_error('Flavor with ID %s not found' % i.flavor['id'], 0)
