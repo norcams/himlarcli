@@ -1,0 +1,61 @@
+Dear UH-IaaS user,
+
+As you may know, we recently hit a constraint in our networking
+infrastructure, which forced the deletion of demo instances in the OSL
+region. This is an attempt to explain the situation and outline what
+is being done to permanently fix the problem. In summary:
+
+  * There is currently a hard limit on the number of instances that
+    can be spun up in both BGO and OSL.
+
+  * Since there are currently fewer instances running in BGO, we ask
+    that new instances are provisioned there, if possible.
+
+  * We ask that you delete any instances that you don't need, in order
+    to free up resources for others.
+
+This is temporary. The networking constraint exists in hardware, which
+means that new hardware is needed to fix the problem permanently. The
+timeframe for permanently fixing the issue is outlined below:
+
+  * In region BGO, the relevant networking components will be replaced
+    by the end of next week (UiB has the components in stock).
+
+  * In region OSL, new networking equipment has been ordered from the
+    vendor, and is expected to arrive within two weeks. We then expect
+    to replace the components shortly thereafter.
+
+We apologize for any inconvenience you have experienced as a result of
+these networking problems, and we wanted to let you know that these
+problems are being worked on and will be fixed as soon as possible.
+
+Have a nice weekend!
+
+Follow us on Twitter: https://twitter.com/uhiaas
+
+----------------------------------------------------------------------
+
+The remainder of this email is for those of you that are interested in
+the nitty-gritty, technical details about the problems.
+
+The networking limitation is related to IPv6, specifically to the
+amount of IPv6 routes that the router hardware supports. The routers
+operate with two limits: "IPv4/IPv6 entries" with a maximum of 16284,
+and "Long IPv6 entries" with a maximum of 256. The latter was unknown
+to us until recently, and applies to IPv6 routes where the prefix is
+longer than 64 bits. In our case, since we're creating host routes to
+individual instances, the prefix is 128.
+
+The implication is that new instances, with either the dualstack or
+the IPv6-only network options, will not work properly if this limit is
+exceeded. Any instances that use the old IPv4-only network do not have
+this problem and are not affected.
+
+The networking hardware is getting dated and was slated for
+replacement regardless of these problems, but obviously we had to
+expedite the process.
+
+Best Regards,
+--
+The UH-IaaS team
+http://docs.uh-iaas.no/
