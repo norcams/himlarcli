@@ -18,6 +18,15 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  cephmon-01:
+    compute_profile: 2
+    compute_resource: controller-01
+  cephmon-02:
+    compute_profile: 2
+    compute_resource: controller-01
+  cephmon-03:
+    compute_profile: 2
+    compute_resource: controller-02
   compute-01:
     mac: 00:23:24:5e:32:7e #6
   compute-02:
