@@ -261,6 +261,60 @@ nodes:
   status-01:
     compute_profile: 1
     compute_resource: controller-01
+
+  storage-01:
+    compute-profile: 1
+    compute_resource: controller-01
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+    compute_attributes:
+      volumes_attributes:
+        '1': # SSD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '10G'
+          format_type:  'qcow2'
+        '2': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpoolsata1'
+          capacity:     '20G'
+          format_type:  'qcow2'
+        '3': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpoolsata1'
+          capacity:     '20G'
+          format_type:  'qcow2'
+        '4': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpoolsata2'
+          capacity:     '20G'
+          format_type:  'qcow2'
+        '5': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpoolsata2'
+          capacity:     '20G'
+          format_type:  'qcow2'
+        '6': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpoolsata3'
+          capacity:     '20G'
+          format_type:  'qcow2'
+        '7': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpoolsata3'
+          capacity:     '20G'
+          format_type:  'qcow2'
+        '8': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpoolsata4'
+          capacity:     '20G'
+          format_type:  'qcow2'
+        '9': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpoolsata4'
+          capacity:     '20G'
+          format_type:  'qcow2'
   telemetry-01:
     compute_profile: 1
     compute_resource: controller-01
