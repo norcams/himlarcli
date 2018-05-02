@@ -1,0 +1,24 @@
+---
+desc:   'Manage instance live migration. For offline migration see aggregate.py'
+actions:
+  list:    'List instances for migration'
+  migrate: 'Migrate instances from host'
+opt_args:
+  'source':
+    'metavar':  'source'
+    'help':     'Source host. Use either hostname or FQDN'
+  'target':
+    'sub':      'migrate'
+    'metavar':  'target'
+    'help':     'Target host. Use either hostname or FQDN'
+  '--limit':
+    'sub':      'migrate'
+    'type':     int
+    'dest':     'limit'
+    'help':     'number of instances to migrate before exit'
+  '--sleep':
+    'sub':      'migrate'
+    'dest':     'sleep'
+    'type':     int
+    'help':     'number of seconds to sleep between instances'
+    'default':  2
