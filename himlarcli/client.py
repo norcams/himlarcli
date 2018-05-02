@@ -87,6 +87,14 @@ class Client(object):
             output = '=> DRY-RUN %s: %s' % (function, kwargs)
             self.logger.debug(output)
 
+    def get_fqdn(self, hostname):
+        if not hostname:
+            return None
+        if '.' in hostname:
+            return hostname
+        domain = self.get_config('openstack', 'domain')
+        return hostname + '.' + domain
+
     @staticmethod
     def log_error(msg, code=0):
         sys.stderr.write("%s\n" % msg)
