@@ -323,6 +323,11 @@ nodes:
         value:          'vda'
     compute_attributes:
       volumes_attributes:
+        '0': # OS-disk
+          allocation:   '0G'
+          pool_name:    'dirpoolevo'
+          capacity:     '10G'
+          format_type:  'qcow2'
         '1': # SSD
           allocation:   '0G'
           pool_name:    'dirpoolevo'
@@ -376,6 +381,11 @@ nodes:
         value:          'vda'
     compute_attributes:
       volumes_attributes:
+        '0': # OS-disk
+          allocation:   '0G'
+          pool_name:    'dirpoolevo'
+          capacity:     '10G'
+          format_type:  'qcow2'
         '1': # SSD
           allocation:   '0G'
           pool_name:    'dirpoolevo'
@@ -429,6 +439,11 @@ nodes:
         value:          'vda'
     compute_attributes:
       volumes_attributes:
+        '0': # OS-disk
+          allocation:   '0G'
+          pool_name:    'dirpoolocz'
+          capacity:     '10G'
+          format_type:  'qcow2'
         '1': # SSD
           allocation:   '0G'
           pool_name:    'dirpoolocz'
@@ -482,6 +497,11 @@ nodes:
         value:          'vda'
     compute_attributes:
       volumes_attributes:
+        '0': # OS-disk
+          allocation:   '0G'
+          pool_name:    'dirpoolocz'
+          capacity:     '10G'
+          format_type:  'qcow2'
         '1': # SSD
           allocation:   '0G'
           pool_name:    'dirpoolocz'
