@@ -61,6 +61,21 @@ class Nova(Client):
         return server
 
 # =============================== HOSTS =======================================
+    def get_host(self, hostname):
+        """
+            Return hypervisor from hostname
+            Version: 2018-1
+            :rtype: novaclient.v2.hypervisors.Hypervisor
+        """
+        try:
+            hosts = self.client.hypervisors.search(hostname)
+        except novaclient.exceptions.NotFound as e:
+            self.logger.warning('=> %s', e)
+            return None
+        for host in hosts:
+            if host.hypervisor_hostname == hostname:
+                return host
+
     def get_hosts(self, zone=None):
         return self.client.hosts.list(zone=zone)
 
