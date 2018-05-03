@@ -6,6 +6,7 @@ import keystoneauth1.exceptions as keyexc
 import urllib2
 import time
 
+# pylint: disable=R0904
 
 class Nova(Client):
     version = 2
@@ -14,7 +15,7 @@ class Nova(Client):
 
     valid_objects = ['flavor']
 
-    def __init__(self, config_path, host=None, debug=False, log=None, region=None):
+    def __init__(self, config_path, debug=False, log=None, region=None):
         """ Create a new nova client to manaage a host
         `**host`` fqdn for the nova compute host
         `**config_path`` path to ini file with config
@@ -76,8 +77,13 @@ class Nova(Client):
             if host.hypervisor_hostname == hostname:
                 return host
 
-    def get_hosts(self, zone=None):
-        return self.client.hosts.list(zone=zone)
+    def get_hosts(self, detailed=True):
+        """
+            Return all hypervisor from all aggregates
+            Version: 2018-1
+            :rtype: novaclient.base.ListWithMeta
+        """
+        return self.client.hypervisors.list(detailed)
 
     def get_service(self, host, service='nova-compute'):
         return self.client.services.list(host=host, binary=service)
@@ -106,8 +112,29 @@ class Nova(Client):
         return agg_list
 
     def get_aggregate(self, aggregate):
-        aggregate = self.__get_aggregate(aggregate)
+        """
+            Return an aggregate
+            Version: 2018-1
+            :rtype: novaclient.v2.aggregates.Aggregate
+        """
+        try:
+            aggregate = self.client.aggregates.find(name=aggregate)
+        except novaclient.exceptions.NotFound as e:
+            self.logger.warning(e)
+            return None
         return aggregate
+
+    def get_aggregate_hosts(self, aggregate):
+        """
+            Return all hypervisors/hosts from an aggregate
+            Version: 2018-1
+            :rtype: List
+        """
+        aggregate = self.__get_aggregate(aggregate)
+        hosts = list()
+        for h in aggregate.hosts:
+            hosts.append(self.get_host(h))
+        return hosts
 
     def update_aggregate(self, aggregate, metadata):
         aggregate = self.__get_aggregate(aggregate)
