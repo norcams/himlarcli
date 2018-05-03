@@ -132,6 +132,8 @@ class Nova(Client):
         """
         aggregate = self.__get_aggregate(aggregate)
         hosts = list()
+        if not aggregate:
+            return hosts
         for h in aggregate.hosts:
             hosts.append(self.get_host(h))
         return hosts
