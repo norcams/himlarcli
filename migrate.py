@@ -47,7 +47,6 @@ def action_migrate():
     # Disable source host unless no-disable param is used
     if not options.dry_run and not options.no_disable:
         nc.disable_host(source)
-        logger.debug('=> disable source host %s', source)
     dry_run_txt = 'DRY_RUN: ' if options.dry_run else ''
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0
@@ -62,6 +61,26 @@ def action_migrate():
             time.sleep(options.sleep)
         elif not options.dry_run:
             logger.debug('=> dropping migrate of %s unknown state %s', i.name, state)
+        count += 1
+        if options.limit and count > options.limit:
+            logger.debug('=> number of instances reached limit %s', options.limit)
+            break
+
+def action_evacuate():
+    q = 'Evacuate all instances from %s to other hosts' % (source)
+    if not himutils.confirm_action(q):
+        return
+    instances = nc.get_all_instances(search_opts=search_opts)
+    dry_run_txt = 'DRY_RUN: ' if options.dry_run else ''
+    count = 0
+    for i in instances:
+        state = getattr(i, 'OS-EXT-STS:vm_state')
+        logger.debug('=> %sevacuate %s', dry_run_txt, i.name)
+        if state == 'active' and not options.dry_run:
+            i.evacuate()
+            time.sleep(options.sleep)
+        elif not options.dry_run:
+            logger.debug('=> dropping evacuate of %s unknown state %s', i.name, state)
         count += 1
         if options.limit and count > options.limit:
             logger.debug('=> number of instances reached limit %s', options.limit)
