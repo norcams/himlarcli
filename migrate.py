@@ -35,15 +35,20 @@ def action_list():
 
 def action_migrate():
     target = nc.get_fqdn(options.target)
+    dry_run_txt = 'DRY_RUN: ' if options.dry_run else ''
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0
     for i in instances:
-        if not dry_run:
+        state = getattr(i, 'OS-EXT-STS:vm_state')
+        logger.debug('=> %smigrate %s to %s', dry_run_txt, i.name, target)
+        if state == 'active' and not options.dry_run:
             i.live_migrate(host=target)
-            logger.debug('=> migrate %s to %s', i.name, target)
+            time.sleep(options.sleep)
+        elif state == 'stopped' and not options.dry_run:
+            i.migrate()
             time.sleep(options.sleep)
         else:
-            logger.debug('=> DRY-RUN: migrate %s to %s', i.name, target)
+            logger.debug('=> dropping migrate of %s unknown state %s', i.name, state)
         count += 1
         if options.limit and count > options.limit:
             logger.debug('=> number of instances reached limit %s', options.limit)
