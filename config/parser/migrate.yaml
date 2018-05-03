@@ -1,5 +1,5 @@
 ---
-desc:   'Manage instance live migration. For offline migration see aggregate.py'
+desc:   'Migate instances. Only use on hosts with shared storage! For local storage see aggregate.py'
 actions:
   list:     'List instances for migration'
   migrate:  'Migrate instances from host'
@@ -30,3 +30,8 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '--aggregate':
+    'sub':      'evacuate'
+    'dest':     'aggregate'
+    'help':     'host aggregate to evacuate'
+    'default':  'central1'

@@ -67,7 +67,20 @@ def action_migrate():
             break
 
 def action_evacuate():
-    q = 'Evacuate all instances from %s to other hosts' % (source)
+    # Check that there are other enabled hosts in the same aggregate
+    hosts = nc.get_aggregate_hosts(options.aggregate)
+    found_enabled = list()
+    for host in hosts:
+        if host.hypervisor_hostname == source:
+            continue
+        if host.status == 'enabled':
+            found_enabled.append(host.hypervisor_hostname)
+    if not found_enabled:
+        himutils.sys_error('Evacuate failed. No valid host in aggregate %s'
+                            % options.aggregate)
+    logger.debug('=> valid host found %s',  ", ".join(found_enabled))
+    # Interactive question
+    q = 'Evacuate all instances from %s to other hosts' % source
     if not himutils.confirm_action(q):
         return
     instances = nc.get_all_instances(search_opts=search_opts)
