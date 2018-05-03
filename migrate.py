@@ -35,10 +35,10 @@ def action_list():
         printer.output_dict(output, sort=True, one_line=True)
 
 def action_migrate():
+    target = nc.get_fqdn(options.target)
     q = 'Migrate all instances from %s to %s' % (source, target)
     if not himutils.confirm_action(q):
         return
-    target = nc.get_fqdn(options.target)
     dry_run_txt = 'DRY_RUN: ' if options.dry_run else ''
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0
