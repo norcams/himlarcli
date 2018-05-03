@@ -73,8 +73,8 @@ def action_evacuate():
     hosts = nc.get_aggregate_hosts(options.aggregate)
     found_enabled = list()
     for host in hosts:
-#        if host.hypervisor_hostname == source:
-#            continue
+        if host.hypervisor_hostname == source:
+            continue
         if host.status == 'enabled':
             found_enabled.append(host.hypervisor_hostname)
     if not found_enabled:
@@ -89,7 +89,6 @@ def action_evacuate():
     dry_run_txt = 'DRY_RUN: ' if options.dry_run else ''
     count = 0
     for i in instances:
-        print i.to_dict()
         state = getattr(i, 'OS-EXT-STS:vm_state')
         logger.debug('=> %sevacuate %s', dry_run_txt, i.name)
         if state == 'active' and not options.dry_run:
