@@ -23,6 +23,9 @@ nc.set_dry_run(options.dry_run)
 source = nc.get_fqdn(options.source)
 search_opts = dict(all_tenants=1, host=source)
 
+if not nc.get_host(source):
+    himutils.sys_error('Could not find source host %s' % source)
+
 def action_list():
     instances = nc.get_all_instances(search_opts=search_opts)
     printer.output_dict({'header': 'Instance list (id, name, state)'})
@@ -36,9 +39,15 @@ def action_list():
 
 def action_migrate():
     target = nc.get_fqdn(options.target)
+    if not nc.get_host(target):
+        himutils.sys_error('Could not find target host %s' % target)
     q = 'Migrate all instances from %s to %s' % (source, target)
     if not himutils.confirm_action(q):
         return
+    # Disable source host unless no-disable param is used
+    if not options.dry_run and not options.no_disable:
+        nc.disable_host(source)
+        logger.debug('=> disable source host %s', source)
     dry_run_txt = 'DRY_RUN: ' if options.dry_run else ''
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0

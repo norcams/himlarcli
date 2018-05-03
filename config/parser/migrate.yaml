@@ -21,4 +21,11 @@ opt_args:
     'dest':     'sleep'
     'type':     int
     'help':     'number of seconds to sleep between instances'
-    'default':  2
+    'default':  5
+  '--no-disable':
+    'sub':      ['migrate']
+    'dest':     'no_disable'
+    'help':     'do not disable source hypervisor'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
