@@ -8,6 +8,7 @@ from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
+import time
 
 parser = Parser()
 options = parser.parse_args()
@@ -34,6 +35,9 @@ def action_list():
         printer.output_dict(output, sort=True, one_line=True)
 
 def action_migrate():
+    q = 'Migrate all instances from %s to %s' % (source, target)
+    if not himutils.confirm_action(q):
+        return
     target = nc.get_fqdn(options.target)
     dry_run_txt = 'DRY_RUN: ' if options.dry_run else ''
     instances = nc.get_all_instances(search_opts=search_opts)
@@ -47,7 +51,7 @@ def action_migrate():
         elif state == 'stopped' and not options.dry_run:
             i.migrate()
             time.sleep(options.sleep)
-        else:
+        elif not options.dry_run:
             logger.debug('=> dropping migrate of %s unknown state %s', i.name, state)
         count += 1
         if options.limit and count > options.limit:
