@@ -22,7 +22,7 @@ opt_args:
     'dest':     'sleep'
     'type':     int
     'help':     'number of seconds to sleep between instances'
-    'default':  5
+    'default':  15
   '--no-disable':
     'sub':      ['migrate']
     'dest':     'no_disable'
