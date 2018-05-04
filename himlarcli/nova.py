@@ -62,7 +62,7 @@ class Nova(Client):
         return server
 
 # =============================== HOSTS =======================================
-    def get_host(self, hostname):
+    def get_host(self, hostname, detailed=False):
         """
             Return hypervisor from hostname
             Version: 2018-1
@@ -75,6 +75,8 @@ class Nova(Client):
             return None
         for host in hosts:
             if host.hypervisor_hostname == hostname:
+                if detailed:
+                    return self.client.hypervisors.get(host.id)
                 return host
 
     def get_hosts(self, detailed=True):
