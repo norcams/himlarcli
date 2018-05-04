@@ -1,0 +1,11 @@
+---
+desc:   'Manage hypervisors/compute hosts'
+actions:
+  list:       'List all hypervisors'
+  show:       'Show hypervisor details'
+  instances:  'List all instances on hypervisor'
+opt_args:
+  'host':
+    'sub':      ['show', 'instances']
+    'metavar':  'host'
+    'help':     'Hypervisor host. Use either hostname or FQDN'
