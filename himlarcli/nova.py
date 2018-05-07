@@ -100,6 +100,34 @@ class Nova(Client):
 
 ################################## AGGREGATE ##################################
 
+    def move_host_aggregate(self, hostname, aggregate, remove_from_old=True):
+        host = self.get_host(hostname)
+        to_agg = self.get_aggregate(aggregate)
+        if not host: return # host not found
+        if not to_agg: return # aggregate not found
+        if hostname in to_agg.hosts: return # host already in aggregate
+
+        if host.status != 'enabled':
+            if not self.dry_run: self.enable_host(hostname)
+            enabled = True
+        else: enabled = False
+
+        if remove_from_old:
+            filters = { 'hosts': [hostname] }
+            aggregates = self.get_filtered_aggregates(**filters)
+            for agg in aggregates:
+                if not self.dry_run:
+                    agg.remove_host(hostname)
+                self.logger.debug('=> remove host %s from aggregate %s',
+                                  hostname, agg.name)
+        if not self.dry_run:
+            to_agg.add_host(hostname)
+        self.logger.debug('=> add host %s to aggregate %s', hostname, to_agg.name)
+
+        if enabled and not self.dry_run:
+            self.disable_host(hostname)
+        return True
+
     def get_filtered_aggregates(self, **kwargs):
         aggregates = self.client.aggregates.findall(**kwargs)
         return aggregates
