@@ -173,6 +173,7 @@ class Parser(object):
     """
     Arg options:
         - sub: add this arg only to this sub action
+        - weight: used for positional aggregate. default weight 50
         - name: arg name. E.G. '-n'
         - dest: variable name to store the result in
         - default: default value
@@ -184,7 +185,11 @@ class Parser(object):
         - type: string value of type
     """
     def __add_opt_args(self):
-        for name, arg in self.opt_args.iteritems():
+        sorted_opts = sorted(self.opt_args.iteritems(),
+                             key=lambda opt: int(opt[1].get('weight', 50)),
+                             reverse=True)
+
+        for name, arg in sorted_opts:
             if not 'dest' in arg and '-' in name:
                 print 'missing dest in opt_args %s' % name
                 continue
@@ -207,6 +212,8 @@ class Parser(object):
             for parser in parsers.itervalues():
                 if 'sub' in arg:
                     del arg['sub']
+                if 'weight' in arg:
+                    del arg['weight']
                 self.__add_argument(parser=parser, name=name, **arg)
 
     @staticmethod
