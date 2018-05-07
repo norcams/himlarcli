@@ -113,10 +113,9 @@ class Nova(Client):
         else: enabled = False
 
         if remove_from_old:
-            filters = { 'hosts': [hostname] }
-            aggregates = self.get_filtered_aggregates(**filters)
+            aggregates = self.get_aggregates(False)
             for agg in aggregates:
-                if not self.dry_run:
+                if hostname in agg.hosts:
                     agg.remove_host(hostname)
                 self.logger.debug('=> remove host %s from aggregate %s',
                                   hostname, agg.name)
