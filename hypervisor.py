@@ -52,6 +52,27 @@ def action_show():
         himutils.sys_error('Could not find valid host %s' % options.host)
     printer.output_dict(host.to_dict())
 
+def action_move():
+    hostname = nc.get_fqdn(options.host)
+    if nc.move_host_aggregate(hostname=hostname, aggregate=options.aggregate):
+        print "Host %s moved to aggregate %s" % (hostname, options.aggregate)
+
+def action_enable():
+    host = nc.get_host(hostname=nc.get_fqdn(options.host), detailed=True)
+    if not host:
+        himutils.sys_error('Could not find valid host %s' % options.host)
+    if host.status != 'enabled' and not options.dry_run:
+        nc.enable_host(host.hypervisor_hostname)
+        print 'Host %s enabled' % host.hypervisor_hostname
+
+def action_disable():
+    host = nc.get_host(hostname=nc.get_fqdn(options.host), detailed=True)
+    if not host:
+        himutils.sys_error('Could not find valid host %s' % options.host)
+    if host.status != 'disabled' and not options.dry_run:
+        nc.disable_host(host.hypervisor_hostname)
+        print 'Host %s disabled' % host.hypervisor_hostname
+
 def action_list():
     hosts = nc.get_hosts()
     printer.output_dict({'header': 'Hypervisor list (name, vms, state, status)'})

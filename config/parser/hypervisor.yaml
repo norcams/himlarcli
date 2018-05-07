@@ -4,8 +4,16 @@ actions:
   list:       'List all hypervisors'
   show:       'Show hypervisor details'
   instances:  'List all instances on hypervisor'
+  move:       'Move host to another aggregate'
+  enable:     'Enable hypervisor'
+  disable:    'Disable hypervisor'
 opt_args:
   'host':
-    'sub':      ['show', 'instances']
+    'sub':      ['move', 'show', 'instances', 'enable', 'disable']
     'metavar':  'host'
     'help':     'Hypervisor host. Use either hostname or FQDN'
+  'aggregate':
+    'sub':      ['move']
+    'metavar':  'aggregate'
+    'weight':   10
+    'help':     'Aggreate name'
