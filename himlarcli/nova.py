@@ -116,9 +116,9 @@ class Nova(Client):
             aggregates = self.get_aggregates(False)
             for agg in aggregates:
                 if hostname in agg.hosts:
-                    agg.remove_host(hostname)
-                self.logger.debug('=> remove host %s from aggregate %s',
-                                  hostname, agg.name)
+                    if not self.dry_run: agg.remove_host(hostname)
+                    self.logger.debug('=> remove host %s from aggregate %s',
+                                      hostname, agg.name)
         if not self.dry_run:
             to_agg.add_host(hostname)
         self.logger.debug('=> add host %s to aggregate %s', hostname, to_agg.name)
