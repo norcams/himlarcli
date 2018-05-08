@@ -54,6 +54,9 @@ def action_show():
 
 def action_move():
     hostname = nc.get_fqdn(options.host)
+    instances = nc.get_instances(host=hostname)
+    if instances:
+        himutils.sys_error('Host %s not empty. Remove instances first' % hostname)
     if nc.move_host_aggregate(hostname=hostname, aggregate=options.aggregate):
         print "Host %s moved to aggregate %s" % (hostname, options.aggregate)
 
