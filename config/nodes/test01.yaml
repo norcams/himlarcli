@@ -64,6 +64,9 @@ nodes:
   identity-01:
     compute_profile: 1
     compute_resource: controller-03
+  identity-02:
+    compute_profile: 1
+    compute_resource: controller-01
   image-01:
     compute_profile: 1
     compute_resource: controller-02
