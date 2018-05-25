@@ -157,11 +157,11 @@ def action_notify():
     # Generate instance list per user
     for i in instances:
         user = ksclient.get_by_id('user', i.user_id)
-        if 'name' not in user:
+        if not user.name:
             continue
-        if "@" not in user['name']:
+        if "@" not in user.name:
             continue
-        email = user['name'].lower()
+        email = user.name.lower()
         if email not in users:
             users[email] = dict()
         users[email][i.name] = {'status': i.status}
