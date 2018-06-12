@@ -173,7 +173,7 @@ class Nova(Client):
 
     def get_instances(self, aggregate=None, host=None, simple=False):
         if not aggregate:
-            instances = self.__get_instances()
+            instances = self.__get_instances(host=host)
         else:
             agg = self.__get_aggregate(aggregate)
             if not agg.hosts:
