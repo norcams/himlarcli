@@ -62,17 +62,7 @@ nodes:
     compute_resource: controller-02
   image-01:
     compute_profile: 1
-    compute_resource: controller-01
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '10G'
-          format_type:  'qcow2'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+    compute_resource: controller-02
   logger-01:
     compute_profile: 2
     compute_resource: controller-01
@@ -115,7 +105,7 @@ nodes:
     compute_resource: controller-02
   network-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   novactrl-01:
     compute_profile: 2
     compute_resource: controller-01
@@ -552,4 +542,4 @@ nodes:
     compute_resource: controller-01
   volume-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
