@@ -48,6 +48,7 @@ def action_whales():
             if len(usage.server_usages) < options.threshold:
                 continue
             cinderusage = cc.get_usage(usage.tenant_id)
+            admin = project.admin if hasattr(project, 'admin') else 'unknown!'
             output = OrderedDict()
             output['instances'] = len(usage.server_usages)
             output['volume_gb'] =  cinderusage.gigabytes['in_use']
