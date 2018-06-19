@@ -98,7 +98,7 @@ nodes:
     compute_resource: controller-02
   novactrl-01:
     compute_profile: 2
-    compute_resource: controller-01
+    compute_resource: controller-02
   object-01:
     compute-profile: 1
     compute_resource: controller-01
