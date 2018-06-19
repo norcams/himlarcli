@@ -53,7 +53,7 @@ def action_whales():
             output['instances'] = len(usage.server_usages)
             output['volume_gb'] =  cinderusage.gigabytes['in_use']
             output['name'] = project.name
-            output['admin'] = project.admin
+            output['admin'] = admin
             if print_header:
                 output['header'] = 'project usage %s (instances, volume (GB), name, id)' % region
                 print_header = False
