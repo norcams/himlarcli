@@ -1,10 +1,11 @@
 import json
 import operator
 import sys
+import csv
 
 class Printer(object):
 
-    VALID_OPTIONS = ['text', 'json']
+    VALID_OPTIONS = ['text', 'json', 'csv']
     INDENT = 2
 
     def __init__(self, output_format):
@@ -13,17 +14,38 @@ class Printer(object):
         else:
             sys.exit('Printer(): Unknown format %s' % output_format)
 
+    def output_list_dicts(self, lists, sort=True, one_line=False):
+        if self.format == 'text':
+            self.__list_dicts_to_text(lists=lists, sort=sort, one_line=one_line)
+        elif self.format == 'json':
+            self.__list_dicts_to_json(lists=lists, sort=sort)
+        elif self.formant == csv:
+            print 'not implemented'
+
     def output_dict(self, objects, sort=True, one_line=False):
+        if not isinstance(objects, dict):
+            self.log_error('cannot output dict in printer. wrong object type')
+            return
         if self.format == 'text':
             self.__dict_to_text(objects=objects, sort=sort, one_line=one_line)
         elif self.format == 'json':
             self.__dict_to_json(objects=objects, sort=sort)
+        elif self.format == 'csv':
+            self.__dict_to_csv(objects=objects, sort=sort)
 
     def __dict_to_json(self, objects, sort=True):
         if 'header' in objects:
             del objects['header']
         if objects:
             print json.dumps(objects, sort_keys=sort, indent=self.INDENT)
+
+    def __list_dicts_to_text(self, lists, sort=True, one_line=False):
+        for obj in lists:
+            self.__dict_to_text(obj, sort=sort, one_line=one_line)
+
+    def __list_dicts_to_json(self, lists, sort=True):
+        for obj in lists:
+            self.__dict_to_json(obj, sort=sort)
 
     @staticmethod
     def __dict_to_text(objects, order_by=0, sort=True, one_line=False):
@@ -49,3 +71,20 @@ class Printer(object):
                 print "%s = %s" % (k, v)
         if out_line:
             print out_line.strip()
+
+    @staticmethod
+    def __dict_to_csv(objects, sort=True):
+        writer = csv.DictWriter(sys.stdout,
+                                fieldnames=objects.keys(),
+                                dialect='excel')
+        if 'header' in objects:
+            del objects['header']
+            writer.writeheader()
+        if objects:
+            writer.writerow(objects)
+
+    @staticmethod
+    def log_error(msg, code=0):
+        sys.stderr.write("%s\n" % msg)
+        if code > 0:
+            sys.exit(code)
