@@ -340,9 +340,10 @@ class Keystone(Client):
                                             admin=new_email,
                                             name=new_demo_name)
 
-    def reset_password(self, email, domain=None, dry_run=False):
+    def reset_password(self, email, domain=None, dry_run=False, password=None):
         obj = self.get_user_objects(email=email, domain=domain)
-        password = self.generate_password()
+        if password == None:
+            password = self.generate_password()
         if not dry_run and 'api' in obj and obj['api']:
             self.logger.debug('=> reset password for user %s' % email)
             self.client.users.update(obj['api'], password=password)
