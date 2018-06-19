@@ -1,5 +1,6 @@
 import sys
 import os
+from datetime import datetime
 import ConfigParser
 import logging
 import logging.config
@@ -47,6 +48,15 @@ def get_config(config_path):
     config = ConfigParser.ConfigParser()
     config.read(config_path)
     return config
+
+def get_date(datestr, default):
+    if datestr:
+        try:
+            return datetime.strptime(datestr, '%d.%m.%Y').date()
+        except ValueError:
+            sys_error('date format DD.MM.YYYY not valid for %s' % datestr, 1)
+    else:
+        return default
 
 def get_logger(name, config, debug, log=None):
     if log:
