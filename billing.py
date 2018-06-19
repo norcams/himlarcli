@@ -74,7 +74,7 @@ def action_flavors():
         usage = nc.get_usage(project_id=project.id, start=start, end=stop)
         for server in usage.server_usages:
             flavors[server['flavor']] = flavors.get(server['flavor'], 0) + 1
-    printer.output_dict({'header': 'flavor usage for %s in all regions' % project.name})
+    flavors['header'] = 'flavor usage for %s in all regions' % project.name
     printer.output_dict(flavors)
 
 def action_resources():

@@ -2,6 +2,7 @@ import json
 import operator
 import sys
 import csv
+from collections import OrderedDict
 
 class Printer(object):
 
@@ -73,15 +74,23 @@ class Printer(object):
             print out_line.strip()
 
     @staticmethod
-    def __dict_to_csv(objects, sort=True):
+    def __dict_to_csv(objects, order_by=0, sort=True):
+        if 'header' in objects:
+            del objects['header']
+            print_header = True
+        else:
+            print_header = False
         writer = csv.DictWriter(sys.stdout,
                                 fieldnames=objects.keys(),
                                 dialect='excel')
-        if 'header' in objects:
-            del objects['header']
-            writer.writeheader()
         if objects:
-            writer.writerow(objects)
+            if print_header:
+                writer.writeheader()
+            if sort:
+                sorted_objects = OrderedDict(sorted(objects.items()))
+            else:
+                sorted_objects = objects
+            writer.writerow(sorted_objects)
 
     @staticmethod
     def log_error(msg, code=0):
