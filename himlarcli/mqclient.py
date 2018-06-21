@@ -55,7 +55,6 @@ class MQclient(object):
         else:
             self.logger.debug('=> DRY-RUN: message %s added to queue %s', message, queue)
 
-
     def __get_config(self, section, option):
         try:
             value = self.config.get(section, option)
@@ -66,3 +65,5 @@ class MQclient(object):
         except ConfigParser.NoSectionError:
             self.logger.debug('=> config file missing section %s', section)
         return None
+
+# sender
