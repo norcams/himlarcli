@@ -30,21 +30,21 @@ def process_action(ch, method, properties, body): #callback
     print " [x] Received %r" % body
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
-
-    # check action if reset or provision
     data = json.loads(body)
-    user = ksclient.get_user_by_email(data['email'], 'api')
+    user = ksclient.get_user_by_email(data['email'], 'api') #user_type='api'
 
-    if data['action'] == 'reset_password':
-        ksclient.reset_password(email=data['email'], password=data['password'])
+    if user:
+        if data['action'] == 'reset_password':
+            ksclient.reset_password(email=data['email'], password=data['password'])
+        elif data['action'] == 'provision':
+            ksclient.create_user(name=options.user,
+                                domain=options.domain,
+                                email=data['email'],
+                                admin=options.admin,
+                                password=data['password'],
+                                description=options.description,
+                                enddate=str(enddate))
 
-    # TODO: fix dp_provisioner
-    #if data['action'] == 'provision':
-    #client = ksclient.get_client()
-    #print client
-    #create_user
-
-#-----------------------------------------------------------------
 def action_pop():
     channel = mqclient.get_channel('access')
     channel.basic_consume(process_action, queue='access')
@@ -59,7 +59,6 @@ def action_pop():
 
 def action_push():
   mqclient.push(email=options.email, password=options.password, queue='access')
-
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
