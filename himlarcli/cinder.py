@@ -17,6 +17,9 @@ class Cinder(Client):
                                           service_type=self.service_type,
                                           region_name=self.region)
 
+    def get_usage(self, project_id):
+        return self.client.quotas.get(tenant_id=project_id, usage=True)
+
     def get_client(self):
         return self.client
 

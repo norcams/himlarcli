@@ -115,6 +115,9 @@ nodes:
   nat-linux-01:
     compute_profile: 1
     compute_resource: controller-01
+  nat-linux-02:
+    compute_profile: 1
+    compute_resource: controller-02
   network-01:
     compute_profile: 2
     compute_resource: controller-03

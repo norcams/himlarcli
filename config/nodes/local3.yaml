@@ -28,29 +28,19 @@ nodes:
     compute_profile: 2
     compute_resource: controller-02
   compute-01:
-    mac: 00:23:24:5e:32:7e #6
+    mac: 00:23:24:5d:ad:8b #4
   compute-02:
-    mac: 00:23:24:5e:35:20 #2
+    mac: 00:23:24:5e:32:47 #5
   console-01:
     compute_profile: 1
     compute_resource: controller-01
   controller-01:
-    mac: 00:15:17:d8:08:c9 #8
+    mac: 00:15:17:d8:08:c9 # sh5520
   controller-02:
-    mac: 00:23:24:5e:29:8d #7
+    mac: 00:23:24:5e:29:8d #3
   dashboard-01:
     compute_profile: 1
     compute_resource: controller-01
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '60G'
-          format_type:  'raw'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
   db-01:
     compute_profile: 1
     compute_resource: controller-01
@@ -62,17 +52,7 @@ nodes:
     compute_resource: controller-02
   image-01:
     compute_profile: 1
-    compute_resource: controller-01
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '10G'
-          format_type:  'qcow2'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+    compute_resource: controller-02
   logger-01:
     compute_profile: 2
     compute_resource: controller-01
@@ -115,10 +95,10 @@ nodes:
     compute_resource: controller-02
   network-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02
   novactrl-01:
     compute_profile: 2
-    compute_resource: controller-01
+    compute_resource: controller-02
   object-01:
     compute-profile: 1
     compute_resource: controller-01
@@ -552,4 +532,4 @@ nodes:
     compute_resource: controller-01
   volume-01:
     compute_profile: 1
-    compute_resource: controller-01
+    compute_resource: controller-02

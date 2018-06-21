@@ -3,6 +3,7 @@ from novaclient import client as novaclient
 import novaclient.exceptions as exceptions
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as keyexc
+from datetime import date, datetime, timedelta
 import urllib2
 import time
 
@@ -173,7 +174,7 @@ class Nova(Client):
 
     def get_instances(self, aggregate=None, host=None, simple=False):
         if not aggregate:
-            instances = self.__get_instances()
+            instances = self.__get_instances(host=host)
         else:
             agg = self.__get_aggregate(aggregate)
             if not agg.hosts:
@@ -228,8 +229,10 @@ class Nova(Client):
             search_opts.update({'all_tenants': 1})
         return self.__get_all_instances(search_opts)
 
-    def get_project_instances(self, project_id):
+    def get_project_instances(self, project_id, deleted=False):
         search_opts = dict(tenant_id=project_id, all_tenants=1)
+        if deleted:
+            search_opts['deleted'] = 1
         instances = self.__get_all_instances(search_opts=search_opts)
         self.logger.debug('=> found %s instances for project %s' % (len(instances), project_id))
         return instances
@@ -301,9 +304,13 @@ class Nova(Client):
 
     def get_usage(self, project_id=None, start=None, end=None):
         if not start:
-            start = datetime(2016, 11, 10)
+            start = datetime.today() - timedelta(days=7)
         if not end:
             end = datetime.today()
+        if isinstance(start, date):
+            start = datetime.combine(start, datetime.min.time())
+        if isinstance(end, date):
+            end = datetime.combine(end, datetime.min.time())
         if project_id:
             usage = self.client.usage.get(tenant_id=project_id, start=start, end=end)
         else:

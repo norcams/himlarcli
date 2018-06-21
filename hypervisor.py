@@ -41,7 +41,7 @@ def action_instances():
         if i.status in status:
             status[str(i.status).lower()] += 1
         else:
-            status[str(i.status).lower()] = 1
+            status[str(i.status).lower()] += 1
     printer.output_dict({'header': 'Counts'})
     printer.output_dict(status)
 
