@@ -3,7 +3,6 @@ import pika
 import himlarcli.utils as utils
 import ConfigParser
 
-
 class MQclient(object):
 
     def __init__(self, config_path, debug, log=None):
@@ -67,3 +66,4 @@ class MQclient(object):
         return None
 
 # sender
+
