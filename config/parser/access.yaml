@@ -3,7 +3,6 @@ desc:           'Temp script for rabbitmq jobs from access'
 actions:
   'push':       'Add create order'
   'pop':        'Remove create order'
-  'provision':  'API user provisioning'
 opt_args:
   '--domain':
     'dest':     'domain'
