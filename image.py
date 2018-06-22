@@ -70,6 +70,8 @@ def action_usage():
     printer.output_dict(out_image)
     distros = {'fedora': 0, 'centos': 0, 'ubuntu': 0, 'debian': 0, 'cirros': 0}
     distros['header'] = 'Distros'
+    tags = dict()
+    tags['header'] = 'Tags'
     for image in output.itervalues():
         out_image = {
             'name': image['name'],
@@ -82,9 +84,12 @@ def action_usage():
         printer.output_dict(out_image, sort=True, one_line=one_line)
         for distro in distros.iterkeys():
             if distro in image['name'].lower():
+                for tag in image['tags']:
+                    tags[tag] = tags.get(tag, 0) + 1
                 distros[distro] += image['count']
                 continue
     printer.output_dict(distros)
+    printer.output_dict(tags)
     return output
 
 def action_list():
