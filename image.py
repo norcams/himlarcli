@@ -85,7 +85,7 @@ def action_usage():
         for distro in distros.iterkeys():
             if distro in image['name'].lower():
                 for tag in image['tags']:
-                    tags[tag] = tags.get(tag, 0) + 1
+                    tags[tag] = tags.get(tag, 0) + image['count']
                 distros[distro] += image['count']
                 continue
     printer.output_dict(distros)
