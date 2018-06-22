@@ -68,7 +68,7 @@ def action_usage():
     output = image_usage(options.detailed)
     out_image = {'header': 'Images with usage count'}
     printer.output_dict(out_image)
-    distros = {'fedora': 0, 'centos': 0, 'ubuntu': 0, 'debian': 0, 'cirros': 0}
+    distros = {'fedora': 0, 'centos': 0, 'ubuntu': 0, 'debian': 0, 'cirros': 0, 'windows': 0}
     distros['header'] = 'Distros'
     tags = dict()
     tags['header'] = 'Tags'
