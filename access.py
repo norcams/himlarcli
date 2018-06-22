@@ -37,8 +37,7 @@ def process_action(ch, method, properties, body): #callback
                                 email=data['email'],
                                 admin=options.admin,
                                 password=data['password'],
-                                description=options.description,
-                                enddate=str(enddate))
+                                description=options.description)
 
 def action_pop():
     channel = mqclient.get_channel('access')
