@@ -91,6 +91,9 @@ def action_resources():
         deleted = nc.get_project_instances(project_id=project.id, deleted=True)
         running = nc.get_project_instances(project_id=project.id)
         for i in deleted + running:
+            resource = gc.get_resource(resource_type='instance', resource_id=i.id)
+            if not resource:
+                continue
             metrics = dict()
             metrics['vcpu'] = gc.get_client().metric.get('vcpus', i.id)
             metrics['ram'] = gc.get_client().metric.get('memory', i.id)

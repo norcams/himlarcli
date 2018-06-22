@@ -1,5 +1,6 @@
 from himlarcli.client import Client
 from gnocchiclient.v1.client import Client as gnocchiclient
+from gnocchiclient import exceptions
 
 class Gnocchi(Client):
 
@@ -13,3 +14,12 @@ class Gnocchi(Client):
 
     def get_client(self):
         return self.client
+
+    def get_resource(self, resource_type, resource_id):
+        try:
+            resource = self.client.resource.get(resource_type=resource_type,
+                                                resource_id=resource_id)
+        except exceptions.ResourceNotFound as e:
+            resource = None
+            self.log_error('Resource with ID %s not found!' % resource_id)
+        return resource
