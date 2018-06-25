@@ -55,3 +55,7 @@ opt_args:
     'sub':      'create'
     'dest':     'enddate'
     'help':     'set end date for projects (DD.MM.YY)'
+  '--password':
+    'sub':      'create'
+    'dest':     'password'
+    'help':     'user password (default: random password)'
