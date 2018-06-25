@@ -41,8 +41,7 @@ def action_create():
     else:
         enddate = None
     createdate = datetime.today()
-    project = ksclient.create_project(domain=options.domain,
-                                      project_name=options.project,
+    project = ksclient.create_project(project_name=options.project,
                                       admin=options.admin.lower(),
                                       test=test,
                                       type=options.type,

@@ -424,15 +424,15 @@ class Keystone(Client):
             self.log_error('Project %s not updated' % project_id)
 
 
-    def create_project(self, domain, project_name, admin=None, description=None, **kwargs):
+    def create_project(self, project_name, admin=None, description=None, **kwargs):
         """
         Create new project in domain and grant user role to admin if valid user.
-        Works with dry_run
-        version: 2
+        Works with dry_run and domain
+        version: 2018-1
 
         :return: dictionary with project data
         """
-        parent_id = self.__get_domain(domain)
+        parent_id = self.domain_id
         project_found = self.get_project_by_name(project_name=project_name)
         grant_role = True if admin and self.is_valid_user(admin, domain) else False
         if project_found:
