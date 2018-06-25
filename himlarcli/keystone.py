@@ -469,11 +469,12 @@ class Keystone(Client):
 
         :return: clear text password for the new user
         """
-        if not self.__validate_email(email):
-            self.log_error('%s is not a valid email address', email)
+        if not self.__validate_email(email.lower()):
+            self.log_error('%s is not a valid email address' % email)
             return
         domain = self.domain_id
         group_name = self.__get_group_name(name)
+        username = name.lower()
         if not password:
             password = self.generate_password()
         group = user = None
@@ -494,16 +495,19 @@ class Keystone(Client):
         # Create user
         try:
             if not self.dry_run:
-                user = self.client.users.create(name=name,
+                user = self.client.users.create(name=username,
                                                 domain=domain,
-                                                email=email,
+                                                email=email.lower(),
                                                 type=user_type,
                                                 password=password,
                                                 **kwargs)
                 self.logger.debug('=> create user %s', user.to_dict())
             else:
                 data = kwargs.copy()
-                data.update({'name': name, 'email': email, 'type': user_type})
+                data.update({
+                    'name': username,
+                    'email': email.lower(),
+                    'type': user_type})
                 self.log_dry_run('create user', **data)
         except exceptions.http.BadRequest as e:
             self.log_error(e)
