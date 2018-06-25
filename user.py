@@ -102,7 +102,6 @@ def action_create():
         enddate = None
     email = options.email if options.email else options.user
     ksclient.create_user(name=options.user,
-                         domain=options.domain,
                          email=email,
                          admin=options.admin,
                          description=options.description,

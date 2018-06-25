@@ -462,7 +462,7 @@ class Keystone(Client):
             return data
         return project
 
-    def create_user(self, name, email, domain, user_type='api', **kwargs):
+    def create_user(self, name, email, password=None, user_type='api', **kwargs):
         """
         Create a new group and a new local user for the group.
         version: 2
@@ -472,9 +472,10 @@ class Keystone(Client):
         if not self.__validate_email(email):
             self.log_error('%s is not a valid email address', email)
             return
-        domain = self.__get_domain(domain)
+        domain = self.domain_id
         group_name = self.__get_group_name(name)
-        password = self.generate_password()
+        if not password:
+            password = self.generate_password()
         group = user = None
 
         # Create group
