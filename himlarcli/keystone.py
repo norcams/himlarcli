@@ -525,6 +525,20 @@ class Keystone(Client):
         if password:
             print "New password: %s" % password
 
+    def provision_dataporten(self, email, password):
+        """
+        Create a api user and demo project for a dataporten user.
+        Version: 2018-6
+        """
+        self.logger.debug('=> provsion new dataporten user %s', email)
+        self.create_user(name=email, email=email, password=password)
+        project_name = get_project_name(email)
+        desc = "Personal demo project for %s. Resources might be terminated at any time" % email.lower()
+        project = self.create_project(project_name=project_name,
+                                      admin=email.lower(),
+                                      type='demo',
+                                      description=desc)
+
     """
     Federation settings for identity provider """
     def set_identity_provider(self, name, remote_id):
