@@ -170,6 +170,7 @@ def update_image(name, image_data, image_type):
     imagefile = himutils.download_file(image_data['latest'], url, logger,
                                        checksum_type, checksum_url, 10000)
     if not imagefile: # if download or checksum failed
+        logger.debug('=> download %s failed' % url)
         return
     #tags = list(image_data['tags']) if 'tags' in image_data else list()
     tags = list()
