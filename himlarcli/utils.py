@@ -170,7 +170,7 @@ def load_config(configfile, log=None):
             config = None
     return config
 
-def download_file(target, source, logger, checksum_type=None, checksum_url=None):
+def download_file(target, source, logger, checksum_type=None, checksum_url=None, content_length=1000):
     """ Download a file from a source url """
     target = get_abs_path(target)
     if not os.path.isfile(target):
@@ -181,7 +181,7 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None)
             sys.stderr.write(str(exc)+'\n')
             return None
         #print filename
-        if int(headers['content-length']) < 1000:
+        if int(headers['content-length']) < content_length:
             logger.debug("=> file is too small: %s" % target)
             if os.path.isfile(target):
                 os.remove(target)
