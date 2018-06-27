@@ -434,14 +434,14 @@ class Keystone(Client):
         """
         parent_id = self.domain_id
         project_found = self.get_project_by_name(project_name=project_name)
-        grant_role = True if admin and self.is_valid_user(admin, domain) else False
+        grant_role = True if admin and self.is_valid_user(admin, parent_id) else False
         if project_found:
             #self.logger.debug('=> project %s exists' % project)
             self.log_error("WARNING: project %s exists!" % project_name)
             return None
         if self.dry_run:
             data = kwargs.copy()
-            data.update({'domain': domain, 'name': project_name, 'description': description})
+            data.update({'domain': parent_id, 'name': project_name, 'description': description})
             self.log_dry_run('create_project', **data)
         else:
             try:
