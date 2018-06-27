@@ -535,7 +535,7 @@ class Keystone(Client):
         """
         self.logger.debug('=> provsion new dataporten user %s', email)
         self.create_user(name=email, email=email, password=password)
-        project_name = get_project_name(email)
+        project_name = self.get_project_name(email)
         desc = "Personal demo project for %s. Resources might be terminated at any time" % email.lower()
         project = self.create_project(project_name=project_name,
                                       admin=email.lower(),
