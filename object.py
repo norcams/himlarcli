@@ -31,7 +31,7 @@ def action_grant():
         himutils.sys_error('No project found with name %s' % options.project)
     users = ksclient.get_users(domain=options.domain, project=project.id)
     for user in users:
-        ksclient.grant_role(email=user.email, project_name=project.name, role='object')
+        ksclient.grant_role(email=user.email, project_name=project.name, role_name='object')
 
 def action_revoke():
     print "TODO"

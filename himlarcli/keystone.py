@@ -355,7 +355,7 @@ class Keystone(Client):
         print "New password: %s" % password
 
 
-    def grant_role(self, email, project_name, role='user'):
+    def grant_role(self, email, project_name, role_name='user'):
         """ Grant a role to a project for a user.
             version: 2 """
         if not self.dry_run:
@@ -366,7 +366,10 @@ class Keystone(Client):
         if not group:
             self.log_error('Group %s-group not found!'  % email)
             return
-        role = self.__get_role(role)
+        role = self.__get_role(role_name)
+        if not role:
+            self.log_error('Role %s not found!'  % role_name)
+            return
         exists = None
         try:
             if not self.dry_run:
@@ -620,14 +623,20 @@ class Keystone(Client):
             self.logger.debug('=> no user found for email %s' % email)
         return match
 
-    def __get_role(self, role, domain=None):
-        roles = self.client.roles.list(domain=domain)
-        for r in roles:
-            if r.name == role:
-                self.logger.debug('=> role %s found' % role)
-                return r
-        self.logger.debug('=> role %s NOT found' % role)
-        return None
+    def __get_role(self, role_name):
+        """
+        Get the role object based on the role name and domain.
+        Version: 2018-6
+        :return the role object or None if not found
+        :rtype: keystoneclient.v3.roles.Role
+        """
+        try:
+            role = self.client.roles.find(name=role_name, domain=self.domain_id)
+            print type(role)
+        except exceptions.http.NotFound as e:
+            self.logger.debug('=> role %s NOT found' % role_name)
+            role = None
+        return role
 
     def __get_group(self, group, domain=None, user=None):
         """ Return FIRST group that maches group name """
