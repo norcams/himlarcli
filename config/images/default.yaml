@@ -12,19 +12,8 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
-  'ubuntu_1710':
-    'name':             'GOLD Ubuntu 17.10'
-    'depricated':       'Outdated (Ubuntu)'
-    'url':              'http://builder/'
-    'latest':           'ubuntu_1710-latest.qcow2'
-    'min_ram':          768
-    'min_disk':         8
-    'visibility':       'public'
-    'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
   'ubuntu_1804':
-    'name':             'GOLD Ubuntu 18.04'
+    'name':             'GOLD Ubuntu 18.04 LTS'
     'depricated':       'Outdated (Ubuntu)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1804-latest.qcow2'
