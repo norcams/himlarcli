@@ -70,12 +70,16 @@ def action_grant():
         nc = Nova(options.config, debug=options.debug, log=logger)
         nc.set_dry_run(options.dry_run)
         update_access(nc, 'grant')
+        print "Grant access to %s for %s in %s" % (options.flavor,
+            options.project, region)
 
 def action_revoke():
     for region in regions:
         nc = Nova(options.config, debug=options.debug, log=logger)
         nc.set_dry_run(options.dry_run)
-        update_access(nc, 'grant')
+        update_access(nc, 'revoke')
+        print "Revoke access to %s for %s in %s" % (options.flavor,
+            options.project, region)
 
 def update_access(nc, action):
     public = flavors['public'] if 'public' in flavors else False
@@ -84,7 +88,6 @@ def update_access(nc, action):
     project = kc.get_project_by_name(options.project)
     if not project:
         himutils.sys_error('project not found %s' % project)
-    print "%s access to %s for %s" % (action, options.flavor, options.project)
     nc.update_flavor_access(filters=options.flavor,
                             project_id=project.id,
                             action=action)
