@@ -1,5 +1,9 @@
 ---
 public: false
+properties:
+  hw_rng:allowed: 1
+  hw_rng:rate_bytes: 100000
+  hw_rng:rate_period: 60
 r1: # (8x) new
   'r1.medium': # [1-8-20]
     vcpus: 1
