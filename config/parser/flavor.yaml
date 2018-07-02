@@ -1,0 +1,25 @@
+---
+desc:           'Manage flavors. Defaults to all regions'
+actions:
+  'list':   ''
+  'update': ''
+  'purge':  ''
+  'grant':  ''
+  'revoke': ''
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
+  'flavor':
+    #'sub':       ['list', 'create', 'grant', 'delete', 'instances']
+    'metavar':   'flavor'
+    'help':      'flavor class name (e.g. m1)'
+  'project':
+    'sub':       ['grant', 'revoke']
+    'metavar':   'project'
+    'help':      'project name (e.g. iaas-team)'
+    'weight':   10

@@ -34,6 +34,21 @@ class Nova(Client):
         return self.ksclient
 
 
+    def get_by_name(self, obj_type, obj_name, is_public=None):
+        """
+        Get valid openstack object by type and name.
+        version: 2018-7
+        """
+        if obj_type not in self.valid_objects:
+            self.logger.debug('=> %s is not a valid object type', obj_type)
+            return
+        try:
+            return getattr(self.client, '%ss' % obj_type).find(
+                name=obj_name,
+                is_public=is_public)
+        except novaclient.exceptions.NotFound:
+            self.logger.debug('=> %s with name %s not found', obj_type, obj_name)
+
     def get_by_id(self, obj_type, obj_id):
         """ Get valid openstack object by type and id.
             version: 2 """
@@ -374,51 +389,72 @@ class Nova(Client):
 
 ################################### FLAVOR ####################################
 
-    def update_flavor(self, name, spec, public=True, dry_run=False):
-        """ Update is not an option. We delete and create a new flavor! """
-        flavors = self.get_flavors()
-        found = False
-        for f in flavors:
-            if f.name != name:
-                continue
-            found = True
-            update = False
-            if f._info['os-flavor-access:is_public'] != public:
+    def update_flavor(self, name, spec, properties=None, public=True):
+        """
+        Update flavor with new spec or propertiesself.
+        Note: Update require a delete and create with new ID
+        Version: 2018-7
+        """
+        dry_run_txt = ' DRY_RUN:' if self.dry_run else ''
+        flavor = self.get_by_name('flavor', name)
+        if not flavor:
+            # Create new flavor
+            self.logger.debug('=>%s create flavor %s', dry_run_txt, name)
+            if not self.dry_run:
+                flavor = self.client.flavors.create(name=name,
+                                                    ram=spec['ram'],
+                                                    vcpus=spec['vcpus'],
+                                                    disk=spec['disk'],
+                                                    is_public=public)
+        # Check to see if an update are needed
+        update = False
+        if flavor and getattr(flavor, 'os-flavor-access:is_public') != public:
+            update = True
+        for k, v in spec.iteritems():
+            if flavor and v != getattr(flavor, k):
                 update = True
-            for k, v in spec.iteritems():
-                if v != f._info[k]:
-                    update = True
-            if update and not dry_run:
-                self.logger.debug('=> updated flavor %s' % name)
+        if update:
+            self.logger.debug('=>%s update flavor %s', dry_run_txt, name)
+            if not self.dry_run:
                 # delete old
-                self.client.flavors.delete(f.id)
+                self.client.flavors.delete(flavor.id)
                 # create new
-                self.client.flavors.create(name=name,
-                                           ram=spec['ram'],
-                                           vcpus=spec['vcpus'],
-                                           disk=spec['disk'],
-                                           is_public=public)
-            elif update and dry_run:
-                self.logger.debug('=> dry-run: update %s: %s' % (name, spec))
-            else:
-                self.logger.debug('=> no update needed for %s' % name)
-        if not found:
-            self.logger.debug('=> create new flavor %s: %s' % (name, spec))
-            if not dry_run:
-                self.client.flavors.create(name=name,
-                                           ram=spec['ram'],
-                                           vcpus=spec['vcpus'],
-                                           disk=spec['disk'],
-                                           is_public=public)
+                flavor = self.client.flavors.create(name=name,
+                                                    ram=spec['ram'],
+                                                    vcpus=spec['vcpus'],
+                                                    disk=spec['disk'],
+                                                    is_public=public)
+        # if no flavor we cannot do properties
+        if not flavor:
+            return
+        # Unset old properties
+        for k, v in flavor.get_keys().iteritems():
+            if k not in properties:
+                self.logger.debug('=>%s unset flavor properties %s', dry_run_txt, k)
+            if not self.dry_run:
+                flavor.unset_keys([k])
+        # Add new properties
+        update = False
+        if not properties:
+            return
+        flavor_keys = flavor.get_keys()
+        for k, v in properties.iteritems():
+            if not hasattr(flavor_keys, k) or v != getattr(flavor_keys, k):
+                self.logger.debug('=>%s set flavor properties %s', dry_run_txt, k)
+                if not self.dry_run:
+                    try:
+                        flavor.set_keys({k:v})
+                    except novaclient.exceptions.BadRequest as e:
+                        self.logger.debug('=> %s', e)
 
-
-    def get_flavors(self, filters=None):
-        # Setting sort_key=id and sort_dir='desc' seem to sort by flavor size!
-        # DO NOT TRUST THIS SORTING
+    def get_flavors(self, filters=None, sort_key='memory_mb', sort_dir='asc'):
+        """
+        Get flavors. Use filter to get flavor class, e.g. m1
+        """
         flavors = self.client.flavors.list(detailed=True,
                                            is_public=None,
-                                           sort_key='id',
-                                           sort_dir='desc')
+                                           sort_key=sort_key,
+                                           sort_dir=sort_dir)
         flavors_filtered = list()
         if filters:
             for flavor in flavors:
@@ -431,18 +467,24 @@ class Nova(Client):
         else:
             return flavors
 
-    def purge_flavors(self, filters, flavors, dry_run=False):
-        dry_run_txt = 'DRY-RUN: ' if dry_run else ''
+    def purge_flavors(self, filters, flavors):
+        """
+        Purge flavors not defined in flavor list
+        """
+        dry_run_txt = 'DRY-RUN: ' if self.dry_run else ''
         current_flavors = self.get_flavors(filters)
         for flavor in current_flavors:
             if flavor.name not in flavors[filters]:
-                if not dry_run:
+                if not self.dry_run:
                     self.client.flavors.delete(flavor.id)
                 self.logger.debug('=> %sdelete flavor %s' %
                                   (dry_run_txt, flavor.name))
 
-    def update_flavor_access(self, filters, project_id, action, dry_run=False):
-        dry_run_txt = 'DRY-RUN: ' if dry_run else ''
+    def update_flavor_access(self, filters, project_id, action):
+        """
+        Grant or revoke access to flavor from project
+        """
+        dry_run_txt = 'DRY-RUN: ' if self.dry_run else ''
         if action == 'revoke':
             action_func = 'remove_tenant_access'
         else:
@@ -450,7 +492,7 @@ class Nova(Client):
         flavors = self.get_flavors(filters)
         for flavor in flavors:
             try:
-                if not dry_run:
+                if not self.dry_run:
                     getattr(self.client.flavor_access, action_func)(flavor.id,
                                                                     project_id)
                 self.logger.debug('=> %s%s access to %s' %

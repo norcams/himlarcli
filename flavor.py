@@ -1,72 +1,95 @@
 #!/usr/bin/env python
 
-import sys
-import utils
-import pprint
+from himlarcli import tests as tests
+tests.is_virtual_env()
+
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
+from himlarcli.parser import Parser
+from himlarcli.printer import Printer
 from himlarcli import utils as himutils
+from collections import OrderedDict
 
-himutils.is_virtual_env()
+parser = Parser()
+options = parser.parse_args()
+printer = Printer(options.format)
 
-# Input args
-desc = 'Manage flavors'
-actions = ['update', 'purge', 'list', 'grant', 'revoke']
-opt_args = {'-n': {'dest': 'name', 'help': 'flavor class (mandatory)', 'required': True},
-            '-p': {'dest': 'project', 'help': 'project to grant or revoke access'}}
+kc= Keystone(options.config, debug=options.debug)
+kc.set_domain(options.domain)
+kc.set_dry_run(options.dry_run)
+logger = kc.get_logger()
 
-options = utils.get_action_options(desc, actions, dry_run=True, opt_args=opt_args)
-ksclient = Keystone(options.config, debug=options.debug)
-logger = ksclient.get_logger()
-novaclient = Nova(options.config, debug=options.debug, log=logger)
-domain = 'Dataporten'
+# Region
+if hasattr(options, 'region'):
+    regions = kc.find_regions(region_name=options.region)
+else:
+    regions = kc.find_regions()
 
-if options.action[0] == 'list':
-    pp = pprint.PrettyPrinter(indent=1)
-    flavors = novaclient.get_flavors(filters=options.name)
-    for flavor in flavors:
-        #print flavor.__dict__.keys()
-        if not getattr(flavor, 'OS-FLV-DISABLED:disabled'):
-            public = 'public' if getattr(flavor, 'os-flavor-access:is_public') else 'not public'
-            print '------------------------'
-            print '%s (%s):' % (flavor.name, public)
-            print 'ram:   %s' % flavor.ram
-            print 'vcpus: %s' % flavor.vcpus
-            print 'disk:  %s' % flavor.disk
-        else:
-            print '------------------------'
-            print '%s is disabled!' % flavor.name
-        #pp.pprint(flavor.to_dict())
-elif options.action[0] == 'update':
-    flavors = himutils.load_config('config/flavors/%s.yaml' % options.name, logger)
-    if not flavors:
-        print 'ERROR! No flavors found in config/flavors/%s.yaml' % options.name
-        sys.exit(1)
-    print 'Update %s flavors' % options.name
+# Flavors
+flavors = himutils.load_config('config/flavors/%s.yaml' % options.flavor, logger)
+if not flavors:
+    himutils.sys_error('Could not find flavor config file config/flavors/%s.yaml'
+                        % options.flavor)
+
+def action_list():
+    for region in regions:
+        nc = Nova(options.config, debug=options.debug, log=logger)
+        flavors = nc.get_flavors(filters=options.flavor)
+        outputs = ['name', 'vcpus', 'ram', 'disk']
+        printer.output_dict({'header': 'flavors (%s)' % ', '.join(outputs)})
+        for flavor in flavors:
+            output = OrderedDict()
+            for out in outputs:
+                output[out] = getattr(flavor, out)
+            printer.output_dict(objects=output, one_line=True, sort=False)
+
+def action_update():
     public = flavors['public'] if 'public' in flavors else False
-    for name, spec in sorted(flavors[options.name].iteritems()):
-        novaclient.update_flavor(name, spec, public, options.dry_run)
-elif options.action[0] == 'purge':
-    flavors = himutils.load_config('config/flavors/%s.yaml' % options.name, logger)
-    if not flavors:
-        print 'ERROR! No flavors found in config/flavors/%s.yaml' % options.name
-        sys.exit(1)
-    print 'Purge %s flavors' % options.name
-    novaclient.purge_flavors(options.name, flavors, options.dry_run)
-elif options.action[0] == 'grant' or options.action[0] == 'revoke':
-    flavors = himutils.load_config('config/flavors/%s.yaml' % options.name, logger)
+    properties = flavors['properties'] if 'properties' in flavors else None
+    if (options.flavor not in flavors or
+            not isinstance(flavors[options.flavor], dict)):
+        himutils.sys_error('%s hash not found in config' % options.flavor)
+
+    for region in regions:
+        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc.set_dry_run(options.dry_run)
+        for name, spec in sorted(flavors[options.flavor].iteritems()):
+            nc.update_flavor(name=name, spec=spec,
+                             properties=properties, public=public)
+
+def action_purge():
+    for region in regions:
+        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc.set_dry_run(options.dry_run)
+        print 'Purge %s flavors in %s' % (options.flavor, region)
+        nc.purge_flavors(options.flavor, flavors)
+
+def action_grant():
+    for region in regions:
+        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc.set_dry_run(options.dry_run)
+        update_access(nc, 'grant')
+
+def action_revoke():
+    for region in regions:
+        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc.set_dry_run(options.dry_run)
+        update_access(nc, 'grant')
+
+def update_access(nc, action):
+    public = flavors['public'] if 'public' in flavors else False
     if 'public' in flavors and flavors['public']:
-        print 'Grant or revoke will not work on public flavors!'
-        sys.exit(0)
-    if not options.project:
-        print 'Missing project to grant access'
-        sys.exit(0)
-    project = ksclient.get_project(options.project, domain=domain)
+        himutils.sys_error('grant or revoke will not work on public flavors!')
+    project = kc.get_project_by_name(options.project)
     if not project:
-        print 'Could not find project %s' % options.project
-        sys.exit(0)
-    print "%s access to %s for %s" % (options.action[0], options.name, options.project)
-    novaclient.update_flavor_access(filters=options.name,
-                                    project_id=project.id,
-                                    action=options.action[0],
-                                    dry_run=options.dry_run)
+        himutils.sys_error('project not found %s' % project)
+    print "%s access to %s for %s" % (action, options.flavor, options.project)
+    nc.update_flavor_access(filters=options.flavor,
+                            project_id=project.id,
+                            action=action)
+
+# Run local function with the same name as the action
+action = locals().get('action_' + options.action)
+if not action:
+    himutils.sys_error("Function action_%s() not implemented" % options.action)
+action()
