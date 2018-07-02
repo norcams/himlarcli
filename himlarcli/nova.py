@@ -430,16 +430,17 @@ class Nova(Client):
         # Unset old properties
         for k, v in flavor.get_keys().iteritems():
             if k not in properties:
+                if not self.dry_run:
+                    flavor.unset_keys([k])
                 self.logger.debug('=>%s unset flavor properties %s', dry_run_txt, k)
-            if not self.dry_run:
-                flavor.unset_keys([k])
         # Add new properties
         update = False
         if not properties:
             return
         flavor_keys = flavor.get_keys()
         for k, v in properties.iteritems():
-            if not hasattr(flavor_keys, k) or v != getattr(flavor_keys, k):
+            # flavor keys return everything as unicode so we use string match
+            if str(v) != flavor_keys.get(k):
                 self.logger.debug('=>%s set flavor properties %s', dry_run_txt, k)
                 if not self.dry_run:
                     try:

@@ -36,7 +36,8 @@ def action_list():
         nc = Nova(options.config, debug=options.debug, log=logger)
         flavors = nc.get_flavors(filters=options.flavor)
         outputs = ['name', 'vcpus', 'ram', 'disk']
-        printer.output_dict({'header': 'flavors (%s)' % ', '.join(outputs)})
+        header = 'flavors in %s (%s)' % (region, ', '.join(outputs))
+        printer.output_dict({'header': header})
         for flavor in flavors:
             output = OrderedDict()
             for out in outputs:
