@@ -632,7 +632,6 @@ class Keystone(Client):
         """
         try:
             role = self.client.roles.find(name=role_name, domain=self.domain_id)
-            print type(role)
         except exceptions.http.NotFound as e:
             self.logger.debug('=> role %s NOT found' % role_name)
             role = None
