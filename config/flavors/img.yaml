@@ -1,6 +1,8 @@
 ---
 # flavors used for image builder
 public: false
+properties:
+  hw_rng:allowed: 'True'
 img:
   'img.zerodisk':
     ram:    1024
