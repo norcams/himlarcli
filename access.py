@@ -16,6 +16,7 @@ printer = Printer(options.format)
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
+kc.set_domain('dataporten')
 logger = ksclient.get_logger()
 mqclient = MQclient(options.config, debug=options.debug, log=logger)
 mqclient.set_dry_run(options.dry_run)
