@@ -27,7 +27,7 @@ def process_action(ch, method, properties, body): #callback
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
     data = json.loads(body)
-    user = ksclient.get_user_by_email(data['email'], user_type='api') #user_type='api'
+    user = ksclient.get_user_by_email(data['email'], user_type='api')
 
     if user:
         if data['action'] == 'reset_password':
@@ -38,7 +38,7 @@ def process_action(ch, method, properties, body): #callback
             pass
     else:
         if data['action'] == 'provision':
-            print "=> Provisin: "
+            print "=> Provision: "
             provision = ksclient.provision_dataporten(email=data['email'], password=data['password'])
         elif data['action'] =='reset_password':
             print "Provisioning is required! "
