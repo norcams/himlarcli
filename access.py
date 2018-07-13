@@ -26,18 +26,22 @@ def process_action(ch, method, properties, body): #callback
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
     data = json.loads(body)
-    user = ksclient.get_user_by_email(data['email'], 'api') #user_type='api'
+    user = ksclient.get_user_by_email(data['email'], user_type='api') #user_type='api'
 
     if user:
         if data['action'] == 'reset_password':
-            ksclient.reset_password(email=data['email'], password=data['password'])
+            print "=> Reset: "
+            reset = ksclient.reset_password(email=data['email'], password=data['password'])
         elif data['action'] == 'provision':
-            ksclient.create_user(name=options.user,
-                                domain=options.domain,
-                                email=data['email'],
-                                admin=options.admin,
-                                password=data['password'],
-                                description=options.description)
+            print "User exists! "
+            pass
+    else:
+        if data['action'] == 'provision':
+            print "=> Provisin: "
+            provision = ksclient.provision_dataporten(email=data['email'], password=data['password'])
+        elif data['action'] =='reset_password':
+            print "Provisioning is required! "
+            pass
 
 def action_pop():
     channel = mqclient.get_channel('access')
@@ -61,4 +65,3 @@ if not action:
 action() # pylint: disable=E1102
 
 # receiver
-
