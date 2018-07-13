@@ -38,10 +38,7 @@ def action_instances():
         }
         printer.output_dict(output, sort=True, one_line=True)
         status['total'] += 1
-        if i.status in status:
-            status[str(i.status).lower()] += 1
-        else:
-            status[str(i.status).lower()] += 1
+        status[str(i.status).lower()] = status.get(str(i.status).lower(), 0) + 1
     printer.output_dict({'header': 'Counts'})
     printer.output_dict(status)
 
