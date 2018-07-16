@@ -31,6 +31,8 @@ if hasattr(options, 'type'):
         tags.append(options.type)
 
 def action_grant():
+    print "WARNING: this will break with the upgrade to ocata"
+    print "https://trello.com/c/vjRI4EKC/"
     ksclient = Keystone(options.config, debug=options.debug, log=logger)
     project = ksclient.get_project(project=options.project, domain=options.domain)
     if not project:
