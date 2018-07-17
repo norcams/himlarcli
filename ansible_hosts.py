@@ -2,6 +2,7 @@
 import utils
 import ConfigParser
 from himlarcli.foremanclient import Client
+from himlarcli import utils as himutils
 
 desc = 'Create an ansible inventory hostfile in ./hostfile.<loc>'
 options = utils.get_options(desc, hosts=False)
@@ -18,6 +19,13 @@ for host in hosts['results']:
     #Example if test01-nat-linux-01
     if check == 3:
         loc, role, var, num = hostname.split('-')
+    try:
+        if not loc or not role:
+            pass
+    except:    
+        himutils.sys_error('Broken hostname %s! Please fix!' % hostname, 0)
+        continue
+
     group = "%s-%s" % (loc, role)
     if not group in hostlist:
         hostlist[group] = []
