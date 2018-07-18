@@ -116,7 +116,7 @@ def action_delete():
     print "We are now deleting user, group, project and instances for %s" % options.user
     print 'Please wait...'
     ksclient.user_cleanup(email=options.user)
-    print 'Delete successfull'
+    print 'Delete successful'
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
