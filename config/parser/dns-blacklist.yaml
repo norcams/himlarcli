@@ -1,0 +1,30 @@
+---
+desc: 'Blacklist DNS domains'
+actions:
+  'list':   'List the blacklists'
+  'create': 'Add a blacklist'
+  'delete': 'Delete a blacklist'
+  'update': 'Update a blacklist'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--pattern':
+    'sub':      ['create']
+    'dest':     'pattern'
+    'help':     'Pattern for the blacklist'
+    'required': true
+  '--new-pattern':
+    'sub':      ['update']
+    'dest':     'pattern'
+    'help':     'Pattern for the blacklist'
+  '--comment':
+    'sub':      ['create','update']
+    'dest':     'comment'
+    'help':     'Description of the blacklist (reason, comment, etc.)'
+  '--id':
+    'sub':      ['delete','update']
+    'dest':     'blacklist_id'
+    'help':     'Blacklist ID'
+    'required': true
