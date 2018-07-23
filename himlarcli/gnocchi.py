@@ -19,6 +19,9 @@ class Gnocchi(Client):
         try:
             resource = self.client.resource.get(resource_type=resource_type,
                                                 resource_id=resource_id)
+        except exceptions.ResourceTypeNotFound as e:
+            resource = None
+            self.log_error('Resource type %s not found!' % resource_type)
         except exceptions.ResourceNotFound as e:
             resource = None
             self.log_error('Resource with ID %s not found!' % resource_id)
