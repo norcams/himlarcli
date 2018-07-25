@@ -88,7 +88,7 @@ def action_rename():
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
         himutils.sys_error("%s is not a valid user." % options.user, 1)
-    ksclient.reset_password(email=options.user, domain=options.domain, dry_run=options.dry_run)
+    print ksclient.reset_password(email=options.user)
 
 def action_create():
     if not ksclient.is_valid_user(email=options.admin, domain=options.domain):

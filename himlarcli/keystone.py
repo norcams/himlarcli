@@ -340,20 +340,23 @@ class Keystone(Client):
                                             admin=new_email,
                                             name=new_demo_name)
 
-    def reset_password(self, email, domain=None, dry_run=False, password=None):
-        obj = self.get_user_objects(email=email, domain=domain)
+    def reset_password(self, email, password=None):
+        """
+            Change password for api user
+            Version: 2018-7
+        """
+        dry_run_txt = 'DRY-RUN: ' if self.dry_run else ''
+        user = self.get_user_by_email(email=email, user_type='api')
         if password == None:
             password = self.generate_password()
-        if not dry_run and 'api' in obj and obj['api']:
-            self.logger.debug('=> reset password for user %s' % email)
-            self.client.users.update(obj['api'], password=password)
-        elif dry_run:
-            self.logger.debug('=> DRY-RUN: reset password for user %s' % email)
-        else:
-            print 'Reset password failed! User %s not found.' % email
-            return
-        print "New password: %s" % password
+        if not user:
+            self.warning('Reset password failed! User %s not found.', email)
 
+        self.logger.debug('=> %sreset password for user %s', dry_run_txt, email)
+        if not self.dry_run:
+            self.client.users.update(user, password=password)
+
+        return "New password: %s" % password
 
     def grant_role(self, email, project_name, role_name='user'):
         """ Grant a role to a project for a user.
