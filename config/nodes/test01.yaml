@@ -59,7 +59,7 @@ nodes:
     compute_profile: 1
     compute_resource: controller-01
   db-02:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-02
   identity-01:
     compute_profile: 1
@@ -90,7 +90,7 @@ nodes:
     compute_profile: 1
     compute_resource: controller-01
   mq-01:
-    compute_profile: 1
+    compute_profile: 2
     compute_resource: controller-01
   nat-linux-01:
     compute_profile: 1
