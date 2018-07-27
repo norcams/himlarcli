@@ -1,10 +1,9 @@
 import ConfigParser
 import sys
 import tweepy
-import json
 from himlarcli import utils
 
-class Slack(object):
+class Twitter(object):
 
     def __init__(self, config_path, debug=False, log=None):
         debug_level = 1 if debug else 0
