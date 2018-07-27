@@ -18,13 +18,19 @@ class Slack(object):
         self.slack_user = self.get_config('slack', 'user')
         self.slack_channel = self.get_config('slack', 'channel')
 
-    def send_slack(self, msg):
+    def publish_slack(self, msg):
         url = self.webhook_url
         payload = {"channel": self.slack_channel,
                    "username": self.slack_user,
                    "text": msg}
         json_payload = json.dumps(payload)
-        requests.post(url, data=json_payload)
+        log_msg = 'Message published to %s by %s: %s' % (self.slack_channel, self.slack_user, msg)
+        if not self.dry_run:
+            requests.post(url, data=json_payload)
+            self.logger.debug('=> %s', log_msg)
+        else:
+            log_msg = 'DRY-RUN: ' + log_msg
+
 
     def set_dry_run(self, dry_run):
         self.dry_run = dry_run
