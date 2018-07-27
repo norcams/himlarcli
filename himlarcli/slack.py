@@ -27,10 +27,9 @@ class Slack(object):
         log_msg = 'Message published to %s by %s: %s' % (self.slack_channel, self.slack_user, msg)
         if not self.dry_run:
             requests.post(url, data=json_payload)
-            self.logger.debug('=> %s', log_msg)
         else:
             log_msg = 'DRY-RUN: ' + log_msg
-
+        self.logger.debug('=> %s', log_msg)
 
     def set_dry_run(self, dry_run):
         self.dry_run = dry_run
