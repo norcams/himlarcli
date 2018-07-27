@@ -1,0 +1,12 @@
+---
+desc: 'Publish status message to Slack, Twitter and Grafana'
+actions:
+  slack:    'Publish to Slack'
+  twitter:  'Publish to Twittter'
+  grafana:  'Publish to Grafana'
+  all:      'Publish to Slack, Twitter and Grafana'
+opt_args:
+  '-t':
+    'dest':     'template'
+    'help':     'mesage body template file, eg. misc/notify_maintenance.txt'
+    'required': True
