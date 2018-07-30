@@ -15,11 +15,17 @@ printer = Printer(options.format)
 def action_slack():
     slack = Slack(options.config, debug=options.debug)
     slack.set_dry_run(options.dry_run)
+    print message
+    if not himutils.confirm_action('Publish to Slack?' % options.user):
+        return
     slack.publish_slack(message)
 
 def action_twitter():
     twitter = Twitter(options.config, debug=options.debug)
     twitter.set_dry_run(options.dry_run)
+    print message
+    if not himutils.confirm_action('Publish to Twitter?' % options.user):
+        return
     twitter.publish_twitter(message)
 
 def action_all():
