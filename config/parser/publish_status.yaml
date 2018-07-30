@@ -17,4 +17,3 @@ opt_args:
   '-d':
     'dest':     'date'
     'help':     'Date to substitute $date in template (as written, will NOT be parsed!)'
-    'choices':  ['osl', 'bgo', 'tos']
