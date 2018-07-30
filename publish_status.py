@@ -11,7 +11,6 @@ himutils.is_virtual_env()
 parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
-message = parse_template()
 
 def action_slack():
     slack = Slack(options.config, debug=options.debug)
@@ -34,6 +33,7 @@ def parse_template():
     stripped_msg = msg_content.rstrip('\n')
     return stripped_msg
 
+message = parse_template()
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
 if not action:
