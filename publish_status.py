@@ -16,7 +16,7 @@ def action_slack():
     slack = Slack(options.config, debug=options.debug)
     slack.set_dry_run(options.dry_run)
     print message
-    if not himutils.confirm_action('Publish to Slack?' % options.user):
+    if not himutils.confirm_action('Publish to Slack?'):
         return
     slack.publish_slack(message)
 
@@ -24,7 +24,7 @@ def action_twitter():
     twitter = Twitter(options.config, debug=options.debug)
     twitter.set_dry_run(options.dry_run)
     print message
-    if not himutils.confirm_action('Publish to Twitter?' % options.user):
+    if not himutils.confirm_action('Publish to Twitter?'):
         return
     twitter.publish_twitter(message)
 
