@@ -11,22 +11,26 @@ himutils.is_virtual_env()
 parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
+message = parse_template()
 
 def action_slack():
-    message = parse_template()
     slack = Slack(options.config, debug=options.debug)
     slack.set_dry_run(options.dry_run)
     slack.publish_slack(message)
 
 def action_twitter():
-    message = parse_template()
     twitter = Twitter(options.config, debug=options.debug)
     twitter.set_dry_run(options.dry_run)
     twitter.publish_twitter(message)
 
+def action_all():
+    action_slack()
+    action_twitter()
+
 def parse_template():
+    mapping = {'region': options.region.upper(), 'date': options.date}
     msg_content = himutils.load_template(inputfile=options.template,
-                                         mapping={})
+                                         mapping=mapping)
     stripped_msg = msg_content.rstrip('\n')
     return stripped_msg
 
