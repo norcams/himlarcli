@@ -20,7 +20,8 @@ class MQclient(object):
             virtual_host=self.__get_config('rabbitmq', 'vhost'),
             credentials=credentials,
             socket_timeout=10,
-            blocked_connection_timeout=20)
+            blocked_connection_timeout=20,
+            heartbeat_interval=10)
         self.connection = pika.BlockingConnection(parameters)
 
     def set_dry_run(self, dry_run):
