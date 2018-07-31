@@ -15,7 +15,6 @@ printer = Printer(options.format)
 def action_slack():
     slack = Slack(options.config, debug=options.debug)
     slack.set_dry_run(options.dry_run)
-    print message
     if not himutils.confirm_action('Publish to Slack?'):
         return
     slack.publish_slack(message)
@@ -23,7 +22,6 @@ def action_slack():
 def action_twitter():
     twitter = Twitter(options.config, debug=options.debug)
     twitter.set_dry_run(options.dry_run)
-    print message
     if not himutils.confirm_action('Publish to Twitter?'):
         return
     twitter.publish_twitter(message)
@@ -40,6 +38,7 @@ def parse_template():
     return stripped_msg
 
 message = parse_template()
+print('The following message will be published: %s' % message)
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
 if not action:

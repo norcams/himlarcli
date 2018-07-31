@@ -1,18 +1,12 @@
-import ConfigParser
-import sys
+from himlarcli.client import Client
 import tweepy
 from himlarcli import utils
 
-class Twitter(object):
+class Twitter(Client):
 
     def __init__(self, config_path, debug=False, log=None):
-        debug_level = 1 if debug else 0
-        self.config_path = config_path
-        self.config = utils.get_config(config_path)
-        self.logger = utils.get_logger(__name__, self.config, debug, log)
+        super(Twitter, self).__init__(config_path, debug, log)
         self.logger.debug('=> config file: %s' % config_path)
-        self.debug = debug
-        self.dry_run = False
         self.key = self.get_config('twitter', 'api_key')
         self.secret_key = self.get_config('twitter', 'api_secret_key')
         self.access_token = self.get_config('twitter', 'access_token')
@@ -33,22 +27,5 @@ class Twitter(object):
             log_msg = 'DRY-RUN: ' + log_msg
         self.logger.debug('=> %s', log_msg)
 
-    def set_dry_run(self, dry_run):
-        self.dry_run = dry_run
-
-    def get_config(self, section, option):
-        try:
-            value = self.config.get(section, option)
-            return value
-        except ConfigParser.NoOptionError:
-            self.logger.debug('=> config file section [%s] missing option %s'
-                              % (section, option))
-        except ConfigParser.NoSectionError:
-            self.logger.debug('=> config file missing section %s' % section)
-        return None
-
-    @staticmethod
-    def log_error(msg, code=0):
-        sys.stderr.write("%s\n" % msg)
-        if code > 0:
-            sys.exit(code)
+    def get_client(self):
+        return self.client
