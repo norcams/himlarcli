@@ -18,7 +18,9 @@ class MQclient(object):
         parameters = pika.ConnectionParameters(
             host=self.__get_config('rabbitmq', 'host'),
             virtual_host=self.__get_config('rabbitmq', 'vhost'),
-            credentials=credentials)
+            credentials=credentials,
+            socket_timeout=10,
+            blocked_connection_timeout=20)
         self.connection = pika.BlockingConnection(parameters)
 
     def set_dry_run(self, dry_run):
@@ -53,6 +55,7 @@ class MQclient(object):
                 self.logger.debug('=> message %s added to queue %s', message, queue)
         else:
             self.logger.debug('=> DRY-RUN: message %s added to queue %s', message, queue)
+        self.close_connection()
 
     def __get_config(self, section, option):
         try:
