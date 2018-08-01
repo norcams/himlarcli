@@ -31,7 +31,11 @@ def action_all():
     action_twitter()
 
 def parse_template():
-    mapping = {'region': options.region.upper(), 'date': options.date}
+    mapping = {}
+    if options.region:
+        mapping['region'] = options.region.upper()
+    if options.date:
+        mapping['date'] = options.date
     msg_content = himutils.load_template(inputfile=options.template,
                                          mapping=mapping)
     stripped_msg = msg_content.rstrip('\n')
