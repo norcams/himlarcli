@@ -1,0 +1,1 @@
+Services will be unavailable on $date in $region due to maintenance. Running instances will not be affected.
