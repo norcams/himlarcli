@@ -32,6 +32,9 @@ def action_volume():
         # Quotas
         quotas = dict({'in_use': 0, 'quota': 0})
         for project in projects:
+            if not hasattr(project, "type"): # unknown project type
+              logger.debug('=> unknow project type %s', project.name)
+              continue
             # Filter demo
             if not options.demo and project.type == 'demo':
                 continue
