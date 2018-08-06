@@ -32,37 +32,43 @@ class Designate(Client):
         return dict()
 
     def create_blacklist(self, pattern, description):
-        bl = self.client.blacklists.create(pattern=pattern, description=description)
-        return bl
+        res = self.client.blacklists.create(pattern=pattern, description=description)
+        return res
 
     def delete_blacklist(self, blacklist_id):
-        bl = self.client.blacklists.delete(blacklist_id=blacklist_id)
+        res = self.client.blacklists.delete(blacklist_id=blacklist_id)
         return bl
 
     def update_blacklist(self, blacklist_id, values):
-        bl = self.client.blacklists.update(blacklist_id=blacklist_id, values=values)
-        return bl
+        res = self.client.blacklists.update(blacklist_id=blacklist_id, values=values)
+        return res
 
-    #-------------------------------------------------------------------
-    # Zones functions
-    #-------------------------------------------------------------------
-    def list_zones(self):
-        result = self.client.zones.list()
-        if result:
-            return result
-            #return result.to_dict()
-        return dict()
+    def get_blacklist(self, blacklist_id):
+        res = self.client.blacklists.get(blacklist_id=blacklist_id)
+        return res
 
     #-------------------------------------------------------------------
     # TLDs functions
     #-------------------------------------------------------------------
     def list_tlds(self):
-        result = self.client.tlds.list()
+        result = self.client.tlds.list(limit=9999)
         if result:
             return result
             #return result.to_dict()
         return dict()
 
     def create_tld(self, name, description):
-        tld = self.client.tlds.create(name, description)
-        return tld
+        tld = self.client.tlds.create(name=name, description=description)
+        return res
+
+    def delete_tld(self, tld):
+        res = self.client.tlds.delete(tld=tld)
+        return res
+
+    def update_tld(self, tld, values):
+        res = self.client.tlds.update(tld=tld, values=values)
+        return res
+
+    def get_tld(self, name):
+        res = self.client.tlds.get(tld=name)
+        return res

@@ -1,0 +1,51 @@
+---
+desc: 'Manage Designate (DNS)'
+actions:
+  'blacklist_list':   'List the blacklists'
+  'blacklist_create': 'Add a blacklist'
+  'blacklist_delete': 'Delete a blacklist'
+  'blacklist_update': 'Update a blacklist'
+  'blacklist_show':   'Show a blacklist'
+  'tld_list':         'List all TLDs'
+  'tld_create':       'Add a single TLD'
+  'tld_delete':       'Delete a single TLD'
+  'tld_update':       'Update a single TLD'
+  'tld_show':         'Show a single TLD'
+  'tld_import':       'Bulk import TLDs from file'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--pattern':
+    'sub':      ['blacklist_create']
+    'dest':     'pattern'
+    'help':     'Pattern for the blacklist'
+    'required': true
+  '--new-pattern':
+    'sub':      ['blacklist_update']
+    'dest':     'pattern'
+    'help':     'Pattern for the blacklist'
+  '--comment':
+    'sub':      ['blacklist_create','blacklist_update','tld_create','tld_update']
+    'dest':     'comment'
+    'help':     'Description (reason, comment, etc.)'
+  '--id':
+    'sub':      ['blacklist_delete','blacklist_update','blacklist_show','tld_delete','tld_update']
+    'dest':     'this_id'
+    'help':     'The unique OpenStack ID for the element'
+    'required': true
+  '--name':
+    'sub':      ['tld_create','tld_show']
+    'dest':     'name'
+    'help':     'A TLD (e.g. "com")'
+    'required': true
+  '--new-name':
+    'sub':      ['tld_update']
+    'dest':     'name'
+    'help':     'A TLD (e.g. "com")'
+  '--file':
+    'sub':      ['tld_import']
+    'dest':     'file'
+    'help':     'File to import TLDs from'
+    'required': true
