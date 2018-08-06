@@ -30,7 +30,7 @@ nodes:
   compute-01:
     mac: 00:23:24:5d:ad:8b #4
   compute-02:
-    mac: 00:23:24:5e:32:47 #5
+    mac: 18:03:73:d8:18:9a #5
   console-01:
     compute_profile: 1
     compute_resource: controller-01
