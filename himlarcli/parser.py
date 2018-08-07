@@ -39,6 +39,7 @@ class Parser(object):
         self.subparser = None
         self.parsers = None
         self.autocomplete = False
+        self.default_format = 'text'
         if autoload:
             self.__autoload()
 
@@ -47,6 +48,9 @@ class Parser(object):
 
     def add_actions(self, actions):
         self.actions = actions
+
+    def set_default_format(self, default_format):
+        self.default_format = default_format
 
     def set_autocomplete(self, autocomplete):
         self.autocomplete = True if autocomplete else False
@@ -160,14 +164,14 @@ class Parser(object):
                                     dest='format',
                                     choices=valid_format,
                                     type=str,
-                                    default='text',
+                                    default=self.default_format,
                                     help='output format')
         elif self.SHOW['format']:
             self.parser.add_argument('--format',
                                      dest='format',
                                      choices=valid_format,
                                      type=str,
-                                     default='text',
+                                     default=self.default_format,
                                      help='output format')
 
     """
