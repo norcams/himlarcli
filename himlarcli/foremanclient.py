@@ -63,7 +63,7 @@ class Client(object):
 
     def get_facts(self, host_id):
         host = self.__set_host(host_id)
-        return self.foreman.hosts.fact_values_index(host_id=host)
+        return self.foreman.hosts.fact_values_index(host_id=host, per_page=10000)
 
     def set_host_build(self, host, build=True):
         host = self.__set_host(host)
