@@ -19,6 +19,8 @@ class MQclient(object):
             host=self.__get_config('rabbitmq', 'host'),
             virtual_host=self.__get_config('rabbitmq', 'vhost'),
             credentials=credentials,
+            connection_attempts=5,
+            retry_delay=30,
             socket_timeout=10,
             blocked_connection_timeout=20,
             heartbeat_interval=10)
