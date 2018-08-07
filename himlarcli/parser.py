@@ -165,7 +165,7 @@ class Parser(object):
         elif self.SHOW['format']:
             self.parser.add_argument('--format',
                                      dest='format',
-                                     choices=self.FORMATS,
+                                     choices=valid_format,
                                      type=str,
                                      default='text',
                                      help='output format')
