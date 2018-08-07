@@ -1,5 +1,5 @@
 ---
-desc: 'Print arbitrary facts from Foreman in an Ansible compatible format'
+desc: 'Print arbitrary facts from Foreman'
 opt_args:
   '-f':
     'dest':     'fact'
