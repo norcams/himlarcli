@@ -6,7 +6,8 @@ opt_args:
     'help':     'Foreman fact'
     'required': True
 
-  '-h':
+  '-H':
     'dest':     'hosts'
     'help':     'One or more hosts to collect facts from'
+    'nargs':    '+'
     'required': True
