@@ -9,6 +9,7 @@ from himlarcli import utils as himutils
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from collections import OrderedDict
+from prettytable import PrettyTable
 
 himutils.is_virtual_env()
 
@@ -51,16 +52,31 @@ def action_blacklist_list():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
     blacklists = designateclient.list_blacklists()
     outputs = ['pattern','description','id']
-    header = 'Blacklisted DNS domains (%s)' % (', '.join(outputs))
-    printer.output_dict({'header': header})
-    output = OrderedDict()
-    if isinstance(blacklists, list):
-        for b in blacklists:
-            if not isinstance(b, dict):
-                b = b.to_dict()
-            for out in outputs:
-                output[out] = b[out]
-            printer.output_dict(objects=output, one_line=True, sort=False)
+    if options.pretty:
+        x = PrettyTable()
+        x.field_names = outputs
+        x.align['pattern'] = 'l'
+        x.align['description'] = 'l'
+        if isinstance(blacklists, list):
+            for b in blacklists:
+                if not isinstance(b, dict):
+                    b = b.to_dict()
+                array = []
+                for o in outputs:
+                    array.append(b[o])
+                x.add_row(array)
+        print(x)
+    else:
+        header = 'Blacklisted DNS domains (%s)' % (', '.join(outputs))
+        printer.output_dict({'header': header})
+        output = OrderedDict()
+        if isinstance(blacklists, list):
+            for b in blacklists:
+                if not isinstance(b, dict):
+                    b = b.to_dict()
+                for out in outputs:
+                    output[out] = b[out]
+                printer.output_dict(objects=output, one_line=True, sort=False)
 
 def action_blacklist_create():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
@@ -94,16 +110,32 @@ def action_tld_list():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
     tlds = designateclient.list_tlds()
     outputs = ['name','description','id']
-    header = 'Top Level Domains (%s)' % (', '.join(outputs))
-    printer.output_dict({'header': header})
-    output = OrderedDict()
-    if isinstance(tlds, list):
-        for b in tlds:
-            if not isinstance(b, dict):
-                b = b.to_dict()
-            for out in outputs:
-                output[out] = b[out]
-            printer.output_dict(objects=output, one_line=True, sort=False)
+    if options.pretty:
+        x = PrettyTable()
+        x.field_names = outputs
+        x.align['name'] = 'l'
+        x.align['description'] = 'l'
+        x.sortby = 'name'
+        if isinstance(tlds, list):
+            for b in tlds:
+                if not isinstance(b, dict):
+                    b = b.to_dict()
+                array = []
+                for o in outputs:
+                    array.append(b[o])
+                x.add_row(array)
+        print(x)
+    else:
+        header = 'Top Level Domains (%s)' % (', '.join(outputs))
+        printer.output_dict({'header': header})
+        output = OrderedDict()
+        if isinstance(tlds, list):
+            for b in tlds:
+                if not isinstance(b, dict):
+                    b = b.to_dict()
+                for out in outputs:
+                    output[out] = b[out]
+                printer.output_dict(objects=output, one_line=True, sort=False)
 
 def action_tld_create():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
