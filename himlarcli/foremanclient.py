@@ -55,6 +55,16 @@ class Client(object):
         host = self.__set_host(host)
         return self.foreman.show_hosts(id=host)
 
+    def get_fact(self, host, fact):
+        host = self.__set_host(host)
+        facts = self.get_facts(host)
+        fact = facts['results'][host][fact]
+        return fact
+
+    def get_facts(self, host_id):
+        host = self.__set_host(host_id)
+        return self.foreman.hosts.fact_values_index(host_id=host)
+
     def set_host_build(self, host, build=True):
         host = self.__set_host(host)
         if len(self.foreman.show_hosts(id=host)) > 0:
