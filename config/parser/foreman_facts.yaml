@@ -1,0 +1,12 @@
+---
+desc: 'Print arbitrary facts from Foreman in an Ansible compatible format'
+opt_args:
+  '-f':
+    'dest':     'fact'
+    'help':     'Foreman fact'
+    'required': True
+
+  '-h':
+    'dest':     'hosts'
+    'help':     'One or more hosts to collect facts from'
+    'required': True
