@@ -58,7 +58,7 @@ class Designate(Client):
         return dict()
 
     def create_tld(self, name, description):
-        tld = self.client.tlds.create(name=name, description=description)
+        res = self.client.tlds.create(name=name, description=description)
         return res
 
     def delete_tld(self, tld):
