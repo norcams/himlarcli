@@ -23,7 +23,6 @@ mqclient.set_dry_run(options.dry_run)
 
 # pylint: disable=W0613
 def process_action(ch, method, properties, body): #callback
-    print " [x] Received %r" % body
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
     data = json.loads(body)
@@ -31,17 +30,17 @@ def process_action(ch, method, properties, body): #callback
 
     if user:
         if data['action'] == 'reset_password':
-            print "=> Reset: "
+            #"Reset action "
             reset = ksclient.reset_password(email=data['email'], password=data['password'])
         elif data['action'] == 'provision':
-            print "User exists! "
+            #"User exists! "
             pass
     else:
         if data['action'] == 'provision':
-            print "=> Provision: "
+            #"Provision action "
             provision = ksclient.provision_dataporten(email=data['email'], password=data['password'])
         elif data['action'] =='reset_password':
-            print "Provisioning is required! "
+            #"Provisioning is required! "
             pass
 
 def action_pop():
