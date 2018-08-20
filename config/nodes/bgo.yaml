@@ -122,7 +122,13 @@ nodes:
     compute_resource: controller-02
   novactrl-01:
     compute_profile: 2
+    compute_resource: controller-01
+  novactrl-02:
+    compute_profile: 2
     compute_resource: controller-02
+  novactrl-03:
+    compute_profile: 2
+    compute_resource: controller-03
   ns-01:
     compute_profile: 1
     compute_resource: controller-02
