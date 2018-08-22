@@ -29,28 +29,29 @@ if not regions:
     himutils.sys_error('no regions found with this name!')
 
 def action_create():
-    quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
-    if options.quota and not quota:
-        himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
-    test = 1 if options.type == 'test' else 0
-    if options.enddate:
-        try:
-            enddate = datetime.strptime(options.enddate, '%d.%m.%Y').date()
-        except ValueError:
-            himutils.sys_error('date format DD.MM.YYYY not valid for %s' % options.enddate, 1)
+    if ksclient.is_valid_user(options.admin, options.domain):
+        quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
+        if options.quota and not quota:
+            himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
+        test = 1 if options.type == 'test' else 0
+        if options.enddate:
+            try:
+                enddate = datetime.strptime(options.enddate, '%d.%m.%Y').date()
+            except ValueError:
+                himutils.sys_error('date format DD.MM.YYYY not valid for %s' % options.enddate, 1)
+        else:
+            enddate = None
+        createdate = datetime.today()
+        project = ksclient.create_project(project_name=options.project,
+                                          admin=options.admin.lower(),
+                                          test=test,
+                                          type=options.type,
+                                          description=options.desc,
+                                          enddate=str(enddate),
+                                          createdate=createdate.isoformat(),
+                                          quota=options.quota,
+                                          rt=options.rt)
     else:
-        enddate = None
-    createdate = datetime.today()
-    project = ksclient.create_project(project_name=options.project,
-                                      admin=options.admin.lower(),
-                                      test=test,
-                                      type=options.type,
-                                      description=options.desc,
-                                      enddate=str(enddate),
-                                      createdate=createdate.isoformat(),
-                                      quota=options.quota,
-                                      rt=options.rt)
-    if not ksclient.is_valid_user(options.admin, options.domain):
         himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
     if project:
         output = project.to_dict() if not isinstance(project, dict) else project
