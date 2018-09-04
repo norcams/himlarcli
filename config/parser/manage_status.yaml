@@ -1,0 +1,10 @@
+---
+desc: 'Manage the UH-IaaS status backend'
+actions:
+  list:    'List all status messages'
+  delete:  'Delete status message (ID)'
+opt_args:
+  '-i':
+    'dest':     'status_id'
+    'help':     'ID of status message'
+    'required': False
