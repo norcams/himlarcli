@@ -70,7 +70,7 @@ def action_flavors():
 
     flavors = dict()
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger region=region)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         usage = nc.get_usage(project_id=project.id, start=start, end=stop)
         for server in usage.server_usages:
             flavors[server['flavor']] = flavors.get(server['flavor'], 0) + 1
