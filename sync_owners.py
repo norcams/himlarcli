@@ -71,14 +71,18 @@ def action_sync():
                         owner['ip'] = addr['addr']
             # Get project, admin and org
             project = kc.get_by_id('project', i.tenant_id)
-            owner['project_name'] = project.name
-            owner['admin'] = project.admin if hasattr(project, 'admin') else None
-            domain = project.admin.split("@")[1] if hasattr(project, 'admin') else ''
-            if len(domain.split(".")) > 1:
-                org = domain.split(".")[-2]
+            if project:
+                owner['project_name'] = project.name
+                owner['admin'] = project.admin if hasattr(project, 'admin') else None
+                domain = project.admin.split("@")[1] if hasattr(project, 'admin') else ''
+                if len(domain.split(".")) > 1:
+                    org = domain.split(".")[-2]
+                else:
+                    org = 'unknown'
+                owner['organization'] = org
             else:
-                org = 'unknown'
-            owner['organization'] = org
+                owner['project_name'] = 'unknown'
+                owner['organization'] = 'unknown'
             # Get user and instance_id
             user = kc.get_by_id('user', i.user_id)
             owner['user'] = user.name.lower() if user else None
