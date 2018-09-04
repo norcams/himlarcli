@@ -13,19 +13,15 @@ from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
-from himlarcli.printer import Printer
 from himlarcli import utils as himutils
 
 parser = Parser()
-parser.toggle_show('dry_run')
-parser.toggle_show('formater')
-
+parser.toggle_show('dry-run')
+parser.toggle_show('format')
 options = parser.parse_args()
-printer = Printer(options.format)
 
 kc= Keystone(options.config, debug=options.debug)
 kc.set_domain(options.domain)
-kc.set_dry_run(options.dry_run)
 logger = kc.get_logger()
 
 # Region
