@@ -1,0 +1,14 @@
+---
+desc:       'Copy instance owners to reporting db'
+actions:
+  sync:     'Store instance owners in report db'
+  purge:    'Purge instance owners for deleted instances in report db'
+
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
