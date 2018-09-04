@@ -2,8 +2,8 @@
 import time
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
-#from himlarcli.slack import Slack
-#from himlarcli.twitter import Twitter
+from himlarcli.slack import Slack
+from himlarcli.twitter import Twitter
 from himlarcli.status import Status
 from himlarcli import utils as himutils
 
