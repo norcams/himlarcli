@@ -37,7 +37,7 @@ class Designate(Client):
 
     def delete_blacklist(self, blacklist_id):
         res = self.client.blacklists.delete(blacklist_id=blacklist_id)
-        return bl
+        return res
 
     def update_blacklist(self, blacklist_id, values):
         res = self.client.blacklists.update(blacklist_id=blacklist_id, values=values)
