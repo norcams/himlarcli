@@ -35,7 +35,7 @@ def action_whales():
     logger.debug('=> stop date = %s', stop)
 
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         cc = Cinder(options.config, debug=options.debug, log=logger, region=region)
         project_usage = nc.get_usage(start=start, end=stop)
         logger.debug('=> threshold for whales filter %s', options.threshold)
@@ -70,7 +70,7 @@ def action_flavors():
 
     flavors = dict()
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger region=region)
         usage = nc.get_usage(project_id=project.id, start=start, end=stop)
         for server in usage.server_usages:
             flavors[server['flavor']] = flavors.get(server['flavor'], 0) + 1
@@ -86,8 +86,8 @@ def action_resources():
     output = dict({'vcpu': 0, 'ram':0})
     for region in regions:
         # instances
-        nc = Nova(options.config, debug=options.debug, log=logger)
-        gc = Gnocchi(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
+        gc = Gnocchi(options.config, debug=options.debug, log=logger, region=region)
         deleted = nc.get_project_instances(project_id=project.id, deleted=True)
         running = nc.get_project_instances(project_id=project.id)
         for i in deleted + running:

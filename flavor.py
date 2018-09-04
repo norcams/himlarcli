@@ -33,7 +33,7 @@ if not flavors:
 
 def action_list():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         flavors = nc.get_flavors(filters=options.flavor)
         outputs = ['name', 'vcpus', 'ram', 'disk']
         header = 'flavors in %s (%s)' % (region, ', '.join(outputs))
@@ -52,7 +52,7 @@ def action_update():
         himutils.sys_error('%s hash not found in config' % options.flavor)
 
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
         for name, spec in sorted(flavors[options.flavor].iteritems()):
             nc.update_flavor(name=name, spec=spec,
@@ -60,14 +60,14 @@ def action_update():
 
 def action_purge():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
         print 'Purge %s flavors in %s' % (options.flavor, region)
         nc.purge_flavors(options.flavor, flavors)
 
 def action_grant():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
         update_access(nc, 'grant')
         print "Grant access to %s for %s in %s" % (options.flavor,
@@ -75,7 +75,7 @@ def action_grant():
 
 def action_revoke():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
         update_access(nc, 'revoke')
         print "Revoke access to %s for %s in %s" % (options.flavor,
