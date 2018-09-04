@@ -35,7 +35,7 @@ class Status(Client):
     def delete_status(self, status_id):
         url = ('%s/%s' % (self.api_url, status_id))
         headers = {'Accept': 'application/problem+json',
-                  'Authorization': self.auth_token}
+                   'Authorization': self.auth_token}
         if not self.dry_run:
             response = requests.delete(url, headers=headers)
             self.logger.debug('=> %s' % response.status_code)
