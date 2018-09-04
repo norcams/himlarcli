@@ -30,6 +30,8 @@ if hasattr(options, 'region'):
 else:
     regions = kc.find_regions()
 
+logger.debug('=> regions used: %s', ','.join(regions))
+
 Base = declarative_base()
 
 class Owner(Base):
@@ -52,8 +54,8 @@ def action_sync():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
-        net = Neutron(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
+        net = Neutron(options.config, debug=options.debug, log=logger, region=region)
         network_list = list()
         for network in net.list_networks():
             network_list.append(network['name'])
@@ -96,6 +98,7 @@ def action_sync():
                 logger.debug('=> create owner for ip %s', owner['ip'])
                 session.add(Owner(**owner))
             session.commit()
+    session.close()
 
 def action_purge():
     engine = create_engine(kc.get_config('db', 'database_uri'))
@@ -103,7 +106,7 @@ def action_purge():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger)
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         instances = nc.get_all_instances({'all_tenants': 1, 'deleted': 1})
         for i in instances:
             old = session.query(Owner).filter(Owner.instance_id == i.id).first()
@@ -111,6 +114,7 @@ def action_purge():
                 logger.debug('=> purge owner for instance %s', old.ip)
                 session.delete(old)
                 session.commit()
+    session.close()
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
