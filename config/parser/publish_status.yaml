@@ -1,15 +1,15 @@
 ---
-desc: 'Publish status message to Slack, Twitter and Grafana'
+desc: 'Publish status message to Slack, Twitter and UH-IaaS status backend'
 actions:
-  slack:    'Publish to Slack'
-  twitter:  'Publish to Twittter'
-  grafana:  'Publish to Grafana'
-  all:      'Publish to Slack, Twitter and Grafana'
+  important: 'Publish to Slack, Twitter and UH-IaaS status backend (tagged important)'
+  info:      'Publish to Twitter and UH-IaaS status backend (tagged info)'
 opt_args:
   '-t':
     'dest':     'template'
-    'help':     'mesage body template file, eg. misc/notify_maintenance.txt'
-    'required': True
+    'help':     'Message body template file, eg. misc/notify_maintenance.txt'
+  '-m':
+    'dest':     'message'
+    'help':     'Message body as a command-line argument (overrides -t option if both are given)'
   '-r':
     'dest':     'region'
     'help':     'Region to substitute $region in template (automatically uppercased)'
