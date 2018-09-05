@@ -17,18 +17,20 @@ slack = Slack(options.config, debug=options.debug)
 twitter = Twitter(options.config, debug=options.debug)
 status = Status(options.config, debug=options.debug)
 
+
 def action_important():
     if not himutils.confirm_action('Are you sure you want to publish?'):
         return
-    slack.publish_slack(message)
-    twitter.publish_twitter(message)
-    status.publish_status(message, msg_type='important')
+    link_msg = ("%s For live updates visit https://status.uh-iaas.no" % msg)
+    slack.publish_slack(link_msg)
+    twitter.publish_twitter(link_msg)
+    status.publish_status(msg, msg_type='important')
 
 def action_info():
     if not himutils.confirm_action('Are you sure you want to publish?'):
         return
-    twitter.publish_twitter(message)
-    status.publish_status(message)
+    twitter.publish_twitter(msg)
+    status.publish_status(msg)
 
 def parse_template():
     mapping = {}
@@ -42,13 +44,13 @@ def parse_template():
     return stripped_msg
 
 if options.message:
-    message = options.message
+    msg = options.message
 elif options.template:
-    message = parse_template()
+    msg = parse_template()
 else:
     himutils.sys_error("No template or message given.")
 
-print('The following message will be published: %s' % message)
+print('The following message will be published: %s' % msg)
 slack.set_dry_run(options.dry_run)
 twitter.set_dry_run(options.dry_run)
 status.set_dry_run(options.dry_run)
