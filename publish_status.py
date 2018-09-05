@@ -17,13 +17,13 @@ slack = Slack(options.config, debug=options.debug)
 twitter = Twitter(options.config, debug=options.debug)
 status = Status(options.config, debug=options.debug)
 
-
 def action_important():
     if not himutils.confirm_action('Are you sure you want to publish?'):
         return
-    link_msg = ("%s For live updates visit https://status.uh-iaas.no" % msg)
-    slack.publish_slack(link_msg)
-    twitter.publish_twitter(link_msg)
+    if options.link:
+        msg += " For live updates visit https://status.uh-iaas.no"
+    slack.publish_slack(msg)
+    twitter.publish_twitter(msg)
     status.publish_status(msg, msg_type='important')
 
 def action_info():
