@@ -18,16 +18,18 @@ twitter = Twitter(options.config, debug=options.debug)
 status = Status(options.config, debug=options.debug)
 
 def action_important():
-    if not himutils.confirm_action('Are you sure you want to publish?'):
-        return
     important_msg = msg
     if options.link:
         important_msg += " For live updates visit https://status.uh-iaas.no"
+    print('The following message will be published: %s' % important_msg)
+    if not himutils.confirm_action('Are you sure you want to publish?'):
+        return
     slack.publish_slack(important_msg)
     twitter.publish_twitter(important_msg)
     status.publish_status(important_msg, msg_type='important')
 
 def action_info():
+    print('The following message will be published: %s' % msg)
     if not himutils.confirm_action('Are you sure you want to publish?'):
         return
     twitter.publish_twitter(msg)
@@ -51,7 +53,6 @@ elif options.template:
 else:
     himutils.sys_error("No template or message given.")
 
-print('The following message will be published: %s' % msg)
 slack.set_dry_run(options.dry_run)
 twitter.set_dry_run(options.dry_run)
 status.set_dry_run(options.dry_run)
