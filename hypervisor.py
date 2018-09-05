@@ -30,6 +30,12 @@ def action_instances():
     printer.output_dict({'header': 'Instance list (id, libvirt_name, name, status)'})
     status = dict({'total': 0})
     for i in instances:
+        # Filter for project type
+        if options.type:
+            project = kc.get_by_id('project', i.tenant_id)
+            if hasattr(project, 'type') and project.type != options.type:
+                status['type'] = options.type
+                continue
         output = {
              'id': i.id,
              'instance_name': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),

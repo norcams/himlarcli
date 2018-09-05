@@ -17,3 +17,8 @@ opt_args:
     'metavar':  'aggregate'
     'weight':   10
     'help':     'Aggreate name'
+  '-t':
+    'sub':      ['instances']
+    'dest':     'type'
+    'help':     'instance project type'
+    'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
