@@ -27,7 +27,7 @@ def action_instances():
         himutils.sys_error('Could not find valid host %s' % options.host)
     search_opts = dict(all_tenants=1, host=host.hypervisor_hostname)
     instances = nc.get_all_instances(search_opts=search_opts)
-    printer.output_dict({'header': 'Instance list (id, libvirt_name, name, status)'})
+    printer.output_dict({'header': 'Instance list (id, name, status, updated)'})
     status = dict({'total': 0})
     for i in instances:
         # Filter for project type
@@ -38,9 +38,10 @@ def action_instances():
                 continue
         output = {
              'id': i.id,
-             'instance_name': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
+             #'instance_name': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
              'name': i.name,
-             'status': i.status
+             'status': i.status,
+             'updated': i.updated
         }
         printer.output_dict(output, sort=True, one_line=True)
         status['total'] += 1
