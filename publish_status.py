@@ -20,11 +20,12 @@ status = Status(options.config, debug=options.debug)
 def action_important():
     if not himutils.confirm_action('Are you sure you want to publish?'):
         return
+    important_msg = msg
     if options.link:
-        msg += " For live updates visit https://status.uh-iaas.no"
-    slack.publish_slack(msg)
-    twitter.publish_twitter(msg)
-    status.publish_status(msg, msg_type='important')
+        important_msg += " For live updates visit https://status.uh-iaas.no"
+    slack.publish_slack(important_msg)
+    twitter.publish_twitter(important_msg)
+    status.publish_status(important_msg, msg_type='important')
 
 def action_info():
     if not himutils.confirm_action('Are you sure you want to publish?'):
