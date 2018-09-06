@@ -3,8 +3,8 @@ Due to scheduled maintenance these instances in UH-IaaS region $region
 will be rebooted on $date if they are running.
 
 These instances are running in availability zone (AZ) $region_lower-legacy-1.
-This AZ will continue with the scheduled maintenance as before. New instances in
-AZ $region_lower-default-1 will not have scheduled maintenance.
+This AZ will be removed in the future. Please consider terminating these
+instances and start new ones in AZ $region_lower-default-1.
 
 We would also appreciate if you delete unused instances. Resources are limited.
 
