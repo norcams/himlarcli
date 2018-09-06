@@ -33,6 +33,9 @@ domain = 'Dataporten'
 zone = '%s-default-1' % ksclient.region
 msg_file = 'misc/notify_reboot.txt'
 
+# aggregate in <loc>-legacy-1 AZ
+legacy_aggregate = ['group1', 'group2', 'group3']
+
 if 'host' in options and options.host:
     if '.' in options.host:
         host = options.host
@@ -91,7 +94,7 @@ def action_activate():
     dry_run_txt = 'DRY-RUN: ' if options.dry_run else ''
     for aggregate in aggregates:
         # do not use on central1 or placeholder1
-        if aggregate == 'central1' or aggregate == 'placeholder1':
+        if aggregate not in legacy_aggregate:
             continue
         print '=============== %s ================' % aggregate
         metadata = novaclient.get_aggregate(aggregate)
@@ -118,6 +121,8 @@ def action_migrate():
     aggregates = novaclient.get_aggregates()
     active_aggregate = 'unknown'
     for aggregate in aggregates:
+        if aggregate not in legacy_aggregate:
+            continue
         info = novaclient.get_aggregate(aggregate)
         if 'enabled' in info.metadata:
             active_aggregate = aggregate
