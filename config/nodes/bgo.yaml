@@ -28,24 +28,34 @@ nodes:
     compute_profile: 2
     compute_resource: controller-03
   compute-01:
+    hostgroup: 3
     mac: ec:f4:bb:ce:21:84
   compute-02:
+    hostgroup: 3
     mac: ec:f4:bb:cd:a0:94
   compute-03:
+    hostgroup: 3
     mac: ec:f4:bb:cd:a0:2c
   compute-04:
+    hostgroup: 3
     mac: 18:66:da:82:7e:a8
   compute-05:
+    hostgroup: 3
     mac: 18:66:da:82:b5:49
   compute-06:
+    hostgroup: 3
     mac: 18:66:da:82:be:7a
   compute-07:
+    hostgroup: 3
     mac: 00:0a:f7:79:c5:df
   compute-08:
+    hostgroup: 3
     mac: 00:0a:f7:79:c5:e3
   compute-09:
+    hostgroup: 3
     mac: 00:0a:f7:82:54:23
   compute-10:
+    hostgroup: 3
     mac: 00:0a:f7:79:c5:f3
   console-01:
     compute_profile: 2
