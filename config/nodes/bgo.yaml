@@ -59,7 +59,7 @@ nodes:
   controller-04:
     mac: b0:83:fe:e8:3a:31
   dashboard-01:
-    compute_profile: 3
+    compute_profile: 4
     compute_resource: controller-02
     compute_attributes:
       volumes_attributes:
@@ -84,7 +84,7 @@ nodes:
     compute_profile: 2
     compute_resource: controller-02
   logger-01:
-    compute_profile: 3
+    compute_profile: 4
     compute_resource: controller-04
     compute_attributes:
       volumes_attributes:
@@ -97,7 +97,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   metric-01:
-    compute_profile: 3
+    compute_profile: 4
     compute_resource: controller-01
   monitor-01:
     compute_profile: 2
@@ -112,22 +112,22 @@ nodes:
     compute_profile: 1
     compute_resource: controller-02
   network-01:
-    compute_profile: 2
+    compute_profile: 3
     compute_resource: controller-01
   network-02:
-    compute_profile: 2
+    compute_profile: 3
     compute_resource: controller-02
   network-03:
-    compute_profile: 2
+    compute_profile: 3
     compute_resource: controller-03
   novactrl-01:
-    compute_profile: 2
+    compute_profile: 3
     compute_resource: controller-01
   novactrl-02:
-    compute_profile: 2
+    compute_profile: 3
     compute_resource: controller-02
   novactrl-03:
-    compute_profile: 2
+    compute_profile: 3
     compute_resource: controller-03
   ns-01:
     compute_profile: 1
@@ -200,7 +200,7 @@ nodes:
       - name:           'installdevice'
         value:          'sdg'
   telemetry-01:
-    compute_profile: 3
+    compute_profile: 4
     compute_resource: controller-03
   volume-01:
     compute_profile: 2

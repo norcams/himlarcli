@@ -50,6 +50,25 @@ default:
   3: # large
     vm_attrs:
       cpus:   '2'
+      memory: '4294967296'
+      nics_attributes:
+        '0':
+          bridge: br0
+          model:  'virtio'
+          type:   'bridge'
+        'br1':
+          bridge: br1
+          model:  'virtio'
+          type:   'bridge'
+      volumes_attributes:
+        '0':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '10G'
+          format_type:  'qcow2'
+  4: # x-large
+    vm_attrs:
+      cpus:   '2'
       memory: '8589934592'
       nics_attributes:
         '0':

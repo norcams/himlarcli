@@ -146,7 +146,7 @@ nodes:
   storage-05:
     mac: bc:30:5b:e0:4e:4f
   telemetry-01:
-    compute_profile: 3
+    compute_profile: 4
     compute_resource: controller-03
   volume-01:
     compute_profile: 1
