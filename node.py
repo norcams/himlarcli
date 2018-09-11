@@ -63,8 +63,8 @@ def action_delete():
     if not options.assume_yes:
         if not himutils.confirm_action('Are you sure you want to delete %s?' % node_name):
             return
-    sensu.delete_client(node_name)
     client.delete_node(node_name, options.dry_run)
+    sensu.delete_client(node_name)
 
 def action_full():
     for name, node_data in sorted(nodes.iteritems()):
