@@ -18,6 +18,7 @@ options = parser.parse_args()
 client = Client(options.config, options.debug)
 region = client.get_config('openstack', 'region')
 logger = client.get_logger()
+sensu = Sensu(options.config, debug=options.debug)
 
 # Load node config
 node_config = himutils.load_config('config/nodes/%s.yaml' % region)
@@ -61,6 +62,7 @@ def action_delete():
     node_name = '%s-%s' % (region, options.node)
     if not himutils.confirm_action('Are you sure you want to delete %s?' % node_name):
         return
+    sensu.delete_client(node_name)
     client.delete_node(node_name, options.dry_run)
 
 def action_full():
