@@ -66,6 +66,23 @@ def action_delete():
     client.delete_node(node_name, options.dry_run)
     sensu.delete_client(node_name)
 
+def action_reinstall():
+    node_name = '%s-%s' % (region, options.node)
+    if options.node in nodes:
+        if not options.assume_yes:
+            if not himutils.confirm_action('Are you sure you want to reinstall %s?' % node_name):
+                return
+        client.delete_node(node_name, options.dry_run)
+        sensu.delete_client(node_name)
+        client.create_node(name=node_name,
+                           node_data=nodes[options.node],
+                           region=region,
+                           dry_run=options.dry_run)
+    else:
+        sys.stderr.write("Node %s not found in config/nodes/%s.yaml\n" %
+                         (options.node, region))
+        sys.exit(1)
+
 def action_full():
     for name, node_data in sorted(nodes.iteritems()):
         node_name = '%s-%s' % (region, name)
