@@ -9,7 +9,7 @@ actions:
   'full':      'install all nodes'
 opt_args:
   '-n':
-    'sub':      ['show', 'install', 'delete']
+    'sub':      ['show', 'install', 'delete', 'reinstall']
     'dest':     'node'
     'metavar':  'nodename'
     'help':     'location part can be dropped, eg. compute-01'
