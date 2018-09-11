@@ -8,7 +8,6 @@ himutils.is_virtual_env()
 parser = Parser()
 options = parser.parse_args()
 sensu = Sensu(options.config, debug=options.debug)
-sensu.set_dry_run(options.dry_run)
 host = options.host
 
 def action_list_silenced():
