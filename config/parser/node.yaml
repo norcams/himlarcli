@@ -13,3 +13,10 @@ opt_args:
     'metavar':  'nodename'
     'help':     'location part can be dropped, eg. compute-01'
     'required': true
+  '-y':
+    'sub':      ['delete']
+    'dest':     'assume_yes'
+    'help':     'assume yes when deleting a node (for automation purposes)'
+    'action':   'store_const'
+    'const':    true
+    'default':  false

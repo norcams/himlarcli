@@ -60,8 +60,9 @@ def action_install():
 
 def action_delete():
     node_name = '%s-%s' % (region, options.node)
-    if not himutils.confirm_action('Are you sure you want to delete %s?' % node_name):
-        return
+    if not options.assume_yes:
+        if not himutils.confirm_action('Are you sure you want to delete %s?' % node_name):
+            return
     sensu.delete_client(node_name)
     client.delete_node(node_name, options.dry_run)
 
