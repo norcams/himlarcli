@@ -22,7 +22,7 @@ def action_silence():
 def action_delete():
     sensu.delete_client(options.host)
 
-action = locals().get('action_' + options.action)
+action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
     himutils.sys_error("Function action_%s() not implemented" % options.action)
 action()
