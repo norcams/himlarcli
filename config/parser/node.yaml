@@ -2,12 +2,13 @@
 desc: 'Perform action on node (use short nodename without region or domain)'
 actions:
   'install':  'install a new node'
+  'delete':   'delete a node'
   'show':     'show node info'
   'list':     'list all nodes'
   'full':     'install all nodes'
 opt_args:
   '-n':
-    'sub':      ['show', 'install']
+    'sub':      ['show', 'install', 'delete']
     'dest':     'node'
     'metavar':  'nodename'
     'help':     'location part can be dropped, eg. compute-01'

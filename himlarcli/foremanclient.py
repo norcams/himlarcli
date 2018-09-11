@@ -123,6 +123,17 @@ class Client(object):
         else:
             self.logger.debug('=> dry run: host config %s' % host)
 
+    def delete_node(self, host, dry_run=False):
+        host = self.__set_host(host)
+        if not dry_run:
+            result = self.foreman.destroy_hosts(host)
+            if not result:
+                self.log_error('Could not delete host.')
+                return
+            self.logger.debug('=> deleted node %s' % host)
+        else:
+            self.logger.debug('=> dry run: deleted node %s' % host)
+
     def __set_host(self, host):
         if not host:
             self.host = None

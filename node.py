@@ -5,6 +5,7 @@ import pprint
 from himlarcli import utils as himutils
 from himlarcli.foremanclient import Client
 from himlarcli.parser import Parser
+from himlarcli.sensu import Sensu
 #from himlarcli.printer import Printer
 
 himutils.is_virtual_env()
@@ -55,6 +56,10 @@ def action_install():
         sys.stderr.write("Node %s not found in config/nodes/%s.yaml\n" %
                          (options.node, region))
         sys.exit(1)
+
+def action_delete():
+    node_name = '%s-%s' % (region, options.node)
+    client.delete_node(node_name, options.dry_run)
 
 def action_full():
     for name, node_data in sorted(nodes.iteritems()):
