@@ -59,6 +59,8 @@ def action_install():
 
 def action_delete():
     node_name = '%s-%s' % (region, options.node)
+    if not himutils.confirm_action('Are you sure you want to delete %s?' % node_name):
+        return
     client.delete_node(node_name, options.dry_run)
 
 def action_full():
