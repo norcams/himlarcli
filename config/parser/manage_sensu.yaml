@@ -4,7 +4,7 @@ actions:
   delete:        'Delete host from Sensu'
   silence:       'Silence host'
   unsilence:     'Unsilence host'
-  list_silenced: 'Lists silenced hosts'
+  list-silenced: 'Lists silenced hosts'
 opt_args:
   '-H':
     'sub':      ['delete','silence','unsilence']
