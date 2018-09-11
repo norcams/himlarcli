@@ -1,11 +1,12 @@
 ---
 desc: 'Perform action on node (use short nodename without region or domain)'
 actions:
-  'install':  'install a new node'
-  'delete':   'delete a node'
-  'show':     'show node info'
-  'list':     'list all nodes'
-  'full':     'install all nodes'
+  'install':   'install a new node'
+  'reinstall': 'reinstall new node'
+  'delete':    'delete a node'
+  'show':      'show node info'
+  'list':      'list all nodes'
+  'full':      'install all nodes'
 opt_args:
   '-n':
     'sub':      ['show', 'install', 'delete']
@@ -14,7 +15,7 @@ opt_args:
     'help':     'location part can be dropped, eg. compute-01'
     'required': true
   '-y':
-    'sub':      ['delete']
+    'sub':      ['reinstall', 'delete']
     'dest':     'assume_yes'
     'help':     'assume yes when deleting a node (for automation purposes)'
     'action':   'store_const'
