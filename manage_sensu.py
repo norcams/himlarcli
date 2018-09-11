@@ -8,20 +8,19 @@ himutils.is_virtual_env()
 parser = Parser()
 options = parser.parse_args()
 sensu = Sensu(options.config, debug=options.debug)
-host = options.host
 
 def action_list_silenced():
     sensu.list_silenced()
 
 def action_unsilence():
-    sensu.clear_silenced(host)
+    sensu.clear_silenced(options.host)
 
 def action_silence():
     expire = options.expire
-    sensu.silence_host(host, expire)
+    sensu.silence_host(options.host, expire)
 
 def action_delete():
-    sensu.delete_client(host)
+    sensu.delete_client(options.host)
 
 action = locals().get('action_' + options.action)
 if not action:
