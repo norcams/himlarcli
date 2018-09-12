@@ -16,8 +16,7 @@ def action_unsilence():
     sensu.clear_silenced(options.host)
 
 def action_silence():
-    expire = options.expire
-    sensu.silence_host(options.host, expire)
+    sensu.silence_host(options.host, options.expire)
 
 def action_delete():
     sensu.delete_client(options.host)
