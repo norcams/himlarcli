@@ -4,6 +4,7 @@ properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
   hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 'windows'
 d1: # (4x)
   'd1.small':
     vcpus: 1
