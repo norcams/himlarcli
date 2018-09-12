@@ -64,6 +64,9 @@ nodes:
   db-02:
     compute_profile: 2
     compute_resource: controller-02
+  dns-01:
+    compute_profile: 1
+    compute_resource: controller-02
   identity-01:
     compute_profile: 1
     compute_resource: controller-01
