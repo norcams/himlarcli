@@ -73,7 +73,10 @@ def action_reinstall():
             if not himutils.confirm_action('Are you sure you want to reinstall %s?' % node_name):
                 return
         client.delete_node(node_name, options.dry_run)
-        sensu.delete_client(node_name)
+        if options.sensu_expire:
+            sensu.silence_host(node_name, options.sensu_expire)
+        else:
+            sensu.delete_client(node_name)
         client.create_node(name=node_name,
                            node_data=nodes[options.node],
                            region=region,

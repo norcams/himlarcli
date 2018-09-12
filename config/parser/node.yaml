@@ -21,3 +21,7 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '-e':
+    'sub':      ['reinstall']
+    'dest':     'sensu_expire'
+    'help':     'silence sensu for a given period of time (in seconds)'
