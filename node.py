@@ -66,6 +66,14 @@ def action_delete():
     client.delete_node(node_name, options.dry_run)
     sensu.delete_client(node_name)
 
+def action_rebuild():
+    node_name = '%s-%s' % (region, options.node)
+    if options.sensu_expire:
+        sensu.silence_host(node_name, options.sensu_expire)
+    else:
+        sensu.delete_client(node_name)
+    client.set_host_build(node_name)
+
 def action_reinstall():
     node_name = '%s-%s' % (region, options.node)
     if options.node in nodes:

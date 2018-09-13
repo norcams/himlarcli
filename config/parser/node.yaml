@@ -3,13 +3,14 @@ desc: 'Perform action on node (use short nodename without region or domain)'
 actions:
   'install':   'install a new node'
   'reinstall': 'reinstall new node'
+  'rebuild':   'rebuild a node (preserves the node in Foreman)'
   'delete':    'delete a node'
   'show':      'show node info'
   'list':      'list all nodes'
   'full':      'install all nodes'
 opt_args:
   '-n':
-    'sub':      ['show', 'install', 'delete', 'reinstall']
+    'sub':      ['show', 'install', 'delete', 'reinstall', 'rebuild']
     'dest':     'node'
     'metavar':  'nodename'
     'help':     'location part can be dropped, eg. compute-01'
