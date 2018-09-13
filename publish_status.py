@@ -19,10 +19,10 @@ status = Status(options.config, debug=options.debug)
 
 def action_important():
     important_msg = msg
-    if not himutils.twitter_length(important_msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
     if options.link:
         important_msg += " For live updates visit https://status.uh-iaas.no"
+    if not himutils.twitter_length(important_msg):
+        himutils.sys_error("Message cannot contain more than 280 characters")
     print('The following message will be published: %s' % important_msg)
     if not himutils.confirm_action('Are you sure you want to publish?'):
         return
