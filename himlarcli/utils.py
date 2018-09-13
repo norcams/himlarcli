@@ -210,4 +210,4 @@ def checksum_file(file_path, type='sha256', chunk_size=65336):
     return digest.hexdigest()
 
 def twitter_length(string):
-    return len(string.strip()) < 280
+    return len(string) < 280
