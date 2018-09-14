@@ -19,8 +19,12 @@ class Sensu(Client):
     def delete_client(self, host):
         url = self.api_url
         endpoint = '/clients/' + host
-        response = self.session.delete(url+endpoint)
-        self.logger.debug('=> %s' % response.status_code)
+        if not self.dry_run:
+            response = self.session.delete(url+endpoint)
+            self.logger.debug('=> %s' % response.status_code)
+        else:
+            self.logger.debug('=> DRY-RUN: deleted %s' % host)
+
 
     def silence_host(self, host, expire=None):
         url = self.api_url
