@@ -208,6 +208,3 @@ def checksum_file(file_path, type='sha256', chunk_size=65336):
     with open(file_path, 'rb') as f:
         [digest.update(chunk) for chunk in iter(functools.partial(f.read, chunk_size), '')]
     return digest.hexdigest()
-
-def twitter_length(string):
-    return len(string) < 280

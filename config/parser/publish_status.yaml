@@ -3,10 +3,11 @@ desc: 'Publish status message to Slack, Twitter and UH-IaaS status backend'
 actions:
   important: 'Publish to Slack, Twitter and UH-IaaS status backend (tagged important)'
   info:      'Publish to Twitter and UH-IaaS status backend (tagged info)'
+  event:     'Publish to UH-IaaS event backend'
 opt_args:
   '-t':
     'dest':     'template'
-    'help':     'Message body template file, eg. misc/notify_maintenance.txt'
+    'help':     'Message body template file, eg. notify/notify_maintenance.txt'
   '-m':
     'dest':     'message'
     'help':     'Message body as a command-line argument (overrides -t option if both are given)'
@@ -18,6 +19,7 @@ opt_args:
     'dest':     'date'
     'help':     'Date to substitute $date in template (as written, will NOT be parsed!)'
   '-l':
+    'sub':      ['important']
     'dest':     'link'
     'help':     'Link to status.uh-iaas.no on important Slack and Twitter messages'
     'action':   'store_const'

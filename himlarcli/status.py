@@ -11,7 +11,7 @@ class Status(Client):
         self.api_url = self.get_config('status', 'url')
         self.auth_token = ('Bearer %s' % self.get_config('status', 'token'))
 
-    def publish_status(self, msg, msg_type='info'):
+    def publish(self, msg, msg_type='info'):
         url = self.api_url
         headers = {'Content-Type': 'application/json',
                    'Accept': 'application/problem+json',
@@ -26,13 +26,13 @@ class Status(Client):
         else:
             self.logger.debug('DRY-RUN: %s' % msg)
 
-    def list_status(self):
+    def list(self, msg_type='info'):
         url = self.api_url
         headers = {'Content-Type': 'application/json'}
         reponse = requests.get(url, headers=headers)
         print(reponse.text)
 
-    def delete_status(self, status_id):
+    def delete(self, status_id):
         url = ('%s/%s' % (self.api_url, status_id))
         headers = {'Accept': 'application/problem+json',
                    'Authorization': self.auth_token}

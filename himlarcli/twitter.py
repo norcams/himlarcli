@@ -27,5 +27,10 @@ class Twitter(Client):
             log_msg = 'DRY-RUN: ' + log_msg
         self.logger.debug('=> %s', log_msg)
 
+
     def get_client(self):
         return self.client
+
+    @staticmethod
+    def twitter_length(string):
+        return len(string) < 280

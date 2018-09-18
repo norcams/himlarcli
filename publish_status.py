@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import time
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.slack import Slack
@@ -17,27 +16,10 @@ slack = Slack(options.config, debug=options.debug)
 twitter = Twitter(options.config, debug=options.debug)
 status = Status(options.config, debug=options.debug)
 
-def action_important():
-    important_msg = msg
-    if options.link:
-        important_msg += " For live updates visit https://status.uh-iaas.no"
-    if not himutils.twitter_length(important_msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
-    print('The following message will be published: %s' % important_msg)
+def confirm_publish(final_msg):
+    print('The following message will be published: %s' % final_msg)
     if not himutils.confirm_action('Are you sure you want to publish?'):
         return
-    slack.publish_slack(important_msg)
-    twitter.publish_twitter(important_msg)
-    status.publish_status(important_msg, msg_type='important')
-
-def action_info():
-    if not himutils.twitter_length(msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
-    print('The following message will be published: %s' % msg)
-    if not himutils.confirm_action('Are you sure you want to publish?'):
-        return
-    twitter.publish_twitter(msg)
-    status.publish_status(msg)
 
 def parse_template():
     mapping = {}
@@ -49,6 +31,28 @@ def parse_template():
                                          mapping=mapping)
     stripped_msg = msg_content.rstrip('\n')
     return stripped_msg
+
+def action_important():
+    important_msg = msg
+    if options.link:
+        important_msg += " For live updates visit https://status.uh-iaas.no"
+    confirm_publish(important_msg)
+    if not twitter.twitter_length(important_msg):
+        himutils.sys_error("Message cannot contain more than 280 characters")
+    slack.publish_slack(important_msg)
+    twitter.publish_twitter(important_msg)
+    status.publish(important_msg, msg_type='important')
+
+def action_info():
+    if not twitter.twitter_length(msg):
+        himutils.sys_error("Message cannot contain more than 280 characters")
+    confirm_publish(msg)
+    twitter.publish_twitter(msg)
+    status.publish(msg)
+
+def action_event():
+    confirm_publish(msg)
+    status.publish(msg, msg_type='event')
 
 if options.message:
     msg = options.message
