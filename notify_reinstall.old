@@ -11,7 +11,7 @@ sys.exit(1)
 
 options = utils.get_options('Notify users of rebuild host', dry_run=True, hosts=1)
 notify = Notify(options.config, debug=options.debug)
-with open('misc/notify_email.txt', 'r') as body_txt:
+with open('notify/notify_email.txt', 'r') as body_txt:
     body_content = body_txt.read()
 
 # Find users

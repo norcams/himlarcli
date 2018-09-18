@@ -16,7 +16,7 @@ sys.exit(0)
 
 # Edit this to send new email to all users
 subject = 'UH-IaaS: Purge of all data (%s)' % region
-body_file = 'misc/notify_reinstall.txt'
+body_file = 'notify/notify_reinstall.txt'
 
 with open(body_file, 'r') as body_txt:
     body_content = body_txt.read()

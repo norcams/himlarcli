@@ -31,7 +31,7 @@ logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=logger)
 domain = 'Dataporten'
 zone = '%s-default-1' % ksclient.region
-msg_file = 'misc/notify_reboot.txt'
+msg_file = 'notify/notify_reboot.txt'
 
 # aggregate in <loc>-legacy-1 AZ
 legacy_aggregate = ['group1', 'group2', 'group3']

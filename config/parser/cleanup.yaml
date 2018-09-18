@@ -22,5 +22,5 @@ opt_args:
   '--template':
     'sub':      'notify'
     'dest':     'template'
-    'default':  'misc/notify_cleanup.txt'
+    'default':  'notify/notify_cleanup.txt'
     'help':     'mail body template file'

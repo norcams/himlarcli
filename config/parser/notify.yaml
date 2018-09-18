@@ -14,7 +14,7 @@ opt_args:
     'required': True
   '-t':
     'dest':     'template'
-    'help':     'mail body template file, eg. misc/notify_cleanup.txt'
+    'help':     'mail body template file, eg. notify/notify_cleanup.txt'
     'required': True
   '--region':
     'sub':      ['instance']

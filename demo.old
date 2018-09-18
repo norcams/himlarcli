@@ -196,7 +196,7 @@ def action_notify():
             #ksclient.update_project(project_id=project.id, notify=delete_date)
             #mapping = dict(region=region.upper(), project=project.name)
             mapping = {'personal': project.name, 'date': delete_date, 'demo': demo_project.name}
-            body_content = himutils.load_template(inputfile='misc/notify_demo2.txt',
+            body_content = himutils.load_template(inputfile='notify/notify_demo2.txt',
                                                   mapping=mapping,
                                                   log=logger)
             subject = ('[UH-IaaS] Your personal project will be deleted')
