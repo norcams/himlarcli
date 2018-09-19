@@ -152,6 +152,9 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  report-01:
+    compute_profile: 1
+    compute_resource: controller-01
   resolver-01:
     compute_profile: 1
     compute_resource: controller-03

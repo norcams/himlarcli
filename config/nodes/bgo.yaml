@@ -157,9 +157,6 @@ nodes:
   object-05:
     mac: d0:94:66:09:41:d5
     hostgroup: 9
-  report-01:
-    compute_profile: 1
-    compute_resource: controller-01
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
@@ -173,6 +170,9 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  report-01:
+    compute_profile: 1
+    compute_resource: controller-01
   resolver-01:
     compute_profile: 1
     compute_resource: controller-03
