@@ -26,10 +26,11 @@ class Status(Client):
         else:
             self.logger.debug('DRY-RUN: %s' % msg)
 
-    def list(self, msg_type='info'):
+    def list(self, msg_type):
         url = self.api_url
         headers = {'Content-Type': 'application/json'}
-        reponse = requests.get(url, headers=headers)
+        params = {"message_type": msg_type}
+        reponse = requests.get(url, headers=headers, params=params)
         print(reponse.text)
 
     def delete(self, status_id):

@@ -11,7 +11,7 @@ status = Status(options.config, debug=options.debug)
 status.set_dry_run(options.dry_run)
 
 def action_list():
-    status.list()
+    status.list(options.msg_type)
 
 def action_delete():
     status_id = options.status_id

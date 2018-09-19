@@ -8,3 +8,7 @@ opt_args:
     'dest':     'status_id'
     'help':     'ID of status message'
     'required': False
+  '-t':
+    'sub':      ['list']
+    'dest':     'msg_type'
+    'help':     'List messages by type'
