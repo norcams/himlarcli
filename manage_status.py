@@ -11,13 +11,13 @@ status = Status(options.config, debug=options.debug)
 status.set_dry_run(options.dry_run)
 
 def action_list():
-    status.list_status()
+    status.list()
 
 def action_delete():
     status_id = options.status_id
     if not himutils.confirm_action('Are you sure you want to delete status message with id %s' % status_id):
         return
-    status.delete_status(status_id)
+    status.delete(status_id)
 
 action = locals().get('action_' + options.action)
 if not action:
