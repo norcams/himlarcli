@@ -28,12 +28,16 @@ nodes:
     compute_profile: 1
     compute_resource: controller-03
   compute-01:
+    hostgroup: 3
     mac: 00:23:ae:ec:1d:30
   compute-02:
+    hostgroup: 3
     mac: 78:45:c4:f8:5d:db
   compute-03:
+    hostgroup: 3
     mac: 00:1e:c9:d1:67:68
   compute-04:
+    hostgroup: 3
     mac: 00:1e:c9:f6:28:e2
   console-01:
     compute_profile: 1
@@ -139,14 +143,19 @@ nodes:
     compute_profile: 1
     compute_resource: controller-03
   storage-01:
+    hostgroup: 2
     mac: d0:67:e5:ef:12:29
   storage-02:
+    hostgroup: 2
     mac: 00:24:e8:3f:90:e8
   storage-03:
+    hostgroup: 2
     mac: bc:30:5b:e0:4f:90
   storage-04:
+    hostgroup: 2
     mac: bc:30:5b:e0:0c:0f
   storage-05:
+    hostgroup: 2
     mac: bc:30:5b:e0:4e:4f
   telemetry-01:
     compute_profile: 4

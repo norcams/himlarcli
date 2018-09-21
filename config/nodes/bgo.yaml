@@ -144,19 +144,19 @@ nodes:
     compute_resource: controller-02
   object-01:
     mac: d0:94:66:09:0d:6c
-    hostgroup: 9
+    hostgroup: 7
   object-02:
     mac: d0:94:66:09:17:a7
-    hostgroup: 9
+    hostgroup: 7
   object-03:
     mac: d0:94:66:09:53:bc
-    hostgroup: 9
+    hostgroup: 7
   object-04:
     mac: d0:94:66:09:2a:b7
-    hostgroup: 9
+    hostgroup: 7
   object-05:
     mac: d0:94:66:09:41:d5
-    hostgroup: 9
+    hostgroup: 7
   proxy-01:
     compute_profile: 1
     compute_resource: controller-01
