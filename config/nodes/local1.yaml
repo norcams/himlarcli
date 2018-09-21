@@ -44,10 +44,10 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
-  db-01:
+  db-global-01:
     compute_profile: 1
     compute_resource: controller-02
-  db-02:
+  db-regional-01:
     compute_profile: 1
     compute_resource: controller-03
   identity-01:

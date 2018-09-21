@@ -81,12 +81,12 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
-  db-01:
+  db-global-01:
     compute_profile: 1
-    compute_resource: controller-01
-  db-02:
-    compute_profile: 2
     compute_resource: controller-02
+  db-regional-01:
+    compute_profile: 2
+    compute_resource: controller-01
   identity-01:
     compute_profile: 2
     compute_resource: controller-03

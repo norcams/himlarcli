@@ -62,12 +62,12 @@ nodes:
   dashboard-mgmt-01:
     compute_profile: 1
     compute_resource: controller-03
-  db-01:
+  db-global-01:
     compute_profile: 1
-    compute_resource: controller-01
-  db-02:
-    compute_profile: 2
     compute_resource: controller-02
+  db-regional-01:
+    compute_profile: 2
+    compute_resource: controller-01
   dns-01:
     compute_profile: 1
     compute_resource: controller-02

@@ -47,10 +47,10 @@ nodes:
   dashboard-01:
     compute_profile: 1
     compute_resource: controller-01
-  db-01:
+  db-global-01:
     compute_profile: 1
     compute_resource: controller-01
-  db-02:
+  db-regional-01:
     compute_profile: 1
     compute_resource: controller-01
   identity-01:
