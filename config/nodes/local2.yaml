@@ -9,9 +9,15 @@ nodes:
   db-regional-01:
     compute_resource:     'controller-01'
     compute_profile:      1
+  dns-01:
+    compute_profile: 1
+    compute_resource:     'controller-01'
   identity-01:
     compute_resource:     'controller-01'
     compute_profile:      1
+  identity-02:
+    compute_profile: 1
+    compute_resource:     'controller-01'
   image-01:
     compute_resource:     'controller-01'
     compute_profile:      1
@@ -24,6 +30,9 @@ nodes:
   novactrl-01:
     compute_resource:     'controller-01'
     compute_profile:      1
+  ns-01:
+    compute_profile: 1
+    compute_resource:     'controller-01'
   proxy-01:
     compute_resource:     'controller-01'
     compute_profile:      1
