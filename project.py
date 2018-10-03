@@ -8,6 +8,7 @@ from himlarcli.printer import Printer
 from himlarcli.mail import Mail
 from himlarcli import utils as himutils
 from datetime import datetime
+from email.mime.text import MIMEText
 
 himutils.is_virtual_env()
 
@@ -15,7 +16,9 @@ parser = Parser()
 parser.set_autocomplete(True)
 options = parser.parse_args()
 printer = Printer(options.format)
-msg_file = 'notify/project_created.txt'
+project_msg_file = 'notify/project_created.txt'
+access_msg_file = 'notify/access_granted_rt.txt'
+access_user_msg_file = 'notify/access_granted_user.txt'
 mail = Mail(options.config, debug=options.debug)
 mail.set_dry_run(options.dry_run)
 
@@ -91,7 +94,7 @@ def action_create():
                            quota=options.quota,
                            end_date=str(enddate))
             subject = 'UH-IaaS: Project %s has been created' % options.project
-            body_content = himutils.load_template(inputfile=msg_file,
+            body_content = himutils.load_template(inputfile=project_msg_file,
                                                   mapping=mapping)
         if not body_content:
             himutils.sys_error('ERROR! Could not find and parse mail body in \
@@ -100,21 +103,42 @@ def action_create():
         mime = mail.rt_mail(options.rt, subject, body_content)
         mail.send_mail('support@uh-iaas.no', mime)
 
-
 def action_grant():
-    if not ksclient.is_valid_user(email=options.user, domain=options.domain):
-        himutils.sys_error('User %s not found as a valid user.' % options.user)
-    project = ksclient.get_project_by_name(project_name=options.project)
-    if not project:
-        himutils.sys_error('No project found with name "%s"' % options.project)
-    if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
-        himutils.sys_error('Project are %s. User access not allowed!' % project.type)
-    role = ksclient.grant_role(project_name=options.project,
-                               email=options.user)
-    if role:
-        output = role.to_dict() if not isinstance(role, dict) else role
-        output['header'] = "Roles for %s" % options.project
-        printer.output_dict(output)
+    for user in options.users:
+        if not ksclient.is_valid_user(email=user, domain=options.domain):
+            himutils.sys_error('User %s not found as a valid user.' % user)
+        project = ksclient.get_project_by_name(project_name=options.project)
+        if not project:
+            himutils.sys_error('No project found with name "%s"' % options.project)
+        if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
+            himutils.sys_error('Project are %s. User access not allowed!' % project.type)
+        role = ksclient.grant_role(project_name=options.project,
+                                   email=user)
+        if role:
+            output = role.to_dict() if not isinstance(role, dict) else role
+            output['header'] = "Roles for %s" % options.project
+            printer.output_dict(output)
+
+    if options.mail:
+        if options.rt is None:
+            himutils.sys_error('--rt parameter is missing.')
+        else:
+            rt_mapping = dict(users='\n'.join(options.users))
+            rt_subject = 'UH-IaaS: Access granted to users in %s' % options.project
+            rt_body_content = himutils.load_template(inputfile=access_msg_file,
+                                                     mapping=rt_mapping)
+
+        rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
+        mail.send_mail('support@uh-iaas.no', rt_mime)
+
+    for user in options.users:
+        mapping = dict(project_name=options.project)
+        body_content = himutils.load_template(inputfile=access_user_msg_file,
+                                              mapping=mapping)
+        msg = MIMEText(body_content, 'plain')
+        msg['subject'] = 'UH-IaaS: You have been given access to project %s' % options.project
+
+        mail.send_mail(user, rt_mime, fromaddr='no-reply@uh-iaas.no')
 
 def action_delete():
     question = 'Delete project %s and all resources' % options.project

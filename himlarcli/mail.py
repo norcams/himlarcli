@@ -12,8 +12,9 @@ class Mail(Client):
         self.server = smtplib.SMTP(self.get_config('mail', 'smtp'), 25)
         self.server.starttls()
 
-    def send_mail(self, toaddr, mail):
-        fromaddr = self.get_config('mail', 'from_addr')
+    def send_mail(self, toaddr, mail, fromaddr=None):
+        if fromaddr is None:
+            fromaddr = self.get_config('mail', 'from_addr')
         if not self.dry_run:
             log_msg = 'Sending mail to %s' % toaddr
             try:
@@ -27,7 +28,8 @@ class Mail(Client):
     def close(self):
         self.server.quit()
 
-    def rt_mail(self, ticket, subject, msg):
+    @staticmethod
+    def rt_mail(ticket, subject, msg):
         mail = MIMEMultipart('alternative')
         mail['References'] = 'RT-Ticket-%s@uninett.no' % ticket
         mail['Subject'] = '[uninett.no #%s] %s' % (ticket, subject)
