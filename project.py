@@ -92,8 +92,7 @@ def action_create():
                            end_date=str(enddate))
             subject = 'UH-IaaS: Project %s has been created' % options.project
             body_content = himutils.load_template(inputfile=msg_file,
-                                                  mapping=mapping,
-                                                  log=ksclient.get_logger())
+                                                  mapping=mapping)
         if not body_content:
             himutils.sys_error('ERROR! Could not find and parse mail body in \
                                %s' % options.msg)
