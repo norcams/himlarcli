@@ -17,6 +17,7 @@ options = parser.parse_args()
 printer = Printer(options.format)
 msg_file = 'notify/project_created.txt'
 mail = Mail(options.config, debug=options.debug)
+mail.set_dry_run(options.dry_run)
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
