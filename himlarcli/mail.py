@@ -14,8 +14,8 @@ class Mail(Client):
 
     def send_mail(self, toaddr, mail):
         fromaddr = self.get_config('mail', 'from_addr')
-        log_msg = 'Sending message to %s' % toaddr
         if not self.dry_run:
+            log_msg = 'Sending mail to %s' % toaddr
             try:
                 self.server.sendmail(fromaddr, toaddr, mail.as_string())
             except smtplib.SMTPRecipientsRefused as e:
