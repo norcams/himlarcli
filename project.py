@@ -75,7 +75,7 @@ def action_create():
             himutils.sys_error('ERROR! Could not find and parse mail body in \
                                %s' % options.msg)
 
-        rt_mail = Mail.rt_mail(options.rt, body_content)
+        rt_mail = mail.rt_mail(options.rt, body_content)
         print(rt_mail)
 
     # Quotas
