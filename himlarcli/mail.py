@@ -30,7 +30,7 @@ class Mail(Client):
     def rt_mail(self, ticket, subject, msg):
         mail = MIMEMultipart('alternative')
         mail['References'] = 'RT-Ticket-%s@uninett.no' % ticket
-        mail['Subject'] = 'Re: [uninett.no #%s] %s' % (ticket, subject)
+        mail['Subject'] = '[uninett.no #%s] %s' % (ticket, subject)
         mail['From'] = 'UH-IaaS support <support@uh-iaas.no>'
         mail['Reply-To'] = 'support@uh-iaas.no'
         mail['X-RT-Owner'] = 'Nobody'
