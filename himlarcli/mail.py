@@ -14,24 +14,29 @@ class Mail(Client):
 
     def send_mail(self, toaddr, mail):
         fromaddr = self.get_config('mail', 'from_addr')
-        try:
-            self.server.sendmail(fromaddr, toaddr, mail)
-        except smtplib.SMTPRecipientsRefused as e:
-            self.log_error(e)
+        log_msg = 'Sending message to %s' % toaddr
+        if not self.dry_run:
+            try:
+                self.server.sendmail(fromaddr, toaddr, mail.as_string())
+            except smtplib.SMTPRecipientsRefused as e:
+                self.log_error(e)
+        else:
+            log_msg = 'DRY-RUN:' + mail.as_string()
+        self.logger.debug('=> %s', log_msg)
 
     def close(self):
         self.server.quit()
 
-    def rt_mail(self, ticket, msg):
+    def rt_mail(self, ticket, subject, msg):
         mail = MIMEMultipart('alternative')
-        mail['References'] = 'RT-Ticket-' + int(ticket) + '@uninett.no'
-        mail['Subject'] = 'fixme'
+        mail['References'] = 'RT-Ticket-%s@uninett.no' % ticket
+        mail['Subject'] = 'Re: [uninett.no #%s] %s' % (ticket, subject)
         mail['From'] = 'UH-IaaS support <support@uh-iaas.no>'
         mail['Reply-To'] = 'support@uh-iaas.no'
         mail['X-RT-Owner'] = 'Nobody'
         mail['X-RT-Queue'] = 'UH-IaaS'
-        mail['X-RT-Ticket'] = 'uninett.no #' + int(ticket)
-        mail.attach(MIMEText(msg, 'plain', 'utf-8'))
+        mail['X-RT-Ticket'] = 'uninett.no #%s' % ticket
+        mail.attach(MIMEText(msg, 'plain'))
         return mail
 
     def get_client(self):

@@ -60,24 +60,6 @@ def action_create():
         output['header'] = "Show information for %s" % options.project
         printer.output_dict(output)
 
-    if options.mail:
-        if options.rt is None:
-            himutils.sys_error('--rt parameter is missing.')
-        else:
-            mapping = dict(project_name=options.project,
-                           admin=options.admin.lower(),
-                           quota=options.quota,
-                           end_date=None)
-            body_content = himutils.load_template(inputfile=msg_file,
-                                                  mapping=mapping,
-                                                  log=ksclient.get_logger())
-        if not body_content:
-            himutils.sys_error('ERROR! Could not find and parse mail body in \
-                               %s' % options.msg)
-
-        rt_mail = mail.rt_mail(options.rt, body_content)
-        print(rt_mail)
-
     # Quotas
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
@@ -98,6 +80,26 @@ def action_create():
             novaclient.update_quota(project_id=project_id, updates=quota['nova'])
         if quota and 'neutron' in quota and project:
             neutronclient.update_quota(project_id=project_id, updates=quota['neutron'])
+
+    if options.mail:
+        if options.rt is None:
+            himutils.sys_error('--rt parameter is missing.')
+        else:
+            mapping = dict(project_name=options.project,
+                           admin=options.admin.lower(),
+                           quota=options.quota,
+                           end_date=None)
+            subject = 'UH-IaaS: Project %s has been created' % options.project
+            body_content = himutils.load_template(inputfile=msg_file,
+                                                  mapping=mapping,
+                                                  log=ksclient.get_logger())
+        if not body_content:
+            himutils.sys_error('ERROR! Could not find and parse mail body in \
+                               %s' % options.msg)
+
+        mime = mail.rt_mail(options.rt, subject, body_content)
+        mail.send_mail('support@uh-iaas.no', mime)
+
 
 def action_grant():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
