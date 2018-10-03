@@ -5,6 +5,7 @@ from himlarcli.cinder import Cinder
 from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
+from himlarcli.mail import Mail
 from himlarcli import utils as himutils
 from datetime import datetime
 
@@ -14,6 +15,8 @@ parser = Parser()
 parser.set_autocomplete(True)
 options = parser.parse_args()
 printer = Printer(options.format)
+msg_file = 'notify/project_created.txt'
+mail = Mail(options.config, debug=options.debug)
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
@@ -56,6 +59,24 @@ def action_create():
         output = project.to_dict() if not isinstance(project, dict) else project
         output['header'] = "Show information for %s" % options.project
         printer.output_dict(output)
+
+    if options.mail:
+        if options.rt is None:
+            himutils.sys_error('--rt parameter is missing.')
+        else:
+            mapping = dict(project_name=options.project,
+                           admin=options.admin.lower(),
+                           quota=options.quota,
+                           end_date=None)
+            body_content = himutils.load_template(inputfile=msg_file,
+                                                  mapping=mapping,
+                                                  log=ksclient.get_logger())
+        if not body_content:
+            himutils.sys_error('ERROR! Could not find and parse mail body in \
+                               %s' % options.msg)
+
+        rt_mail = Mail.rt_mail(options.rt, body_content)
+        print(rt_mail)
 
     # Quotas
     for region in regions:
