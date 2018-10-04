@@ -138,7 +138,7 @@ def action_grant():
         msg = MIMEText(body_content, 'plain')
         msg['subject'] = 'UH-IaaS: You have been given access to project %s' % options.project
 
-        mail.send_mail(user, rt_mime, fromaddr='no-reply@uh-iaas.no')
+        mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
 
 def action_delete():
     question = 'Delete project %s and all resources' % options.project
