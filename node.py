@@ -3,7 +3,7 @@ import sys
 import time
 import pprint
 from himlarcli import utils as himutils
-from himlarcli.foremanclient import Client
+from himlarcli.foremanclient import ForemanClient
 from himlarcli.parser import Parser
 from himlarcli.sensu import Sensu
 #from himlarcli.printer import Printer
@@ -14,8 +14,7 @@ himutils.is_virtual_env()
 parser = Parser()
 options = parser.parse_args()
 
-
-client = Client(options.config, options.debug)
+client = ForemanClient(options.config, options.debug)
 region = client.get_config('openstack', 'region')
 logger = client.get_logger()
 sensu = Sensu(options.config, debug=options.debug)
@@ -51,8 +50,7 @@ def action_install():
     if options.node in nodes:
         client.create_node(name=node_name,
                            node_data=nodes[options.node],
-                           region=region,
-                           dry_run=options.dry_run)
+                           region=region)
     else:
         sys.stderr.write("Node %s not found in config/nodes/%s.yaml\n" %
                          (options.node, region))
@@ -63,7 +61,7 @@ def action_delete():
     if not options.assume_yes:
         if not himutils.confirm_action('Are you sure you want to delete %s?' % node_name):
             return
-    client.delete_node(node_name, options.dry_run)
+    client.delete_node(node_name)
     sensu.delete_client(node_name)
 
 def action_rebuild():
@@ -80,15 +78,14 @@ def action_reinstall():
         if not options.assume_yes:
             if not himutils.confirm_action('Are you sure you want to reinstall %s?' % node_name):
                 return
-        client.delete_node(node_name, options.dry_run)
+        client.delete_node(node_name)
         if options.sensu_expire:
             sensu.silence_host(node_name, options.sensu_expire)
         else:
             sensu.delete_client(node_name)
         client.create_node(name=node_name,
                            node_data=nodes[options.node],
-                           region=region,
-                           dry_run=options.dry_run)
+                           region=region)
     else:
         sys.stderr.write("Node %s not found in config/nodes/%s.yaml\n" %
                          (options.node, region))
@@ -99,11 +96,12 @@ def action_full():
         node_name = '%s-%s' % (region, name)
         client.create_node(name=node_name,
                            node_data=node_data,
-                           region=region,
-                           dry_run=options.dry_run)
+                           region=region)
         time.sleep(10)
 
 # Run local function with the same name as the action
+sensu.set_dry_run(options.dry_run)
+client.set_dry_run(options.dry_run)
 action = locals().get('action_' + options.action)
 if not action:
     logger.error("Function action_%s not implemented" % options.action)

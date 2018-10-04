@@ -1,19 +1,20 @@
+from himlarcli.client import Client
 import sys
 import ConfigParser
 from foreman.client import Foreman
 from himlarcli import utils
 
-class Client(object):
+class ForemanClient(Client):
 
     def __init__(self, config_path, debug=False, version='1', log=None):
-        self.config = utils.get_config(config_path)
-        self.logger = utils.get_logger(__name__, self.config, debug, log)
-        config = self.get_config_section('foreman')
+        super(ForemanClient, self).__init__(config_path, debug, log)
         self.logger.debug('=> config file: %s' % config_path)
-        self.logger.debug('=> foreman url: %s' % config['url'])
-
-        self.foreman = Foreman(config['url'],
-                               (config['user'], config['password']),
+        foreman_url = self.get_config('foreman', 'url')
+        self.logger.debug('=> foreman url: %s' % foreman_url)
+        foreman_user = self.get_config('foreman', 'user')
+        foreman_password = self.get_config('foreman', 'password')
+        self.foreman = Foreman(foreman_url,
+                               (foreman_user, foreman_password),
                                api_version=2,
                                version=version,
                                verify=False)
@@ -33,8 +34,8 @@ class Client(object):
         try:
             openstack = self.config.items(section)
         except ConfigParser.NoSectionError:
-            self.logger.exception('missing [%s]' % section)
-            self.logger.critical('Could not find section [%s] in %s', section, self.config_path)
+            self.logger.debug('missing [%s]' % section)
+            self.logger.debug('Could not find section [%s] in %s', section, self.config_path)
             sys.exit(1)
         return dict(openstack)
 
@@ -78,13 +79,13 @@ class Client(object):
 
     def create_host(self, host):
         if 'name' not in host:
-            self.logger.critical('host dict missing name')
+            self.logger.debug('host dict missing name')
             return
         self.logger.debug('=> create new host %s' % host['name'])
         result = self.foreman.create_host(host)
         self.logger.debug('=> host created: %s' % result)
 
-    def create_node(self, name, node_data, region, dry_run=False):
+    def create_node(self, name, node_data, region):
         if self.get_host(name):
             self.logger.debug('=> node %s found, dropping create' % name)
             return
@@ -107,12 +108,12 @@ class Client(object):
             if compute_resource in found_resources:
                 host['compute_resource_id'] = found_resources[compute_resource]
             else:
-                self.logger.critical('=> compute resource %s not found' % compute_resource)
+                self.logger.debug('=> compute resource %s not found' % compute_resource)
                 return
         elif 'mac' not in node_data:
-            self.logger.critical('=> mac or compute resource are mandatory for %s' % name)
+            self.logger.debug('=> mac or compute resource are mandatory for %s' % name)
             return
-        if not dry_run:
+        if not self.dry_run:
             result = self.foreman.create_hosts(host)
             if not result:
                 self.log_error('Could not create host. Check production.log on foreman host!')
@@ -123,9 +124,9 @@ class Client(object):
         else:
             self.logger.debug('=> dry run: host config %s' % host)
 
-    def delete_node(self, host, dry_run=False):
+    def delete_node(self, host):
         host = self.__set_host(host)
-        if not dry_run:
+        if not self.dry_run:
             result = self.foreman.destroy_hosts(host)
             if not result:
                 self.log_error('Could not delete host.')

@@ -3,7 +3,7 @@ import utils
 #from himlarcli.nova import Nova
 from himlarcli.keystone import Keystone
 #import himlarcli.foremanclient as foreman
-from himlarcli.foremanclient import Client
+from himlarcli.foremanclient import ForemanClient
 from himlarcli import utils as himutils
 
 # Fix foreman functions and logger not-callable
@@ -15,7 +15,7 @@ keystone = Keystone(options.config, debug=options.debug)
 logger = keystone.get_logger()
 domain = keystone.get_config('openstack', 'domain')
 
-client = Client(options.config, options.debug, log=logger)
+client = ForemanClient(options.config, options.debug, log=logger)
 foreman = client.get_client()
 
 # Add compute resources

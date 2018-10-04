@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import utils
 import ConfigParser
-from himlarcli.foremanclient import Client
+from himlarcli.foremanclient import ForemanClient
 from himlarcli import utils as himutils
 
 desc = 'Create an ansible inventory hostfile in ./hostfile.<loc>'
 options = utils.get_options(desc, hosts=False)
 
-foreman = Client(options.config, options.debug)
+foreman = ForemanClient(options.config, options.debug)
 
 hosts = foreman.get_hosts('*')
 hostlist = dict()
@@ -22,7 +22,7 @@ for host in hosts['results']:
     try:
         if not loc or not role:
             pass
-    except:    
+    except:
         himutils.sys_error('Broken hostname %s! Please fix!' % hostname, 0)
         continue
 

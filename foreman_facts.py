@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
-from himlarcli.foremanclient import Client
+from himlarcli.foremanclient import ForemanClient
 
 parser = Parser()
 parser.toggle_show('dry-run')
@@ -9,7 +9,7 @@ parser.set_default_format('json')
 options = parser.parse_args()
 printer = Printer(options.format)
 
-foreman = Client(options.config, options.debug)
+foreman = ForemanClient(options.config, options.debug)
 
 hosts = options.hosts
 
