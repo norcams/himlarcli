@@ -1,0 +1,10 @@
+Hi,
+
+Access has been granted to the following users:
+
+$users
+
+Best regards,
+
+The UH-IaaS team
+

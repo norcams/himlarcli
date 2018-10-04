@@ -1,0 +1,13 @@
+Hi,
+
+You have been granted access to the UH-IaaS project $project_name
+
+If you haven't used our service before, please read the end user documentation
+at http://docs.uh-iaas.no
+
+If you have any questions or problems using the service, or if you think you've
+received this e-mail by mistake, please let us know.
+
+Best regards,
+
+The UH-IaaS team
