@@ -56,7 +56,7 @@ opt_args:
     'sub':      ['grant']
     'dest':     'users'
     'help':     'email of one or more valid openstack users'
-    'nargs':    '+'
+    'action':   'append'
     'required': true
   '--force':
     'sub':      ['delete']
