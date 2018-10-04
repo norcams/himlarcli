@@ -48,7 +48,7 @@ def action_update():
     public = flavors['public'] if 'public' in flavors else False
     properties = flavors['properties'] if 'properties' in flavors else None
     if not properties.get('aggregate_instance_extra_specs:type', None):
-        properties['aggregate_instance_extra_specs:type'] = 'standard'
+        properties['aggregate_instance_extra_specs:type'] = 's== standard'
     if (options.flavor not in flavors or
             not isinstance(flavors[options.flavor], dict)):
         himutils.sys_error('%s hash not found in config' % options.flavor)
