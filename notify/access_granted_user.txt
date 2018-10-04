@@ -1,6 +1,6 @@
 Hi,
 
-You have been granted access to the UH-IaaS project $project_name by $admin
+You have been granted access to the UH-IaaS project $project_name
 
 If you haven't used our service before, please read the end user documentation
 at http://docs.uh-iaas.no
