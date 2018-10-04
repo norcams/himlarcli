@@ -29,6 +29,8 @@ if not regions:
     himutils.sys_error('no regions found with this name!')
 
 def action_create():
+    if ksclient.is_valid_user(options.admin, options.domain) and options.type == 'personal': 
+        himutils.sys_error('not valid user', 1)
     quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
     if options.quota and not quota:
         himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
@@ -54,8 +56,7 @@ def action_create():
         himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
     if project:
         output = project.to_dict() if not isinstance(project, dict) else project
-        output['header'] = "Show information for %s" % options.project
-        printer.output_dict(output)
+        output['header'] = "Show information for %s" % options.projectprinter.output_dict(output)
 
     # Quotas
     for region in regions:
