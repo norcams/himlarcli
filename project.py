@@ -63,7 +63,8 @@ def action_create():
         himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
     if project:
         output = project.to_dict() if not isinstance(project, dict) else project
-        output['header'] = "Show information for %s" % options.projectprinter.output_dict(output)
+        output['header'] = "Show information for %s" % options.project
+        printer.output_dict(output)
 
     # Quotas
     for region in regions:
