@@ -17,6 +17,9 @@ class Mail(Client):
     def send_mail(self, toaddr, mail, fromaddr=None):
         if fromaddr is None:
             fromaddr = self.get_config('mail', 'from_addr')
+        if not 'From' in mail:
+            mail['From'] = fromaddr
+        mail['To'] = toaddr
         if not self.dry_run:
             log_msg = 'Sending mail to %s' % toaddr
             try:
