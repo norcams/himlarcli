@@ -8,8 +8,10 @@ class Mail(Client):
 
     def __init__(self, config_path, debug=False, log=None):
         super(Mail, self).__init__(config_path, debug, log)
+        debug_level = 1 if debug else 0
         self.logger.debug('=> config file: %s' % config_path)
         self.server = smtplib.SMTP(self.get_config('mail', 'smtp'), 25)
+        self.server.set_debuglevel(debug_level)
         self.server.starttls()
 
     def send_mail(self, toaddr, mail, fromaddr=None):
