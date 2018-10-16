@@ -134,7 +134,7 @@ def action_grant():
         mail.send_mail('support@uh-iaas.no', rt_mime)
 
         for user in options.users:
-            mapping = dict(project_name=options.project)
+            mapping = dict(project_name=options.project, admin=project.admin)
             body_content = himutils.load_template(inputfile=access_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
