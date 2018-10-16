@@ -36,7 +36,7 @@ if not regions:
     himutils.sys_error('no regions found with this name!')
 
 def action_create():
-    if ksclient.is_valid_user(options.admin, options.domain) and options.type == 'personal': 
+    if ksclient.is_valid_user(options.admin, options.domain) and options.type == 'personal':
         himutils.sys_error('not valid user', 1)
     quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
     if options.quota and not quota:
@@ -133,14 +133,14 @@ def action_grant():
         rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
         mail.send_mail('support@uh-iaas.no', rt_mime)
 
-    for user in options.users:
-        mapping = dict(project_name=options.project)
-        body_content = himutils.load_template(inputfile=access_user_msg_file,
-                                              mapping=mapping)
-        msg = MIMEText(body_content, 'plain')
-        msg['subject'] = 'UH-IaaS: You have been given access to project %s' % options.project
+        for user in options.users:
+            mapping = dict(project_name=options.project)
+            body_content = himutils.load_template(inputfile=access_user_msg_file,
+                                                  mapping=mapping)
+            msg = MIMEText(body_content, 'plain')
+            msg['subject'] = 'UH-IaaS: You have been given access to project %s' % options.project
 
-        mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
+            mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
 
 def action_delete():
     question = 'Delete project %s and all resources' % options.project
