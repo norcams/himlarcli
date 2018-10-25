@@ -185,6 +185,12 @@ nodes:
   storage-05:
     mac: b0:83:fe:cd:5b:8d
     hostgroup: 2
+  storage-06:
+    mac: d0:94:66:33:2d:b2
+    hostgroup: 7
+  storage-07:
+    mac: d0:94:66:33:06:b0
+    hostgroup: 7
   telemetry-01:
     compute_profile: 4
     compute_resource: controller-03
