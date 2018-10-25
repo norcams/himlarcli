@@ -187,10 +187,10 @@ nodes:
     hostgroup: 2
   storage-06:
     mac: d0:94:66:33:2d:b2
-    hostgroup: 7
+    hostgroup: 8
   storage-07:
     mac: d0:94:66:33:06:b0
-    hostgroup: 7
+    hostgroup: 8
   telemetry-01:
     compute_profile: 4
     compute_resource: controller-03
