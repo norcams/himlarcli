@@ -19,8 +19,6 @@ printer = Printer(options.format)
 project_msg_file = 'notify/project_created.txt'
 access_msg_file = 'notify/access_granted_rt.txt'
 access_user_msg_file = 'notify/access_granted_user.txt'
-mail = Mail(options.config, debug=options.debug)
-mail.set_dry_run(options.dry_run)
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
@@ -88,6 +86,9 @@ def action_create():
             neutronclient.update_quota(project_id=project_id, updates=quota['neutron'])
 
     if options.mail:
+        mail = Mail(options.config, debug=options.debug)
+        mail.set_dry_run(options.dry_run)
+
         if options.rt is None:
             himutils.sys_error('--rt parameter is missing.')
         else:
@@ -122,6 +123,9 @@ def action_grant():
             printer.output_dict(output)
 
     if options.mail:
+        mail = Mail(options.config, debug=options.debug)
+        mail.set_dry_run(options.dry_run)
+
         if options.rt is None:
             himutils.sys_error('--rt parameter is missing.')
         else:
