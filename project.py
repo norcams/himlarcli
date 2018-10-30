@@ -198,23 +198,21 @@ def action_show():
 def action_instances():
     project = ksclient.get_project_by_name(project_name=options.project)
     for region in regions:
-      novaclient = Nova(options.config, debug=options.debug, log=logger)
-      instances = novaclient.get_project_instances(project_id=project.id)
-      if not instances:
-        himutils.sys_error('No instances found for the project %s' % options.project)
-
-  #  inst = dict()
-    printer.output_dict({'header': 'Instances list (id, name, region)'})
-    count = 0
-    for i in instances:
-      output = {
-            'id': i.id,
-            'name': i.name,
-            'region': ksclient.get_region(),
-      }
-      count += 1
-      printer.output_dict(output, sort=True, one_line=True)
-    printer.output_dict({'header': 'Total instances in this project', 'count': count})
+        novaclient = Nova(options.config, debug=options.debug, log=logger)
+        instances = novaclient.get_project_instances(project_id=project.id)
+        if not instances:
+            himutils.sys_error('No instances found for the project %s' % options.project)
+        printer.output_dict({'header': 'Instances list (id, name, region)'})
+        count = 0
+        for i in instances:
+            output = {
+                'id': i.id,
+                'name': i.name,
+                'region': region,
+            }
+            count += 1
+            printer.output_dict(output, sort=True, one_line=True)
+        printer.output_dict({'header': 'Total instances in this project', 'count': count})
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
