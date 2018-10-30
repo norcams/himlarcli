@@ -1,5 +1,6 @@
 from himlarcli.client import Client
 from himlarcli.nova import Nova
+from himlarcli.neutron import Neutron
 from himlarcli.glance import Glance
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as exceptions
@@ -239,7 +240,10 @@ class Keystone(Client):
         self.__delete_instances(project)
         # Delete images
         self.__delete_images(project)
-        self.debug_log('=> delete project %s' % project_name)
+        # Delete security groups
+        self.__delete_security_groups(project)
+
+        self.debug_log('delete project %s' % project_name)
         if not self.dry_run:
             return self.client.projects.delete(project)
         return None
@@ -699,6 +703,14 @@ class Keystone(Client):
                           region=self.region)
         glclient.set_dry_run(self.dry_run)
         glclient.delete_private_images(project.id)
+
+    def __delete_security_groups(self, project):
+        neutronclient = Neutron(config_path=self.config_path,
+                                debug=self.debug,
+                                log=self.logger,
+                                region=self.region)
+        neutronclient.set_dry_run(self.dry_run)
+        neutronclient.purge_security_groups(project)
 
     def __list_compute_quota(self, project):
         self.novaclient = Nova(config_path=self.config_path,
