@@ -41,7 +41,7 @@ class Neutron(Client):
         })
 
     def delete_security_group(self, secgroup_id):
-        self.logger.debug('=> delete secgroup %s', secgroup_id)
+        self.debug_log('delete secgroup %s' % secgroup_id)
         try:
             self.client.delete_security_group(secgroup_id)
         except (exceptions.NotFound, exceptions.Conflict) as e:
@@ -54,6 +54,13 @@ class Neutron(Client):
             self.create_security_group_rule(secgroup_id=secgroup['security_group']['id'],
                                             port=port, ethertype='IPv6')
         return secgroup['security_group']
+
+    def purge_security_groups(self, project):
+        """ Remove all security groups for a project """
+        sec_groups = self.client.list_security_groups(tenant_id=project.id)
+
+        for sg in sec_groups['security_groups']:
+            self.delete_security_group(sg['id'])
 
 # =================================== NETWORK ================================
 

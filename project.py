@@ -34,7 +34,7 @@ if not regions:
     himutils.sys_error('no regions found with this name!')
 
 def action_create():
-    if ksclient.is_valid_user(options.admin, options.domain) and options.type == 'personal':
+    if not ksclient.is_valid_user(options.admin, options.domain) and options.type == 'personal':
         himutils.sys_error('not valid user', 1)
     quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
     if options.quota and not quota:
