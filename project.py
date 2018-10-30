@@ -60,7 +60,7 @@ def action_create():
     if not ksclient.is_valid_user(options.admin, options.domain):
         himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
     if project:
-        output = project.to_dict() if not isinstance(project, dict) else project
+        output = Keystone.get_dict(project)
         output['header'] = "Show information for %s" % options.project
         printer.output_dict(output)
 
@@ -72,12 +72,7 @@ def action_create():
         cinderclient.set_dry_run(options.dry_run)
         novaclient.set_dry_run(options.dry_run)
         neutronclient.set_dry_run(options.dry_run)
-        if project and not isinstance(project, dict):
-            project_id = project.id
-        elif project and isinstance(project, dict) and 'id' in project:
-            project_id = project['id']
-        else:
-            project_id = None
+        project_id = Keystone.get_attr(project, 'id')
         if quota and 'cinder' in quota and project:
             cinderclient.update_quota(project_id=project_id, updates=quota['cinder'])
         if quota and 'nova' in quota and project:

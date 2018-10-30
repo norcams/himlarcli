@@ -96,6 +96,31 @@ class Client(object):
         return hostname + '.' + domain
 
     @staticmethod
+    def get_attr(obj, attr):
+        """
+        Return attribute from object. This will work when attr are both
+        attribute of object or keys of dict.
+        """
+        if isinstance(obj, dict) and attr in obj:
+            return obj[attr]
+        elif not isinstance(obj, dict) and hasattr(obj, attr):
+            return getattr(obj, attr)
+        return None
+
+    @staticmethod
+    def get_dict(obj):
+        """
+        Return a dict used for the output parser. This can be used both on
+        dicts and openstack objects.
+        """
+        if isinstance(obj, dict):
+            return obj
+        elif hasattr(obj, 'to_dict'):
+            return getattr(obj, 'to_dict')()
+        else:
+            return dict()
+
+    @staticmethod
     def log_error(msg, code=0):
         sys.stderr.write("%s\n" % msg)
         if code > 0:
