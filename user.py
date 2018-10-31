@@ -89,11 +89,14 @@ def action_rename():
 
 def action_validate():
     orgs = himutils.load_config('config/ldap.yaml', logger).keys()
+    orgs = list()
     ldap = dict()
     for org in orgs:
         ldap[org] = LdapClient(options.config, debug=options.debug)
         ldap[org].bind(org)
     users = ksclient.list_users(domain=options.domain)
+    deactive = list()
+    unknown = list()
     for user in users:
         org_found = False
         for org in orgs:
@@ -101,11 +104,24 @@ def action_validate():
                 continue
             org_found = True
             if not ldap[org].get_user(user):
-                print "%s not found in ldap" % user
+                #print "%s not found in ldap" % user
+                deactive.append(user)
             break
         if not org_found:
-            print "%s org not found" % user
+            #print "%s org not found" % user
+            if '@' in user:
+                org = user.split("@")[1]
+                unknown.append(org)
         time.sleep(2)
+    output = dict()
+    output['header'] = 'Unknown user orgs:'
+    output['orgs'] = unknown
+    printer.output_dict(output)
+    output = dict()
+    output['header'] = 'Deactive users:'
+    output['users'] = deactive
+    output['count'] = len(deactive)
+    printer.output_dict(output)
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
