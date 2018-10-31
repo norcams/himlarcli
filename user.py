@@ -4,6 +4,7 @@ from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
+from himlarcli.ldapclient import LdapClient
 from himlarcli import utils as himutils
 from datetime import datetime
 
@@ -84,6 +85,24 @@ def action_rename():
     ksclient.user_cleanup(email=options.new)
     ksclient.rename_user(new_email=options.new,
                          old_email=options.old)
+
+def action_validate():
+    orgs = himutils.load_config('config/ldap.yaml', logger).keys()
+    ldap = dict()
+    for org in orgs:
+        ldap[org] = LdapClient(options.config, debug=options.debug)
+        ldap[org].bind(org)
+    users = ksclient.list_users(domain=options.domain)
+    for user in users:
+        org_found = False
+        for org in orgs:
+            if not org in user:
+                continue
+            org_found = True
+            if not ldap[org].get_user(user):
+                print "%s not found in ldap" % user
+        if not org_found:
+            print "%s org not found" % user
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):

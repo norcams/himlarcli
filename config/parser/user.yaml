@@ -8,6 +8,7 @@ actions:
   'rename':   'Use this when user changes affiliation'
   'password': 'Reset API password for user'
   'create':   'Create a user new local API only user'
+  'validate': 'Validate user against FEIDE ldap'
 opt_args:
   '--domain':
     'dest':     'domain'
