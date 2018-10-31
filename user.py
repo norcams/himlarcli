@@ -7,6 +7,7 @@ from himlarcli.printer import Printer
 from himlarcli.ldapclient import LdapClient
 from himlarcli import utils as himutils
 from datetime import datetime
+import time
 
 himutils.is_virtual_env()
 
@@ -101,8 +102,10 @@ def action_validate():
             org_found = True
             if not ldap[org].get_user(user):
                 print "%s not found in ldap" % user
+            break
         if not org_found:
             print "%s org not found" % user
+        time.sleep(2)
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
