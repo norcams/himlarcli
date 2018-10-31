@@ -89,7 +89,6 @@ def action_rename():
 
 def action_validate():
     orgs = himutils.load_config('config/ldap.yaml', logger).keys()
-    orgs = list()
     ldap = dict()
     for org in orgs:
         ldap[org] = LdapClient(options.config, debug=options.debug)
