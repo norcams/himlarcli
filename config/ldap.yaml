@@ -1,14 +1,14 @@
 ---
 uib:
-  'server':   'ldap.uib.no'
+  'server':   'ldaps://ldap.uib.no'
   'base_dn':  'dc=uib,dc=no'
   'type':     'employeeType'
   'org':      'ou'
 uio:
-  'server':   'ldap.uio.no'
+  'server':   'ldaps://ldap.uio.no'
   'base_dn':  'dc=uio,dc=no'
   'type':     'eduPersonPrimaryAffiliation'
   'org':      'eduPersonPrimaryOrgUnitDN'
 uia:
-  'server':   'ldap.uia.no'
+  'server':   'ldaps://ldap.uia.no'
   'base_dn':  'dc=uia,dc=no'

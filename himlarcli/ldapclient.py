@@ -18,11 +18,11 @@ class LdapClient(Client):
         server = self.get_ldap_config(org, 'server')
         self.org = org
         try:
-            self.ldap = ldap.open(server)
+            self.ldap = ldap.initialize(server)
             self.ldap.simple_bind()
             self.debug_log('LDAP: connected to server %s' % server)
         except ldap.LDAPError as e:
-            print e
+            self.log_error('failed to connect to %s with error %s' % (server, e))
 
     def get_ldap_config(self, org, option):
         if org not in self.ldap_config:
@@ -35,6 +35,8 @@ class LdapClient(Client):
         return self.ldap
 
     def get_user(self, email, attr=None):
+        if not self.ldap:
+            return None
         base_dn = self.get_ldap_config(self.org, 'base_dn')
         return self.ldap.search_s(base_dn,
                                   ldap.SCOPE_SUBTREE,
