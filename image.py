@@ -100,6 +100,7 @@ def action_retire():
         sys.stderr.write("Invalid yaml file (config/images/%s): images hash not found\n"
                          % options.image_config)
         sys.exit(1)
+    image_type = image_templates['type']
     image_msg = options.name if options.name else 'all'
     question = "Retire all active images matching '%s'" % image_msg
     if not himutils.confirm_action(question):
