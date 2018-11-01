@@ -95,6 +95,7 @@ def action_validate():
         ldap[org].bind(org)
     users = ksclient.list_users(domain=options.domain)
     deactive = list()
+    active = dict()
     unknown = list()
     for user in users:
         org_found = False
@@ -105,22 +106,28 @@ def action_validate():
             if not ldap[org].get_user(user):
                 #print "%s not found in ldap" % user
                 deactive.append(user)
+            else:
+                active[org] = active.setdefault(org, 0) + 1
             break
         if not org_found:
             #print "%s org not found" % user
             if '@' in user:
                 org = user.split("@")[1]
-                unknown.append(org)
+                if org not in unknown:
+                    unknown.append(org)
         time.sleep(2)
-    output = dict()
-    output['header'] = 'Unknown user orgs:'
-    output['orgs'] = unknown
-    printer.output_dict(output)
+    active['header'] = 'Active users:'
+    printer.output_dict(active)
     output = dict()
     output['header'] = 'Deactive users:'
     output['users'] = deactive
     output['count'] = len(deactive)
     printer.output_dict(output)
+    output = dict()
+    output['header'] = 'Unknown user orgs:'
+    output['orgs'] = unknown
+    printer.output_dict(output)
+
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
