@@ -1,6 +1,7 @@
 from himlarcli.client import Client
 from himlarcli import utils
 import ldap
+import inspect
 
 class LdapClient(Client):
 
@@ -22,7 +23,7 @@ class LdapClient(Client):
             self.ldap.simple_bind()
             self.debug_log('LDAP: connected to server %s' % server)
         except ldap.LDAPError as e:
-            self.log_error('failed to connect to %s with error %s' % (server, e))
+            self.log_error('failed to connect to %s with error: %s' % (server, e.message['desc']))
 
     def get_ldap_config(self, org, option):
         if org not in self.ldap_config:
@@ -36,9 +37,13 @@ class LdapClient(Client):
 
     def get_user(self, email, attr=None):
         if not self.ldap:
-            return None
+            raise ValueError('ldap server not configured. Run bind() first')
         base_dn = self.get_ldap_config(self.org, 'base_dn')
-        return self.ldap.search_s(base_dn,
-                                  ldap.SCOPE_SUBTREE,
-                                  "(mail=%s)" % email,
-                                  attr)
+        try:
+            user = self.ldap.search_s(base_dn,
+                                      ldap.SCOPE_SUBTREE,
+                                      "(mail=%s)" % email,
+                                      attr)
+        except ldap.LDAPError as e:
+            self.log_error('ldap server for %s failed: %s' % (self.org, e.message['desc']), 1)
+        return user
