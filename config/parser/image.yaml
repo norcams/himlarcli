@@ -8,6 +8,7 @@ actions:
   'purge':    'Delete images'
   'grant':    'Grant access to private image from project'
   'test':     'Create instances base on images'
+  'retire':   'Will retire one or more images (deactivate and rename)'
 opt_args:
   '--region':
     'dest':     'region'
@@ -25,12 +26,12 @@ opt_args:
     'const':    true
     'default':  false
   '-i':
-    'sub':      'update'
+    'sub':      [ 'update', 'retire' ]
     'dest':     'image_config'
     'help':     'config file under config/images/'
     'default':  'default.yaml'
   '-n':
-    'sub':      ['update', 'grant', 'test']
+    'sub':      ['update', 'grant', 'test', 'retire']
     'dest':     'name'
     'help':     'only use image with this name (use short name)'
   '-t':

@@ -94,6 +94,35 @@ def action_usage():
     printer.output_dict(tags)
     return output
 
+def action_retire():
+    image_templates = himutils.load_config('config/images/%s' % options.image_config)
+    if not image_templates or 'images' not in image_templates or 'type' not in image_templates:
+        sys.stderr.write("Invalid yaml file (config/images/%s): images hash not found\n"
+                         % options.image_config)
+        sys.exit(1)
+    ksclient = Keystone(options.config, debug=options.debug, log=logger)
+    status = 'active'
+    image_msg = options.name if options.name else 'all'
+    question = "Retire all active images matching '%s'" % image_msg
+    if not himutils.confirm_action(question):
+        return
+    found = False
+    for name, image_data in image_templates['images'].iteritems():
+        if options.name and name != options.name:
+            logger.debug('=> dropped %s: image name spesified', name)
+            continue
+        image = glclient.find_image(filters={'limit':1}, name=image_data['name'])
+        if image and len(image) > 0:
+            if not options.dry_run:
+                timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
+                glclient.update_image(image_id=image[0]['id'],
+                                      name=image_data['depricated'],
+                                      depricated=timestamp)
+                glclient.deactivate(image_id=image[0]['id'])
+        found = True
+    if not found:
+        print 'No image found in %s' % options.image_config
+
 def action_list():
     ksclient = Keystone(options.config, debug=options.debug, log=logger)
     status = 'deactivated' if options.deactive else 'active'
