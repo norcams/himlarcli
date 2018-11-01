@@ -88,7 +88,7 @@ nodes:
         '1':
           allocation:   '0G'
           pool_name:    'masstorage'
-          capacity:     '50G'
+          capacity:     '100G'
           format_type:  'raw'
     host_parameters_attributes:
       - name:           'installdevice'
