@@ -25,6 +25,8 @@ nodes:
   console-01:
     compute_profile: 1
     compute_resource: controller-02
+  controller-00:
+    mac: 18:03:73:e4:b1:25
   controller-01:
     mac: 00:23:24:5e:34:f1 #8
   controller-02:
