@@ -1,1 +1,1 @@
-On ${date}, we will be upgrading all the remaining Openstack components to the Pike version. All Openstack services will be unavailable in this time frame. Running instances will not be affected.
+All UH-IaaS services (dashboard, API, access, status) will be unavailable on ${date} due to upgrading. Running instances will not be affected.
