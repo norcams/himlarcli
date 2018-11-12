@@ -23,6 +23,6 @@ opt_args:
     'const':    true
     'default':  false
   '-e':
-    'sub':      ['reinstall']
+    'sub':      ['reinstall', 'rebuild']
     'dest':     'sensu_expire'
     'help':     'silence sensu for a given period of time (in seconds)'
