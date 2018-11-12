@@ -89,7 +89,7 @@ def action_list():
             'name': host.hypervisor_hostname,
             'state': host.state,
             'status': host.status,
-            'running_vms': host.running_vms
+            'running_vms': host.running_vms,
             'aggreate': aggregates[host.hypervisor_hostname]
         }
         printer.output_dict(output, sort=True, one_line=True)
