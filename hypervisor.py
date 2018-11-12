@@ -81,14 +81,16 @@ def action_disable():
         print 'Host %s disabled' % host.hypervisor_hostname
 
 def action_list():
+    aggregates = nc.get_all_aggregate_hosts()
     hosts = nc.get_hosts()
-    printer.output_dict({'header': 'Hypervisor list (name, vms, state, status)'})
+    printer.output_dict({'header': 'Hypervisor list (aggregate, name, vms, state, status)'})
     for host in hosts:
         output = {
             'name': host.hypervisor_hostname,
             'state': host.state,
             'status': host.status,
             'running_vms': host.running_vms
+            'aggreate': aggregates[host.hypervisor_hostname]
         }
         printer.output_dict(output, sort=True, one_line=True)
 

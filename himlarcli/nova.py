@@ -232,6 +232,16 @@ class Nova(Client):
                 self.logger.debug("=> add %s to user list" % user.name)
         return emails
 
+    def get_all_aggregate_hosts(self):
+        aggregates = self.client.aggregates.list()
+        hosts = dict()
+        for aggregate in aggregates:
+            if not hasattr(aggregate, 'hosts'):
+                continue
+            for h in aggregate.hosts:
+                hosts[h] = aggregate.name
+        return hosts
+
 # ============================== INSTANCES ====================================
 
     def get_instance(self, server_id):
