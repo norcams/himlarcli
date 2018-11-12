@@ -81,6 +81,9 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  dashboard-mgmt-01:
+    compute_profile: 1
+    compute_resource: controller-04
   db-global-01:
     compute_profile: 1
     compute_resource: controller-02
