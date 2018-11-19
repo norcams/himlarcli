@@ -79,6 +79,9 @@ nodes:
     compute_resource: controller-02
   image-01:
     compute_profile: 1
+    compute_resource: controller-01
+  image-02:
+    compute_profile: 1
     compute_resource: controller-02
   logger-01:
     compute_profile: 2
