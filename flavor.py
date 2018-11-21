@@ -111,6 +111,5 @@ def update_access(nc, action):
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    print("Function action_%s not implemented" % options.action)
-    sys.exit(1)
+    himutils.sys_error("Function action_%s() not implemented" % options.action)
 action()
