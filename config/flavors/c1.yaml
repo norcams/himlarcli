@@ -25,7 +25,7 @@ c1: # (2x) new
     vcpus: 16
     ram: 32768
     disk: 20
-  'c1.8xlarge': # [32-64-20]
-    vcpus: 32
-    ram: 65536
-    disk: 20
+  # 'c1.8xlarge': # [32-64-20]
+  #   vcpus: 32
+  #   ram: 65536
+  #   disk: 20
