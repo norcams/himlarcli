@@ -22,11 +22,11 @@ win:
     vcpus: 4
     ram: 16384
     disk: 80
-  'win.x2large':
+  'win.2xlarge':
     vcpus: 8
     ram: 32768
     disk: 80
-  'win.x4large':
+  'win.4xlarge':
     vcpus: 16
     ram: 65536
     disk: 80
