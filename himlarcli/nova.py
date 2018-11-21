@@ -516,6 +516,16 @@ class Nova(Client):
                 self.logger.debug('=> unable to %s %s' %
                                   (action, flavor.name))
 
+    def get_flavor_access(self, filters):
+        flavors = self.get_flavors(filters)
+        access_list = dict()
+        for flavor in flavors:
+            if getattr(flavor, 'os-flavor-access:is_public'):
+                self.debug_log('%s is public and have no access' % flavor.name)
+                continue
+            access_list[flavor.name] = self.client.flavor_access.list(flavor=flavor.id)
+        return access_list
+
 ################################## PRIVATE ####################################
 
     def __change_status(self, action='start', state='SHUTOFF', instances=None):

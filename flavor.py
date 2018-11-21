@@ -83,6 +83,20 @@ def action_revoke():
         print "Revoke access to %s for %s in %s" % (options.flavor,
             options.project, region)
 
+def action_list_access():
+    for region in regions:
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
+        access = nc.get_flavor_access(filters=options.flavor)
+        header = 'access to %s flavor in %s' % (options.flavor, region)
+        printer.output_dict({'header': header})
+        output = dict()
+        for name, projects in access.iteritems():
+            output[name] = list()
+            for project_id in projects:
+                project = kc.get_by_id('project', project_id.tenant_id)
+                output[name].append(project.name)
+        printer.output_dict(output)
+
 def update_access(nc, action):
     public = flavors['public'] if 'public' in flavors else False
     if 'public' in flavors and flavors['public']:
@@ -94,8 +108,9 @@ def update_access(nc, action):
                             project_id=project.id,
                             action=action)
 
-# Run local function with the same name as the action
-action = locals().get('action_' + options.action)
+# Run local function with the same name as the action (Note: - => _)
+action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    himutils.sys_error("Function action_%s() not implemented" % options.action)
+    print("Function action_%s not implemented" % options.action)
+    sys.exit(1)
 action()

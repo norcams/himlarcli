@@ -6,6 +6,7 @@ actions:
   'purge':  ''
   'grant':  ''
   'revoke': ''
+  'list-access': 'List project with access to flavors of this class'
 opt_args:
   '--domain':
     'dest':     'domain'
