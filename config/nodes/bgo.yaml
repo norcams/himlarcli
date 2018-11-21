@@ -71,16 +71,6 @@ nodes:
   dashboard-01:
     compute_profile: 4
     compute_resource: controller-02
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '60G'
-          format_type:  'raw'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
   dashboard-mgmt-01:
     compute_profile: 1
     compute_resource: controller-04
