@@ -59,6 +59,16 @@ def action_update():
         for name, spec in sorted(flavors[options.flavor].iteritems()):
             nc.update_flavor(name=name, spec=spec,
                              properties=properties, public=public)
+        # Update access
+        access = nc.get_flavor_access(filters=options.flavor)
+        all_projects = set()
+        for name, projects in access.iteritems():
+            for project_id in projects:
+                all_projects.add(project_id.tenant_id)
+        for project in all_projects:
+            nc.update_flavor_access(filters=options.flavor,
+                                    project_id=project,
+                                    action='grant')
 
 def action_purge():
     for region in regions:
@@ -86,6 +96,7 @@ def action_revoke():
 def action_list_access():
     for region in regions:
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
+        nc.set_dry_run(options.dry_run)
         access = nc.get_flavor_access(filters=options.flavor)
         header = 'access to %s flavor in %s' % (options.flavor, region)
         printer.output_dict({'header': header})
