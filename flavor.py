@@ -108,7 +108,7 @@ def action_list_access():
                 if project:
                     output[name].append(project.name)
                 else:
-                    himutils.sys_error('project not found %s' % project_id, 0)
+                    himutils.sys_error('project not found %s' % project_id.tenant_id, 0)
                     continue
         printer.output_dict(output)
 
