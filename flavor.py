@@ -105,7 +105,11 @@ def action_list_access():
             output[name] = list()
             for project_id in projects:
                 project = kc.get_by_id('project', project_id.tenant_id)
-                output[name].append(project.name)
+                if project:
+                    output[name].append(project.name)
+                else:
+                    himutils.sys_error('project not found %s' % project_id, 0)
+                    continue
         printer.output_dict(output)
 
 def update_access(nc, action):
