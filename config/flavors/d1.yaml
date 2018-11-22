@@ -22,11 +22,11 @@ d1: # (4x)
     vcpus: 4
     ram: 16384
     disk: 80
-  'd1.x2large': # [8-32-80] (new)
+  'd1.2xlarge': # [8-32-80] (new)
     vcpus: 8
     ram: 32768
     disk: 80
-  'd1.x4large': # [16-64-80] (new)
+  'd1.4xlarge': # [16-64-80] (new)
     vcpus: 16
     ram: 65536
     disk: 80

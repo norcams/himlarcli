@@ -13,7 +13,7 @@ m2: # (4x)
     vcpus: 16
     ram: 65536
     disk: 20
-  'm2.8xlarge' : # [32-128-20] (new)
-    vcpus: 32
-    ram: 131072
-    disk: 20
+  # 'm2.8xlarge': # [32-128-20] (new)
+  #   vcpus: 32
+  #   ram: 131072
+  #   disk: 20
