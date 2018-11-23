@@ -66,8 +66,11 @@ class ForemanClient(Client):
     def get_fact(self, host, fact):
         host = self.__set_host(host)
         facts = self.get_facts(host)
-        fact = facts['results'][host][fact]
-        return fact
+        if facts['results']:
+            fact = facts['results'][host][fact]
+            return fact
+        else:
+            return None
 
     def get_facts(self, host):
         host = self.__set_host(host)
