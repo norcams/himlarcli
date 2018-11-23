@@ -12,7 +12,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '50G'
           format_type:  'raw'
     host_parameters_attributes:
@@ -80,7 +80,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '100G'
           format_type:  'raw'
     host_parameters_attributes:
