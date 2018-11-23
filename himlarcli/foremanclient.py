@@ -47,6 +47,9 @@ class ForemanClient(Client):
     def get_logger(self):
         return self.logger
 
+    def get_client(self):
+        return self.client
+
     def get_compute_resources(self):
         resource = '/api/compute_resources'
         resources = self._get(resource, per_page='10000')
