@@ -70,8 +70,9 @@ def action_migrate():
 
 def action_evacuate():
     source_host = nc.get_host(source)
+    locked = options.no_lock
     if source_host.state != 'down':
-        himutils.sys_error('Evacuate failed. Source host need to be down! Use migrate')
+        himutils.sys_error('Evacuate failed. Source host need to be down! Use migrate.')
     # Check that there are other valid hosts in the same aggregate
     hosts = nc.get_aggregate_hosts(options.aggregate)
     found_enabled = list()
@@ -97,9 +98,14 @@ def action_evacuate():
         if state == 'active' and not options.dry_run:
             i.evacuate()
             time.sleep(options.sleep)
-        elif state == 'stopped' and not options.dry_run:
+        elif state != 'active' and not options.dry_run:
             i.evacuate()
             time.sleep(options.sleep)
+            state = locked
+            if locked == True:
+                pass
+            else:
+                locked = True
         elif not options.dry_run:
             logger.debug('=> dropping evacuate of %s unknown state %s', i.name, state)
         count += 1
