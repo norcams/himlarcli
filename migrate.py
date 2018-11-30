@@ -98,13 +98,12 @@ def action_evacuate():
         if state == 'active' and not options.dry_run:
             i.evacuate()
             time.sleep(options.sleep)
+            locked = False
         elif state != 'active' and not options.dry_run:
+            logger.debug('=> lock status %s', options.no_lock)
             i.evacuate()
             time.sleep(options.sleep)
-            state = locked
-            if locked == True:
-                pass
-            else:
+            if locked != True:
                 locked = True
         elif not options.dry_run:
             logger.debug('=> dropping evacuate of %s unknown state %s', i.name, state)
