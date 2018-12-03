@@ -58,9 +58,9 @@ for x in range(1, 4):
         if not found_profile:
             if not options.dry_run:
                 result = foreman.create_compute_attributes(
-                    compute_profile_id=x,
-                    compute_resource_id=found_resources[r],
-                    compute_attribute=compute_attribute[x])
+                    x,
+                    found_resources[r],
+                    compute_attribute[x])
                 logger.debug("=> create result %s" % result)
             else:
                 logger.debug('=> dryrun %s(%s): %s' % (r, profile['name'], compute_attribute[x]))
@@ -72,10 +72,10 @@ for x in range(1, 4):
                     continue
                 if not options.dry_run:
                     result = foreman.update_compute_attributes(
-                        compute_profile_id=x,
-                        compute_resource_id=found_resources[r],
-                        id=attr['id'],
-                        compute_attribute=compute_attribute[x])
+                        x,
+                        found_resources[r],
+                        attr['id'],
+                        compute_attribute[x])
                     logger.debug("=> update result %s" % result)
                 else:
                     logger.debug("=> dryrun %s(%s): %s" % (r, profile['name'], compute_attribute[x]))
