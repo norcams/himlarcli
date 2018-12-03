@@ -112,7 +112,7 @@ class ForemanClient(Client):
 
     def get_hosts(self, search=None):
         resource = '/api/hosts'
-        return self._do_get(resource, per_page='10000', search=search)
+        return self._get(resource, per_page='10000', search=search)
 
     def power_on(self, hostname):
         resource = '/api/hosts/%s/power' % hostname
