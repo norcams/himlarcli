@@ -58,6 +58,31 @@ class ForemanClient(Client):
             found_resources[r['name']] = r['id']
         return found_resources
 
+    def create_compute_resources(self, data):
+        resource = '/api/compute_resources'
+        res = self._post(resource, data)
+        return res
+
+    def update_compute_resources(self, name, data):
+        resource = '/api/compute_resources/%s' % name
+        res = self._put(resource, data)
+        return res
+
+    def create_compute_attributes(self, profile_id, resource_id, data):
+        resource = '/api/compute_profiles/%s/compute_resources/%s/compute_attributes' % (profile_id, resource_id)
+        res = self._post(resource, data)
+        return res
+
+    def update_compute_attributes(self, profile_id, resource_id, attr_id, data):
+        resource = '/api/compute_profiles/%s/compute_resources/%s/compute_attributes/%s' % (profile_id, resource_id, attr_id)
+        res = self._put(resource, data)
+        return res
+
+    def show_compute_profile(self, name):
+        resource = '/api/compute_profiles/%s' % name
+        res = self._get(resource)
+        return res
+
     def get_host(self, host):
         host = self.__set_host(host)
         resource = "/api/hosts/%s" % host
