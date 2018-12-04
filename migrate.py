@@ -70,7 +70,7 @@ def action_migrate():
 
 def action_evacuate():
     source_host = nc.get_host(source)
-    locked = options.no_lock
+    #nolock = options.no_lock
     if source_host.state != 'down':
         himutils.sys_error('Evacuate failed. Source host need to be down! Use migrate.')
     # Check that there are other valid hosts in the same aggregate
@@ -95,22 +95,26 @@ def action_evacuate():
     for i in instances:
         state = getattr(i, 'OS-EXT-STS:vm_state')
         logger.debug('=> %sevacuate %s', dry_run_txt, i.name)
-        if state == 'active' and not options.dry_run:
-            i.evacuate()
-            time.sleep(options.sleep)
-            locked = False
-        elif state != 'active' and not options.dry_run:
-            logger.debug('=> lock status %s', options.no_lock)
-            i.evacuate()
-            time.sleep(options.sleep)
-            if locked != True:
-                locked = True
-        elif not options.dry_run:
+        if not options.dry_run:
+            if state == 'active':
+                i.evacuate()
+                time.sleep(options.sleep)
+                #nolock = False
+            if state != 'stopped' and not options.no_lock:
+                i.lock()
+                i.evacuate()
+                time.sleep(options.sleep)
+                #nolock = True
+            elif state != 'active' and not options.no_lock:
+                i.lock()
+                i.evacuate()
+                time.sleep(options.sleep)
             logger.debug('=> dropping evacuate of %s unknown state %s', i.name, state)
         count += 1
         if options.limit and count > options.limit:
             logger.debug('=> number of instances reached limit %s', options.limit)
             break
+
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
