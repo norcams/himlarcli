@@ -70,7 +70,6 @@ def action_migrate():
 
 def action_evacuate():
     source_host = nc.get_host(source)
-    #nolock = options.no_lock
     if source_host.state != 'down':
         himutils.sys_error('Evacuate failed. Source host need to be down! Use migrate.')
     # Check that there are other valid hosts in the same aggregate
@@ -99,12 +98,10 @@ def action_evacuate():
             if state == 'active':
                 i.evacuate()
                 time.sleep(options.sleep)
-                #nolock = False
             if state != 'stopped' and not options.no_lock:
                 i.lock()
                 i.evacuate()
                 time.sleep(options.sleep)
-                #nolock = True
             elif state != 'active' and not options.no_lock:
                 i.lock()
                 i.evacuate()
@@ -114,7 +111,6 @@ def action_evacuate():
         if options.limit and count > options.limit:
             logger.debug('=> number of instances reached limit %s', options.limit)
             break
-
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
