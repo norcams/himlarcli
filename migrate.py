@@ -95,17 +95,11 @@ def action_evacuate():
         state = getattr(i, 'OS-EXT-STS:vm_state')
         logger.debug('=> %sevacuate %s', dry_run_txt, i.name)
         if not options.dry_run:
-            if state == 'active':
+            if state == 'active' or state == 'stopped':
                 i.evacuate()
                 time.sleep(options.sleep)
-            if state != 'stopped' and not options.no_lock:
+            else:
                 i.lock()
-                i.evacuate()
-                time.sleep(options.sleep)
-            elif state != 'active' and not options.no_lock:
-                i.lock()
-                i.evacuate()
-                time.sleep(options.sleep)
             logger.debug('=> dropping evacuate of %s unknown state %s', i.name, state)
         count += 1
         if options.limit and count > options.limit:
