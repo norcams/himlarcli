@@ -54,8 +54,8 @@ class ForemanClient(Client):
         resource = '/api/compute_resources'
         resources = self._get(resource, per_page='10000')
         found_resources = dict({})
-        for r in resources['results']:
-            found_resources[r['name']] = r['id']
+        for resource in resources['results']:
+            found_resources[resource['name']] = resource['id']
         return found_resources
 
     def create_compute_resources(self, data):
@@ -78,10 +78,27 @@ class ForemanClient(Client):
         res = self._put(resource, data)
         return res
 
-    def show_compute_profile(self, name):
-        resource = '/api/compute_profiles/%s' % name
+    def get_compute_profiles(self):
+        resource = '/api/compute_profiles'
+        profiles = self._get(resource)
+        found_profiles = dict({})
+        for profile in profiles['results']:
+            found_profiles[profile['name']] = profile['id']
+        return found_profiles
+
+    def create_compute_profile(self, data):
+        resource = '/api/compute_profiles'
+        res = self._post(resource, data)
+        return res
+
+    def show_compute_profile(self, profile_id):
+        resource = '/api/compute_profiles/%s' % profile_id
         res = self._get(resource)
         return res
+
+    def delete_compute_profile(self, profile_id):
+        resource = '/api/compute_profiles/%s' % profile_id
+        res = self._delete(resource)
 
     def get_host(self, host):
         host = self.__set_host(host)
