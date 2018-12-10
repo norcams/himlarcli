@@ -1,4 +1,3 @@
-python-foreman==0.4.5
 python-ldap==2.4.27
 argcomplete==1.9.2
 IPy==0.83

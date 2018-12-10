@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import utils
-#from himlarcli.nova import Nova
 from himlarcli.keystone import Keystone
-#import himlarcli.foremanclient as foreman
 from himlarcli.foremanclient import ForemanClient
 from himlarcli import utils as himutils
 
@@ -15,8 +13,7 @@ keystone = Keystone(options.config, debug=options.debug)
 logger = keystone.get_logger()
 domain = keystone.get_config('openstack', 'domain')
 
-client = ForemanClient(options.config, options.debug, log=logger)
-foreman = client.get_client()
+foreman = ForemanClient(options.config, options.debug, log=logger)
 
 # Add compute resources
 resource_config = himutils.load_config('config/compute_resources.yaml')
@@ -25,10 +22,7 @@ if keystone.region not in resource_config:
 else:
     num_resources = resource_config[keystone.region]['num_resources']
 logger.debug("=> number of compute resources for %s: %s" % (keystone.region, num_resources))
-resources = foreman.index_computeresources()
-found_resources = dict({})
-for r in resources['results']:
-    found_resources[r['name']] = r['id']
+found_resources = foreman.get_compute_resources()
 
 for x in range(1, (num_resources+1)):
     name = '%s-controller-0%s' % (keystone.region, x)
@@ -40,13 +34,12 @@ for x in range(1, (num_resources+1)):
     if name not in found_resources:
         logger.debug('=> add new compute resource %s' % name)
         if not options.dry_run:
-            result = foreman.create_computeresources(resource)
+            result = foreman.create_compute_resources(resource)
             found_resources[name] = result['id']
     else:
         logger.debug('=> update compute resource %s' % name)
         if not options.dry_run:
-            result = foreman.update_computeresources(found_resources[name], resource)
-
+            result = foreman.update_compute_resources(found_resources[name], resource)
 
 # Compute profile
 profile_config = himutils.load_config('config/compute_profiles.yaml')
@@ -55,8 +48,8 @@ if keystone.region not in profile_config:
 else:
     compute_attribute = profile_config[keystone.region]
 
-for x in range(1,4):
-    profile = foreman.show_computeprofiles(x)
+for x in range(1, 4):
+    profile = foreman.show_compute_profile(x)
     for r in found_resources:
         found_profile = None
         for attr in profile['compute_attributes']:
@@ -64,10 +57,10 @@ for x in range(1,4):
                 found_profile = attr
         if not found_profile:
             if not options.dry_run:
-                result = foreman.create_computeattributes(
-                        compute_profile_id=x,
-                        compute_resource_id=found_resources[r],
-                        compute_attribute=compute_attribute[x])
+                result = foreman.create_compute_attributes(
+                    x,
+                    found_resources[r],
+                    compute_attribute[x])
                 logger.debug("=> create result %s" % result)
             else:
                 logger.debug('=> dryrun %s(%s): %s' % (r, profile['name'], compute_attribute[x]))
@@ -78,11 +71,11 @@ for x in range(1,4):
                     logger.debug("=> %s: no change for %s" % (profile['name'], r))
                     continue
                 if not options.dry_run:
-                    result = foreman.update_computeattributes(
-                            compute_profile_id=x,
-                            compute_resource_id=found_resources[r],
-                            id=attr['id'],
-                            compute_attribute=compute_attribute[x])
+                    result = foreman.update_compute_attributes(
+                        x,
+                        found_resources[r],
+                        attr['id'],
+                        compute_attribute[x])
                     logger.debug("=> update result %s" % result)
                 else:
                     logger.debug("=> dryrun %s(%s): %s" % (r, profile['name'], compute_attribute[x]))
