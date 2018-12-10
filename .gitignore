@@ -7,5 +7,6 @@ include/
 share/
 *.egg-info
 *.pyc
+*.fuse*
 config.ini
 active_instances.txt
