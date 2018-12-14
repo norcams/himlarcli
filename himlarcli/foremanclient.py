@@ -117,7 +117,8 @@ class ForemanClient(Client):
     def power_on(self, hostname):
         resource = '/api/hosts/%s/power' % hostname
         self.logger.debug('=> Power on %s' % hostname)
-        self._do_put(resource, power_action='start')
+        data = {'power_action': 'on'}
+        self._put(resource, data)
 
     def create_host(self, host):
         if 'name' not in host:
