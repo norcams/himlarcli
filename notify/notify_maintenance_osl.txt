@@ -1,0 +1,1 @@
+Regional services will be unavailable on $date in OSL due to maintenance. This means that although services may respond, they will be unstable. Running instances will not be affected.
