@@ -167,7 +167,7 @@ class ForemanClient(Client):
                 self.log_error('Could not create host. Check production.log on foreman host!')
                 return
             if 'mac' not in node_data:
-                self.power_on(host['name'])
+                self.power_on(result['name'])
             self.logger.debug('=> create host %s' % result)
         else:
             self.logger.debug('=> dry run: host config %s' % host)
