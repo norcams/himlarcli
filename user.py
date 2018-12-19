@@ -123,7 +123,7 @@ def action_deactivate():
                             i.stop()
                         nc.debug_log('stop instance %s' % i.id)
         print 'Deactivate api user %s' % email
-    print "%s instances stopped"
+    print "%s instances stopped" % count
 
 def action_validate():
     active, deactive, unknown = get_valid_users()
