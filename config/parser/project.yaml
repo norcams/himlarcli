@@ -59,9 +59,9 @@ opt_args:
     'action':   'append'
     'required': true
   '--force':
-    'sub':      ['delete']
+    'sub':      ['create', 'delete']
     'dest':     'force'
-    'help':     'delete project without question'
+    'help':     'skip interactive confirmation'
     'action':   'store_const'
     'const':    true
     'default':  false

@@ -55,8 +55,9 @@ def action_create():
                str(enddate),
                options.quota,
                options.rt)
-    if not himutils.confirm_action('Are you sure you want to create this project?'):
-        himutils.sys_error('Aborted', 1)
+    if not options.force:
+        if not himutils.confirm_action('Are you sure you want to create this project?'):
+            himutils.sys_error('Aborted', 1)
     project = ksclient.create_project(project_name=options.project,
                                       admin=options.admin.lower(),
                                       test=test,
