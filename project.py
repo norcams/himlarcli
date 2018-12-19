@@ -48,7 +48,7 @@ def action_create():
     else:
         enddate = None
     createdate = datetime.today()
-    print 'Project name: %s Admin: %s Type: %s Endate: %s Quota: %s RT: %s' \
+    print 'Project name: %s\nAdmin: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
             % (options.project,
                options.admin.lower(),
                options.type,
