@@ -466,6 +466,7 @@ class Keystone(Client):
             except exceptions.http.BadRequest as e:
                 self.log_error(e)
                 self.log_error('Project %s not created' % project_name)
+                return None
         if grant_role:
             self.grant_role(project_name=project_name, email=admin)
         if self.dry_run:

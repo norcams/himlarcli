@@ -59,7 +59,9 @@ def action_create():
                                       rt=options.rt)
     if not ksclient.is_valid_user(options.admin, options.domain):
         himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
-    if project:
+    if not project:
+        himutils.sys_error('Failed creating %s' % options.project, 1)
+    else:
         output = Keystone.get_dict(project)
         output['header'] = "Show information for %s" % options.project
         printer.output_dict(output)
