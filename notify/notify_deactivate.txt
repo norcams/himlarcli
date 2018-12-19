@@ -1,10 +1,12 @@
-The email you have used with UH-IaaS, $email,
-are no longer active in your organization. We have now been deactivated
-your account and all resources in your demo and/or personal projects are stopped.
-The account and resources will be terminated in 30 days.
+Hi,
 
-If you have changed your email address or think this is a mistake please
-contact us.
+The email address $email associated with you UH-IaaS account is no longer
+active in your organization. As a result your account has been deactivated and
+the instances in your demo and/or personal projects have been stopped. The
+account and all resources associated with it will be terminated in 30 days.
+
+If you have changed your email address or think this is has happened by mistake
+please contact us.
 
 Support and contact information can be found at http://docs.uh-iaas.no/en/latest/support.html
 
