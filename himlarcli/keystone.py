@@ -110,7 +110,10 @@ class Keystone(Client):
 
     def get_user_by_email(self, email, user_type):
         """ Get dataporten (dp) or api user from email.
-            version: 2 """
+            version: 2
+            :return: user object
+            :rtype: keystoneclient.v3.users.User
+        """
         email = self.__get_uib_email(email)
         user = dict()
         if user_type == 'api':
@@ -361,7 +364,7 @@ class Keystone(Client):
         if password == None:
             password = self.generate_password()
         if not user:
-            self.warning('Reset password failed! User %s not found.', email)
+            self.logger.warning('Reset password failed! User %s not found.', email)
 
         self.logger.debug('=> %sreset password for user %s', dry_run_txt, email)
         if not self.dry_run:
