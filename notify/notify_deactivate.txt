@@ -1,0 +1,13 @@
+The email you have used with UH-IaaS, email,
+are no longer active in your organization. We have now been deactivated
+your account and all resources stopped. The account and resources will be
+terminated in 30 days.
+
+If you have changed your email address or think this is a mistake please
+contact us.
+
+Support and contact information can be found at http://docs.uh-iaas.no/en/latest/support.html
+
+Best regards,
+
+The UH-IaaS team

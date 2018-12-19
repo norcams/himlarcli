@@ -5,6 +5,7 @@ from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.ldapclient import LdapClient
+from himlarcli.notify import Notify
 from himlarcli import utils as himutils
 from datetime import datetime
 import time
@@ -19,7 +20,6 @@ ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
 ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
-novaclient = Nova(options.config, debug=options.debug, log=ksclient.get_logger())
 printer = Printer(options.format)
 
 def action_show():
@@ -87,35 +87,43 @@ def action_rename():
     ksclient.rename_user(new_email=options.new,
                          old_email=options.old)
 
-def action_validate():
-    orgs = himutils.load_config('config/ldap.yaml', logger).keys()
-    ldap = dict()
-    for org in orgs:
-        ldap[org] = LdapClient(options.config, debug=options.debug)
-        ldap[org].bind(org)
-    users = ksclient.list_users(domain=options.domain)
-    deactive = list()
-    active = dict()
-    unknown = list()
-    for user in users:
-        org_found = False
-        for org in orgs:
-            if not org in user:
+def action_deactivate():
+    active, deactive, unknown = get_valid_users()
+    q = 'This will deactivate %s users (total active users %s)' \
+        % (len(deactive), active['total'])
+    if not himutils.confirm_action(q):
+        return
+    regions = ksclient.find_regions()
+    for email in deactive:
+        user = ksclient.get_user_by_email(email, 'api')
+        # Disable user and notify user
+        if user.enabled:
+            # notify user
+            notify_user(email, 'notify/notify_deactivate.txt')
+            # Disable api user
+            date = datetime.today().strftime('%Y-%m-%d')
+            ksclient.update_user(user_id=user.id, enabled=False, disabled=date)
+        else:
+            continue
+        projects = ksclient.get_user_projects(email)
+        # Shutoff instances in demo and personal project.
+        for project in projects:
+            if not hasattr(project, 'type'):
                 continue
-            org_found = True
-            if not ldap[org].get_user(user):
-                #print "%s not found in ldap" % user
-                deactive.append(user)
-            else:
-                active[org] = active.setdefault(org, 0) + 1
-            break
-        if not org_found:
-            #print "%s org not found" % user
-            if '@' in user:
-                org = user.split("@")[1]
-                if org not in unknown:
-                    unknown.append(org)
-        time.sleep(2)
+            if project.type == 'demo' or project.type == 'personal':
+                for region in regions:
+                    nc = Nova(options.config, debug=options.debug, log=logger, region=region)
+                    nc.set_dry_run(options.dry_run)
+                    instances = nc.get_project_instances(project.id)
+                    for i in instances:
+                        if not options.dry_run:
+                            i.stop()
+                        nc.debug_log('stop instance %s' % i.id)
+        print 'Deactivate api user %s' % email
+
+def action_validate():
+    active, deactive, unknown = get_valid_users()
+
     active['header'] = 'Active users:'
     printer.output_dict(active)
     output = dict()
@@ -161,6 +169,55 @@ def action_delete():
     print 'Please wait...'
     ksclient.user_cleanup(email=options.user)
     print 'Delete successful'
+
+def notify_user(email, template):
+    body_content = himutils.load_template(inputfile=template,
+                                          mapping={'user': email},
+                                          log=logger)
+    subject = '[UH-IaaS] Your account have been disabled'
+    notify = Notify(options.config, debug=False, log=logger)
+    notify.set_dry_run(options.dry_run)
+    notify.mail_user(body_content, subject, email)
+    notify.close()
+
+def get_valid_users():
+    orgs = himutils.load_config('config/ldap.yaml', logger).keys()
+    ldap = dict()
+    for org in orgs:
+        ldap[org] = LdapClient(options.config, debug=options.debug, log=logger)
+        ldap[org].bind(org)
+    users = ksclient.list_users(domain=options.domain)
+    deactive = list()
+    active = dict()
+    unknown = list()
+    count = 0
+    for user in users:
+        if options.limit and count >= int(options.limit):
+            break
+        count += 1
+        org_found = False
+        for org in orgs:
+            if not org in user:
+                continue
+            org_found = True
+            if not ldap[org].get_user(user):
+                #print "%s not found in ldap" % user
+                deactive.append(user)
+            else:
+                active[org] = active.setdefault(org, 0) + 1
+            break
+        if not org_found:
+            #print "%s org not found" % user
+            if '@' in user:
+                org = user.split("@")[1]
+                if org not in unknown:
+                    unknown.append(org)
+        time.sleep(2)
+    total = 0
+    for k,v in active.iteritems():
+        total += v
+    active['total'] = total
+    return (active, deactive, unknown)
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

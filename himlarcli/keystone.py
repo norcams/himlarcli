@@ -172,6 +172,13 @@ class Keystone(Client):
         obj['projects'] = projects
         return obj
 
+    def update_user(self, user_id, **kwargs):
+        """ Update user
+            version: 2018-12 """
+        self.debug_log('update user: %s' % kwargs)
+        if not self.dry_run:
+            self.client.users.update(user=user_id, **kwargs)
+
     def get_project_count(self, domain=False):
         projects = self.__get_projects(domain)
         return len(projects)

@@ -58,6 +58,7 @@ class Notify(object):
             self.logger.debug('=> %s', log_msg)
         else:
             log_msg = 'DRY-RUN: ' + log_msg
+            self.logger.debug('=> %s', log_msg)
 
     def mail_instance_owner(self, instances, body, subject, admin=False, options=['status']):
         if not self.ksclient:
