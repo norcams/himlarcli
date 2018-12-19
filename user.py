@@ -95,6 +95,7 @@ def action_deactivate():
     if not himutils.confirm_action(q):
         return
     regions = ksclient.find_regions()
+    count = 0
     for email in deactive:
         user = ksclient.get_user_by_email(email, 'api')
         # Disable user and notify user
@@ -118,9 +119,11 @@ def action_deactivate():
                     instances = nc.get_project_instances(project.id)
                     for i in instances:
                         if not options.dry_run:
+                            count += 1
                             i.stop()
                         nc.debug_log('stop instance %s' % i.id)
         print 'Deactivate api user %s' % email
+    print "%s instances stopped"
 
 def action_validate():
     active, deactive, unknown = get_valid_users()
@@ -173,7 +176,7 @@ def action_delete():
 
 def notify_user(email, template):
     body_content = himutils.load_template(inputfile=template,
-                                          mapping={'user': email},
+                                          mapping={'email': email},
                                           log=logger)
     subject = '[UH-IaaS] Your account have been disabled'
     notify = Notify(options.config, debug=False, log=logger)
