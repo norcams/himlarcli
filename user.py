@@ -87,6 +87,7 @@ def action_rename():
     ksclient.rename_user(new_email=options.new,
                          old_email=options.old)
 
+# pylint: disable=E1101
 def action_deactivate():
     active, deactive, unknown = get_valid_users()
     q = 'This will deactivate %s users (total active users %s)' \
