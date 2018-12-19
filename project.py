@@ -48,6 +48,15 @@ def action_create():
     else:
         enddate = None
     createdate = datetime.today()
+    print 'Project name: %s Admin: %s Type: %s Endate: %s Quota: %s RT: %s' \
+            % (options.project,
+               options.admin.lower(),
+               options.type,
+               str(enddate),
+               options.quota,
+               options.rt)
+    if not himutils.confirm_action('Are you sure you want to create this project?'):
+        himutils.sys_error('Aborted', 1)
     project = ksclient.create_project(project_name=options.project,
                                       admin=options.admin.lower(),
                                       test=test,
