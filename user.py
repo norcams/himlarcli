@@ -94,6 +94,7 @@ def action_deactivate():
         % (len(deactive), active['total'])
     if not himutils.confirm_action(q):
         return
+    subject = '[UH-IaaS] Your account have been disabled'
     regions = ksclient.find_regions()
     count = 0
     users_deactivated = list()
@@ -102,7 +103,7 @@ def action_deactivate():
         # Disable user and notify user
         if user.enabled:
             # notify user
-            notify_user(email, 'notify/notify_deactivate.txt')
+            notify_user(email, 'notify/notify_deactivate.txt', subject)
             # Disable api user
             date = datetime.today().strftime('%Y-%m-%d')
             ksclient.update_user(user_id=user.id, enabled=False, disabled=date)
@@ -182,11 +183,10 @@ def action_delete():
     ksclient.user_cleanup(email=options.user)
     print 'Delete successful'
 
-def notify_user(email, template):
+def notify_user(email, template, subject):
     body_content = himutils.load_template(inputfile=template,
                                           mapping={'email': email},
                                           log=logger)
-    subject = '[UH-IaaS] Your account have been disabled'
     notify = Notify(options.config, debug=False, log=logger)
     notify.set_dry_run(options.dry_run)
     notify.mail_user(body_content, subject, email)
@@ -207,16 +207,17 @@ def get_valid_users():
         if options.limit and count >= int(options.limit):
             break
         count += 1
+        # Only add a user to deactive if user also enabled in OS
+        os_user = ksclient.get_user_by_email(user, 'api')
+        if not os_user.enabled:
+            continue
         org_found = False
         for org in orgs:
             if not org in user:
                 continue
             org_found = True
             if not ldap[org].get_user(user):
-                # Only add a user to deactive if user also enabled in OS
-                os_user = ksclient.get_user_by_email(user, 'api')
-                if os_user.enabled:
-                    deactive.append(user)
+                deactive.append(user)
             else:
                 active[org] = active.setdefault(org, 0) + 1
             break
