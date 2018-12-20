@@ -131,7 +131,7 @@ def action_deactivate():
     printer.output_dict(output)
     output = dict()
     output['header'] = 'Stopped instances:'
-    output['users'] = count
+    output['servers'] = count
     printer.output_dict(output)
 
 def action_validate():
