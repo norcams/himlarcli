@@ -106,8 +106,8 @@ class ForemanClient(Client):
         host = dict()
         host['name'] = self.__set_host(name)
         host['build'] = build
-        resource = '/api/hosts/%s' % name
-        if len(self.get_host(name)) > 0:
+        resource = '/api/hosts/%s' % host['name']
+        if len(self.get_host(host['name'])) > 0:
             self._put(resource, host)
 
     def get_hosts(self, search=None):
