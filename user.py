@@ -96,6 +96,7 @@ def action_deactivate():
         return
     regions = ksclient.find_regions()
     count = 0
+    users_deactivated = list()
     for email in deactive:
         user = ksclient.get_user_by_email(email, 'api')
         # Disable user and notify user
@@ -122,8 +123,15 @@ def action_deactivate():
                             count += 1
                             i.stop()
                         nc.debug_log('stop instance %s' % i.id)
-        print 'Deactivate api user %s' % email
-    print "%s instances stopped" % count
+        users_deactivated.append(email)
+    output = dict()
+    output['header'] = 'Deactivated users:'
+    output['users'] = users_deactivated
+    printer.output_dict(output)
+    output = dict()
+    output['header'] = 'Stopped instances:'
+    output['users'] = count
+    printer.output_dict(output)
 
 def action_validate():
     active, deactive, unknown = get_valid_users()
@@ -205,8 +213,10 @@ def get_valid_users():
                 continue
             org_found = True
             if not ldap[org].get_user(user):
-                #print "%s not found in ldap" % user
-                deactive.append(user)
+                # Only add a user to deactive if user also enabled in OS
+                os_user = ksclient.get_user_by_email(user, 'api')
+                if os_user.enabled:
+                    deactive.append(user)
             else:
                 active[org] = active.setdefault(org, 0) + 1
             break
