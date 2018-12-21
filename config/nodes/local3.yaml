@@ -1,12 +1,12 @@
 nodes:
   access-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   api-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   builder-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -19,48 +19,48 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   cephmds-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   cephmds-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   cephmon-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   cephmon-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   cephmon-03:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   compute-01:
     mac: 00:23:24:5d:ad:8b #4
   compute-02:
     mac: 18:03:73:d8:18:9a #5
   console-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   controller-01:
     mac: 00:15:17:d8:08:c9 # sh5520
   controller-02:
     mac: 00:23:24:5e:29:8d #3
   dashboard-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   db-global-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   db-regional-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   identity-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   image-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   logger-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -75,7 +75,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   metric-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -88,25 +88,25 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   monitor-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
     compute_attributes:
       nics_attributes:
         'br1': {}
   mq-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   mq-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   network-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   novactrl-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-02
   object-01:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
       - name:           'installdevice'
@@ -149,7 +149,7 @@ nodes:
           capacity:     '5G'
           format_type:  'qcow2'
   object-02:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-02
     host_parameters_attributes:
       - name:           'installdevice'
@@ -192,7 +192,7 @@ nodes:
           capacity:     '5G'
           format_type:  'qcow2'
   object-03:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
       - name:           'installdevice'
@@ -235,7 +235,7 @@ nodes:
           capacity:     '5G'
           format_type:  'qcow2'
   proxy-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -245,11 +245,11 @@ nodes:
           capacity:     '11G'
           format_type:  'raw'
   status-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
 
   storage-01:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
       - name:           'installdevice'
@@ -302,7 +302,7 @@ nodes:
           capacity:     '20G'
           format_type:  'qcow2'
   storage-02:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
       - name:           'installdevice'
@@ -360,7 +360,7 @@ nodes:
           capacity:     '20G'
           format_type:  'qcow2'
   storage-03:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
       - name:           'installdevice'
@@ -418,7 +418,7 @@ nodes:
           capacity:     '20G'
           format_type:  'qcow2'
   storage-04:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
       - name:           'installdevice'
@@ -476,7 +476,7 @@ nodes:
           capacity:     '20G'
           format_type:  'qcow2'
   storage-05:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
       - name:           'installdevice'
@@ -534,8 +534,8 @@ nodes:
           capacity:     '20G'
           format_type:  'qcow2'
   telemetry-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   volume-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02

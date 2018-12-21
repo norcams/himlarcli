@@ -2,13 +2,13 @@ nodes:
   controller-01:
     mac: 18:66:da:71:b1:d6
   cephmon-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-01
   cephmon-02:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-01
   cephmon-03:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-01
   storage-01:
     mac: d0:94:66:01:46:e6

@@ -2,4 +2,4 @@
 nodes:
   admin-01:
     compute_resource:     'controller-01'
-    comptue_profile:      1
+    comptue_profile:      small

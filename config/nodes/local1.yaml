@@ -1,12 +1,12 @@
 nodes:
   access-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   api-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   builder-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -23,7 +23,7 @@ nodes:
   compute-02:
     mac: 00:23:24:5e:35:20 #2
   console-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   controller-00:
     mac: 18:03:73:e4:b1:25
@@ -34,7 +34,7 @@ nodes:
   controller-03:
     mac: 00:23:24:5e:35:20 #2
   dashboard-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
     compute_attributes:
       volumes_attributes:
@@ -47,22 +47,22 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   db-global-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   db-regional-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   dns-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   identity-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   identity-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   image-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
     compute_attributes:
       volumes_attributes:
@@ -75,7 +75,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   logger-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -90,7 +90,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   metric-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
@@ -103,28 +103,28 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   monitor-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
     compute_attributes:
       nics_attributes:
         'br1': {}
   mq-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   mq-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   network-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   novactrl-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-03
   ns-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   object-01:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
       - name:           'installdevice'
@@ -167,7 +167,7 @@ nodes:
           capacity:     '5G'
           format_type:  'qcow2'
   object-02:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-02
     host_parameters_attributes:
       - name:           'installdevice'
@@ -210,7 +210,7 @@ nodes:
           capacity:     '5G'
           format_type:  'qcow2'
   object-03:
-    compute-profile: 1
+    compute_profile: small
     compute_resource: controller-03
     host_parameters_attributes:
       - name:           'installdevice'
@@ -253,14 +253,14 @@ nodes:
           capacity:     '5G'
           format_type:  'qcow2'
   proxy-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   status-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   telemetry-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   volume-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
