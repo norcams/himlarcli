@@ -158,7 +158,9 @@ class ForemanClient(Client):
         host['name'] = name
         host['build'] = self.__get_node_data('build', node_data, '1')
         host['hostgroup_id'] = self.__get_node_data('hostgroup', node_data, '1')
-        host['compute_profile_id'] = self.__get_node_data('compute_profile', node_data, '1')
+        host['compute_profile_id'] = self.__get_node_data('compute_profile',
+                                                          node_data,
+                                                          'small')
         host['interfaces_attributes'] = self.__get_node_data(
             'interfaces_attributes', node_data, {})
         host['compute_attributes'] = self.__get_node_data(
