@@ -96,9 +96,8 @@ def action_evacuate():
         logger.debug('=> %sevacuate %s %s', dry_run_txt, i.name, i.id)
         if not options.dry_run:
             if state == 'active' or state == 'stopped':
-                if not options.no_lock:
-                    i.evacuate()
-                    time.sleep(options.sleep)
+                i.evacuate()
+                time.sleep(options.sleep)
                 else:
                     i.lock()
                     logger.debug('=> Locked instances: %s \n', i.id)
