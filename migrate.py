@@ -61,13 +61,13 @@ def action_migrate():
         if (state == 'active' or state == 'paused') and not options.dry_run:
             i.live_migrate(host=target)
             time.sleep(options.sleep)
-        elif state == 'suspended' and not options.dry_run:
-            i.resume()
-            time.sleep(2)
-            i.pause()
-            time.sleep(5)
-            i.live_migrate(host=target)
-            time.sleep(options.sleep)
+        # elif state == 'suspended' and not options.dry_run:
+        #     i.resume()
+        #     time.sleep(2)
+        #     i.pause()
+        #     time.sleep(5)
+        #     i.live_migrate(host=target)
+        #     time.sleep(options.sleep)
         elif not options.dry_run:
             logger.debug('=> dropping migrate of %s unknown state %s', i.name, state)
         count += 1
