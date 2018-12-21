@@ -35,9 +35,3 @@ opt_args:
     'dest':     'aggregate'
     'help':     'host aggregate to evacuate'
     'default':  'central1'
-  '--no-lock':
-    'sub':      ['evacuate']
-    'dest':     'no_lock'
-    'help':     'do not lock if an instance is already locked'
-    'const':    true
-    'default':  false

@@ -70,7 +70,6 @@ def action_migrate():
 
 def action_evacuate():
     source_host = nc.get_host(source)
-    locked = options.no_lock
     if source_host.state != 'down':
         himutils.sys_error('Evacuate failed. Source host need to be down! Use migrate.')
     # Check that there are other valid hosts in the same aggregate
@@ -94,21 +93,16 @@ def action_evacuate():
     count = 0
     for i in instances:
         state = getattr(i, 'OS-EXT-STS:vm_state')
-        logger.debug('=> %sevacuate %s', dry_run_txt, i.name)
+        logger.debug('=> %sevacuate %s %s', dry_run_txt, i.name, i.id)
         if not options.dry_run:
             if state == 'active' or state == 'stopped':
                 if not options.no_lock:
-                    locked = False
                     i.evacuate()
                     time.sleep(options.sleep)
                 else:
-                    locked = True
-            else:
-                i.lock()
-                locked = True
-            logger.debug('=> dropping evacuate of %s unknown state %s', i.name, state)
-        if locked == True: # should be a function?
-            logger.info('=> Locked instances: %s \n', i.name)
+                    i.lock()
+                    logger.debug('=> Locked instances: %s \n', i.id)
+            logger.debug('=> dropping evacuate of %s unknown state %s', i.id, state)
         count += 1
         if options.limit and count > options.limit:
             logger.debug('=> number of instances reached limit %s', options.limit)
