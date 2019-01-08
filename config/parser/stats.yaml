@@ -1,0 +1,14 @@
+---
+desc:   'Collect stats for UH-IaaS'
+actions:
+  legacy:   'Old legacy stats used on status.uh-iaas.no'
+  compute:  'Total compute resources available and used'
+
+opt_args:
+  '--region':
+    'dest':     'region'
+    'help':     'override current region'
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'

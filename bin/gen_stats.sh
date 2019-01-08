@@ -1,5 +1,5 @@
 #!/bin/bash
 
 source /opt/himlarcli/bin/activate
-/opt/himlarcli/stats.py
+/opt/himlarcli/stats.py legacy
 
