@@ -242,6 +242,10 @@ class Nova(Client):
                 hosts[h] = aggregate.name
         return hosts
 
+    def get_availability_zones(self):
+        az = self.client.availability_zones.list()
+        return az
+
 # ============================== INSTANCES ====================================
 
     def get_instance(self, server_id):
@@ -551,8 +555,12 @@ class Nova(Client):
     def __get_all_instances(self, search_opts=None):
         if not search_opts:
             search_opts = dict(all_tenants=1)
-        instances = self.client.servers.list(detailed=True,
-                                             search_opts=search_opts)
+        try:
+            instances = self.client.servers.list(detailed=True,
+                                                 search_opts=search_opts)
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return list()
         return instances
 
     def __get_aggregate(self, aggregate):
