@@ -38,7 +38,7 @@ def action_compute():
         zone_hosts = dict()
         # Availablity zones
         for az in azs:
-            if az.zoneName == 'internal':
+            if region not in az.zoneName
                 continue
             for host, data in az.hosts.iteritems():
                 zone_hosts[host] = az.zoneName
@@ -48,6 +48,8 @@ def action_compute():
         # Hypervisor hosts
         hosts = nc.get_hosts()
         for host in hosts:
+            if not host.hypervisor_hostname in zone_hosts:
+                himutils.sys_error('host %s not enabled or in valid az' % host.hypervisor_hostname)
             az = zone_hosts[host.hypervisor_hostname]
             for metric in metrics:
                 stats[az][metric] =+ getattr(host, metric)
