@@ -50,6 +50,7 @@ def action_compute():
         for host in hosts:
             if not host.hypervisor_hostname in zone_hosts:
                 himutils.sys_error('host %s not enabled or in valid az' % host.hypervisor_hostname, 0)
+                continue
             az = zone_hosts[host.hypervisor_hostname]
             for metric in metrics:
                 stats[az][metric] =+ getattr(host, metric)
