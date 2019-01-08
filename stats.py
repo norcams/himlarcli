@@ -32,14 +32,25 @@ def action_compute():
     for region in regions:
         metrics = ['vcpus', 'vcpus_used', 'running_vms', 'memory_mb_used',
                    'memory_mb', 'local_gb', 'local_gb_used']
-        stats[region] = dict()
-        for metric in metrics:
-            stats[region][metric] = dict({'count': 0})
         nc = Nova(options.config, debug=options.debug, region=region, log=logger)
+        aggregates = nc.get_all_aggregate_hosts()
+        azs = nc.get_availability_zones()
+        zone_hosts = dict()
+        # Availablity zones
+        for az in azs:
+            if az.zoneName == 'internal':
+                continue
+            for host, data in az.hosts.iteritems():
+                zone_hosts[host] = az.zoneName
+            stats[az.zoneName] = dict()
+            for metric in metrics:
+                stats[az.zoneName][metric] = dict({'count': 0})
+        # Hypervisor hosts
         hosts = nc.get_hosts()
         for host in hosts:
+            az = zone_hosts[host.hypervisor_hostname]
             for metric in metrics:
-                stats[region][metric] =+ getattr(host, metric)
+                stats[az][metric] =+ getattr(host, metric)
     statsd.gauge_dict('compute', stats)
 
 def action_legacy():
