@@ -57,14 +57,15 @@ def action_legacy():
     projects_count = kc.get_project_count('dataporten')
     users_count = kc.get_user_count('dataporten')
 
+    stats = dict()
+    stats['projects'] = {}
+    stats['instances'] = {}
+    stats['instances']['total'] = {'count': 0, 'error': 0}
+
     for region in regions:
         logger.debug('=> count region %s' % region)
 
         # Projects and users (this will be the same for all regions)
-        stats = dict()
-        stats['projects'] = {}
-        stats['instances'] = {}
-        stats['instances']['total'] = {'count': 0, 'error': 0}
         stats['users'] = {}
         stats['projects'][region] = {}
         stats['projects']['total'] = {}
