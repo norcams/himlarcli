@@ -72,6 +72,8 @@ def action_flavors():
     for region in regions:
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         usage = nc.get_usage(project_id=project.id, start=start, end=stop)
+        if not hasattr(usage, 'server_usages'):
+            continue
         for server in usage.server_usages:
             flavors[server['flavor']] = flavors.get(server['flavor'], 0) + 1
     flavors['header'] = 'flavor usage for %s in all regions' % project.name
