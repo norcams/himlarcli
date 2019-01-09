@@ -86,6 +86,11 @@ class ForemanClient(Client):
             found_profiles[profile['name']] = profile['id']
         return found_profiles
 
+    def get_profile_id(self, profile_name):
+        resource = '/api/compute_profiles/%s' % profile_name
+        profile = self._get(resource)
+        return profile['id']
+
     def create_compute_profile(self, data):
         resource = '/api/compute_profiles'
         res = self._post(resource, data)
@@ -158,9 +163,10 @@ class ForemanClient(Client):
         host['name'] = name
         host['build'] = self.__get_node_data('build', node_data, '1')
         host['hostgroup_id'] = self.__get_node_data('hostgroup', node_data, '1')
-        host['compute_profile_id'] = self.__get_node_data('compute_profile',
-                                                          node_data,
-                                                          'small')
+        host['compute_profile_id'] = self.get_profile_id(
+            self.__get_node_data('compute_profile',
+                                 node_data,
+                                 'small'))
         host['interfaces_attributes'] = self.__get_node_data(
             'interfaces_attributes', node_data, {})
         host['compute_attributes'] = self.__get_node_data(
