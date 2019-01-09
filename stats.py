@@ -53,6 +53,7 @@ def action_compute():
                 continue
             az = zone_hosts[host.hypervisor_hostname]
             for metric in metrics:
+                logger.debug('=> %s %s=%s', host.hypervisor_hostname, metric, getattr(host, metric))
                 stats[az][metric] =+ getattr(host, metric)
     statsd.gauge_dict('compute', stats)
 
