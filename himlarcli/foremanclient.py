@@ -54,8 +54,8 @@ class ForemanClient(Client):
         resource = '/api/compute_resources'
         resources = self._get(resource, per_page='10000')
         found_resources = dict({})
-        for r in resources['results']:
-            found_resources[r['name']] = r['id']
+        for resource in resources['results']:
+            found_resources[resource['name']] = resource['id']
         return found_resources
 
     def create_compute_resources(self, data):
@@ -78,10 +78,32 @@ class ForemanClient(Client):
         res = self._put(resource, data)
         return res
 
-    def show_compute_profile(self, name):
-        resource = '/api/compute_profiles/%s' % name
+    def get_compute_profiles(self):
+        resource = '/api/compute_profiles'
+        profiles = self._get(resource)
+        found_profiles = dict({})
+        for profile in profiles['results']:
+            found_profiles[profile['name']] = profile['id']
+        return found_profiles
+
+    def get_profile_id(self, profile_name):
+        resource = '/api/compute_profiles/%s' % profile_name
+        profile = self._get(resource)
+        return profile['id']
+
+    def create_compute_profile(self, data):
+        resource = '/api/compute_profiles'
+        res = self._post(resource, data)
+        return res
+
+    def show_compute_profile(self, profile_id):
+        resource = '/api/compute_profiles/%s' % profile_id
         res = self._get(resource)
         return res
+
+    def delete_compute_profile(self, profile_id):
+        resource = '/api/compute_profiles/%s' % profile_id
+        res = self._delete(resource)
 
     def get_host(self, host):
         host = self.__set_host(host)
@@ -106,8 +128,8 @@ class ForemanClient(Client):
         host = dict()
         host['name'] = self.__set_host(name)
         host['build'] = build
-        resource = '/api/hosts/%s' % name
-        if len(self.get_host(name)) > 0:
+        resource = '/api/hosts/%s' % host['name']
+        if len(self.get_host(host['name'])) > 0:
             self._put(resource, host)
 
     def get_hosts(self, search=None):
@@ -141,7 +163,10 @@ class ForemanClient(Client):
         host['name'] = name
         host['build'] = self.__get_node_data('build', node_data, '1')
         host['hostgroup_id'] = self.__get_node_data('hostgroup', node_data, '1')
-        host['compute_profile_id'] = self.__get_node_data('compute_profile', node_data, '1')
+        host['compute_profile_id'] = self.get_profile_id(
+            self.__get_node_data('compute_profile',
+                                 node_data,
+                                 'small'))
         host['interfaces_attributes'] = self.__get_node_data(
             'interfaces_attributes', node_data, {})
         host['compute_attributes'] = self.__get_node_data(

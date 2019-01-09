@@ -48,6 +48,16 @@ def action_create():
     else:
         enddate = None
     createdate = datetime.today()
+    if not options.force:
+        print 'Project name: %s\nAdmin: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
+                % (options.project,
+                   options.admin.lower(),
+                   options.type,
+                   str(enddate),
+                   options.quota,
+                   options.rt)
+        if not himutils.confirm_action('Are you sure you want to create this project?'):
+            himutils.sys_error('Aborted', 1)
     project = ksclient.create_project(project_name=options.project,
                                       admin=options.admin.lower(),
                                       test=test,
@@ -59,7 +69,9 @@ def action_create():
                                       rt=options.rt)
     if not ksclient.is_valid_user(options.admin, options.domain):
         himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
-    if project:
+    if not project:
+        himutils.sys_error('Failed creating %s' % options.project, 1)
+    else:
         output = Keystone.get_dict(project)
         output['header'] = "Show information for %s" % options.project
         printer.output_dict(output)

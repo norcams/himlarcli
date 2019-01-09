@@ -1,15 +1,15 @@
 nodes:
   access-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   api-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   admin-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   builder-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
@@ -22,13 +22,13 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   cephmon-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   cephmon-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   cephmon-03:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   compute-01:
     mac: 00:24:e8:38:a4:19
@@ -40,41 +40,41 @@ nodes:
     mac: b8:ac:6f:91:62:ed
     hostgroup: 3
   console-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   controller-02:
     mac: b8:ac:6f:91:8c:ab
   controller-03:
     mac: b8:ac:6f:8d:3a:54
   dashboard-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   dashboard-mgmt-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   db-global-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   db-regional-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-01
   dns-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   identity-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   identity-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   image-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   image-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   logger-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
@@ -87,38 +87,38 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   metric-01:
-    compute_profile: 4
+    compute_profile: xlarge
     compute_resource: controller-01
   monitor-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   mq-01:
-    compute_profile: 2
+    compute_profile: medium
     compute_resource: controller-01
   nat-01:
-    compute_profile: 1
+    compute_profile: small
     hostgroup: 4
     compute_resource: controller-01
   network-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   network-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   network-03:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   novactrl-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   novactrl-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   ns-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   proxy-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
@@ -131,13 +131,13 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   resolver-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   resolver-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-03
   status-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02
   storage-01:
     mac: 00:24:e8:2e:e3:9d
@@ -155,11 +155,11 @@ nodes:
     mac: 00:26:b9:79:1a:ce
     hostgroup: 2
   telemetry-01:
-    compute_profile: 4
+    compute_profile: xlarge
     compute_resource: controller-03
   volume-01:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-01
   volume-02:
-    compute_profile: 1
+    compute_profile: small
     compute_resource: controller-02

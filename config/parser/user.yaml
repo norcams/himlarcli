@@ -9,6 +9,7 @@ actions:
   'password': 'Reset API password for user'
   'create':   'Create a user new local API only user'
   'validate': 'Validate user against FEIDE ldap'
+  'deactivate': 'Deactivate all users not found in LDAP.'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -60,3 +61,7 @@ opt_args:
     'sub':      'create'
     'dest':     'password'
     'help':     'user password (default: random password)'
+  '--limit':
+    'sub':      ['validate', 'deactivate']
+    'dest':     'limit'
+    'help':     'limit the number of users'
