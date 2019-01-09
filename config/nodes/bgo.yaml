@@ -19,13 +19,13 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   cephmon-01:
-    compute_profile: medium
+    compute_profile: xlarge
     compute_resource: controller-01
   cephmon-02:
-    compute_profile: medium
+    compute_profile: xlarge
     compute_resource: controller-02
   cephmon-03:
-    compute_profile: medium
+    compute_profile: xlarge
     compute_resource: controller-03
   compute-01:
     hostgroup: 3
