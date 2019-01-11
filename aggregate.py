@@ -165,7 +165,7 @@ def action_notify():
         user = ksclient.get_by_id('user', i.user_id)
         if not user:
             project = ksclient.get_by_id('project', i.tenant_id)
-            if hasattr(project, 'admin')
+            if hasattr(project, 'admin'):
                 email = project.admin
             else:
                 continue
@@ -174,7 +174,6 @@ def action_notify():
                 continue
             if "@" not in user.name:
                 continue
-            if not email:
             email = user.name.lower()
         if email not in users:
             users[email] = dict()
