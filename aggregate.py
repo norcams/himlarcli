@@ -163,7 +163,7 @@ def action_notify():
     for i in instances:
         user = ksclient.get_by_id('user', i.user_id)
         if not user:
-            himutils.sys_error('could not find user for %s', i.id)
+            himutils.sys_error('could not find user for %s' % i.id, 0)
             continue
         if not user.name:
             continue
