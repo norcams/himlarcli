@@ -161,15 +161,21 @@ def action_notify():
         novaclient.update_aggregate(options.aggregate, metadata=metadata)
     # Generate instance list per user
     for i in instances:
+        email = None
         user = ksclient.get_by_id('user', i.user_id)
         if not user:
-            himutils.sys_error('could not find user for %s' % i.id, 0)
-            continue
-        if not user.name:
-            continue
-        if "@" not in user.name:
-            continue
-        email = user.name.lower()
+            project = ksclient.get_by_id('project', i.tenant_id)
+            if hasattr(project, 'admin')
+                email = project.admin
+            else:
+                continue
+        if not email:
+            if not user.name:
+                continue
+            if "@" not in user.name:
+                continue
+            if not email:
+            email = user.name.lower()
         if email not in users:
             users[email] = dict()
         users[email][i.name] = {'status': i.status}
