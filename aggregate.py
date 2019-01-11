@@ -162,6 +162,9 @@ def action_notify():
     # Generate instance list per user
     for i in instances:
         user = ksclient.get_by_id('user', i.user_id)
+        if not user:
+            himutils.sys_error('could not find user for %s', i.id)
+            continue
         if not user.name:
             continue
         if "@" not in user.name:
