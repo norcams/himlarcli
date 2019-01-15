@@ -15,7 +15,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '50G'
           format_type:  'qcow2'
     host_parameters_attributes:
@@ -80,7 +80,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '100G'
           format_type:  'qcow2'
     host_parameters_attributes:
@@ -124,7 +124,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '20G'
           format_type:  'qcow2'
     host_parameters_attributes:
