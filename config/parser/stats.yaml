@@ -12,3 +12,9 @@ opt_args:
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
+  '--quiet':
+    'dest':     'quiet'
+    'help':     'drop output'
+    'action':   'store_const'
+    'const':    true
+    'default':  false

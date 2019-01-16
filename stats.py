@@ -55,6 +55,10 @@ def action_compute():
                 logger.debug('=> %s %s=%s', host.hypervisor_hostname, metric, getattr(host, metric))
                 stats[az][metric] = int(getattr(host, metric) + stats[az][metric])
     statsd.gauge_dict('compute', stats)
+    if not options.quiet:
+        for name, stat in stats.iteritems():
+            printer.output_dict({ 'header': name})
+            printer.output_dict(stat)
 
 def action_legacy():
     projects_count = kc.get_project_count('dataporten')
@@ -92,11 +96,13 @@ def action_legacy():
         for r, d in s.iteritems():
             name = '%s.%s' % (r, t)
             count = d['count']
-            #print '%s = %s' % (name, count)
+            if not options.quiet:
+                print '%s = %s' % (name, count)
             statsd.gauge(name, count)
             if 'error' in d:
                 name = '%s.instance_errors' % (r)
-                #print '%s = %s' % (name, d['error'])
+                if not options.quiet:
+                    print '%s = %s' % (name, d['error'])
                 statsd.gauge(name, d['error'])
 
 # Run local function with the same name as the action (Note: - => _)
