@@ -37,7 +37,7 @@ def action_compute():
         zone_hosts = dict()
         # Availablity zones
         for az in azs:
-            if region not in az.zoneName:
+            if region not in az.zoneName or not hasattr(az, 'hosts'):
                 continue
             for host, data in az.hosts.iteritems():
                 zone_hosts[host] = az.zoneName
