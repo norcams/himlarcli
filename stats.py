@@ -14,7 +14,7 @@ parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
 
-kc= Keystone(options.config, debug=options.debug)
+kc = Keystone(options.config, debug=options.debug)
 kc.set_domain(options.domain)
 kc.set_dry_run(options.dry_run)
 logger = kc.get_logger()
@@ -37,9 +37,10 @@ def action_compute():
         zone_hosts = dict()
         # Availablity zones
         for az in azs:
-            if region not in az.zoneName or not az.hosts:
+            if ('iaas-team-only' in az.zoneName or
+                    region not in az.zoneName or not az.hosts):
                 continue
-            for host, data in az.hosts.iteritems():
+            for host in az.hosts.iterkeys():
                 zone_hosts[host] = az.zoneName
             stats[az.zoneName] = dict()
             for metric in metrics:
@@ -48,7 +49,8 @@ def action_compute():
         hosts = nc.get_hosts()
         for host in hosts:
             if not host.hypervisor_hostname in zone_hosts:
-                himutils.sys_error('host %s not enabled or in valid az' % host.hypervisor_hostname, 0)
+                himutils.sys_error('host %s not enabled or in valid az'
+                                   % host.hypervisor_hostname, 0)
                 continue
             az = zone_hosts[host.hypervisor_hostname]
             for metric in metrics:
@@ -57,7 +59,7 @@ def action_compute():
     statsd.gauge_dict('compute', stats)
     if not options.quiet:
         for name, stat in stats.iteritems():
-            printer.output_dict({ 'header': name})
+            printer.output_dict({'header': name})
             printer.output_dict(stat)
 
 def action_legacy():
