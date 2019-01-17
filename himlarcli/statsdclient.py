@@ -11,14 +11,15 @@ class StatsdClient(Client):
         port = self.get_config('statsd', 'port')
 
         self.client = statsd.StatsClient(server, port, prefix=prefix)
-        self.debug_log('connected to statsd server %s' % server)
+        self.debug_log('connected to statsd server %s:%s' % (server, port))
 
     def gauge(self, metric, count, delta=False):
+        self.debug_log('gauge: %s = %s' % (metric, count))
         if not self.dry_run:
-            self.client.gauge(metric, count, delta)
-            self.debug_log('%s = %s' % (metric, count))
-        else:
-            self.debug_log('add %s to %s' % (count, metric))
+            if delta:
+                self.client.gauge(metric, count, delta=True)
+            else:
+                self.client.gauge(metric, count)
 
     def get_client(self):
         return self.client
@@ -30,4 +31,3 @@ class StatsdClient(Client):
                 self.gauge_dict(metric, v)
             else:
                 self.gauge(metric, v)
-                
