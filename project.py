@@ -177,19 +177,17 @@ def action_list():
         printer.output_dict(output_project, sort=True, one_line=True)
     printer.output_dict({'header': 'Project list count', 'count': count})
 
-def action_show():
+def action_show_access():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
         himutils.sys_error('No project found with name %s' % options.project)
-    output_project = project.to_dict()
-    output_project['header'] = "Show information for %s" % project.name
-    printer.output_dict(output_project)
-    if not options.detailed:
-        return
     roles = ksclient.list_roles(project_name=options.project)
     printer.output_dict({'header': 'Roles in project %s' % options.project})
     for role in roles:
         printer.output_dict(role, sort=True, one_line=True)
+
+def action_show_quota():
+    project = ksclient.get_project_by_name(project_name=options.project)
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
@@ -206,6 +204,14 @@ def action_show():
                 quota.update({'header': '%s quota in %s' % (comp, region), 'region': region})
                 #printer.output_dict({'header': 'Roles in project %s' % options.project})
                 printer.output_dict(quota)
+
+def action_show():
+    project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.sys_error('No project found with name %s' % options.project)
+    output_project = project.to_dict()
+    output_project['header'] = "Show information for %s" % project.name
+    printer.output_dict(output_project)
 
 def action_instances():
     project = ksclient.get_project_by_name(project_name=options.project)
@@ -226,8 +232,8 @@ def action_instances():
             printer.output_dict(output, sort=True, one_line=True)
         printer.output_dict({'header': 'Total instances in this project', 'count': count})
 
-# Run local function with the same name as the action
-action = locals().get('action_' + options.action)
+# Run local function with the same name as the action (Note: - => _)
+action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
     himutils.sys_error("Function action_%s() not implemented" % options.action)
 action()

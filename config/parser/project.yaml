@@ -1,12 +1,14 @@
 ---
 desc:   'Project management for UH-IaaS'
 actions:
-  'list':   'List project. Use -f to filter result by project type'
-  'show':   'Show all attributes for a project'
-  'create': 'Create a new project and grant admin access if valid user'
-  'grant':  'Grant access to project for user.'
-  'delete': 'Delete project and all resources'
-  'instances': 'List of all instances in project'
+  'list':         'List project. Use -f to filter result by project type'
+  'show':         'Show all attributes for a project'
+  'show-access':  'Show roles in project'
+  'show-quota':   'Show quota for project'
+  'create':       'Create a new project and grant admin access if valid user'
+  'grant':        'Grant access to project for user.'
+  'delete':       'Delete project and all resources'
+  'instances':    'List of all instances in project'
 #  'update': 'TODO'
 #  'revoke': 'TODO'
 opt_args:
@@ -15,10 +17,10 @@ opt_args:
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   'project':
-   'sub':       ['show', 'create', 'grant', 'delete', 'instances']
+   'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'delete', 'instances']
    'metavar':   'project'
   '--region':
-    'sub':      ['show', 'create', 'instances']
+    'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota']
     'dest':     'region'
     'help':     'specify region'
   '--end':
@@ -65,13 +67,6 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
-  '--detailed':
-    'sub':      ['show']
-    'dest':     'detailed'
-    'help':     'also show roles and quota for project'
-    'action':   'store_const'
-    'const':    true
-    'default':  False
   '--rt':
     'sub':      ['create', 'grant']
     'dest':     'rt'
