@@ -1,0 +1,6 @@
+---
+type: 'gold'
+images:
+  'fedora_27':
+    'name':             'GOLD Fedora 27'
+    'depricated':       'Outdated (Fedora)'
