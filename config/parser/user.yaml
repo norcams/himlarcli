@@ -10,6 +10,7 @@ actions:
   'create':   'Create a user new local API only user'
   'validate': 'Validate user against FEIDE ldap'
   'deactivate': 'Deactivate all users not found in LDAP.'
+  'list-disabled':  'List disabled users'
 opt_args:
   '--domain':
     'dest':     'domain'

@@ -122,7 +122,8 @@ def action_deactivate():
                     for i in instances:
                         if not options.dry_run:
                             count += 1
-                            i.stop()
+                            if i.status == 'ACTIVE':
+                                i.stop()
                         nc.debug_log('stop instance %s' % i.id)
         users_deactivated.append(email)
     output = dict()
@@ -149,6 +150,15 @@ def action_validate():
     output['orgs'] = unknown
     printer.output_dict(output)
 
+def action_list_disabled():
+    users = ksclient.get_users(domain=options.domain, enabled=False)
+    printer.output_dict({'header': 'Disabled user list (name, date)'})
+    for user in users:
+        output = {
+            '1': user.name,
+            '2': user.disabled
+        }
+        printer.output_dict(output, sort=True, one_line=True)
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
@@ -234,9 +244,8 @@ def get_valid_users():
     active['total'] = total
     return (active, deactive, unknown)
 
-# Run local function with the same name as the action
-action = locals().get('action_' + options.action)
+# Run local function with the same name as the action (Note: - => _)
+action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    logger.error("Action %s not implemented" % options.action)
-    sys.exit(1)
+    himutils.sys_error("Function action_%s() not implemented" % options.action)
 action()
