@@ -40,10 +40,10 @@ def action_instances():
         flavor_name = 'unknown' if not flavor else flavor.name
         output = {
              '1': i.id,
-             #'instance_name': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
              '3': i.name,
              '4': i.status,
-             '2': i.updated,
+             #'2': i.updated,
+             #'6'': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
              '5': flavor_name
         }
         printer.output_dict(output, sort=True, one_line=True)
