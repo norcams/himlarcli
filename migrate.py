@@ -71,7 +71,7 @@ def action_migrate():
         elif not options.dry_run:
             logger.debug('=> dropping migrate of %s unknown state %s', i.name, state)
         count += 1
-        if options.limit and count > options.limit:
+        if options.limit and count >= options.limit:
             logger.debug('=> number of instances reached limit %s', options.limit)
             break
 
