@@ -36,12 +36,14 @@ def action_instances():
             if hasattr(project, 'type') and project.type != options.type:
                 status['type'] = options.type
                 continue
+        flavor = nc.get_by_id('flavor', i.flavor['id'])
         output = {
-             'id': i.id,
+             '1': i.id,
              #'instance_name': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
-             'name': i.name,
-             'status': i.status,
-             'updated': i.updated
+             '3': i.name,
+             '4': i.status,
+             '2': i.updated,
+             '5': flavor.name
         }
         printer.output_dict(output, sort=True, one_line=True)
         status['total'] += 1
