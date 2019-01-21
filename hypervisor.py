@@ -37,13 +37,14 @@ def action_instances():
                 status['type'] = options.type
                 continue
         flavor = nc.get_by_id('flavor', i.flavor['id'])
+        flavor_name = 'unknown' if not flavor else flavor.name
         output = {
              '1': i.id,
              #'instance_name': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
              '3': i.name,
              '4': i.status,
              '2': i.updated,
-             '5': flavor.name
+             '5': flavor_name
         }
         printer.output_dict(output, sort=True, one_line=True)
         status['total'] += 1
