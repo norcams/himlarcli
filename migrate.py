@@ -8,7 +8,6 @@ from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
-import novaclient
 import time
 
 parser = Parser()
@@ -60,11 +59,8 @@ def action_migrate():
             continue
         logger.debug('=> %smigrate %s to %s', dry_run_txt, i.name, target)
         if (state == 'active' or state == 'paused') and not options.dry_run:
-            try:
-                i.live_migrate(host=target)
-                time.sleep(options.sleep)
-            except novaclient.exceptions.BadRequest as e:
-                logger.warning('=> %s' % e)
+            i.live_migrate(host=target)
+            time.sleep(options.sleep)
         # elif state == 'suspended' and not options.dry_run:
         #     i.resume()
         #     time.sleep(2)
@@ -75,7 +71,7 @@ def action_migrate():
         elif not options.dry_run:
             logger.debug('=> dropping migrate of %s unknown state %s', i.name, state)
         count += 1
-        if options.limit and count >= options.limit:
+        if options.limit and count > options.limit:
             logger.debug('=> number of instances reached limit %s', options.limit)
             break
 
