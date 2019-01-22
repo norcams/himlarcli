@@ -80,6 +80,9 @@ nodes:
   db-regional-01:
     compute_profile: medium
     compute_resource: controller-01
+  dns-01:
+    compute_profile: small
+    compute_resource: controller-02
   identity-01:
     compute_profile: medium
     compute_resource: controller-01
