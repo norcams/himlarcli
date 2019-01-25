@@ -35,10 +35,10 @@ nodes:
     mac: 78:45:c4:f8:5d:db
   compute-03:
     hostgroup: 3
-    mac: 00:1e:c9:d1:67:68
+    mac: 84:2b:2b:ff:f0:8c
   compute-04:
     hostgroup: 3
-    mac: 00:1e:c9:f6:28:e2
+    mac: 84:2b:2b:ff:f0:fc
   console-01:
     compute_profile: small
     compute_resource: controller-03
