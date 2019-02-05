@@ -98,7 +98,7 @@ if keystone.region not in resource_config:
 else:
     num_resources = resource_config[keystone.region]['num_resources']
 logger.debug("=> number of compute resources for %s: %s" % (keystone.region, num_resources))
-found_resources = foreman.get_computer_resources()
+found_resources = foreman.get_compute_resources()
 
 for x in range(1, (num_resources+1)):
     name = '%s-controller-0%s' % (keystone.region, x)
