@@ -167,7 +167,7 @@ nodes:
         '1':
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '20G'
+          capacity:     '50G'
           format_type:  'raw'
     host_parameters_attributes:
       - name:           'installdevice'
