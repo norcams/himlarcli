@@ -147,7 +147,7 @@ for profile_name in profiles.keys():
                 profiles[profile_name])
             logger.debug("=> create attributes result %s" % attr_result)
     else:
-        ext_profile = client.show_computeprofile(found_profiles[profile_name])
+        ext_profile = client.show_computeprofiles(found_profiles[profile_name])
         for attr in ext_profile['compute_attributes']:
             name = attr['compute_profile_name']
             if attr['vm_attrs'] == profiles[name]['vm_attrs']:
