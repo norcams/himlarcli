@@ -11,7 +11,7 @@ import time
 # pylint: disable=R0904
 
 class Nova(Client):
-    version = '2.53'
+    version = '2.42'
     instances = dict()
     ksclient = None
 
