@@ -92,6 +92,7 @@ class Quota(Base):
     __tablename__ = 'quota'
     id = Column(Integer, primary_key=True)
     project_id = Column(String(63), nullable=False, index=True)
+    region = Column(String(15), index=True)
     updated = Column(DateTime, default=datetime.now)
     # Compute
     cores = Column(Integer)

@@ -43,7 +43,8 @@ def action_save():
                 quotas.update(cinder.list_quota(project.id))
                 quotas.update(neutron.list_quota(project.id))
                 quotas['project_id'] = project.id
-                q = state.get_first(Quota, project_id=project.id)
+                quotas['region'] = region
+                q = state.get_first(Quota, project_id=project.id, region=region)
                 if q is not None:
                     state.update(q, quotas)
                 else:
@@ -80,7 +81,8 @@ def action_compare():
                 quotas.update(cinder.list_quota(project.id))
                 quotas.update(neutron.list_quota(project.id))
                 quotas['project_id'] = project.id
-                q = state.get_first(Quota, project_id=project.id)
+                quotas['region'] = region
+                q = state.get_first(Quota, project_id=project.id, region=region)
                 if q is None:
                     print 'could not find saved quota for %s' % project.name
                     continue
