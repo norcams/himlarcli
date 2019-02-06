@@ -202,6 +202,13 @@ class Keystone(Client):
         project = self.__get_project(project, domain=domain)
         return project
 
+    def get_all_projects(self, domain=False):
+        """ Return all project in domain """
+        domain_id = self.__get_domain(domain) if domain else None
+        projects = self.client.projects.list(domain=domain_id)
+        self.debug_log('get all project from domain %s' % domain)
+        return projects
+
     def get_projects(self, domain=False, **kwargs):
         project_list = self.__get_projects(domain, **kwargs)
         return project_list
