@@ -1,0 +1,20 @@
+---
+desc:   'Save state to a local sqlite db'
+actions:
+  save:     'Save the current state for a resource'
+  compare:  'Compare saved and current state of a resource'
+  purge:    'Remove saved stats for a resource'
+  update:   'Update current state based on saved state'
+
+opt_args:
+  '--region':
+    'dest':     'region'
+    'help':     'override current region'
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  'resource':
+    'metavar':  'resource'
+    'help':     'resource name'
+    'choices':  ['keypair', 'quota']

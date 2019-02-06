@@ -1,215 +1,143 @@
-import ConfigParser
-import sqlite3
 import sys
-from himlarcli import utils
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
+#from himlarcli import utils
+from himlarcli.client import Client
 
+class Resource(object):
 
-class State(object):
+    def compare(self, attributes):
+        miss_match = dict()
+        for k, v in attributes.iteritems():
+            if k == 'id':
+                continue
+            if k not in Quota.__dict__:
+                continue
+            if getattr(self, k) != v:
+                miss_match[k] = '%s =! %s' % (getattr(self, k), v)
+        return miss_match
 
-    ACTIVE_TABLE = 'active'
-    IMAGE_TABLE = 'images'
-    TABLES = dict()
-    TABLES[IMAGE_TABLE] = ('CREATE TABLE IF NOT EXISTS %s ('
-                           'id TEXT PRIMARY KEY, '
-                           'name TEXT, '
-                           'status TEXT, '
-                           'region TEXT)') % IMAGE_TABLE
-    TABLES[ACTIVE_TABLE] = ('CREATE TABLE IF NOT EXISTS %s ('
-                            'id TEXT PRIMARY KEY, '
-                            'name TEXT, '
-                            'state TEXT, '
-                            'host TEXT)') % ACTIVE_TABLE
-    conn = None
+    def update(self, attributes):
+        for k, v in attributes.iteritems():
+            setattr(self, k, v)
+
+    @classmethod
+    def create(cls, data):
+        new_data = dict()
+        for k, v in data.iteritems():
+            if k == 'id':
+                continue
+            if k in cls.__dict__:
+                new_data[k] = v
+        return cls(**new_data)
+
+Base = declarative_base(cls=Resource)
+
+class State(Client):
 
     def __init__(self, config_path, debug, log=False):
-        self.config_path = config_path
-        self.config = utils.get_config(config_path)
-        self.logger = utils.get_logger(__name__, self.config, debug, log)
-        self.logger.debug('=> config file: %s', config_path)
-        self.debug = debug
-        self.db = self.__get_config('state', 'db')
+        super(State, self).__init__(config_path, debug, log)
         self.connect()
-        # Make sure all tables exists
-        self.__create_tables()
 
-    """
-    Connect to db
-    """
+    def get_client(self):
+        """ We return the db session since we do not have a client """
+        return self.session
+
     def connect(self):
-        try:
-            self.conn = sqlite3.connect(self.db)
-            cur = self.conn.cursor()
-            cur.execute('SELECT SQLITE_VERSION()')
-            data = cur.fetchone()
-            self.logger.debug("=> sqlite3 version %s", data)
-            self.logger.debug("=> connected to %s", self.db)
-        except sqlite3.Error as e:
-            self.logger.critical("ERROR %s", e.args[0])
-            sys.exit(1)
+        """ Connect to the sqlite database """
+        db = self.get_config('state', 'db')
+        self.engine = create_engine('sqlite:///%s' % db)
+        Base.metadata.bind = self.engine
+        DBSession = sessionmaker()
+        self.session = DBSession()
+        Base.metadata.create_all(self.engine)
+        self.debug_log("sqlite driver %s" % self.engine.driver)
+        self.debug_log("connected to %s" % db)
 
-    def close(self):
-        self.conn.close()
+    def add(self, resource):
+        """ Add a new resource to database """
+        self.debug_log('add new resource of type %s' % resource.to_str())
+        self.session.add(resource)
+        self.session.commit()
 
-    def purge(self, table_name):
-        self.__purge_table(name=table_name)
-        self.__create_table(name=table_name)
+    def update(self, resource, data):
+        """ Update an resource with new data """
+        if not self.dry_run:
+            resource.update(data)
+        self.debug_log('update resource %s' % resource.to_str())
 
-    def insert(self, table, **kwargs):
-        cur = self.conn.cursor()
-        if 'id' in kwargs:
-            sql = "SELECT count(*) FROM %s WHERE id = '%s';" % (table, kwargs['id'])
-            cur.execute(sql)
-            if cur.fetchone()[0] > 0:
-                self.logger.debug("=> id %s exits in table %s", kwargs['id'], table)
-                return
-        sql = ('INSERT')
-        columns = []
-        values = []
-        for key, value in kwargs.iteritems():
-            columns.append(key)
-            if isinstance(value, basestring):
-                values.append("'%s'" % value)
-            else:
-                values.append(value)
-        sql = ('INSERT INTO %s (%s) VALUES (%s)') % (
-            table, ', '.join(str(x) for x in columns),
-            ', '.join(str(x) for x in values))
+    def get_all(self, class_name, **kwargs):
+        return self.session.query(class_name).filter_by(**kwargs).all()
 
-        self.logger.debug("=> SQL=%s", sql)
-        cur.execute(sql)
-        self.conn.commit()
+    def get_first(self, class_name, **kwargs):
+        return self.session.query(class_name).filter_by(**kwargs).first()
 
-    def fetch(self, table, columns='*', **kwargs):
-        sql = ('SELECT %s FROM %s') % (columns, table)
-        clause = []
-        for key, value in kwargs.iteritems():
-            if isinstance(value, basestring):
-                clause.append("%s='%s'" % (key, value))
-            else:
-                clause.append("%s=%s" % (key, value))
-        if clause:
-            sql += (' WHERE ')
-            sql += ' and '.join(str(x) for x in clause)
-        cur = self.conn.cursor()
-        self.logger.debug("=> SQL=%s", sql)
-        cur.execute(sql)
-        return cur.fetchall()
+    def purge(self, table):
+        """ Drop a table for database """
+        self.debug_log('drop table %s' % table.title())
+        found_table = getattr(sys.modules[__name__], table.title())
+        if not self.dry_run:
+            found_table.__table__.drop()
 
-    def add_active(self, instances):
-        if not self.conn:
-            self.connect()
-        cur = self.conn.cursor()
-        instance_list = list()
-        for i in instances:
-            host = i._info['OS-EXT-SRV-ATTR:host']
-            state = i._info['status']
-            sql = "SELECT count(*) FROM %s WHERE id = '%s'" % (self.table, i.id)
-            #self.logger.debug("add_active(): %s" % sql)
-            cur.execute(sql)
-            if cur.fetchone()[0] == 0:
-                instance_list.append((i.id, i.name, state, host))
-                self.logger.debug("=> add instance %s" % i.id)
-            else:
-                self.logger.debug("=> instance %s exits in db" % i.id)
-        if instance_list:
-            sql = "INSERT INTO %s VALUES(?, ?, ?, ?)" % self.table
-            cur.executemany(sql, instance_list)
-            self.conn.commit()
-            #self.logger.debug("add_active(): %s" % sql)
+#
+# Data models
+#
 
-    def get_instances(self, state=None, host=None):
-        if not self.conn:
-            self.connect()
-        cur = self.conn.cursor()
-        if state and host:
-            sql = "SELECT * FROM %s WHERE state = '%s' AND host = '%s'" \
-                % (self.table, state, host)
-        elif state:
-            sql = "SELECT * FROM %s WHERE state = '%s'" % (self.table, state)
-        elif host:
-            sql = "SELECT * FROM %s WHERE host = '%s'" % (self.table, host)
-        else:
-            sql = "SELECT * FROM %s" % self.table
-        self.logger.debug("=> %s" % sql)
-        cur.execute(sql)
-        rows = cur.fetchall()
-        self.logger.debug("=> row size %s" % len(rows))
-        return rows
+class Keypair(Base):
+    __tablename__ = 'keypair'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(63), nullable=False, index=True)
+    name = Column(String(255))
+    public_key = Column(String(1024))
 
-    def dump(self):
-        if not self.conn:
-            self.connect()
-        sql = "SELECT * FROM %s" % self.table
-        cur = self.conn.cursor()
-        self.logger.debug("%s" % sql)
-        cur.execute(sql)
-        rows = cur.fetchall()
-        self.logger.debug("=> row size %s" % len(rows))
-        for row in rows:
-            self.logger.debug("%s" % str(row))
-        return rows
+    def to_str(self):
+        return 'keys for user id %s' % self.user_id
 
-#    def purge(self):
-#        if not self.conn:
-#            self.connect()
-#        sql = "DROP TABLE IF EXISTS %s" % self.table
-#        cur = self.conn.cursor()
-#        cur.execute(sql)
-#        self.logger.debug("=> %s" % sql)
-#        self._create_active_table()
 
-    def _create_active_table(self):
-        with self.conn:
-            sql = "CREATE TABLE %s(id TEXT PRIMARY KEY, \
-                                   name TEXT, \
-                                   state TEXT, \
-                                   host TEXT)" % self.table
-            cur = self.conn.cursor()
-            cur.execute(sql)
-            self.logger.debug("=> %s" % sql)
+class Quota(Base):
+    __tablename__ = 'quota'
+    id = Column(Integer, primary_key=True)
+    project_id = Column(String(63), nullable=False, index=True)
+    updated = Column(DateTime, default=datetime.now)
+    # Compute
+    cores = Column(Integer)
+    ram = Column(Integer)
+    instances = Column(Integer)
+    # Volume
+    snapshots = Column(Integer)
+    volumes = Column(Integer)
+    gigabytes = Column(Integer)
+    # Network
+    security_group_rules = Column(Integer)
+    security_groups = Column(Integer)
 
-    """
-    Purge all tables
-    """
-    def __purge_tables(self):
-        for name in self.TABLES.iterkeys():
-            self.__purge_table(name=name)
+    def to_str(self):
+        return 'quota for project id %s' % self.project_id
 
-    """
-    Purge table if it exists
-    """
-    def __purge_table(self, name):
-        cur = self.conn.cursor()
-        sql = "DROP TABLE IF EXISTS %s" % name
-        cur.execute(sql)
-        self.logger.debug('=> purge table for %s', name)
+    def update(self, attributes):
+        for k, v in attributes.iteritems():
+            setattr(self, k, v)
 
-    """
-    Create all new tables if they do not exists
-    """
-    def __create_tables(self):
-        for name in self.TABLES.iterkeys():
-            self.__create_table(name=name)
+    def compare(self, attributes):
+        miss_match = dict()
+        for k, v in attributes.iteritems():
+            if k == 'id':
+                continue
+            if k not in Quota.__dict__:
+                continue
+            if getattr(self, k) != v:
+                miss_match[k] = '%s =! %s' % (getattr(self, k), v)
+        return miss_match
 
-    """
-    Create new table if it does not exists
-    """
-    def __create_table(self, name):
-        table = self.TABLES[name]
-        cur = self.conn.cursor()
-        cur.execute(table)
-        self.logger.debug('=> create new table for %s', name)
-
-    """
-    Fetch config from config file
-    """
-    def __get_config(self, section, option):
-        try:
-            value = self.config.get(section, option)
-            return value
-        except ConfigParser.NoOptionError:
-            self.logger.debug('=> config file section [%s] missing option %s',
-                              section, option)
-        except ConfigParser.NoSectionError:
-            self.logger.debug('=> config file missing section %s', section)
-        return None
+    @staticmethod
+    def create(quotas):
+        new_quota = dict()
+        for k, v in quotas.iteritems():
+            if k == 'id':
+                continue
+            if k in Quota.__dict__:
+                new_quota[k] = v
+        return Quota(**new_quota)
