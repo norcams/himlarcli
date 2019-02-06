@@ -79,6 +79,7 @@ class Keypair(Base):
     __tablename__ = 'keypair'
     id = Column(Integer, primary_key=True)
     user_id = Column(String(63), nullable=False, index=True)
+    created = Column(DateTime, default=datetime.now)
     name = Column(String(255))
     public_key = Column(String(1024))
 
@@ -93,7 +94,7 @@ class Quota(Base):
     id = Column(Integer, primary_key=True)
     project_id = Column(String(63), nullable=False, index=True)
     region = Column(String(15), index=True)
-    updated = Column(DateTime, default=datetime.now)
+    created = Column(DateTime, default=datetime.now)
     # Compute
     cores = Column(Integer)
     ram = Column(Integer)
