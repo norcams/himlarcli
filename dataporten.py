@@ -28,4 +28,4 @@ ksclient.create_group('nologin', desc, 'dataporten')
 
 # Create provider, mapping and container to connect them
 ksclient.set_mapping('dataporten_personal', rules)
-ksclient.set_protocol('openidc', 'dataporten', 'dataporten_personal')
+ksclient.set_protocol('openid', 'dataporten', 'dataporten_personal')
