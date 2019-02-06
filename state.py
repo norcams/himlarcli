@@ -48,7 +48,7 @@ def action_save():
                 if q is not None:
                     state.update(q, quotas)
                 else:
-                    quota = Quota.create(quotas)
+                    quota = Quota.create(quotas) # pylint: disable=E1101
                     state.add(quota)
     elif options.resource == 'keypair':
         users = kc.get_users()
@@ -66,7 +66,7 @@ def action_save():
                     if k is not None:
                         print 'update'
                     else:
-                        state.add(Keypair.create(keypair))
+                        state.add(Keypair.create(keypair)) # pylint: disable=E1101
 
 def action_compare():
     if options.resource == 'quota':
