@@ -9,17 +9,6 @@ from himlarcli.client import Client
 
 class Resource(object):
 
-    def compare(self, attributes):
-        miss_match = dict()
-        for k, v in attributes.iteritems():
-            if k == 'id':
-                continue
-            if k not in Quota.__dict__:
-                continue
-            if getattr(self, k) != v:
-                miss_match[k] = '%s =! %s' % (getattr(self, k), v)
-        return miss_match
-
     def update(self, attributes):
         for k, v in attributes.iteritems():
             setattr(self, k, v)
@@ -96,6 +85,8 @@ class Keypair(Base):
     def to_str(self):
         return 'keys for user id %s' % self.user_id
 
+    def compare(self, attributes):
+        pass
 
 class Quota(Base):
     __tablename__ = 'quota'
@@ -117,10 +108,6 @@ class Quota(Base):
     def to_str(self):
         return 'quota for project id %s' % self.project_id
 
-    def update(self, attributes):
-        for k, v in attributes.iteritems():
-            setattr(self, k, v)
-
     def compare(self, attributes):
         miss_match = dict()
         for k, v in attributes.iteritems():
@@ -131,13 +118,3 @@ class Quota(Base):
             if getattr(self, k) != v:
                 miss_match[k] = '%s =! %s' % (getattr(self, k), v)
         return miss_match
-
-    @staticmethod
-    def create(quotas):
-        new_quota = dict()
-        for k, v in quotas.iteritems():
-            if k == 'id':
-                continue
-            if k in Quota.__dict__:
-                new_quota[k] = v
-        return Quota(**new_quota)
