@@ -1,5 +1,6 @@
 from himlarcli.client import Client
 from novaclient import client as novaclient
+from novaclient.api_versions import APIVersion
 import novaclient.exceptions as exceptions
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as keyexc
@@ -10,7 +11,7 @@ import time
 # pylint: disable=R0904
 
 class Nova(Client):
-    version = 2
+    version = '2.53'
     instances = dict()
     ksclient = None
 
@@ -22,7 +23,7 @@ class Nova(Client):
         `**config_path`` path to ini file with config
         """
         super(Nova, self).__init__(config_path, debug, log, region)
-        self.client = novaclient.Client(self.version,
+        self.client = novaclient.Client(APIVersion(self.version),
                                         session=self.sess,
                                         region_name=self.region)
 
@@ -61,6 +62,10 @@ class Nova(Client):
             self.logger.debug('=> %s with id %s not found', obj_type, obj_id)
             result = None
         return result
+
+    def get_keypairs(self, user_id):
+        """ Return all keypair for a user """
+        return self.client.keypairs.list(user_id=user_id, marker=0, limit=50)
 
 # =============================== SERVER ======================================
 
