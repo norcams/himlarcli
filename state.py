@@ -60,11 +60,14 @@ def action_save():
                     keypair = {
                         'user_id': user.id,
                         'name': key.name,
-                        'public_key': key.public_key
+                        'public_key': key.public_key,
+                        'region': region,
+                        'type': key.type
                     }
-                    k = state.get_first(Keypair, public_key=key.public_key)
+                    k = state.get_first(Keypair, region=region, user_id=user.id, name=key.name)
+                    logger.debug('=> key %s for user %s', key.name, user.name)
                     if k is not None:
-                        print 'update'
+                        state.update(k, keypair)
                     else:
                         state.add(Keypair.create(keypair)) # pylint: disable=E1101
 

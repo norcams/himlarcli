@@ -81,6 +81,8 @@ class Keypair(Base):
     user_id = Column(String(63), nullable=False, index=True)
     created = Column(DateTime, default=datetime.now)
     name = Column(String(255))
+    type = Column(String(15))
+    region = Column(String(15), index=True)
     public_key = Column(String(1024))
 
     def to_str(self):
