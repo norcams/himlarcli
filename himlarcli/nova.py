@@ -11,7 +11,7 @@ import time
 # pylint: disable=R0904
 
 class Nova(Client):
-    version = '2.42'
+
     instances = dict()
     ksclient = None
 
@@ -23,7 +23,9 @@ class Nova(Client):
         `**config_path`` path to ini file with config
         """
         super(Nova, self).__init__(config_path, debug, log, region)
-        self.client = novaclient.Client(APIVersion(self.version),
+        version = self.get_config('openstack', 'compute_api_version')
+        self.debug_log('using nova compute api_version %s' % version)
+        self.client = novaclient.Client(APIVersion(version),
                                         session=self.sess,
                                         region_name=self.region)
 
