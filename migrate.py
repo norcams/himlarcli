@@ -61,7 +61,7 @@ def action_migrate():
         if (state == 'active' or state == 'paused') and not options.dry_run:
             i.live_migrate(host=target)
             time.sleep(options.sleep)
-        elif state == 'suspended' or state == 'stopped' and not options.dry_run:
+        elif state == 'stopped' and not options.dry_run:
             i.migrate(host=target)
             time.sleep(options.sleep)
         # elif state == 'suspended' and not options.dry_run:
