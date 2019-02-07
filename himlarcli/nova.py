@@ -114,12 +114,16 @@ class Nova(Client):
         return self.client.services.list(host=host, binary=service)
 
     def enable_host(self, name, service='nova-compute'):
-        self.logger.debug('=> enable host %s' % name)
-        self.client.services.enable(host=name, binary=service)
+        services = self.client.services.list(host=name, binary=service)
+        for s in services:
+            self.client.services.enable(s.id)
+        self.logger.debug('=> enable %s services on host %s' % (service, name))
 
     def disable_host(self, name, service='nova-compute'):
-        self.logger.debug('=> disable host %s' % name)
-        self.client.services.disable(host=name, binary=service)
+        services = self.client.services.list(host=name, binary=service)
+        for s in services:
+            self.client.services.disable(s.id)
+        self.logger.debug('=> disable %s services on host %s' % (service, name))
 
 ################################## AGGREGATE ##################################
 
