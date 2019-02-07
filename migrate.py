@@ -31,10 +31,10 @@ def action_list():
     printer.output_dict({'header': 'Instance list (id, name, state, task)'})
     for i in instances:
         output = {
-             'id': i.id,
-             'name': i.name,
-             'state': getattr(i, 'OS-EXT-STS:vm_state'),
-             'state_task': getattr(i, 'OS-EXT-STS:task_state')
+            'id': i.id,
+            'name': i.name,
+            'state': getattr(i, 'OS-EXT-STS:vm_state'),
+            'state_task': getattr(i, 'OS-EXT-STS:task_state')
         }
         printer.output_dict(output, sort=True, one_line=True)
 
@@ -55,7 +55,7 @@ def action_migrate():
         state = getattr(i, 'OS-EXT-STS:vm_state')
         state_task = getattr(i, 'OS-EXT-STS:task_state')
         if state_task:
-            logger.debug('=> instance running task %s, dropping migrate',state_task)
+            logger.debug('=> instance running task %s, dropping migrate', state_task)
             continue
         logger.debug('=> %smigrate %s to %s', dry_run_txt, i.name, target)
         if (state == 'active' or state == 'paused') and not options.dry_run:
@@ -89,8 +89,8 @@ def action_evacuate():
             found_enabled.append(host.hypervisor_hostname)
     if not found_enabled:
         himutils.sys_error('Evacuate failed. No valid host in aggregate %s'
-                            % options.aggregate)
-    logger.debug('=> valid host found %s',  ", ".join(found_enabled))
+                           % options.aggregate)
+    logger.debug('=> valid host found %s', ", ".join(found_enabled))
     # Interactive question
     q = 'Evacuate all instances from %s to other hosts' % source
     if not himutils.confirm_action(q):
