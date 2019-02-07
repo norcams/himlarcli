@@ -35,9 +35,9 @@ def action_save():
     if options.resource == 'quota':
         projects = kc.get_all_projects(domain=options.domain)
         for region in regions:
-            nova = get_client(Nova, region)
-            cinder = get_client(Cinder, region)
-            neutron = get_client(Neutron, region)
+            nova = himutils.get_client(Nova, options, logger, region)
+            cinder = himutils.get_client(Cinder, options, logger, region)
+            neutron = himutils.get_client(Neutron, options, logger, region)
             for project in projects:
                 quotas = nova.list_quota(project.id).copy()
                 quotas.update(cinder.list_quota(project.id))
@@ -53,7 +53,7 @@ def action_save():
     elif options.resource == 'keypair':
         users = kc.get_users()
         for region in regions:
-            nova = get_client(Nova, region)
+            nova = himutils.get_client(Nova, options, logger, region)
             for user in users:
                 keypairs = nova.get_keypairs(user_id=user.id)
                 for key in keypairs:
@@ -76,9 +76,9 @@ def action_compare():
         projects = kc.get_all_projects(domain=options.domain)
         for region in regions:
             printer.output_dict({'header': 'quota miss match found in %s' % region})
-            nova = get_client(Nova, region)
-            cinder = get_client(Cinder, region)
-            neutron = get_client(Neutron, region)
+            nova = himutils.get_client(Nova, options, logger, region)
+            cinder = himutils.get_client(Cinder, options, logger, region)
+            neutron = himutils.get_client(Neutron, options, logger, region)
             for project in projects:
                 quotas = nova.list_quota(project.id).copy()
                 quotas.update(cinder.list_quota(project.id))
@@ -100,7 +100,7 @@ def action_compare():
         users = kc.get_users()
         for region in regions:
             printer.output_dict({'header': 'ssh keys miss match found in %s' % region})
-            nova = get_client(Nova, region)
+            nova = himutils.get_client(Nova, options, logger, region)
             for user in users:
                 keypairs = list()
                 temp = nova.get_keypairs(user_id=user.id)
@@ -120,11 +120,6 @@ def action_update():
 
 def action_purge():
     state.purge(options.resource)
-
-def get_client(name, region):
-    client = name(options.config, debug=options.debug, region=region, log=logger)
-    client.set_dry_run(options.dry_run)
-    return client
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))

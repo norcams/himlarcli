@@ -14,6 +14,11 @@ import urllib2
 from string import Template
 import socket
 
+def get_client(name, options, logger, region):
+    client = name(options.config, debug=options.debug, region=region, log=logger)
+    client.set_dry_run(options.dry_run)
+    return client
+
 def sys_error(text, code=1):
     sys.stderr.write("%s\n" % text)
     if code > 0:
