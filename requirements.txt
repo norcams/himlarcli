@@ -1,10 +1,11 @@
 python-ldap==2.4.27
 argcomplete==1.9.2
 IPy==0.83
-python-openstackclient==3.11.0
-python-swiftclient==3.1.0
-python-neutronclient==6.1.1
-python-designateclient==2.7.0
+# we use queens rdo versions
+python-openstackclient==3.14.3
+python-swiftclient==3.5.0
+python-neutronclient==6.7.0
+python-designateclient==2.9.0
 gnocchiclient==7.0.1
 statsd==3.2.1
 pika==0.11.2
