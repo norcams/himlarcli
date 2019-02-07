@@ -143,7 +143,7 @@ nodes:
     compute_resource: controller-02
   proxy-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-04
     compute_attributes:
       volumes_attributes:
         '1':
