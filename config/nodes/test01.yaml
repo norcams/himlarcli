@@ -118,13 +118,13 @@ nodes:
     compute_resource: controller-01
   proxy-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
         '1':
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '20G'
+          capacity:     '50G'
           format_type:  'raw'
     host_parameters_attributes:
       - name:           'installdevice'

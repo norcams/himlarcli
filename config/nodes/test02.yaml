@@ -125,7 +125,7 @@ nodes:
         '1':
           allocation:   '0G'
           pool_name:    'masstorage'
-          capacity:     '20G'
+          capacity:     '50G'
           format_type:  'qcow2'
     host_parameters_attributes:
       - name:           'installdevice'
