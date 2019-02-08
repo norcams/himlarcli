@@ -1,3 +1,6 @@
+---
+type: 'gold'
+images:
   'winsrv2016std':
     'name':             'GOLD Windows Server 2016 Standard'
     'depricated':       'Outdated Windows Server 2016 Standard (Windows)'
