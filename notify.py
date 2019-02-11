@@ -7,6 +7,8 @@ from himlarcli.printer import Printer
 from himlarcli.notify import Notify
 from himlarcli import utils as himutils
 
+# OPS! It might need some updates. We use class Mail instead of Notify now.
+
 himutils.is_virtual_env()
 
 parser = Parser()

@@ -5,10 +5,12 @@ from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.ldapclient import LdapClient
-from himlarcli.notify import Notify
+from himlarcli.mail import Mail
 from himlarcli import utils as himutils
 from datetime import datetime
 import time
+
+# OPS! It might need some updates. We use class Mail instead of Notify now.
 
 himutils.is_virtual_env()
 
@@ -103,7 +105,7 @@ def action_deactivate():
         # Disable user and notify user
         if user.enabled:
             # notify user
-            notify_user(email, 'notify/notify_deactivate.txt', subject)
+            mail_user(email, 'notify/notify_deactivate.txt', subject)
             # Disable api user
             date = datetime.today().strftime('%Y-%m-%d')
             ksclient.update_user(user_id=user.id, enabled=False, disabled=date)
@@ -193,14 +195,14 @@ def action_delete():
     ksclient.user_cleanup(email=options.user)
     print 'Delete successful'
 
-def notify_user(email, template, subject):
+def mail_user(email, template, subject):
     body_content = himutils.load_template(inputfile=template,
                                           mapping={'email': email},
                                           log=logger)
-    notify = Notify(options.config, debug=False, log=logger)
-    notify.set_dry_run(options.dry_run)
-    notify.mail_user(body_content, subject, email)
-    notify.close()
+    mail = Mail(options.config, debug=False, log=logger)
+    mail.set_dry_run(options.dry_run)
+    mail.mail_user(body_content, subject, email)
+    mail.close()
 
 def get_valid_users():
     orgs = himutils.load_config('config/ldap.yaml', logger).keys()
