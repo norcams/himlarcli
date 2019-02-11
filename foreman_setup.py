@@ -7,13 +7,89 @@ from himlarcli import utils as himutils
 # Fix foreman functions and logger not-callable
 # pylint: disable=E1101,E1102
 
-desc = 'Setup compute resources and profiles'
+desc = 'Setup Foreman for himlar'
 options = utils.get_options(desc, hosts=False)
 keystone = Keystone(options.config, debug=options.debug)
 logger = keystone.get_logger()
 domain = keystone.get_config('openstack', 'domain')
 
 foreman = ForemanClient(options.config, options.debug, log=logger)
+client = foreman.get_client()
+
+# create foreman domain based on config
+# get domain id
+
+# get smart proxy id for tftp
+
+# create subnet
+# mgmt network + netmask from config
+# domain_ids = domain_id
+# tftp_ids = proxy_id
+# dns-primary, dns-secondary, gateway is blank
+# get subnet id
+
+# Glabal parameters
+# enable-puppetlabs-repo false
+# enable-puppetlabs-pc1-repo true
+# run-puppet-in-installer true
+# time-zone Europe/Oslo
+# ntp-server no.pool.ntp.org
+# root-pass rootpw_md5
+# entries-per-page 100
+# foreman-url https://
+# unattended-url http://
+# trusted-puppetmaster-hosts <foreman-fqdn>
+# discovery-fact-column ipmi_ipaddress
+# update-ip-from-built-request true
+# use-shortname-for-vms true
+# idle-timeout 180
+#
+# check if we can avoid safemode_render bug, and if so
+# safemode-render true
+
+# medium
+# name CentOS download.iaas.uio.no
+# os-family Redhat
+# path
+# get ids
+
+# sync templates with foreman_templates /api/v2/templates/import
+# get provision_id norcams Kickstart default
+# get pxelinux_id norcams PXELinux
+# get ptable_id norcams ptable default
+
+# associate ptable templates with Redhat
+
+# create and update os
+# Create CentOS major 7 minor 6
+# associate with family Redhat
+# architecture-ids 1
+# medium-ids download.iaas.uio.no
+# ptable norcams ...
+# provision_id + pxelinux_id
+# make ^^ default
+
+# create default env production
+
+# create base hostgroup
+# name base
+# architecture x86_64
+# domain $foreman_domain_id
+# operatingsystem-id $centos_os
+# medium-id $medium_id_2
+# partition-table-id $norcams_ptable_id
+# subnet-id $foreman_subnet_id
+# puppet-proxy-id $foreman_proxy_id
+# puppet-ca-proxy-id $foreman_proxy_id
+# environment production
+
+# create storage hostgroup
+# parent base
+# parameter installdevice <config value>
+
+# create compute hosgroup
+# parent base
+# parameter installdevice <config value>
 
 # Add compute resources
 resource_config = himutils.load_config('config/compute_resources.yaml')
@@ -33,11 +109,11 @@ for x in range(1, (num_resources+1)):
     resource['url'] = 'qemu+tcp://%s.%s:16509/system' % (name, domain)
     if name not in found_resources:
         logger.debug('=> add new compute resource %s' % name)
-        result = foreman.create_compute_resources(resource)
+        result = client.create_computeresources(resource)
         found_resources[name] = result['id']
     else:
         logger.debug('=> update compute resource %s' % name)
-        result = foreman.update_compute_resources(found_resources[name], resource)
+        result = client.update_computeresources(found_resources[name], resource)
 
 # Compute profile
 profile_config = himutils.load_config('config/compute_profiles.yaml')
@@ -55,30 +131,30 @@ if found_profiles:
         if found_profile not in profiles:
             # We only want profiles defined in config/compute_profiles.yaml
             logger.debug("=> deleting profile %s" % found_profile)
-            foreman.delete_compute_profile(found_profiles[found_profile])
+            client.delete_computeprofile(found_profiles[found_profile])
         else:
             verified_profiles.append(found_profile)
 
 for profile_name in profiles.keys():
     if profile_name not in verified_profiles:
         compute_profile = {'compute_profile': {'name': profile_name}}
-        profile_result = foreman.create_compute_profile(compute_profile)
+        profile_result = client.create_computeprofile(compute_profile)
         logger.debug("=> create profile result %s" % profile_result)
         for r in found_resources:
-            attr_result = foreman.create_compute_attributes(
+            attr_result = client.create_computeattributes(
                 profile_result['id'],
                 found_resources[r],
                 profiles[profile_name])
             logger.debug("=> create attributes result %s" % attr_result)
     else:
-        ext_profile = foreman.show_compute_profile(found_profiles[profile_name])
+        ext_profile = client.show_computeprofiles(found_profiles[profile_name])
         for attr in ext_profile['compute_attributes']:
             name = attr['compute_profile_name']
             if attr['vm_attrs'] == profiles[name]['vm_attrs']:
                 logger.debug("=> no change for %s" % name)
             else:
                 for r in found_resources:
-                    result = foreman.update_compute_attributes(
+                    result = client.update_computeattributes(
                         attr['compute_profile_id'],
                         found_resources[r],
                         attr['id'],
