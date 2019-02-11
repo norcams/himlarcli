@@ -154,7 +154,7 @@ for profile_name in profiles.keys():
                 logger.debug("=> no change for %s" % name)
             else:
                 for r in found_resources:
-                    result = foreman.update_computeattributes(
+                    result = client.update_computeattributes(
                         attr['compute_profile_id'],
                         found_resources[r],
                         attr['id'],
