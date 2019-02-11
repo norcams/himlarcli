@@ -91,7 +91,13 @@ nodes:
     compute_resource: controller-03
   image-01:
     compute_profile: medium
+    compute_resource: controller-01
+  image-02:
+    compute_profile: medium
     compute_resource: controller-02
+  image-03:
+    compute_profile: medium
+    compute_resource: controller-03
   logger-01:
     compute_profile: xlarge
     compute_resource: controller-04
