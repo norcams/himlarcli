@@ -19,3 +19,4 @@ pylint==1.6.4
 backports.functools_lru_cache
 configparser
 tweepy
+python-foreman==0.4.5
