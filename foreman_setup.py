@@ -137,8 +137,7 @@ if found_profiles:
 
 for profile_name in profiles.keys():
     if profile_name not in verified_profiles:
-        compute_profile = {'compute_profile': {'name': profile_name}}
-        profile_result = client.create_computeprofile(compute_profile)
+        profile_result = client.create_computeprofiles({'name': profile_name})
         logger.debug("=> create profile result %s" % profile_result)
         for r in found_resources:
             attr_result = client.create_computeattributes(
