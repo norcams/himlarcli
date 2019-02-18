@@ -19,7 +19,7 @@ images:
     'depricated':       'Outdated Windows Server 2019 Standard (Windows)'
     'url':              'http://genisys.uib.no/images/'
     'latest':           'win2019-server-standard.qcow2'
-    'checksum_file':    'win2016-server-standard.qcow2.sha256'
+    'checksum_file':    'win2019-server-standard.qcow2.sha256'
     'checksum':         'sha256'
     'min_ram':          4090
     'min_disk':         39
@@ -32,7 +32,7 @@ images:
     'depricated':       'Outdated Windows Server 2019 Core (Windows)'
     'url':              'http://genisys.uib.no/images/'
     'latest':           'win2019-server-core.qcow2'
-    'checksum_file':    'win2016-server-core.qcow2.sha256'
+    'checksum_file':    'win2019-server-core.qcow2.sha256'
     'checksum':         'sha256'
     'min_ram':          4090
     'min_disk':         39
