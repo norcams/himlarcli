@@ -59,6 +59,10 @@ class ForemanClient(Client):
             found_profiles[p['name']] = p['id']
         return found_profiles
 
+    def get_profile_id(self, profile_name):
+        profile = self.foreman.show_computeprofiles(profile_name)
+        return profile['id']
+
     def get_host(self, host):
         host = self.__set_host(host)
         return self.foreman.show_hosts(id=host)
@@ -101,7 +105,10 @@ class ForemanClient(Client):
         host['name'] = name
         host['build'] = self.__get_node_data('build', node_data, '1')
         host['hostgroup_id'] = self.__get_node_data('hostgroup', node_data, '1')
-        host['compute_profile_id'] = self.__get_node_data('compute_profile', node_data, '1')
+        host['compute_profile_id'] = self.get_profile_id(
+            self.__get_node_data('compute_profile',
+                                 node_data,
+                                 'small'))
         host['interfaces_attributes'] = self.__get_node_data(
             'interfaces_attributes', node_data, {})
         host['compute_attributes'] = self.__get_node_data(
