@@ -123,7 +123,7 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-01
-  object-01:
+  object-ceph-01:
     compute_profile: small
     compute_resource: controller-01
     host_parameters_attributes:
@@ -166,7 +166,7 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-  object-02:
+  object-ceph-02:
     compute_profile: small
     compute_resource: controller-02
     host_parameters_attributes:
@@ -209,7 +209,7 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-  object-03:
+  object-ceph-03:
     compute_profile: small
     compute_resource: controller-03
     host_parameters_attributes:
