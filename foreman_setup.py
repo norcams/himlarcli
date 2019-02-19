@@ -141,9 +141,9 @@ for profile_name in profiles.keys():
         logger.debug("=> create profile result %s" % profile_result)
         for r in found_resources:
             attr_result = client.create_computeattributes(
-                profile_result['id'],
-                found_resources[r],
-                profiles[profile_name])
+                compute_profile_id=profile_result['id'],
+                compute_resource_id=found_resources[r],
+                compute_attribute=profiles[profile_name])
             logger.debug("=> create attributes result %s" % attr_result)
     else:
         ext_profile = client.show_computeprofiles(found_profiles[profile_name])
@@ -154,8 +154,8 @@ for profile_name in profiles.keys():
             else:
                 for r in found_resources:
                     result = client.update_computeattributes(
-                        attr['compute_profile_id'],
-                        found_resources[r],
-                        attr['id'],
-                        profiles[name])
+                        compute_profile_id=attr['compute_profile_id'],
+                        compute_resource_id=found_resources[r],
+                        id=attr['id'],
+                        compute_attribute=profiles[name])
                     logger.debug("=> update result %s" % result)
