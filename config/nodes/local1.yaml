@@ -258,6 +258,9 @@ nodes:
   proxy-01:
     compute_profile: small
     compute_resource: controller-01
+  rgw-01:
+    compute_profile: small
+    compute_resource: controller-01
   status-01:
     compute_profile: small
     compute_resource: controller-01
