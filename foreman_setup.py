@@ -131,7 +131,7 @@ if found_profiles:
         if found_profile not in profiles:
             # We only want profiles defined in config/compute_profiles.yaml
             logger.debug("=> deleting profile %s" % found_profile)
-            client.delete_computeprofile(found_profiles[found_profile])
+            client.destroy_computeprofiles(found_profiles[found_profile])
         else:
             verified_profiles.append(found_profile)
 
