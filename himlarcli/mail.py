@@ -96,3 +96,4 @@ class Mail(Client):
         msg['Subject'] = subject
         log_msg = 'sending mail to %s' % user
         self.send_mail(user, msg)
+
