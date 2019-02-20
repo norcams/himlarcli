@@ -16,6 +16,7 @@ opt_args:
   '-t':
     'dest':     'template'
     'help':     'mail body template file'
-    'required':  true
-  '--dry-run':
+    'default':  'notify/mailto_all.txt'
+  '--dry_run':
+    'dest':     'do not send, just show the content'
     'help':     'print the mail content'
