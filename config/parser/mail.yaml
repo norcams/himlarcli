@@ -1,0 +1,21 @@
+---
+desc:           'Send mail to users'
+actions:
+  'file':       'Send mail to all the user in a file'
+  'instance':   'Get admins from instances'
+  'project':    'Get admins from projects'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--region':
+    'sub':      ['instance']
+    'dest':     'region'
+    'help':     'only use this region'
+  '-t':
+    'dest':     'template'
+    'help':     'mail body template file'
+    'required':  true
+  '--dry-run':
+    'help':     'print the mail content'
