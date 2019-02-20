@@ -1,0 +1,19 @@
+---
+desc:           'Get metric from gnocchi'
+actions:
+  'instance':   'Get metric from instance'
+
+opt_args:
+  'instance':
+    'metavar':  'instance'
+    'help':     'instance/server ID'
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--start':
+    'dest':     start
+    'help':     'start date (YYYY-MM-DD) Defaults to yesterday'
+  '--end':
+    'dest':     end
+    'help':     'end date (YYYY-MM-DD) Defaults to today'
