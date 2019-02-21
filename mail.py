@@ -31,17 +31,40 @@ else:
 if not regions:
     himutils.sys_error('no valid regions found!')
 
+
+
 def action_file():
-    mail = Mail(options.config, debug=options.debug)
-    with open(emails_file, 'r') as file:
-        for line in file:
-            toadr = file.readline() #mail_to_adr
-            mail.send_mail('support@uh-iaas.no', body_content, subject, toadr)
-            
-    #if --dry-run, only print the content
-    if options.dry_run:
+    if options.template: #if template is given
+        body_content = options.template
         email_content = open(body_content, 'r')
-        print('\n' + email_content.read() + '\n')
+        content = email_content.read()
+        if options.dry_run:
+            logger.debug('=> DRY-RUN: print out the content %s' % email_content.read())
+        # else: send mail
+    else:
+        email_content = open(body_content, 'r')
+        content = email_content.read()
+        if options.dry_run:
+            logger.debug('=> DRY-RUN: print out the content %s' % email_content.read())
+        else:
+            mail = Mail(options.config, debug=options.debug)
+            mail.set_dry_run(options.dry_run)
+             msg = MIMEText(body_content, 'plain')
+             msg['subject'] = '123456'
+            print "heer 2"
+            with open(emails_file, 'r') as emails:
+                for toaddr in emails.readlines():
+                    #print toaddr #mail_to_address
+                    print "heer 3"
+                    try:
+                        logger.debug('=> Sending email ...')
+                        print "try"
+                        #mail.send_mail(toaddr, msg, fromaddr='noreply@usit.uio.no')
+                    except ValueError:
+                        himutils.sys_error('Not able to send the email.')
+            emails.close()
+        email_content.close()
+
 
     # ToDo
     # if -t use template, otherwise use default
