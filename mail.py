@@ -39,22 +39,24 @@ def action_file():
         email_content = open(body_content, 'r')
         content = email_content.read()
         if options.dry_run:
-            logger.debug('=> DRY-RUN: print out the content %s' % email_content.read())
+            print content
+            #logger.debug('=> DRY-RUN: print out the content %s' % content)
         # else: send mail
-    else:
+    email_content.close()
+    if not options.template:
         email_content = open(body_content, 'r')
         content = email_content.read()
         if options.dry_run:
-            logger.debug('=> DRY-RUN: print out the content %s' % email_content.read())
+            print content
+            #logger.debug('=> DRY-RUN: print out the content %s' % content)
         else:
             mail = Mail(options.config, debug=options.debug)
             mail.set_dry_run(options.dry_run)
-             msg = MIMEText(body_content, 'plain')
-             msg['subject'] = '123456'
+            msg = MIMEText(body_content, 'plain')
+            msg['subject'] = '123456'
             print "heer 2"
             with open(emails_file, 'r') as emails:
                 for toaddr in emails.readlines():
-                    #print toaddr #mail_to_address
                     print "heer 3"
                     try:
                         logger.debug('=> Sending email ...')
@@ -63,7 +65,7 @@ def action_file():
                     except ValueError:
                         himutils.sys_error('Not able to send the email.')
             emails.close()
-        email_content.close()
+    email_content.close()
 
 
     # ToDo
