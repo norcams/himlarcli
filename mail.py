@@ -17,12 +17,12 @@ printer = Printer(options.format)
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
 logger = ksclient.get_logger()
+novaclient = Nova(options.config, debug=options.debug, log=logger)
 
 # Update these before running the script
 emails_file = 'notify/user_emails.txt'
 content = 'notify/mailto_all.txt'
 subject = 'INFO UH-IaaS'
-
 
 if hasattr(options, 'region'):
     regions = ksclient.find_regions(region_name=options.region)
@@ -31,6 +31,15 @@ else:
 
 if not regions:
     himutils.sys_error('no valid regions found!')
+
+if 'host' in options and options.host:
+    if '.' in options.host:
+        host = options.host
+    else:
+        domain = ksclient.get_config('openstack', 'domain')
+        host = options.host + '.' + domain
+else:
+    host = None
 
 def action_file():
     if options.template:
@@ -41,7 +50,6 @@ def action_file():
             print content
             #logger.debug('=> DRY-RUN: print out the content %s' % content)
         else:
-            print "jooooo"
             mail = Mail(options.config, debug=options.debug)
             mail.set_dry_run(options.dry_run)
             msg = MIMEText(body_content, 'plain')
@@ -51,11 +59,49 @@ def action_file():
                 for toaddr in emails.readlines():
                     try:
                         logger.debug('=> Sending email ...')
-                        #print msg
-                        mail.send_mail(toaddr, msg, fromaddr='noreply@usit.uio.no')
+                        print msg
+                        #mail.send_mail(toaddr, msg, fromaddr='noreply@usit.uio.no')
                     except ValueError:
                         himutils.sys_error('Not able to send the email.')
             emails.close()
+    email_content.close()
+
+
+# Check nova version
+def action_instance():
+    email_content = open(content, 'r')
+    body_content = email_content.read()
+    for region in regions:
+        novaclient = Nova(options.config, debug=options.debug, log=logger) #, region=region)
+        instances = novaclient.get_instances()
+#        mapping = dict(region=region.upper())
+#         body_content = himutils.load_template(inputfile=options.template,
+#                                               mapping=mapping,
+#                                               log=logger)
+
+        mail = Mail(options.config, debug=options.debug)
+        mail.set_keystone_client(ksclient)
+        users = mail.mail_instance_owner(instances=instances,
+                                           body=body_content,
+                                           subject=subject,
+                                           admin=True)
+        print users
+    email_content.close()
+
+
+def action_project():
+    email_content = open(content, 'r')
+    body_content = email_content.read()
+    mail = Mail(options.config, debug=options.debug)
+    #if options.type:
+    #    search_filter['type'] = options.type
+    projects = ksclient.get_projects(domain=options.domain) #, **search_filter)
+    for project in projects:
+        #if not options.filter or options.filter in project.name:
+        instances = novaclient.get_project_instances(project.id)
+        mail.set_keystone_client(ksclient)
+        users = mail.mail_instance_owner(instances, body_content, subject)
+        print users
     email_content.close()
 
 # Run local function with the same name as the action
