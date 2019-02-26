@@ -96,3 +96,24 @@ class Mail(Client):
         msg['Subject'] = subject
         log_msg = 'sending mail to %s' % user
         self.send_mail(user, msg)
+
+    @staticmethod
+    def __get_user_email(user):
+        if not user:
+            return None
+        if hasattr(user, 'mail'):
+            return user.email.lower()
+        if hasattr(user, 'name') and "@" in user.name:
+            return user.name.lower()
+        return None
+
+    @staticmethod
+    def __get_project_email(project):
+        if not project:
+            return None
+        if hasattr(project, 'admin'):
+            return project.admin.lower()
+        if hasattr(project, 'type') and project.type == 'personal':
+            if hasattr(project, 'name') and "@" in project.name:
+                return project.name.lower()
+        return None

@@ -59,8 +59,7 @@ def action_file():
                 for toaddr in emails.readlines():
                     try:
                         logger.debug('=> Sending email ...')
-                        print msg
-                        #mail.send_mail(toaddr, msg, fromaddr='noreply@usit.uio.no')
+                        mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
                     except ValueError:
                         himutils.sys_error('Not able to send the email.')
             emails.close()
@@ -74,18 +73,12 @@ def action_instance():
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger) #, region=region)
         instances = novaclient.get_instances()
-#        mapping = dict(region=region.upper())
-#         body_content = himutils.load_template(inputfile=options.template,
-#                                               mapping=mapping,
-#                                               log=logger)
-
         mail = Mail(options.config, debug=options.debug)
         mail.set_keystone_client(ksclient)
         users = mail.mail_instance_owner(instances=instances,
                                            body=body_content,
                                            subject=subject,
                                            admin=True)
-        print users
     email_content.close()
 
 
@@ -101,7 +94,6 @@ def action_project():
         instances = novaclient.get_project_instances(project.id)
         mail.set_keystone_client(ksclient)
         users = mail.mail_instance_owner(instances, body_content, subject)
-        print users
     email_content.close()
 
 # Run local function with the same name as the action
