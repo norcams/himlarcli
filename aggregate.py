@@ -6,13 +6,15 @@ from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 #from himlarcli.glance import Glance
 from himlarcli import utils as himutils
-from himlarcli.notify import Notify
+from himlarcli.mail import Mail
 #from himlarcli.state import State
 from himlarcli.parser import Parser
 from himlarcli.parser import Printer
 import novaclient.exceptions as novaexc
 import time
 import sys
+
+# OPS! It might need some updates. We use class Mail instead of Notify now.
 
 himutils.is_virtual_env()
 
@@ -103,7 +105,7 @@ def action_activate():
             for h in metadata.hosts:
                 print '%sEnable %s' % (dry_run_txt, h)
                 novaclient.enable_host(h)
-            tags = {'enabled': datetime.today(), 'disabled': None, 'notify': None}
+            tags = {'enabled': datetime.today(), 'disabled': None, 'mail': None}
             if not options.dry_run:
                 novaclient.update_aggregate(aggregate, tags)
         else: # Disable everything else
@@ -157,7 +159,7 @@ def action_notify():
     instances = novaclient.get_instances(options.aggregate)
     # update metadata
     if not options.dry_run:
-        metadata = {'notify': options.date}
+        metadata = {'mail': options.date}
         novaclient.update_aggregate(options.aggregate, metadata=metadata)
     # Generate instance list per user
     for i in instances:
@@ -189,7 +191,7 @@ def action_notify():
             print 'ERROR! Could not find and parse mail body in \
                   %s' % options.msg
             sys.exit(1)
-        notify = Notify(options.config, debug=options.debug)
+        mail = Mail(options.config, debug=options.debug)
     # Email each users
     for user, instances in users.iteritems():
         user_instances = ""
@@ -200,7 +202,7 @@ def action_notify():
                           % (options.date, ksclient.region))
 
         if not options.dry_run:
-            notify.send_mail(user, msg)
+            mail.send_mail(user, msg)
             print "Sending email to user %s" % user
         else:
             print "Dry-run: Mail would be sendt to user %s" % user

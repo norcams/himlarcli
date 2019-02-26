@@ -4,6 +4,7 @@ import sys
 from email.mime.text import MIMEText
 from himlarcli import utils
 
+# OPS! It might need some updates. We use class Mail instead of Notify now.
 
 class Notify(object):
 
