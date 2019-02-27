@@ -18,6 +18,9 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  cephmon-object-01:
+    compute_profile: small
+    compute_resource: controller-03
   compute-01:
     mac: 00:23:24:5e:32:7e #6
   compute-02:
@@ -253,6 +256,9 @@ nodes:
           capacity:     '5G'
           format_type:  'qcow2'
   proxy-01:
+    compute_profile: small
+    compute_resource: controller-01
+  rgw-01:
     compute_profile: small
     compute_resource: controller-01
   status-01:
