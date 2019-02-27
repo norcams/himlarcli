@@ -81,19 +81,25 @@ def action_instance():
                                            admin=True)
     email_content.close()
 
-
 def action_project():
     email_content = open(content, 'r')
     body_content = email_content.read()
     mail = Mail(options.config, debug=options.debug)
-    #if options.type:
-    #    search_filter['type'] = options.type
-    projects = ksclient.get_projects(domain=options.domain) #, **search_filter)
+    search_filter = dict()
+    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+    if options.filter and options.filter != 'all':
+        search_filter['type'] = options.filter
+    if options.type:
+        search_filter['type'] = options.type
     for project in projects:
-        #if not options.filter or options.filter in project.name:
+        project_type = project.type if hasattr(project, 'type') else '(unknown)'
+#        if not options.filter or options.filter in project.name:
         instances = novaclient.get_project_instances(project.id)
         mail.set_keystone_client(ksclient)
-        users = mail.mail_instance_owner(instances, body_content, subject)
+        users = mail.mail_instance_owner(instances=instances,
+                                           body=body_content,
+                                           subject=subject,
+                                           admin=True)
     email_content.close()
 
 # Run local function with the same name as the action

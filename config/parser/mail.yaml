@@ -17,6 +17,18 @@ opt_args:
     'dest':     'template'
     'help':     'mail body template file'
     'default':  'notify/mailto_all.txt'
+  '--type':
+    'sub':      ['project']
+    'dest':     'type'
+    'help':     'project type'
+    'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
+    'required': true
+  '--filter':
+    'sub':      ['project']
+    'dest':     'filter'
+    'help':     'filter by project type'
+    'default':  'all'
+    'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
   '--dry_run':
     'dest':     'do not send, just show the content'
     'help':     'print the mail content'
