@@ -57,6 +57,24 @@ nodes:
   compute-10:
     mac: e4:43:4b:46:84:86
     hostgroup: 3
+  compute-11:
+    mac: b0:26:28:1e:86:b2
+    hostgroup: 3
+  compute-12:
+    mac: b0:26:28:1e:8b:32
+    hostgroup: 3
+  compute-13:
+    mac: b0:26:28:1e:89:dc
+    hostgroup: 3
+  compute-14:
+    mac: b0:26:28:1e:7a:be
+    hostgroup: 3
+  compute-15:
+    mac: b0:26:28:1e:78:c6
+    hostgroup: 3
+  compute-16:
+    mac: b0:26:28:1e:76:98
+    hostgroup: 3
   console-01:
     compute_profile: medium
     compute_resource: controller-03
