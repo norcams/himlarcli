@@ -1,9 +1,10 @@
 ---
 desc:           'Send mail to users'
 actions:
-  'file':       'Send mail to all the user in a file'
+  'file':       'Send mail to all the users listed in a file'
   'instance':   'Get admins from instances'
   'project':    'Get admins from projects'
+  'sendtoall':  'Send to all the users in the system'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -29,6 +30,3 @@ opt_args:
     'help':     'filter by project type'
     'default':  'all'
     'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
-  '--dry_run':
-    'dest':     'do not send, just show the content'
-    'help':     'print the mail content'
