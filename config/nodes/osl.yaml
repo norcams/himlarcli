@@ -75,6 +75,9 @@ nodes:
   compute-atlas-16:
     mac: b0:26:28:1e:76:98
     hostgroup: 3
+  compute-vgpu-42:
+    mac: ac:1f:6b:64:72:84
+    hostgroup: 3
   console-01:
     compute_profile: medium
     compute_resource: controller-03
