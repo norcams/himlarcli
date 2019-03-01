@@ -84,6 +84,9 @@ def action_instance():
     mail.close()
 
 def action_project():
+    mail = Mail(options.config, debug=options.debug)
+    search_filter = dict()
+    projects = ksclient.get_projects(domain=options.domain, **search_filter)
     if options.template:
         content = options.template
         email_content = open(content, 'r')
@@ -93,9 +96,6 @@ def action_project():
         else:
             with open(content, 'r') as email_content:
                 body_content = email_content.read()
-            mail = Mail(options.config, debug=options.debug)
-            search_filter = dict()
-            projects = ksclient.get_projects(domain=options.domain, **search_filter)
             if options.filter and options.filter != 'all':
                 search_filter['type'] = options.filter
             if options.type:
@@ -103,7 +103,6 @@ def action_project():
             for region in regions:
                 for project in projects:
                     project_type = project.type if hasattr(project, 'type') else '(unknown)'
-                    # if not options.filter or options.filter in project.name:
                     novaclient = himutils.get_client(Nova, options, logger, region)
                     instances = novaclient.get_project_instances(project.id)
                     mail.set_keystone_client(ksclient)
@@ -113,8 +112,10 @@ def action_project():
                                                        admin=True)
     mail.close()
 
-def action_sendtoall():
+def action_flavor():
     users = ksclient.get_users(domain=options.domain)
+    projects = ksclient.list_projects('Dataporten')
+    mail = Mail(options.config, debug=options.debug)
     if options.template:
         content = options.template
         email_content = open(content, 'r')
@@ -124,9 +125,37 @@ def action_sendtoall():
         else:
             with open(content, 'r') as email_content:
                 body_content = email_content.read()
-            projects = ksclient.list_projects('Dataporten')
-            countuser = 0
-            countmail = 0
+        for region in regions:
+            novaclient = himutils.get_client(Nova, options, logger, region)
+            flavor = novaclient.get_flavors()
+            for region in regions:
+                for project in projects:
+                    #Update this for any other type of flavors
+                    if flavor == 'd1':
+                        novaclient = himutils.get_client(Nova, options, logger, region)
+                        instances = novaclient.get_project_instances(project.id)
+                        mail.set_keystone_client(ksclient)
+                        users = mail.mail_instance_owner(instances=instances,
+                                                           body=body_content,
+                                                           subject=subject,
+                                                           admin=True)
+    mail.close()
+
+def action_sendtoall():
+    users = ksclient.get_users(domain=options.domain)
+    projects = ksclient.list_projects('Dataporten')
+    mail = Mail(options.config, debug=options.debug)
+    countuser = 0
+    countmail = 0
+    if options.template:
+        content = options.template
+        email_content = open(content, 'r')
+        body_content = email_content.read()
+        if options.dry_run:
+            print body_content
+        else:
+            with open(content, 'r') as email_content:
+                body_content = email_content.read()
             for user in users:
                 for project in projects:
                     mail = Mail(options.config, debug=options.debug)

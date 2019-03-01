@@ -4,6 +4,7 @@ actions:
   'file':       'Send mail to all the users listed in a file'
   'instance':   'Get admins from instances'
   'project':    'Get admins from projects'
+  'flavor':     'Send mail to a specific flavor'
   'sendtoall':  'Send to all the users in the system'
 opt_args:
   '--domain':
