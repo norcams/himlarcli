@@ -101,14 +101,16 @@ def action_project():
             if options.type:
                 search_filter['type'] = options.type
             for project in projects:
-                project_type = project.type if hasattr(project, 'type') else '(unknown)'
-                # if not options.filter or options.filter in project.name:
-                instances = novaclient.get_project_instances(project.id)
-                mail.set_keystone_client(ksclient)
-                users = mail.mail_instance_owner(instances=instances,
-                                                   body=body_content,
-                                                   subject=subject,
-                                                   admin=True)
+                for region in regions:
+                    project_type = project.type if hasattr(project, 'type') else '(unknown)'
+                    # if not options.filter or options.filter in project.name:
+                    novaclient = himutils.get_client(Nova, options, logger, region)
+                    instances = novaclient.get_project_instances(project.id)
+                    mail.set_keystone_client(ksclient)
+                    users = mail.mail_instance_owner(instances=instances,
+                                                       body=body_content,
+                                                       subject=subject,
+                                                       admin=True)
     mail.close()
 
 def action_sendtoall():
