@@ -100,8 +100,8 @@ def action_project():
                 search_filter['type'] = options.filter
             if options.type:
                 search_filter['type'] = options.type
-            for project in projects:
-                for region in regions:
+            for region in regions:
+                for project in projects:
                     project_type = project.type if hasattr(project, 'type') else '(unknown)'
                     # if not options.filter or options.filter in project.name:
                     novaclient = himutils.get_client(Nova, options, logger, region)
@@ -114,6 +114,7 @@ def action_project():
     mail.close()
 
 def action_sendtoall():
+    users = ksclient.get_users(domain=options.domain)
     if options.template:
         content = options.template
         email_content = open(content, 'r')
@@ -124,14 +125,20 @@ def action_sendtoall():
             with open(content, 'r') as email_content:
                 body_content = email_content.read()
             projects = ksclient.list_projects('Dataporten')
-            for project in projects:
-                mail = Mail(options.config, debug=options.debug)
-                msg = MIMEText(body_content)
-                msg['subject'] = subject
-                mail.send_mail(project, msg, fromaddr='noreply@uh-iaas.no')
-                print '\nProject: %s' % project
+            countuser = 0
+            countmail = 0
+            for user in users:
+                for project in projects:
+                    mail = Mail(options.config, debug=options.debug)
+                    msg = MIMEText(body_content)
+                    msg['subject'] = subject
+                    toaddr = user.email
+                    countuser += 1
+                    if hasattr(user, 'email'):
+                        mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
+                        countmail += 1
+                        print '\nSent %s mail(s) to %s user(s)' % (countmail, countuser)
     mail.close()
-
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
