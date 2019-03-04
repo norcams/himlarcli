@@ -10,7 +10,7 @@ r1: # (8x) new
     ram: 8192
     disk: 20
   'r1.large': # [2-16-20]
-    vcpus: 20
+    vcpus: 2
     ram: 16384
     disk: 20
   'r1xlarge': # [4-32-20]
