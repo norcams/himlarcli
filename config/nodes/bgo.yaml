@@ -27,6 +27,15 @@ nodes:
   cephmon-03:
     compute_profile: xlarge
     compute_resource: controller-03
+  cephmon-object-01:
+    compute_profile: medium
+    compute_resource: controller-01
+  cephmon-object-02:
+    compute_profile: medium
+    compute_resource: controller-02
+  cephmon-object-03:
+    compute_profile: medium
+    compute_resource: controller-03
   compute-01:
     hostgroup: 3
     mac: ec:f4:bb:ce:21:84
@@ -150,19 +159,19 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-02
-  object-01:
+  object-ceph-01:
     mac: d0:94:66:09:0d:6c
     hostgroup: 7
-  object-02:
+  object-ceph-02:
     mac: d0:94:66:09:17:a7
     hostgroup: 7
-  object-03:
+  object-ceph-03:
     mac: d0:94:66:09:53:bc
     hostgroup: 7
-  object-04:
+  object-ceph-04:
     mac: d0:94:66:09:2a:b7
     hostgroup: 7
-  object-05:
+  object-ceph-05:
     mac: d0:94:66:09:41:d5
     hostgroup: 7
   proxy-01:
@@ -187,6 +196,9 @@ nodes:
   resolver-02:
     compute_profile: small
     compute_resource: controller-04
+  rgw-01:
+    compute_profile: medium
+    compute_resource: controller-03
   status-01:
     compute_profile: small
     compute_resource: controller-02
