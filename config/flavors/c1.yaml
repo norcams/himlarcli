@@ -10,7 +10,7 @@ c1: # (2x) new
     ram: 2048
     disk: 20
   'c1.large': #  [2-4-20]
-    vcpus: 2 2 
+    vcpus: 2 
     ram: 4096
     disk: 20
   'c1.xlarge': # [4-8-20]
