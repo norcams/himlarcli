@@ -1,0 +1,24 @@
+---
+# flavor used for uio-vgpu
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+win:
+  'vgpu.small':
+    vcpus: 1
+    ram: 2048
+    disk: 10
+  'vgpu.medium':
+    vcpus: 1
+    ram: 4096
+    disk: 20
+  'vgpu.large':
+    vcpus: 2
+    ram: 8192
+    disk: 20
+  'vgpu.xlarge':
+    vcpus: 4
+    ram: 16384
+    disk: 220
