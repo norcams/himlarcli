@@ -36,10 +36,12 @@ def action_cleanup():
         print role_id.id
         print project.id
         print group.id
-        client.roles.grant(role=role_id,
-                           project=project.id,
-                           group=group.id)
-
+        try:
+            client.roles.revoke(role=role_id,
+                                project=project.id,
+                                group=group.id)
+        except:
+            pass
 def action_grant():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
