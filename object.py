@@ -25,6 +25,21 @@ else:
 if not regions:
     himutils.sys_error('No valid regions found!')
 
+def action_cleanup():
+    client = ksclient.get_client()
+    roles = ksclient.list_roles(project_name=options.project)
+    role_id = client.roles.find(name='object')
+    project = ksclient.get_project(options.project)
+    for role in roles:
+        #print role
+        group = client.groups.find(name=role['group'])
+        print role_id.id
+        print project.id
+        print group.id
+        client.roles.grant(role=role_id,
+                           project=project.id,
+                           group=group.id)
+
 def action_grant():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:

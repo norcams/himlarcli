@@ -3,6 +3,7 @@ desc:           'Manage swift object storage'
 actions:
   'grant':      'Grant all users of a project access to use object storage'
   'revoke':     'Revoke all users of a project access to use object storage'
+  'cleanup':    ''
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -12,5 +13,5 @@ opt_args:
     'dest':     'region'
     'help':     'only use this region'
   'project':
-   'sub':       ['grant', 'revoke']
+   'sub':       ['grant', 'revoke', 'cleanup']
    'metavar':   'project'
