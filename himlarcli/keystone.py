@@ -379,6 +379,37 @@ class Keystone(Client):
 
         return "New password: %s" % password
 
+    def revoke_role(self, emails, project_name, role_name='user'):
+        """
+            Revoke role for user in project
+            version: 2019-3
+            :param email: list of user email address (str)
+        """
+        project = self.get_project_by_name(project_name=project_name)
+        if not project:
+            self.log_error("could not find project %s" % project_name, 1)
+        role = self.__get_role(role_name)
+        if not role:
+            self.log_error('Role %s not found!'  % role_name)
+            return
+        assignments = self.__get_role_assignments(project_id=project.id, role_id=role.id)
+        for email in emails:
+            group = self.get_group_by_email(email=email)
+            if not group:
+                self.log_error('Group %s-group not found!'  % email)
+                continue
+            if group.name not in assignments:
+                self.debug_log('%s not found in assignments. dropping revoke' % group.name)
+                continue
+            self.debug_log('revoke role %s to %s for %s' % (role.name, email, project_name))
+            if not self.dry_run:
+                try:
+                    self.client.roles.revoke(role=role,
+                                             project=project,
+                                             group=group)
+                except exceptions.base.ClientException as e:
+                    self.log_error(e)
+
     def grant_role(self, email, project_name, role_name='user'):
         """ Grant a role to a project for a user.
             version: 2 """
@@ -647,6 +678,25 @@ class Keystone(Client):
         if not match:
             self.logger.debug('=> no user found for email %s' % email)
         return match
+
+    def __get_role_assignments(self, project_id, role_id=None, rvalue = 'group', vtype = 'name'):
+        """
+            Return a list of groups assigned to a project with a role
+            version: 2019-3
+            :param rvalue: return value, user or group (str)
+            :param vtype: retrun value type, id or name (str)
+        """
+        include_names = True if vtype == 'name' else False
+        assignments = self.client.role_assignments.list(project=project_id,
+                                                        role=role_id,
+                                                        include_names=include_names)
+        rlist = list()
+        for a in assignments:
+            if hasattr(a, rvalue):
+                value = getattr(a, rvalue)
+                if vtype in value:
+                    rlist.append(value[vtype])
+        return rlist
 
     def __get_role(self, role_name):
         """
