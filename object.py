@@ -26,13 +26,11 @@ if not regions:
     himutils.sys_error('No valid regions found!')
 
 def action_grant():
-    project = ksclient.get_project_by_name(project_name=options.project)
-    if not project:
-        himutils.sys_error('No project found with name %s' % options.project)
     # Get all users from a project
-    users = ksclient.get_users(domain=options.domain, project=project.id)
+    users = ksclient.list_roles(project_name=options.project)
     for user in users:
-        ksclient.grant_role(email=user.email, project_name=project.name, role_name='object')
+        if user['role'] is not 'object':
+            ksclient.grant_role(email=user['group'], project_name=options.project, role_name='object')
 
 def action_revoke():
     project = ksclient.get_project_by_name(project_name=options.project)

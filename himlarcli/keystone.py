@@ -417,7 +417,10 @@ class Keystone(Client):
             project = self.get_project_by_name(project_name=project_name)
         if not self.dry_run and not project:
             self.log_error("could not find project %s" % project_name, 1)
-        group = self.get_group_by_email(email=email)
+        if '-group' in email:
+            group = self.__get_group(email)
+        else:
+            group = self.get_group_by_email(email=email)
         if not group:
             self.log_error('Group %s-group not found!'  % email)
             return
