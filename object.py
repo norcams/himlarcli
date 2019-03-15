@@ -25,33 +25,25 @@ else:
 if not regions:
     himutils.sys_error('No valid regions found!')
 
-def action_cleanup():
-    client = ksclient.get_client()
-    roles = ksclient.list_roles(project_name=options.project)
-    role_id = client.roles.find(name='object')
-    project = ksclient.get_project(options.project)
-    for role in roles:
-        #print role
-        group = client.groups.find(name=role['group'])
-        print role_id.id
-        print project.id
-        print group.id
-        try:
-            client.roles.revoke(role=role_id,
-                                project=project.id,
-                                group=group.id)
-        except:
-            pass
 def action_grant():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
         himutils.sys_error('No project found with name %s' % options.project)
+    # Get all users from a project
     users = ksclient.get_users(domain=options.domain, project=project.id)
     for user in users:
         ksclient.grant_role(email=user.email, project_name=project.name, role_name='object')
 
 def action_revoke():
-    print "TODO"
+    project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.sys_error('No project found with name %s' % options.project)
+    # Get all users from a project
+    users = ksclient.get_users(domain=options.domain, project=project.id)
+    emails = list()
+    for user in users:
+        emails.append(user.email)
+    ksclient.revoke_role(emails=emails, project_name=project.name, role_name='object')
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
