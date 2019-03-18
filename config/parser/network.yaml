@@ -1,0 +1,17 @@
+---
+desc:           'Manage network in openstack'
+actions:
+  'dualstack':  'List instances with public IPv4 addresses'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
+  '-t':
+    'sub':      ['dualstack']
+    'dest':     'type'
+    'help':     'instance project type'
+    'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
