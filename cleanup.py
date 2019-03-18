@@ -51,6 +51,9 @@ def action_list():
                 #printer.output_dict(project.to_dict())
                 instances = novaclient.get_project_instances(project.id)
                 for i in instances:
+                    network = i.addresses.keys()[0] if len(i.addresses.keys()) > 0 else 'unknown'
+                    if options.network and options.network != network:
+                        continue
                     count += 1
                     output = dict()
                     output['_region'] = region
@@ -82,6 +85,9 @@ def action_delete():
                 #printer.output_dict(project.to_dict())
                 instances = novaclient.get_project_instances(project.id)
                 for i in instances:
+                    network = i.addresses.keys()[0] if len(i.addresses.keys()) > 0 else 'unknown'
+                    if options.network and options.network != network:
+                        continue
                     logger.debug('=> DELETE %s (%s)' % (i.name, project.name))
                     if not options.dry_run:
                         i.delete()
@@ -105,6 +111,12 @@ def action_notify():
         for project in projects:
             if not options.filter or options.filter in project.name:
                 instances = novaclient.get_project_instances(project.id)
+                verified_instances = list()
+                for i in instances:
+                    network = i.addresses.keys()[0] if len(i.addresses.keys()) > 0 else 'unknown'
+                    if options.network and options.network != network:
+                        continue
+                    verified_instances.append(i)
                 mapping = dict(region=region.upper(), project=project.name)
                 body_content = himutils.load_template(inputfile=options.template,
                                                       mapping=mapping,
@@ -114,9 +126,11 @@ def action_notify():
                 notify = Notify(options.config, debug=False, log=logger)
                 notify.set_keystone_client(ksclient)
                 notify.set_dry_run(options.dry_run)
-                users = notify.mail_instance_owner(instances, body_content, subject)
+                users = notify.mail_instance_owner(verified_instances, body_content, subject)
                 notify.close()
-                print users
+                if users:
+                    print users
+
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
