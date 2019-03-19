@@ -102,7 +102,7 @@ nodes:
     compute_profile: small
     compute_resource: controller-02
   db-regional-01:
-    compute_profile: medium
+    compute_profile: xlarge
     compute_resource: controller-01
   dns-01:
     compute_profile: small
@@ -145,7 +145,7 @@ nodes:
     compute_profile: large
     compute_resource: controller-04
   mq-01:
-    compute_profile: medium
+    compute_profile: xlarge
     compute_resource: controller-01
   nat-linux-01:
     compute_profile: small

@@ -19,6 +19,9 @@ opt_args:
   '-f':
     'dest':     'filter'
     'help':     'project filter'
+  '-n':
+    'dest':     'network'
+    'help':     'instance network filter'
   '--template':
     'sub':      'notify'
     'dest':     'template'
