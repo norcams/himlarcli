@@ -229,6 +229,9 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdg'
+  storage-10:
+    mac: 20:04:0f:f4:75:a2
+    hostgroup: 9
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
