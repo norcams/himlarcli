@@ -63,6 +63,72 @@ nodes:
   compute-09:
     hostgroup: 3
     mac: 00:0a:f7:82:54:23
+  compute-alice-11:
+    mac: 20:04:0f:ed:9a:7a
+    hostgroup: 10
+  compute-alice-12:
+    mac: 20:04:0f:ed:6f:96
+    hostgroup: 10
+  compute-alice-13:
+    mac: 20:04:0f:ed:67:b6
+    hostgroup: 10
+  compute-alice-14:
+    mac: 20:04:0f:eb:e1:42
+    hostgroup: 10
+  compute-alice-15:
+    mac: 20:04:0f:eb:e2:7e
+    hostgroup: 10
+  compute-alice-16:
+    mac: 20:04:0f:ee:2c:82
+    hostgroup: 10
+  compute-alice-17:
+    mac: 20:04:0f:eb:ee:e6
+    hostgroup: 10
+  compute-alice-18:
+    mac: 20:04:0f:ed:9c:16
+    hostgroup: 10
+  compute-alice-19:
+    mac: 20:04:0f:ed:6c:a6
+    hostgroup: 10
+  compute-alice-20:
+    mac: 20:04:0f:ed:7e:5a
+    hostgroup: 10
+  compute-alice-21:
+    mac: 20:04:0f:ed:6e:d2
+    hostgroup: 10
+  compute-alice-22:
+    mac: 20:04:0f:ed:6d:66
+    hostgroup: 10
+  compute-alice-23:
+    mac: 20:04:0f:ed:9c:0a
+    hostgroup: 10
+  compute-alice-24:
+    mac: 20:04:0f:ed:67:e6
+    hostgroup: 10
+  compute-alice-25:
+    mac: 20:04:0f:ec:05:26
+    hostgroup: 10
+  compute-alice-26:
+    mac: 20:04:0f:ed:65:5a
+    hostgroup: 10
+  compute-alice-27:
+    mac: 20:04:0f:ed:6d:5e
+    hostgroup: 10
+  compute-alice-28:
+    mac: 20:04:0f:ed:67:aa
+    hostgroup: 10
+  compute-alice-29:
+    mac: 20:04:0f:ed:7f:b6
+    hostgroup: 10
+  compute-alice-30:
+    mac: 20:04:0f:ed:9a:a2
+    hostgroup: 10
+  compute-alice-31:
+    mac: 20:04:0f:ed:6d:62
+    hostgroup: 10
+  compute-alice-32:
+    mac: 20:04:0f:ed:99:fe
+    hostgroup: 10
   compute-10:
     hostgroup: 3
     mac: 00:0a:f7:79:c5:f3
