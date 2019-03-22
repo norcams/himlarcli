@@ -133,10 +133,10 @@ nodes:
     mac: 20:04:0f:ed:99:fe
     hostgroup: 10
   compute-alice-33:
-    mac: 4c:d9:8f:1c:07:8a
+    mac: 20:04:0f:ed:6c:6e
     hostgroup: 10
   compute-alice-34:
-    mac: 4c:d9:8f:1c:04:e4
+    mac: 20:04:0f:ed:6c:9e
     hostgroup: 10
   console-01:
     compute_profile: medium
@@ -371,10 +371,10 @@ nodes:
     mac: 20:04:0f:f4:78:2a
     hostgroup: 9
   storage-dcache-33:
-    mac: 4c:d9:8f:1a:07:ba
+    mac: 20:04:0f:f4:78:12
     hostgroup: 9
   storage-dcache-34:
-    mac: 4c:d9:8f:1a:06:b2
+    mac: 20:04:0f:f4:76:ca
     hostgroup: 9
   telemetry-01:
     compute_profile: xlarge
