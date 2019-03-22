@@ -232,6 +232,72 @@ nodes:
   storage-dcache-10:
     mac: 20:04:0f:f4:75:a2
     hostgroup: 9
+  storage-dcache-11:
+    mac: 20:04:0f:f4:6f:fa
+    hostgroup: 9
+  storage-dcache-12:
+    mac: 20:04:0f:f4:75:8e
+    hostgroup: 9
+  storage-dcache-13:
+    mac: 20:04:0f:f4:6f:66
+    hostgroup: 9
+  storage-dcache-14:
+    mac: 20:04:0f:f4:76:66
+    hostgroup: 9
+  storage-dcache-15:
+    mac: 20:04:0f:f4:98:42
+    hostgroup: 9
+  storage-dcache-16:
+    mac: 20:04:0f:f4:91:22
+    hostgroup: 9
+  storage-dcache-17:
+    mac: 20:04:0f:f4:77:52
+    hostgroup: 9
+  storage-dcache-18:
+    mac: 20:04:0f:f4:95:12
+    hostgroup: 9
+  storage-dcache-19:
+    mac: 20:04:0f:f4:94:76
+    hostgroup: 9
+  storage-dcache-20:
+    mac: 20:04:0f:ee:49:ee
+    hostgroup: 9
+  storage-dcache-21:
+    mac: 20:04:0f:f4:78:0e
+    hostgroup: 9
+  storage-dcache-22:
+    mac: 20:04:0f:f4:78:4e
+    hostgroup: 9
+  storage-dcache-23:
+    mac: 20:04:0f:f4:78:1a
+    hostgroup: 9
+  storage-dcache-24:
+    mac: 20:04:0f:f2:6c:22
+    hostgroup: 9
+  storage-dcache-25:
+    mac: 20:04:0f:f4:96:0e
+    hostgroup: 9
+  storage-dcache-26:
+    mac: 20:04:0f:f4:77:1e
+    hostgroup: 9
+  storage-dcache-27:
+    mac: 20:04:0f:f4:77:2a
+    hostgroup: 9
+  storage-dcache-28:
+    mac: 20:04:0f:f4:76:d2
+    hostgroup: 9
+  storage-dcache-29:
+    mac: 20:04:0f:f4:94:02
+    hostgroup: 9
+  storage-dcache-30:
+    mac: 20:04:0f:f4:76:d6
+    hostgroup: 9
+  storage-dcache-31:
+    mac: 20:04:0f:f4:90:b2
+    hostgroup: 9
+  storage-dcache-32:
+    mac: 20:04:0f:f4:78:2a
+    hostgroup: 9
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
