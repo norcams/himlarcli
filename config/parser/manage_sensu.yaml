@@ -14,5 +14,5 @@ opt_args:
   '-e':
     'sub':      ['silence']
     'dest':     'expire'
-    'help':     'Duration of silence entry'
+    'help':     'Duration of silence entry in seconds'
     'required': False
