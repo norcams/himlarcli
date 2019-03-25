@@ -93,7 +93,7 @@ def action_list():
             '3': host.running_vms,
             '4': host.vcpus_used,
             '5': int(host.memory_mb_used/1024),
-            '2': aggregates[host.hypervisor_hostname]
+            '2': aggregates.get(host.hypervisor_hostname, 'unknown')
         }
         printer.output_dict(output, sort=True, one_line=True)
 
