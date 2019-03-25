@@ -6,6 +6,8 @@ from himlarcli import utils
 
 class ForemanClient(Client):
 
+    per_page = 100
+
     def __init__(self, config_path, debug=False, version='1', log=None):
         super(ForemanClient, self).__init__(config_path, debug, log)
         self.logger.debug('=> config file: %s' % config_path)
@@ -18,6 +20,9 @@ class ForemanClient(Client):
                                api_version=2,
                                version=version,
                                verify=False)
+
+    def set_per_page(self, per_page):
+        self.per_page = per_page
 
     def get_config(self, section, option):
         try:
@@ -75,7 +80,7 @@ class ForemanClient(Client):
 
     def get_facts(self, host_id):
         host = self.__set_host(host_id)
-        return self.foreman.hosts.fact_values_index(host_id=host, per_page=10000)
+        return self.foreman.hosts.fact_values_index(host_id=host, per_page=self.per_page)
 
     def set_host_build(self, host, build=True):
         host = self.__set_host(host)
@@ -83,7 +88,7 @@ class ForemanClient(Client):
             self.foreman.update_hosts(id=host, host={'build': build})
 
     def get_hosts(self, search=None):
-        hosts = self.foreman.index_hosts()
+        hosts = self.foreman.index_hosts(per_page=self.per_page)
         self.logger.debug("=> fetch %s page(s) with a total of %s hosts" %
                           (hosts['page'], hosts['total']))
         return hosts
