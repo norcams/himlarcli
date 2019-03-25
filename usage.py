@@ -68,8 +68,8 @@ def action_instance():
                 continue
             flavor_name = i.flavor.get('original_name', 'unknown')
             flavors[flavor_name] = flavors.get(flavor_name, 0) + 1
-            cores += i.flavor.vcpus
-            ram += i.flavor.ram
+            cores += i.flavor.get('vcpus', 0)
+            ram += i.flavor.get('ram', 0)
             total += 1
         printer.output_dict({'header': '%s instances' % region})
         printer.output_dict(flavors)
