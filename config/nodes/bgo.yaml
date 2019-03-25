@@ -376,7 +376,7 @@ nodes:
   storage-dcache-34:
     mac: 20:04:0f:f4:76:ca
     hostgroup: 9
-  storage-tape-01:
+  tape-01:
     mac: 20:04:0f:f4:77:be
     hostgroup: 11
   telemetry-01:
