@@ -70,7 +70,7 @@ class ForemanClient(Client):
 
     def get_host(self, host):
         host = self.__set_host(host)
-        return self.foreman.show_hosts(id=host, per_page=self.per_page)
+        return self.foreman.show_hosts(id=host)
 
     def get_fact(self, host, fact):
         host = self.__set_host(host)
@@ -80,7 +80,7 @@ class ForemanClient(Client):
 
     def get_facts(self, host_id):
         host = self.__set_host(host_id)
-        return self.foreman.hosts.fact_values_index(host_id=host, per_page=10000)
+        return self.foreman.hosts.fact_values_index(host_id=host, per_page=self.per_page)
 
     def set_host_build(self, host, build=True):
         host = self.__set_host(host)
@@ -88,7 +88,7 @@ class ForemanClient(Client):
             self.foreman.update_hosts(id=host, host={'build': build})
 
     def get_hosts(self, search=None):
-        hosts = self.foreman.index_hosts()
+        hosts = self.foreman.index_hosts(per_page=self.per_page)
         self.logger.debug("=> fetch %s page(s) with a total of %s hosts" %
                           (hosts['page'], hosts['total']))
         return hosts
