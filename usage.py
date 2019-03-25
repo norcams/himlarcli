@@ -66,11 +66,8 @@ def action_instance():
             project = ksclient.get_by_id('project', i.tenant_id)
             if not options.demo and project and 'DEMO' in project.name:
                 continue
-            flavor = novaclient.get_by_id('flavor', i.flavor['id'])
-            if not flavor:
-                himutils.sys_error('Flavor with ID %s not found' % i.flavor['id'], 0)
-                continue
-            flavors[flavor.name] = flavors.get(flavor.name, 0) + 1
+            flavor_name = i.flavor.get('original_name', 'unknown')
+            flavors[flavor_name] = flavors.get(flavor_name, 0) + 1
             cores += flavor.vcpus
             ram += flavor.ram
             total += 1
