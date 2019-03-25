@@ -83,7 +83,10 @@ def action_disable():
 
 def action_list():
     aggregates = nc.get_all_aggregate_hosts()
-    hosts = nc.get_hosts()
+    if options.aggregate == 'all':
+        hosts = nc.get_hosts()
+    else:
+        hosts = nc.get_aggregate_hosts(options.aggregate, True)
     printer.output_dict({'header': 'Hypervisor list (name, aggregate, vms, vcpu_used, ram_gb_used, state, status)'})
     for host in hosts:
         output = {

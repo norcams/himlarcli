@@ -180,7 +180,7 @@ class Nova(Client):
             return None
         return aggregate
 
-    def get_aggregate_hosts(self, aggregate):
+    def get_aggregate_hosts(self, aggregate, detailed=False):
         """
             Return all hypervisors/hosts from an aggregate
             Version: 2018-1
@@ -191,7 +191,7 @@ class Nova(Client):
         if not aggregate:
             return hosts
         for h in aggregate.hosts:
-            hosts.append(self.get_host(h))
+            hosts.append(self.get_host(h, detailed))
         return hosts
 
     def update_aggregate(self, aggregate, metadata):

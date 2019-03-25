@@ -22,3 +22,8 @@ opt_args:
     'dest':     'type'
     'help':     'instance project type'
     'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
+  '-a':
+    'sub':      ['list']
+    'dest':     aggregate
+    'default':  'all'
+    'help':     Limit list to one aggregate
