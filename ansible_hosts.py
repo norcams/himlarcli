@@ -8,6 +8,7 @@ desc = 'Create an ansible inventory hostfile in ./hostfile.<loc>'
 options = utils.get_options(desc, hosts=False)
 
 foreman = ForemanClient(options.config, options.debug)
+foreman.set_per_page(500)
 
 hosts = foreman.get_hosts('*')
 hostlist = dict()
