@@ -24,6 +24,7 @@ ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 printer = Printer(options.format)
 
+
 def action_show():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
         print "%s is not a valid user. Please check your spelling or case." % options.user
@@ -205,6 +206,9 @@ def mail_user(email, template, subject):
     mail.close()
 
 def get_valid_users():
+    whitelist = himutils.load_file('whitelist_users.txt', logger)
+    if not whitelist:
+        himutils.sys_error('Could not find whitelist_users.txt!')
     orgs = himutils.load_config('config/ldap.yaml', logger).keys()
     ldap = dict()
     for org in orgs:
@@ -219,6 +223,8 @@ def get_valid_users():
         if options.limit and count >= int(options.limit):
             break
         count += 1
+        if user in whitelist:
+            ksclient.debug_log('user %s in whitelist' % user)
         # Only add a user to deactive if user also enabled in OS
         os_user = ksclient.get_user_by_email(user, 'api')
         if not os_user.enabled:
@@ -228,7 +234,7 @@ def get_valid_users():
             if not org in user:
                 continue
             org_found = True
-            if not ldap[org].get_user(user):
+            if not ldap[org].get_user(user) and user not in whitelist:
                 deactive.append(user)
             else:
                 active[org] = active.setdefault(org, 0) + 1
