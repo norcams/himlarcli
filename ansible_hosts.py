@@ -13,6 +13,7 @@ foreman.set_per_page(500)
 hosts = foreman.get_hosts('*')
 hostlist = dict()
 for host in hosts['results']:
+    var = None
     hostname = host['name'].split('.')[0]
     check = hostname.count('-')
     if check == 2:
@@ -32,6 +33,13 @@ for host in hosts['results']:
         hostlist[group] = []
     hostlist[group].append(hostname)
 
+    # Add group for var
+    if var:
+        var_group = group = "%s-%s-%s" % (loc, role, var)
+        if not var_group in hostlist:
+           hostlist[var_group] = []
+        hostlist[var_group].append(hostname)
+
 children = "%s:children" % loc
 filename = "hostfile.%s" % loc
 nodes = "%s-nodes:children" % loc
@@ -42,7 +50,6 @@ parser.add_section(children)
 parser.add_section(nodes)
 
 for section, hosts in sorted(hostlist.iteritems()):
-    loc, role = section.split('-')
     parser.set(children, section)
     parser.add_section(section)
     if role not in exclude_nodes:
