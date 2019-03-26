@@ -3,14 +3,13 @@ Hi,
 The email address $email associated with your UH-IaaS account is no longer
 your primary email address in your organization. As a result, your account has
 been deactivated and the instances in your demo and/or personal projects have
-been stopped. The account and all resources associated with it will be
-terminated in 30 days.
+thus been stopped. The account and all resources associated with it will be
+terminated in 30 days unless you notify us before then.
 
-If you have changed your email address or think this is has happened by mistake
-please contact us.
+If you have changed your email address or think this is an error please contact us
+and we will help you getting access to your project(s) and instances again.
 
 Support and contact information can be found at http://docs.uh-iaas.no/en/latest/support.html
 
 Best regards,
-
 The UH-IaaS team
