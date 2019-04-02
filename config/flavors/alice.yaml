@@ -4,17 +4,19 @@ properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
   hw_rng:rate_period: 60
+  hw:cpu_policy: 'dedicated'
+  hw:cpu_thread_policy: 'require'
   aggregate_instance_extra_specs:type: 's== alice'
 alice:
-  'alice.large':
-    vcpus: 2
-    ram: 8192
-    disk: 20
   'alice.xlarge':
     vcpus: 4
     ram: 16384
-    disk: 20
+    disk: 10
   'alice.2xlarge':
     vcpus: 8
     ram: 32768
-    disk: 20
+    disk: 10
+  'alice.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 10
