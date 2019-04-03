@@ -31,3 +31,7 @@ opt_args:
     'help':     'filter by project type'
     'default':  'all'
     'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
+  '--flavortype':
+      'sub':    ['flavor']
+      'dest':   'flavortype'
+      'help':   'filter flavor by type, e.g. m1.xlarge'
