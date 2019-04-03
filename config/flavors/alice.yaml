@@ -10,13 +10,13 @@ properties:
 alice:
   'alice.xlarge':
     vcpus: 4
-    ram: 16384
+    ram: 16383
     disk: 10
   'alice.2xlarge':
     vcpus: 8
-    ram: 32768
+    ram: 32767
     disk: 10
   'alice.4xlarge':
     vcpus: 16
-    ram: 65536
+    ram: 65535
     disk: 10

@@ -10,13 +10,13 @@ properties:
 atlas:
   'atlas.large':
     vcpus: 2
-    ram: 8192
+    ram: 8191
     disk: 20
   'atlas.xlarge':
     vcpus: 4
-    ram: 16384
+    ram: 16383
     disk: 20
   'atlas.2xlarge':
     vcpus: 8
-    ram: 32768
+    ram: 32767
     disk: 20
