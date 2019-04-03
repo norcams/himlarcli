@@ -4,17 +4,19 @@ properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
   hw_rng:rate_period: 60
+  hw:cpu_policy: 'dedicated'
+  hw:cpu_thread_policy: 'require'
   aggregate_instance_extra_specs:type: 's== atlas'
 atlas:
   'atlas.large':
     vcpus: 2
-    ram: 8192
+    ram: 8191
     disk: 20
   'atlas.xlarge':
     vcpus: 4
-    ram: 16384
+    ram: 16383
     disk: 20
   'atlas.2xlarge':
     vcpus: 8
-    ram: 32768
+    ram: 32767
     disk: 20
