@@ -7,9 +7,6 @@ from himlarcli import utils as himutils
 from himlarcli.mail import Mail
 from email.mime.text import MIMEText
 
-user_counter = 0
-sent_mail_counter = 0
-
 himutils.is_virtual_env()
 
 parser = Parser()
@@ -43,6 +40,8 @@ else:
 
 # Send mail to all emails in a template file
 def action_file():
+    user_counter = 0
+    sent_mail_counter = 0
     if options.template:
         content = options.template
         email_content = open(content, 'r')
@@ -70,6 +69,8 @@ def action_file():
 
 # Send mail to all running instances
 def action_instance():
+    user_counter = 0
+    sent_mail_counter = 0
     if options.template:
         content = options.template
         email_content = open(content, 'r')
@@ -99,6 +100,8 @@ def action_instance():
 
 # Send mail to a specific type of project
 def action_project():
+    user_counter = 0
+    sent_mail_counter = 0
     mail = Mail(options.config, debug=options.debug)
     search_filter = dict()
     projects = ksclient.get_projects(domain=options.domain, **search_filter)
@@ -136,6 +139,8 @@ def action_project():
 
 # Send mail to a specific type of flavor
 def action_flavor():
+    user_counter = 0
+    sent_mail_counter = 0
     users = ksclient.get_users(domain=options.domain)
     projects = ksclient.list_projects('Dataporten')
     mail = Mail(options.config, debug=options.debug)
@@ -169,6 +174,8 @@ def action_flavor():
     mail.close()
 
 def action_sendtoall():
+    user_counter = 0
+    sent_mail_counter = 0
     users = ksclient.get_users(domain=options.domain)
     projects = ksclient.list_projects('Dataporten')
     mail = Mail(options.config, debug=options.debug)
