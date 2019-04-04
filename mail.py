@@ -58,7 +58,7 @@ def action_file():
                     user_counter += 1
                     try:
                         logger.debug('=> Sending email ...')
-                        mail.send_mail(toaddr, msg, fromaddr='noreply@usit.uio.no')
+                        mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
                         sent_mail_counter += 1
                     except ValueError:
                         himutils.sys_error('Not able to send the email.')
