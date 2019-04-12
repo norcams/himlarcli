@@ -138,6 +138,9 @@ nodes:
   compute-alice-34:
     mac: 20:04:0f:ed:6c:9e
     hostgroup: 10
+  compute-tape-49:
+    mac: 20:04:0f:f4:77:be
+    hostgroup: 11
   console-01:
     compute_profile: medium
     compute_resource: controller-03
@@ -376,9 +379,6 @@ nodes:
   storage-dcache-34:
     mac: 20:04:0f:f4:76:ca
     hostgroup: 9
-  tape-01:
-    mac: 20:04:0f:f4:77:be
-    hostgroup: 11
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
