@@ -129,11 +129,17 @@ def action_migrate():
         if 'enabled' in info.metadata:
             active_aggregate = aggregate
             break
+    if active_aggregate == 'unknown':
+        himutils.sys_error('Could not find enabled aggregate to migrate to. Make sure to activate aggregate first!')
     q = 'Migrate all instances from %s to %s' % (options.aggregate, active_aggregate)
     if not himutils.confirm_action(q):
         return
     instances = novaclient.get_instances(options.aggregate, host)
     count = 0
+    if hasattr(active_aggregate, 'hosts') and len(active_aggregate.hosts) > 0:
+        target_host = active_aggregate.hosts[0]
+    else:
+        himutils.sys_error('Could not find valid host in aggregate %s' % active_aggregate)
     for instance in instances:
         count += 1
         if options.dry_run:
@@ -141,7 +147,7 @@ def action_migrate():
         else:
             logger.debug('=> migrate instance %s' % unicode(instance.name))
             try:
-                instance.migrate()
+                instance.migrate(host=active_aggregate)
                 time.sleep(2)
                 if count%options.limit == 0 and (options.hard_limit and count < options.limit):
                     logger.debug('=> sleep for %s seconds', options.sleep)
