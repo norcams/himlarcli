@@ -136,9 +136,8 @@ def action_migrate():
         return
     instances = novaclient.get_instances(options.aggregate, host)
     count = 0
-    if hasattr(active_aggregate, 'hosts') and len(active_aggregate.hosts) > 0:
-        target_host = active_aggregate.hosts[0]
-    else:
+    target_host = next(iter(novaclient.get_aggregate_hosts(active_aggregate) or []), None)
+    if not target_host:
         himutils.sys_error('Could not find valid host in aggregate %s' % active_aggregate)
     for instance in instances:
         count += 1
