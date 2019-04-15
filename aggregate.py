@@ -146,7 +146,7 @@ def action_migrate():
         else:
             logger.debug('=> migrate instance %s' % unicode(instance.name))
             try:
-                instance.migrate(host=active_aggregate)
+                instance.migrate(host=target_host.hypervisor_hostname)
                 time.sleep(2)
                 if count%options.limit == 0 and (options.hard_limit and count < options.limit):
                     logger.debug('=> sleep for %s seconds', options.sleep)
