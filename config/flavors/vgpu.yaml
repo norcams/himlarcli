@@ -6,6 +6,7 @@ properties:
   hw_rng:rate_bytes: 1000000
   hw_rng:rate_period: 60
   aggregate_instance_extra_specs:type: 's== vgpu'
+  resources: 'VGPU=1'
 vgpu:
   'vgpu.small':
     vcpus: 1
@@ -22,4 +23,16 @@ vgpu:
   'vgpu.xlarge':
     vcpus: 4
     ram: 16384
+    disk: 20
+  'vgpu.2xlarge':
+    vcpus: 8
+    ram: 32768
+    disk: 20
+  'vgpu.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 20
+  'vgpu.8xlarge':
+    vcpus: 32
+    ram: 131072
     disk: 20
