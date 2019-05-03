@@ -2,6 +2,7 @@
 desc: 'Publish status message to Slack, Twitter and UH-IaaS status backend'
 actions:
   important: 'Publish to Slack, Twitter and UH-IaaS status backend (tagged important)'
+  news:      'Publish to Slack, Twitter and UH-IaaS status backend (tagged news)'
   info:      'Publish to Twitter and UH-IaaS status backend (tagged info)'
   event:     'Publish to UH-IaaS event backend'
 opt_args:
