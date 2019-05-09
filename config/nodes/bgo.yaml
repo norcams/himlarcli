@@ -309,13 +309,13 @@ nodes:
     hostgroup: 2
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdg'
+        value:          'sdq'
   storage-09:
     mac: b0:26:28:21:6a:ca
     hostgroup: 2
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdg'
+        value:          'sdq'
   storage-dcache-10:
     mac: 20:04:0f:f4:75:a2
     hostgroup: 9
