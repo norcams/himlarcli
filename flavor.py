@@ -45,6 +45,10 @@ def action_list():
             printer.output_dict(objects=output, one_line=True, sort=False)
 
 def action_update():
+    question = ("This will delete the flavor and recreate it for all other "
+        "changes than properties. Check project access after. Continue?")
+    if not himutils.confirm_action(question):
+        return
     public = flavors['public'] if 'public' in flavors else False
     properties = flavors['properties'] if 'properties' in flavors else None
     if not properties.get('aggregate_instance_extra_specs:type', None):
