@@ -18,5 +18,5 @@ atlas:
     disk: 20
   'atlas.2xlarge':
     vcpus: 8
-    ram: 32767
+    ram: 24576
     disk: 20
