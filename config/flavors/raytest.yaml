@@ -6,7 +6,8 @@ properties:
   hw_rng:rate_period: 60
 # hw:numa_nodes: 1
   hw:cpu_sockets: 1
-  hw:cpu_thread_policy: 'require'
+#  hw:cpu_policy: 'dedicated'
+#  hw:cpu_thread_policy: 'require'
   aggregate_instance_extra_specs:type: 's== alice'
 raytest:
   'raytest.xlarge':
