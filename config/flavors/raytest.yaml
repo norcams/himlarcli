@@ -17,7 +17,7 @@ raytest:
     vcpus: 8
     ram: 30720
     disk: 10
-  'alice.4xlarge':
+  'raytest.4xlarge':
     vcpus: 16
     ram: 61440
     disk: 10
