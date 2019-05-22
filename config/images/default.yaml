@@ -67,18 +67,6 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
-  'fedora_28':
-    'name':             'GOLD Fedora 28'
-    'depricated':       'Outdated (Fedora)'
-    'url':              'http://builder/'
-    'latest':           'fedora_28-latest.qcow2'
-    'min_ram':          1024
-    'min_disk':         8
-    'visibility':       'public'
-    'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
-      'hw_rng_model':   'virtio'
   'fedora_30':
     'name':             'GOLD Fedora 30'
     'depricated':       'Outdated (Fedora)'
