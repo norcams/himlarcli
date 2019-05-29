@@ -12,13 +12,13 @@ properties:
 raytest:
   'raytest.xlarge':
     vcpus: 4
-    ram: 16383
+    ram: 15360
     disk: 10
   'raytest.2xlarge':
     vcpus: 8
-    ram: 32767
+    ram: 30720
     disk: 10
   'raytest.4xlarge':
     vcpus: 16
-    ram: 65535
+    ram: 61440
     disk: 10
