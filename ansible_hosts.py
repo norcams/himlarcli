@@ -9,7 +9,7 @@ options = utils.get_options(desc, hosts=False)
 
 foreman = ForemanClient(options.config, options.debug)
 
-hosts = foreman.get_hosts('*')
+hosts = foreman.get_hosts('*', per_page=10000)
 hostlist = dict()
 for host in hosts['results']:
     hostname = host['name'].split('.')[0]

@@ -19,14 +19,49 @@ client = foreman.get_client()
 # create foreman domain based on config
 # get domain id
 
+himlar_domain = foreman.get_config('foreman', 'domain')
+
+found_domains = client.index_domains()['results']
+
+foreman_domain_id = []
+
+if found_domains:
+    for d in found_domains:
+        if not himlar_domain in d['name']
+            foreman_domain_id.append(client.create_domains({'name': himlar_domain})['id'])
+
 # get smart proxy id for tftp
+
+found_smart_proxies = client.index_smartproxies()['results'][0]['features']
+
+if found_smart_proxies:
+    for s in found_smart_proxies:
+        if 'TFTP' in s['name']
+            foreman_proxy_id = s['id']
 
 # create subnet
 # mgmt network + netmask from config
 # domain_ids = domain_id
 # tftp_ids = proxy_id
-# dns-primary, dns-secondary, gateway is blank
+# dns-primary, dns-secondary, gateway are all blank
 # get subnet id
+
+subnet_params = { 'name': 'mgmt',
+                  'network': foreman.get_config('foreman', 'network'),
+                  'mask': foreman.get_config('foreman', 'mask'),
+                  'domain_ids': foreman_domain_id,
+                  'tftp_id': foreman_proxy_id }
+
+found_subnets = client.index_subnets()['results']
+
+if found_subnets:
+    for s in found_subnets:
+        if 'mgmt' in s['name']:
+            subnet_id = s['id']
+            client.update_subnets(id=subnet_id, subnet=subnet_params)
+        else:
+            subnet_id = client.create_subnets(subnet_params)['id']
+
 
 # Glabal parameters
 # enable-puppetlabs-repo false
@@ -131,20 +166,19 @@ if found_profiles:
         if found_profile not in profiles:
             # We only want profiles defined in config/compute_profiles.yaml
             logger.debug("=> deleting profile %s" % found_profile)
-            client.delete_computeprofile(found_profiles[found_profile])
+            client.destroy_computeprofiles(found_profiles[found_profile])
         else:
             verified_profiles.append(found_profile)
 
 for profile_name in profiles.keys():
     if profile_name not in verified_profiles:
-        compute_profile = {'compute_profile': {'name': profile_name}}
-        profile_result = client.create_computeprofile(compute_profile)
+        profile_result = client.create_computeprofiles({'name': profile_name})
         logger.debug("=> create profile result %s" % profile_result)
         for r in found_resources:
             attr_result = client.create_computeattributes(
-                profile_result['id'],
-                found_resources[r],
-                profiles[profile_name])
+                compute_profile_id=profile_result['id'],
+                compute_resource_id=found_resources[r],
+                compute_attribute=profiles[profile_name])
             logger.debug("=> create attributes result %s" % attr_result)
     else:
         ext_profile = client.show_computeprofiles(found_profiles[profile_name])
@@ -155,8 +189,8 @@ for profile_name in profiles.keys():
             else:
                 for r in found_resources:
                     result = client.update_computeattributes(
-                        attr['compute_profile_id'],
-                        found_resources[r],
-                        attr['id'],
-                        profiles[name])
+                        compute_profile_id=attr['compute_profile_id'],
+                        compute_resource_id=found_resources[r],
+                        id=attr['id'],
+                        compute_attribute=profiles[name])
                     logger.debug("=> update result %s" % result)
