@@ -137,42 +137,7 @@ def action_project():
             print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
     mail.close()
 
-# Send mail to a specific type of flavor
-def action_flavor():
-    user_counter = 0
-    sent_mail_counter = 0
-    users = ksclient.get_users(domain=options.domain)
-    projects = ksclient.list_projects('Dataporten')
-    mail = Mail(options.config, debug=options.debug)
-    if options.template:
-        content = options.template
-        email_content = open(content, 'r')
-        body_content = email_content.read()
-        if options.dry_run:
-            print body_content
-        else:
-            with open(content, 'r') as email_content:
-                body_content = email_content.read()
-            for region in regions:
-                novaclient = himutils.get_client(Nova, options, logger, region)
-                instances = novaclient.get_all_instances()
-                for i in instances:
-                    output = i.flavor['original_name']
-                    if (options.flavortype == output):
-                        user_counter += 1
-                        try:
-                            logger.debug('=> Sending email ...')
-                            mail.set_keystone_client(ksclient)
-                            users = mail.mail_instance_owner(instances=instances,
-                                                           body=body_content,
-                                                           subject=subject,
-                                                           admin=True)
-                            sent_mail_counter += 1
-                        except ValueError:
-                            himutils.sys_error('Not able to send the email.')
-            print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
-    mail.close()
-
+# Send mail to all the users
 def action_sendtoall():
     user_counter = 0
     sent_mail_counter = 0
