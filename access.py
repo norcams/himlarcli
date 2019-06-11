@@ -28,6 +28,9 @@ def process_action(ch, method, properties, body): #callback
     data = json.loads(body)
     user = ksclient.get_user_by_email(data['email'], user_type='api')
 
+    if 'password' not in data:
+        data['password'] = None
+
     if user:
         if data['action'] == 'reset_password':
             #"Reset action "
@@ -56,7 +59,7 @@ def action_pop():
     mqclient.close_connection()
 
 def action_push():
-    mqclient.push(email=options.email, password=options.password, queue='access')
+    mqclient.push(email=options.email, password=options.password, queue='access', action='provision')
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
