@@ -10,16 +10,12 @@ properties:
   hw:cpu_thread_policy: 'require'
   hw:mem_page_size: 2048
   aggregate_instance_extra_specs:type: 's== alice'
-alice:
-  'alice.xlarge':
+dcache:
+  'dcache.xlarge':
     vcpus: 4
-    ram: 16383
-    disk: 10
-  'alice.2xlarge':
+    ram: 15360
+    disk: 20
+  'dcache.2xlarge':
     vcpus: 8
-    ram: 32767
-    disk: 10
-  'alice.4xlarge':
-    vcpus: 16
-    ram: 65535
-    disk: 10
+    ram: 30720
+    disk: 20
