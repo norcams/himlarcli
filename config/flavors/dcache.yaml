@@ -9,14 +9,10 @@ properties:
   hw:cpu_policy: 'dedicated'
   hw:cpu_thread_policy: 'require'
   hw:mem_page_size: 2048
-  hw:numa_cpus.3: '14,78,30,94,46,110,62,126'
+  hw:numa_cpus.3: '0,1,2,3,4,5,6,7'
   hw:numa_mem.3: '30720'
   aggregate_instance_extra_specs:type: 's== alice'
 dcache:
-  'dcache.xlarge':
-    vcpus: 4
-    ram: 15360
-    disk: 20
   'dcache.2xlarge':
     vcpus: 8
     ram: 30720
