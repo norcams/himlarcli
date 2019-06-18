@@ -11,15 +11,11 @@ properties:
   hw:mem_page_size: 2048
   aggregate_instance_extra_specs:type: 's== alice'
 alice:
-  'alice.xlarge':
-    vcpus: 4
-    ram: 16383
-    disk: 10
   'alice.2xlarge':
     vcpus: 8
-    ram: 32767
+    ram: 30718
     disk: 10
   'alice.4xlarge':
     vcpus: 16
-    ram: 65535
+    ram: 61440
     disk: 10
