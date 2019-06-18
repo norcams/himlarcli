@@ -10,10 +10,10 @@ properties:
   hw:cpu_thread_policy: 'require'
   hw:mem_page_size: 2048
   hw:numa_cpus.3: '0,1,2,3,4,5,6,7'
-  hw:numa_mem.3: '30720'
+  hw:numa_mem.3: '30718'
   aggregate_instance_extra_specs:type: 's== alice'
 dcache:
   'dcache.2xlarge':
     vcpus: 8
-    ram: 30720
+    ram: 30718
     disk: 20
