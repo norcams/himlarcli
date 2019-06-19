@@ -7,8 +7,4 @@ properties:
   hw:cpu_policy: 'dedicated'
   hw:cpu_thread_policy: 'require'
   aggregate_instance_extra_specs:type: 's== atlas'
-atlascpu:
-  'atlascpu.2xlarge':
-    vcpus: 8
-    ram: 24576
-    disk: 20
+atlascpu: {}
