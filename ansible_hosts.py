@@ -43,7 +43,7 @@ for host in hosts['results']:
 children = "%s:children" % loc
 filename = "hostfile.%s" % loc
 nodes = "%s-nodes:children" % loc
-exclude_nodes = {'storage', 'object', 'compute', 'controller', 'leaf', 'torack', 'login', 'mgmt'}
+exclude_nodes = {'storage', 'object', 'compute', 'controller', 'leaf', 'torack', 'spine', 'login', 'mgmt'}
 
 parser = ConfigParser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
@@ -52,6 +52,12 @@ parser.add_section(nodes)
 for section, hosts in sorted(hostlist.iteritems()):
     parser.set(children, section)
     parser.add_section(section)
+    check = section.count('-')
+    if check == 1:
+        loc, role = section.split('-')
+    #Example if test01-nat-linux-01
+    if check == 2:
+        loc, role, var = section.split('-')
     if role not in exclude_nodes:
         parser.set(nodes, section)
     for host in hosts:
