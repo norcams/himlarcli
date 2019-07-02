@@ -16,10 +16,12 @@ opt_args:
     'sub':      ['migrate', 'evacuate']
     'type':     int
     'dest':     'limit'
+    'metavar':  '<int>'
     'help':     'number of instances to migrate before exit'
   '--sleep':
     'sub':      ['migrate', 'evacuate']
     'dest':     'sleep'
+    'metavar':  '<int>'
     'type':     int
     'help':     'number of seconds to sleep between instances'
     'default':  15
@@ -40,9 +42,10 @@ opt_args:
   '--large-ram':
     'sub':      ['migrate']
     'dest':     'large_ram'
+    'metavar':  '<int>'
     'type':     int
     'help':     'large instance defined by this amount of ram (MB)'
-    'default':  16384
+    'default':  16385
   '--aggregate':
     'sub':      'evacuate'
     'dest':     'aggregate'
