@@ -125,7 +125,7 @@ def migrate_instance(instance, target):
         instance.migrate(host=target)
         time.sleep(options.sleep)
     elif not options.dry_run:
-        kc.debug_log('dropping migrate of %s unknown state %s' % (i.name, state))
+        kc.debug_log('dropping migrate of %s unknown state %s' % (instance.name, state))
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

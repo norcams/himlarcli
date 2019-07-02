@@ -42,7 +42,7 @@ opt_args:
     'dest':     'large_ram'
     'type':     int
     'help':     'large instance defined by this amount of ram (MB)'
-    'default':  1024
+    'default':  16384
   '--aggregate':
     'sub':      'evacuate'
     'dest':     'aggregate'
