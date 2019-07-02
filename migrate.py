@@ -52,30 +52,16 @@ def action_migrate():
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0
     for i in instances:
-        state = getattr(i, 'OS-EXT-STS:vm_state')
-        state_task = getattr(i, 'OS-EXT-STS:task_state')
-        if state_task:
-            logger.debug('=> instance running task %s, dropping migrate', state_task)
-            continue
-        logger.debug('=> %smigrate %s to %s', dry_run_txt, i.name, target)
-        if (state == 'active' or state == 'paused') and not options.dry_run:
-            i.live_migrate(host=target)
-            time.sleep(options.sleep)
-        elif state == 'stopped' and not options.dry_run:
-            i.migrate(host=target)
-            time.sleep(options.sleep)
-        # elif state == 'suspended' and not options.dry_run:
-        #     i.resume()
-        #     time.sleep(2)
-        #     i.pause()
-        #     time.sleep(5)
-        #     i.live_migrate(host=target)
-        #     time.sleep(options.sleep)
-        elif not options.dry_run:
-            logger.debug('=> dropping migrate of %s unknown state %s', i.name, state)
+        if options.large:
+            if i.flavor['ram'] > options.large_ram:
+                migrate_instance(i, target)
+            else:
+                kc.debug_log('drop migrate instance %s: ram %s < %s' % (i.name, i.flavor['ram'], options.large_ram))
+        else:
+            migrate_instance(i, target)
         count += 1
         if options.limit and count >= options.limit:
-            logger.debug('=> number of instances reached limit %s', options.limit)
+            kc.debug_log('number of instances reached limit %s' % options.limit)
             break
 
 def action_evacuate():
@@ -116,6 +102,30 @@ def action_evacuate():
         if options.limit and count > options.limit:
             logger.debug('=> number of instances reached limit %s', options.limit)
             break
+
+def migrate_instance(instance, target):
+    """
+    This will do the migration of an instance to the target.
+    Allowed state for migration:
+        * active
+        * paused
+        * stopped
+    """
+    state = getattr(instance, 'OS-EXT-STS:vm_state')
+    state_task = getattr(instance, 'OS-EXT-STS:task_state')
+    # if there is any task running drop migrate
+    if state_task:
+        kc.debug_log('instance running task %s, dropping migrate' % state_task)
+        return
+    kc.debug_log('migrate %s to %s' % (instance.name, target))
+    if (state == 'active' or state == 'paused') and not options.dry_run:
+        instance.live_migrate(host=target)
+        time.sleep(options.sleep)
+    elif state == 'stopped' and not options.dry_run:
+        instance.migrate(host=target)
+        time.sleep(options.sleep)
+    elif not options.dry_run:
+        kc.debug_log('dropping migrate of %s unknown state %s' % (i.name, state))
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

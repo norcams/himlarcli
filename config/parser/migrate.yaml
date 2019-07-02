@@ -30,6 +30,19 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '--large':
+    'sub':      ['migrate']
+    'dest':     'large'
+    'help':     'only migrate large instances'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--large-ram':
+    'sub':      ['migrate']
+    'dest':     'large_ram'
+    'type':     int
+    'help':     'large instance defined by this amount of ram (MB)'
+    'default':  1024
   '--aggregate':
     'sub':      'evacuate'
     'dest':     'aggregate'
