@@ -41,7 +41,6 @@ def action_volume():
                 continue
             hosts = nc.get_aggregate_hosts(aggregate, True)
             for host in hosts:
-                print host.to_dict()
                 vms_pool['in_use'] += host.local_gb_used
         printer.output_dict({'header': '%s pool vms (max in use)' % region})
         printer.output_dict(vms_pool)
