@@ -28,7 +28,8 @@ if not regions:
 def action_volume():
     projects = ksclient.get_projects(domain=options.domain)
     for region in regions:
-        cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
+        cc = himutils.get_client(Cinder, options, logger, region)
+
         # Quotas
         quotas = dict({'in_use': 0, 'quota': 0})
         for project in projects:
@@ -38,19 +39,24 @@ def action_volume():
             # Filter demo
             if not options.demo and project.type == 'demo':
                 continue
-            quota = cinderclient.list_quota(project_id=project.id, usage=True)
+            quota = cc.get_quota(project_id=project.id, usage=True)
             quotas['in_use'] += quota['gigabytes']['in_use']
             quotas['quota'] += quota['gigabytes']['limit']
         # Pools
-        client = cinderclient.get_client()
-        pools = client.volumes.get_pools(detail=True)
+        pools = cc.get_pools(detail=True)
         tmp = pools.to_dict()
+        for pool in pools.pools:
+            name = pool['capabilities']['volume_backend_name']
+            #print pool
+            out_pool = dict()
+            out_pool['total_capacity_gb'] = pool['capabilities']['total_capacity_gb']
+            out_pool['free_capacity_gb'] = pool['capabilities']['free_capacity_gb']
+            printer.output_dict({'header': '%s pool %s' % (region, name)})
+            printer.output_dict(out_pool)
         out_pools = dict()
-        out_pools['total_capacity_gb'] = tmp['pools'][0]['capabilities']['total_capacity_gb']
-        out_pools['free_capacity_gb'] = tmp['pools'][0]['capabilities']['free_capacity_gb']
         out_pools['used_in_volume_gb'] = float(quotas['in_use'])
         out_pools['total_quota_gb'] = float(quotas['quota'])
-        printer.output_dict({'header': '%s volumes' % region})
+        printer.output_dict({'header': '%s openstack volumes' % region})
         printer.output_dict(out_pools)
 
 def action_instance():
