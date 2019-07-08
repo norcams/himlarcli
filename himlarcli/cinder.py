@@ -1,27 +1,40 @@
 from himlarcli.client import Client
 from cinderclient import client as cinderclient
+from cinderclient.api_versions import APIVersion
 from cinderclient import exceptions
 
 class Cinder(Client):
 
     version = 2
-    service_type = 'volumev2'
+    service_type = 'volumev3'
 
     def __init__(self, config_path, debug=False, log=None, region=None):
         """ Create a new cinder client to manaage volumes
         `**config_path`` path to ini file with config
         """
         super(Cinder, self).__init__(config_path, debug, log, region)
-        self.client = cinderclient.Client(self.version,
-                                          session=self.sess,
-                                          service_type=self.service_type,
-                                          region_name=self.region)
+        version = self.get_config('openstack', 'volume_api_version', '3.50')
+        self.debug_log('using cinder volume api_version %s' % version)
+        self.client = cinderclient.Client(APIVersion(version),
+                                        session=self.sess,
+                                        service_type=self.service_type,
+                                        region_name=self.region)
 
-    def get_usage(self, project_id):
-        return self.client.quotas.get(tenant_id=project_id, usage=True)
 
     def get_client(self):
         return self.client
+
+    def get_volume_types(self):
+        return self.client.volume_types.list()
+
+    def get_pools(self, detail=True, search_opts=None):
+        """ Return the volume pools """
+        # NOTE(raykrist): all_tenants not working (2019-07-08)
+        if not search_opts:
+            search_opts = {'all_tenants': 0}
+        elif 'all_tenants' not in search_opts:
+            search_opts.update({'all_tenants': 0})
+        return self.client.volumes.get_pools(detail=detail, search_opts=search_opts)
 
     def update_quota(self, project_id, updates):
         """ Update project cinder quota
@@ -36,7 +49,9 @@ class Cinder(Client):
             self.log_error(e)
         return result
 
-    def list_quota(self, project_id, usage=False):
+    def get_quota(self, project_id, usage=False):
+        """ Get project quotas for volume services with current usage options
+            version: 2019-7 """
         result = self.client.quotas.get(tenant_id=project_id, usage=usage)
         if result:
             return result.to_dict()

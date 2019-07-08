@@ -40,7 +40,7 @@ def action_save():
             neutron = himutils.get_client(Neutron, options, logger, region)
             for project in projects:
                 quotas = nova.list_quota(project.id).copy()
-                quotas.update(cinder.list_quota(project.id))
+                quotas.update(cinder.get_quota(project.id))
                 quotas.update(neutron.list_quota(project.id))
                 quotas['project_id'] = project.id
                 quotas['region'] = region
@@ -81,7 +81,7 @@ def action_compare():
             neutron = himutils.get_client(Neutron, options, logger, region)
             for project in projects:
                 quotas = nova.list_quota(project.id).copy()
-                quotas.update(cinder.list_quota(project.id))
+                quotas.update(cinder.get_quota(project.id))
                 quotas.update(neutron.list_quota(project.id))
                 quotas['project_id'] = project.id
                 quotas['region'] = region
