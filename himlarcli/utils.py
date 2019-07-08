@@ -85,7 +85,7 @@ def setup_logger(name, debug, log_path='/opt/himlarcli/', configfile='logging.ya
         configfile = log_path + '/' + configfile
     with open(configfile, 'r') as stream:
         try:
-            config = yaml.load(stream)
+            config = yaml.full_load(stream)
         except yaml.YAMLError as exc:
             print exc
 
@@ -169,7 +169,7 @@ def load_config(configfile, log=None):
         return None
     with open(configfile, 'r') as stream:
         try:
-            config = yaml.load(stream)
+            config = yaml.full_load(stream)
         except yaml.YAMLError as exc:
             print(exc)
             config = None

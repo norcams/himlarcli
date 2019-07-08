@@ -41,7 +41,7 @@ def config_file(config_path):
     config = utils.get_config(config_path)
     with open(config_template) as template:
         try:
-            tests = yaml.load(template)
+            tests = yaml.full_load(template)
         except yaml.YAMLError as e:
             print e
     for section, options in tests.iteritems():
