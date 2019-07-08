@@ -42,7 +42,7 @@ def action_volume():
             hosts = nc.get_aggregate_hosts(aggregate, True)
             for host in hosts:
                 vms_pool['in_use'] += host.local_gb_used
-        printer.output_dict({'header': '%s pool vms (max in use)' % region})
+        printer.output_dict({'header': '%s pool vms (max gb in use)' % region})
         printer.output_dict(vms_pool)
 
         # cinder quotas and volume usages
