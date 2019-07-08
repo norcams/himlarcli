@@ -35,14 +35,14 @@ def action_volume():
         nc = himutils.get_client(Nova, options, logger, region)
 
         # vms pool
-        vms_pool = dict({'in_use': 0})
+        vms_pool = dict({'in_use_gb': 0})
         for aggregate in nc.get_aggregates(True):
             if aggregate in local_aggregates:
                 continue
             hosts = nc.get_aggregate_hosts(aggregate, True)
             for host in hosts:
-                vms_pool['in_use'] += host.local_gb_used
-        printer.output_dict({'header': '%s pool vms (max gb in use)' % region})
+                vms_pool['in_use_gb'] += int(host.local_gb_used)
+        printer.output_dict({'header': '%s pool vms (max usage)' % region})
         printer.output_dict(vms_pool)
 
         # cinder quotas and volume usages
@@ -99,6 +99,7 @@ def action_instance():
         printer.output_dict({'cores': cores,
                              'ram': '%.1f MB' % int(ram),
                              'instances': total})
+
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
