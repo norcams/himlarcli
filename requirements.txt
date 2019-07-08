@@ -1,8 +1,8 @@
 python-ldap==2.4.27
 argcomplete==1.9.2
 IPy==0.83
-# we use queens rdo versions
-python-openstackclient==3.14.3
+PyYAML==5.1.1
+python-openstackclient==3.16.2
 python-swiftclient==3.5.0
 python-neutronclient==6.7.0
 python-designateclient==2.9.0
