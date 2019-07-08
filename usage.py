@@ -17,6 +17,9 @@ ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
 logger = ksclient.get_logger()
 
+# Aggregate with local disk
+local_aggregates = ['group1', 'group2', 'group3', 'alice1']
+
 if hasattr(options, 'region'):
     regions = ksclient.find_regions(region_name=options.region)
 else:
@@ -29,8 +32,21 @@ def action_volume():
     projects = ksclient.get_projects(domain=options.domain)
     for region in regions:
         cc = himutils.get_client(Cinder, options, logger, region)
+        nc = himutils.get_client(Nova, options, logger, region)
 
-        # Quotas
+        # vms pool
+        vms_pool = dict({'in_use': 0})
+        for aggregate in nc.get_aggregates(True):
+            if aggregate in local_aggregates:
+                continue
+            hosts = nc.get_aggregate_hosts(aggregate, True)
+            for host in hosts:
+                print host.to_dict()
+                vms_pool['in_use'] += host.local_gb_used
+        printer.output_dict({'header': '%s pool vms (max in use)' % region})
+        printer.output_dict(vms_pool)
+
+        # cinder quotas and volume usages
         quotas = dict({'in_use': 0, 'quota': 0})
         for project in projects:
             if not hasattr(project, "type"): # unknown project type
@@ -42,7 +58,8 @@ def action_volume():
             quota = cc.get_quota(project_id=project.id, usage=True)
             quotas['in_use'] += quota['gigabytes']['in_use']
             quotas['quota'] += quota['gigabytes']['limit']
-        # Pools
+
+        # cinder pools
         pools = cc.get_pools(detail=True)
         tmp = pools.to_dict()
         for pool in pools.pools:
@@ -56,7 +73,7 @@ def action_volume():
         out_pools = dict()
         out_pools['used_in_volume_gb'] = float(quotas['in_use'])
         out_pools['total_quota_gb'] = float(quotas['quota'])
-        printer.output_dict({'header': '%s openstack volumes' % region})
+        printer.output_dict({'header': '%s openstack volume service' % region})
         printer.output_dict(out_pools)
 
 def action_instance():
