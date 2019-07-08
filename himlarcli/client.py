@@ -1,7 +1,7 @@
 import sys
 import ConfigParser
 from keystoneclient.auth.identity import v3
-from keystoneclient import session
+from keystoneauth1 import session
 from himlarcli import utils
 from abc import ABCMeta, abstractmethod
 
@@ -60,7 +60,7 @@ class Client(object):
             sys.exit(1)
         return dict(openstack)
 
-    def get_config(self, section, option):
+    def get_config(self, section, option, default = None):
         try:
             value = self.config.get(section, option)
             return value
@@ -69,7 +69,7 @@ class Client(object):
                               % (section, option))
         except ConfigParser.NoSectionError:
             self.logger.debug('=> config file missing section %s' % section)
-        return None
+        return default
 
     def get_logger(self):
         """
