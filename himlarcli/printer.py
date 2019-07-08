@@ -3,6 +3,9 @@ import operator
 import sys
 import csv
 from collections import OrderedDict
+import locale
+
+locale.setlocale(locale.LC_ALL, 'en_DK.UTF-8')
 
 class Printer(object):
 
@@ -69,7 +72,11 @@ class Printer(object):
             elif one_line:
                 out_line += '%s ' % v
             else:
-                print "%s = %s" % (k, v)
+                if isinstance(v, int) or isinstance(v, float):
+                    value = '{:n}'.format(v)
+                else:
+                    value = v
+                print "%s = %s" % (k, value)
         if out_line:
             print out_line.strip()
 
