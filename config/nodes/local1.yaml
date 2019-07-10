@@ -137,12 +137,12 @@ nodes:
         '1': # SSD
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '1G'
+          capacity:     '5G'
           format_type:  'qcow2'
         '2': # SSD
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '1G'
+          capacity:     '5G'
           format_type:  'qcow2'
         '3': # HDD
           allocation:   '0G'
@@ -180,12 +180,12 @@ nodes:
         '1': # SSD
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '1G'
+          capacity:     '5G'
           format_type:  'qcow2'
         '2': # SSD
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '1G'
+          capacity:     '5G'
           format_type:  'qcow2'
         '3': # HDD
           allocation:   '0G'
@@ -223,12 +223,12 @@ nodes:
         '1': # SSD
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '1G'
+          capacity:     '5G'
           format_type:  'qcow2'
         '2': # SSD
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '1G'
+          capacity:     '5G'
           format_type:  'qcow2'
         '3': # HDD
           allocation:   '0G'
