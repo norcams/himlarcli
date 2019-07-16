@@ -9,6 +9,7 @@ actions:
   'grant':        'Grant access to project for user.'
   'delete':       'Delete project and all resources'
   'instances':    'List of all instances in project'
+  'rename':       'Rename a project'
 #  'update': 'TODO'
 #  'revoke': 'TODO'
 opt_args:
@@ -79,3 +80,15 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  False
+  '--new':
+    'sub':      'rename'
+    'dest':     'new'
+    'help':     'new project name(case sensitive)'
+    'metavar':  'project'
+    'required': true
+  '--old':
+    'sub':      'rename'
+    'dest':     'old'
+    'help':     'old project name(case sensitive)'
+    'metavar':  'prjocet'
+    'required': true

@@ -361,6 +361,16 @@ class Keystone(Client):
                                             admin=new_email,
                                             name=new_demo_name)
 
+    def rename_project(self, new_name, old_name):
+        new_project_name = self.get_project_name(new_name)
+        project_type = self.get_project_by_name(
+            self.get_project_by_name(old_name))
+        if project_type:
+            self.debug_log('rename project from %s to %s'
+                           % (project_type.name, new_project_name))
+            if not self.dry_run:
+                self.client.projects.update(project=project_type, name=new_project_name)
+
     def reset_password(self, email, password=None):
         """
             Change password for api user

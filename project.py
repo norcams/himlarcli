@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import sys
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.cinder import Cinder
@@ -231,6 +232,18 @@ def action_instances():
             count += 1
             printer.output_dict(output, sort=True, one_line=True)
         printer.output_dict({'header': 'Total instances in this project', 'count': count})
+
+def action_rename():
+    personal = ksclient.get_project_by_name(options.new)
+    new_project_name = ksclient.get_project_by_name(options.new)
+    old_project_name = ksclient.get_project_by_name(options.old)
+    print "\nYou are about to rename a project from %s to %s" % (options.old, options.new)
+    question = "\nAre you sure you will continue"
+    if not himutils.confirm_action(question):
+        return
+    ksclient.rename_project(new_name=options.new,
+                            old_name=options.old)
+    print("renamed.")
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
