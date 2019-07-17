@@ -85,7 +85,7 @@ nodes:
     mac: 0c:c4:7a:fb:c8:a0
     hostgroup: 3
   compute-atlas-20:
-    mac: 0c:c4:7a:fb:c8:2e 
+    mac: 0c:c4:7a:fb:c8:2e
     hostgroup: 3
   compute-atlas-21:
     mac: 0c:c4:7a:fb:c8:30
@@ -248,5 +248,5 @@ nodes:
     compute_profile: xlarge
     compute_resource: controller-03
   volume-01:
-    compute_profile: medium
+    compute_profile: large
     compute_resource: controller-03
