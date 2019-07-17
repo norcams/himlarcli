@@ -14,8 +14,8 @@ alice:
   'alice.2xlarge':
     vcpus: 8
     ram: 30718
-    disk: 10
+    disk: 20
   'alice.4xlarge':
     vcpus: 16
     ram: 61440
-    disk: 10
+    disk: 20
