@@ -5,6 +5,7 @@ actions:
   'users':    'Stats grouped by user email domain'
   'org':      'Stats grouped by user organization'
   'user':     'List all user instances. FIXME: This does not look at home here'
+  'rename':   'update name or description for an instance'
 opt_args:
   '-n':
     'sub':      'user'
@@ -18,3 +19,20 @@ opt_args:
     'help':     'output data type (instance count or percentage)'
     'choices':  ['count', 'pct']
     'default':  'count'
+  '--id':
+    'sub':      'rename'
+    'dest':     'server id for the instance you want to rename'
+    'help':     'id'
+    'metavar':  'instance'
+    'required': true
+  '--name':
+    'sub':      'rename'
+    'dest':     'update the name for the instance'
+    'help':     'new name'
+    'metavar':  'instance'
+    'required': true
+  '--desc':
+    'sub':      'rename'
+    'dest':     'update the description for the instance'
+    'help':     'description'
+    'metavar':  'instance'

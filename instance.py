@@ -151,6 +151,11 @@ def user():
                 print "* %s" % i.name
     print "\nTotal number of instances for %s: %s" % (options.email, total)
 
+def rename():
+    nc = Nova(options.config, debug=options.debug, log=logger)
+    intance = nc.get_instance(options.id)
+    instance.update(name=options.name, description=options.desc)
+
 # Run local function with the same name as the action
 action = locals().get(options.action)
 if not action:

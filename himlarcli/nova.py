@@ -258,7 +258,6 @@ class Nova(Client):
         return az
 
 # ============================== INSTANCES ====================================
-
     def get_instance(self, server_id):
         return self.client.servers.get(server=server_id)
 
@@ -291,6 +290,13 @@ class Nova(Client):
                 time.sleep(5)
             else:
                 self.logger.debug('=> DRY-RUN: delete instance %s (%s)' % (i.name, project.name))
+
+    def update(self, name=None, description=None):
+        # Update the name and the description for a server
+        update_kwargs = {"name": name}
+        if description is not None:
+            update_kwargs["description"] = description
+        return self.manager.update(self, **update_kwargs)
 
     def list_quota(self, project_id, detail=False):
         """ List a projects nova quota.
