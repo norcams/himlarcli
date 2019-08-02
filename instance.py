@@ -153,7 +153,9 @@ def user():
 
 def rename():
     nc = Nova(options.config, debug=options.debug, log=logger)
-    intance = nc.get_instance(options.id)
+    instance = nc.get_instance(options.serverid)
+    if not instance:
+        himutils.sys_error('No project found with name %s' % options.serverid)
     instance.update(name=options.name, description=options.desc)
 
 # Run local function with the same name as the action

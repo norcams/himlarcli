@@ -19,7 +19,7 @@ opt_args:
     'help':     'output data type (instance count or percentage)'
     'choices':  ['count', 'pct']
     'default':  'count'
-  '--id':
+  '--serverid':
     'sub':      'rename'
     'dest':     'server id for the instance you want to rename'
     'help':     'id'
