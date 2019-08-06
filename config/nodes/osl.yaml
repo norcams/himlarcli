@@ -249,4 +249,7 @@ nodes:
     compute_resource: controller-03
   volume-01:
     compute_profile: large
-    compute_resource: controller-03
+    compute_resource: controller-01
+  volume-02:
+    compute_profile: large
+    compute_resource: controller-02
