@@ -1,0 +1,9 @@
+Hi,
+
+In order to get access to a shared or proper project, you should be registered in UH-IaaS. 
+Please, sign up at <http://access.uh-iaas.no>.
+
+For more information, please visit our website at <http://www.uh-iaas.no>.
+
+Best regards,
+The UH-IaaS team
