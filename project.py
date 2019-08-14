@@ -19,7 +19,7 @@ printer = Printer(options.format)
 project_msg_file = 'notify/project_created.txt'
 access_msg_file = 'notify/access_granted_rt.txt'
 access_user_msg_file = 'notify/access_granted_user.txt'
-access_signup = 'notify/access_signup.txt'
+access_signup_file = 'notify/access_signup_file.txt'
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
@@ -117,19 +117,27 @@ def action_create():
 def action_grant():
     for user in options.users:
         if not ksclient.is_valid_user(email=user, domain=options.domain):
-            q = ("User %s not found as a valid user. Do you want to send the user a mail with the sign up link? (yes|no) " % user)
-            answer = raw_input(q)
-            if answer.lower() != 'yes':
-                print "Abort mail outsending!"
-                return
             if options.mail:
-                mail = Mail(options.config, debug=options.debug)
-                mail.set_dry_run(options.dry_run)
-                mail = Mail(options.config, debug=options.debug)
-                msg = MIMEText(access_signup)
-                msg['subject'] = "Sign up to UH-IaaS"
-                mail.send_mail(user, msg, 'noreply@uh-iaas.no')
-            print('A mail with a link to the access page has been sent to %s.' % user)
+                    mail = Mail(options.config, debug=options.debug)
+                    mail.set_dry_run(options.dry_run)
+                    q = ("User %s not found as a valid user. Do you want to send the user a mail with the sign up link? (yes|no) " % user)
+                    answer = raw_input(q)
+                    if answer.lower() != 'yes':
+                        print "Abort mail outsending!"
+                        return
+                    content = open(access_signup_file, 'r')
+                    body_content = content.read()
+                    mail = Mail(options.config, debug=options.debug)
+                    mail.set_dry_run(options.dry_run)
+                    mail = Mail(options.config, debug=options.debug)
+                    msg = MIMEText(body_content)
+                    msg['subject'] = "Sign up to UH-IaaS"
+                    mail.send_mail(user, msg, 'noreply@uh-iaas.no')
+                    content.close()
+            else:
+                himutils.sys_error('User not found as a valid user %s.' % user)
+            himutils.sys_error('A mail with a link to the access page has been sent to %s.' % user)
+
 
         project = ksclient.get_project_by_name(project_name=options.project)
         if not project:
