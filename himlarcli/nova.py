@@ -296,7 +296,8 @@ class Nova(Client):
         update_kwargs = {"name": name}
         if description is not None:
             update_kwargs["description"] = description
-        return self.manager.update(self, **update_kwargs)
+        result = self.client.instance.update(self, **update_kwargs)
+        return result
 
     def list_quota(self, project_id, detail=False):
         """ List a projects nova quota.

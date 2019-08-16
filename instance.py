@@ -152,11 +152,17 @@ def user():
     print "\nTotal number of instances for %s: %s" % (options.email, total)
 
 def rename():
-    nc = Nova(options.config, debug=options.debug, log=logger)
-    instance = nc.get_instance(options.serverid)
-    if not instance:
-        himutils.sys_error('No project found with name %s' % options.serverid)
-    instance.update(name=options.name, description=options.desc)
+    if hasattr(options, 'region'):
+        regions = ksclient.find_regions(region_name=options.region)
+    else:
+        regions = ksclient.find_regions()
+    for region in regions:
+        nc = himutils.get_client(Nova, options, logger, region)
+        instance = nc.get_instance(options.serverid)
+        if not instance:
+            himutils.sys_error('No project found with name %s' % options.serverid)
+        instance.update(name=options.name, description=options.desc)
+
 
 # Run local function with the same name as the action
 action = locals().get(options.action)

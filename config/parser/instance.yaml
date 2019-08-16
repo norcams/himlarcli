@@ -5,7 +5,7 @@ actions:
   'users':    'Stats grouped by user email domain'
   'org':      'Stats grouped by user organization'
   'user':     'List all user instances. FIXME: This does not look at home here'
-  'rename':   'rename an instance'
+  'rename':   'rename an instance --name <new name> --serverid <serverid that you want to rename>'
 opt_args:
   '-n':
     'sub':      'user'
