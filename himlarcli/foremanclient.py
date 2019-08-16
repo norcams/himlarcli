@@ -44,6 +44,22 @@ class ForemanClient(Client):
             sys.exit(1)
         return dict(openstack)
 
+    def get_location(self):
+        locations = self.foreman.index_locations()
+        location_id = False
+        for l in locations['results']:
+            if l['name'] == 'Default Location':
+                location_id = l['id']
+        return location_id
+
+    def get_organization(self):
+        organizations = self.foreman.index_organizations()
+        organization_id = False
+        for o in organizations['results']:
+            if o['name'] == 'Default Organization':
+                organization_id = o['id']
+        return organization_id
+
     def get_logger(self):
         return self.logger
 
@@ -114,6 +130,8 @@ class ForemanClient(Client):
             self.__get_node_data('compute_profile',
                                  node_data,
                                  'small'))
+        host['organization_id'] = self.get_organization()
+        host['location_id'] = self.get_location()
         host['interfaces_attributes'] = self.__get_node_data(
             'interfaces_attributes', node_data, {})
         host['compute_attributes'] = self.__get_node_data(
