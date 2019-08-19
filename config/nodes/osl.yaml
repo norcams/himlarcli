@@ -75,16 +75,16 @@ nodes:
   compute-atlas-16:
     mac: b0:26:28:1e:76:98
     hostgroup: 3
-  compute-atlas-17:
+  compute-hpc-17:
     mac: 0c:c4:7a:fb:c8:28
     hostgroup: 3
-  compute-atlas-18:
+  compute-hpc-18:
     mac: 0c:c4:7a:fb:c8:2a
     hostgroup: 3
-  compute-atlas-19:
+  compute-hpc-19:
     mac: 0c:c4:7a:fb:c8:a0
     hostgroup: 3
-  compute-atlas-20:
+  compute-hpc-20:
     mac: 0c:c4:7a:fb:c8:2e
     hostgroup: 3
   compute-atlas-21:
