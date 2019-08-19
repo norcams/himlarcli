@@ -18,6 +18,15 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  cephmds-01:
+    compute_profile: small
+    compute_resource: controller-01
+  cephmds-02:
+    compute_profile: small
+    compute_resource: controller-02
+  cephmds-03:
+    compute_profile: small
+    compute_resource: controller-03
   cephmon-01:
     compute_profile: small
     compute_resource: controller-01
