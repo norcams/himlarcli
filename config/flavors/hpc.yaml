@@ -1,8 +1,25 @@
 ---
-# flavor used for uib-kj-webmo
 public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  hw:numa_nodes: 1
+  hw:cpu_sockets: 1
+  hw:cpu_policy: 'dedicated'
+  hw:cpu_thread_policy: 'require'
+  hw:mem_page_size: 2048
+  aggregate_instance_extra_specs:type: 's== hpc'
 hpc:
-  'hpc.webmo':
-    ram:    262144
-    vcpus:  20
-    disk:   20
+  'hpc.xlarge':
+    vcpus: 4
+    ram: 15358
+    disk: 20
+  'hpc.2xlarge':
+    vcpus: 8
+    ram: 30718
+    disk: 20
+  'hpc.4xlarge':
+    vcpus: 16
+    ram: 61440
+    disk: 20
