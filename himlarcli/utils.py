@@ -1,6 +1,7 @@
 import sys
 import os
 from datetime import datetime
+from datetime import date
 import ConfigParser
 import logging
 import logging.config
@@ -62,6 +63,17 @@ def get_date(datestr, default):
             sys_error('date format DD.MM.YYYY not valid for %s' % datestr, 1)
     else:
         return default
+
+def past_date(datestr, format='%Y-%m-%d'):
+    if datestr:
+        try:
+            past = datetime.strptime(datestr, format).date()
+            today = date.today()
+            if past < today:
+                return True
+        except ValueError as e:
+            sys_error(e, 1)
+    return False
 
 def get_logger(name, config, debug, log=None):
     if log:

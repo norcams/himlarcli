@@ -177,6 +177,35 @@ def action_list():
         printer.output_dict(output_project, sort=True, one_line=True)
     printer.output_dict({'header': 'Project list count', 'count': count})
 
+def action_expired():
+    search_filter = dict()
+    # if options.filter and options.filter != 'all':
+    #     search_filter['type'] = options.filter
+    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+    count = 0
+    printer.output_dict({'header': 'Project list (id, name, type, enddate, instances)'})
+    for project in projects:
+        project_type = project.type if hasattr(project, 'type') else '(unknown)'
+        if project.enddate == 'None' or not himutils.past_date(project.enddate):
+            continue
+        output_project = {
+            0: project.id,
+            1: project_type,
+            2: project.name,
+            3: project.enddate
+        }
+        resources = dict({'compute': 0, 'volume': 0})
+        for region in regions:
+            nc = himutils.get_client(Nova, options, logger, region)
+            instances = nc.get_project_instances(project_id=project.id)
+            resources['compute'] = resources.get('compute', 0) + len(instances)
+            # Todo find volume usage
+            #cc = himutils.get_client(Cinder, options, logger, region)
+        output_project[4] = resources['compute']
+        count += 1
+        printer.output_dict(output_project, sort=True, one_line=True)
+    printer.output_dict({'header': 'Project list count', 'count': count})
+
 def action_show_access():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:

@@ -9,6 +9,7 @@ actions:
   'grant':        'Grant access to project for user.'
   'delete':       'Delete project and all resources'
   'instances':    'List of all instances in project'
+  'expired':      'List expired projects'
 #  'update': 'TODO'
 #  'revoke': 'TODO'
 opt_args:
