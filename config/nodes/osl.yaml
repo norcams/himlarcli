@@ -75,18 +75,6 @@ nodes:
   compute-atlas-16:
     mac: b0:26:28:1e:76:98
     hostgroup: 3
-  compute-hpc-17:
-    mac: 0c:c4:7a:fb:c8:28
-    hostgroup: 3
-  compute-hpc-18:
-    mac: 0c:c4:7a:fb:c8:2a
-    hostgroup: 3
-  compute-hpc-19:
-    mac: 0c:c4:7a:fb:c8:a0
-    hostgroup: 3
-  compute-hpc-20:
-    mac: 0c:c4:7a:fb:c8:2e
-    hostgroup: 3
   compute-atlas-21:
     mac: 0c:c4:7a:fb:c8:30
     hostgroup: 3
@@ -98,6 +86,18 @@ nodes:
     hostgroup: 3
   compute-atlas-24:
     mac: 0c:c4:7a:fb:c8:1e
+    hostgroup: 3
+  compute-hpc-25:
+    mac: 0c:c4:7a:fb:c8:28
+    hostgroup: 3
+  compute-hpc-26:
+    mac: 0c:c4:7a:fb:c8:2a
+    hostgroup: 3
+  compute-hpc-27:
+    mac: 0c:c4:7a:fb:c8:a0
+    hostgroup: 3
+  compute-hpc-28:
+    mac: 0c:c4:7a:fb:c8:2e
     hostgroup: 3
   compute-vgpu-42:
     mac: ac:1f:6b:64:72:84
