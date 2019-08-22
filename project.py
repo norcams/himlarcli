@@ -185,8 +185,10 @@ def action_expired():
     count = 0
     printer.output_dict({'header': 'Project list (id, name, type, enddate, instances)'})
     for project in projects:
+        if not hasattr(project, 'enddate'):
+            continue
         project_type = project.type if hasattr(project, 'type') else '(unknown)'
-        if hasattr(project, 'enddate') and project.enddate == 'None' or not himutils.past_date(project.enddate):
+        if project.enddate == 'None' or not himutils.past_date(project.enddate):
             continue
         output_project = {
             0: project.id,

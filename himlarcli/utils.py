@@ -72,7 +72,7 @@ def past_date(datestr, format='%Y-%m-%d'):
             if past < today:
                 return True
         except ValueError as e:
-            sys_error(e, 1)
+            sys_error(e, 0)
     return False
 
 def get_logger(name, config, debug, log=None):
