@@ -21,7 +21,7 @@ opt_args:
    'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'delete', 'instances']
    'metavar':   'project'
   '--region':
-    'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota']
+    'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota', 'expired']
     'dest':     'region'
     'help':     'specify region'
   '--end':
