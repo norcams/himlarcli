@@ -197,6 +197,7 @@ def action_expired():
             3: project.enddate
         }
         resources = dict({'compute': 0, 'volume': 0})
+        i_count = 0
         for region in regions:
             nc = himutils.get_client(Nova, options, logger, region)
             instances = nc.get_project_instances(project_id=project.id)
@@ -204,9 +205,10 @@ def action_expired():
             # Todo find volume usage
             #cc = himutils.get_client(Cinder, options, logger, region)
         output_project[4] = resources['compute']
+        i_count += int(resources['compute'])
         count += 1
         printer.output_dict(output_project, sort=True, one_line=True)
-    printer.output_dict({'header': 'Project list count', 'count': count})
+    printer.output_dict({'header': 'Counts', 'projects': count, 'instances': i_count})
 
 def action_show_access():
     project = ksclient.get_project_by_name(project_name=options.project)
