@@ -183,6 +183,7 @@ def action_expired():
     #     search_filter['type'] = options.filter
     projects = ksclient.get_projects(domain=options.domain, **search_filter)
     count = 0
+    i_count = 0
     printer.output_dict({'header': 'Project list (id, name, type, enddate, instances)'})
     for project in projects:
         if not hasattr(project, 'enddate'):
@@ -197,7 +198,6 @@ def action_expired():
             3: project.enddate
         }
         resources = dict({'compute': 0, 'volume': 0})
-        i_count = 0
         for region in regions:
             nc = himutils.get_client(Nova, options, logger, region)
             instances = nc.get_project_instances(project_id=project.id)
