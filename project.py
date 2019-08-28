@@ -9,6 +9,7 @@ from himlarcli.mail import Mail
 from himlarcli import utils as himutils
 from datetime import datetime
 from email.mime.text import MIMEText
+import re
 
 himutils.is_virtual_env()
 
@@ -189,6 +190,12 @@ def action_expired():
         if not hasattr(project, 'enddate'):
             continue
         project_type = project.type if hasattr(project, 'type') else '(unknown)'
+        # hack to fix manually edited project end dates with wrong format
+        if re.search('\d{2}\.\d{2}\.\d{4}', project.enddate):
+            new_enddate = himutils.convert_date(project.enddate, '%d.%m.%Y')
+            ksclient.update_project(project_id=project.id,
+                                    enddate=new_enddate)
+            project.enddate = new_enddate
         if project.enddate == 'None' or not himutils.past_date(project.enddate):
             continue
         output_project = {

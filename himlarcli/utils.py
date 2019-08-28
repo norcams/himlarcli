@@ -75,6 +75,9 @@ def past_date(datestr, format='%Y-%m-%d'):
             sys_error(e, 0)
     return False
 
+def convert_date(datestr, old_format, new_format='%Y-%m-%d'):
+    return datetime.strptime(datestr, old_format).strftime(new_format)
+
 def get_logger(name, config, debug, log=None):
     if log:
         mylog = log
