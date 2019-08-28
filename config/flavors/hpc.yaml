@@ -11,10 +11,6 @@ properties:
   hw:mem_page_size: 2048
   aggregate_instance_extra_specs:type: 's== hpc'
 hpc:
-  'hpc.xlarge':
-    vcpus: 4
-    ram: 15358
-    disk: 20
   'hpc.2xlarge':
     vcpus: 8
     ram: 30718
@@ -22,4 +18,12 @@ hpc:
   'hpc.4xlarge':
     vcpus: 16
     ram: 61440
+    disk: 20
+  'hpc.8xlarge':
+    vcpus: 32
+    ram: 122880 
+    disk: 20
+  'hpc.16xlarge':
+    vcpus: 64
+    ram: 245760
     disk: 20
