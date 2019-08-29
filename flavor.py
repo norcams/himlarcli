@@ -58,6 +58,9 @@ def action_update():
         himutils.sys_error('%s hash not found in config' % options.flavor)
 
     for region in regions:
+        # Only use flavor class for one region
+        if 'region' in flavors and flavors['region'] != region:
+            continue
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
         for name, spec in sorted(flavors[options.flavor].iteritems()):
