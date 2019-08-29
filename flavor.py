@@ -14,7 +14,7 @@ parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
 
-kc= Keystone(options.config, debug=options.debug)
+kc = Keystone(options.config, debug=options.debug)
 kc.set_domain(options.domain)
 kc.set_dry_run(options.dry_run)
 logger = kc.get_logger()
@@ -24,12 +24,6 @@ if hasattr(options, 'region'):
     regions = kc.find_regions(region_name=options.region)
 else:
     regions = kc.find_regions()
-
-# Flavors
-flavors = himutils.load_config('config/flavors/%s.yaml' % options.flavor, logger)
-if not flavors:
-    himutils.sys_error('Could not find flavor config file config/flavors/%s.yaml'
-                        % options.flavor)
 
 def action_list():
     for region in regions:
@@ -46,9 +40,10 @@ def action_list():
 
 def action_update():
     question = ("This will delete the flavor and recreate it for all other "
-        "changes than properties. Check project access after. Continue?")
+                "changes than properties. Check project access after. Continue?")
     if not himutils.confirm_action(question):
         return
+    flavors = get_flavor_config()
     public = flavors['public'] if 'public' in flavors else False
     properties = flavors['properties'] if 'properties' in flavors else None
     if not properties.get('aggregate_instance_extra_specs:type', None):
@@ -67,8 +62,8 @@ def action_update():
             # Hack to override properties per flavor
             flavor_properties = properties.copy()
             if 'properties' in spec:
-                for p_name, property in spec['properties'].iteritems():
-                    flavor_properties[p_name] = property
+                for p_name, prop in spec['properties'].iteritems():
+                    flavor_properties[p_name] = prop
                 del spec['properties']
             nc.update_flavor(name=name, spec=spec,
                              properties=flavor_properties, public=public)
@@ -84,6 +79,7 @@ def action_update():
                                     action='grant')
 
 def action_purge():
+    flavors = get_flavor_config()
     for region in regions:
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
@@ -96,7 +92,7 @@ def action_grant():
         nc.set_dry_run(options.dry_run)
         update_access(nc, 'grant')
         print "Grant access to %s for %s in %s" % (options.flavor,
-            options.project, region)
+                                                   options.project, region)
 
 def action_revoke():
     for region in regions:
@@ -104,7 +100,7 @@ def action_revoke():
         nc.set_dry_run(options.dry_run)
         update_access(nc, 'revoke')
         print "Revoke access to %s for %s in %s" % (options.flavor,
-            options.project, region)
+                                                    options.project, region)
 
 def action_list_access():
     for region in regions:
@@ -125,8 +121,15 @@ def action_list_access():
                     continue
         printer.output_dict(output)
 
-def update_access(nc, action):
-    public = flavors['public'] if 'public' in flavors else False
+def get_flavor_config():
+    flavors = himutils.load_config('config/flavors/%s.yaml' % options.flavor, logger)
+    if not flavors:
+        himutils.sys_error('Could not find flavor config file config/flavors/%s.yaml'
+                           % options.flavor)
+    return flavors
+
+def update_access(nc, access_action):
+    flavors = get_flavor_config()
     if 'public' in flavors and flavors['public']:
         himutils.sys_error('grant or revoke will not work on public flavors!')
     project = kc.get_project_by_name(options.project)
@@ -134,7 +137,7 @@ def update_access(nc, action):
         himutils.sys_error('project not found %s' % project)
     nc.update_flavor_access(filters=options.flavor,
                             project_id=project.id,
-                            action=action)
+                            action=access_action)
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
