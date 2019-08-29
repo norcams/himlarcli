@@ -43,19 +43,17 @@ def action_update():
                 "changes than properties. Check project access after. Continue?")
     if not himutils.confirm_action(question):
         return
-    flavors = get_flavor_config()
-    public = flavors['public'] if 'public' in flavors else False
-    properties = flavors['properties'] if 'properties' in flavors else None
-    if not properties.get('aggregate_instance_extra_specs:type', None):
-        properties['aggregate_instance_extra_specs:type'] = 's== standard'
-    if (options.flavor not in flavors or
-            not isinstance(flavors[options.flavor], dict)):
-        himutils.sys_error('%s hash not found in config' % options.flavor)
 
     for region in regions:
-        # Only use flavor class for one region
-        if 'region' in flavors and flavors['region'] != region:
-            continue
+        flavors = get_flavor_config(region)
+        public = flavors['public'] if 'public' in flavors else False
+        properties = flavors['properties'] if 'properties' in flavors else None
+        if not properties.get('aggregate_instance_extra_specs:type', None):
+            properties['aggregate_instance_extra_specs:type'] = 's== standard'
+        if (options.flavor not in flavors or
+                not isinstance(flavors[options.flavor], dict)):
+            himutils.sys_error('%s hash not found in config' % options.flavor)
+
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
         for name, spec in sorted(flavors[options.flavor].iteritems()):
@@ -79,8 +77,8 @@ def action_update():
                                     action='grant')
 
 def action_purge():
-    flavors = get_flavor_config()
     for region in regions:
+        flavors = get_flavor_config(region)
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
         print 'Purge %s flavors in %s' % (options.flavor, region)
@@ -90,7 +88,7 @@ def action_grant():
     for region in regions:
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
-        update_access(nc, 'grant')
+        update_access(nc, 'grant', region)
         print "Grant access to %s for %s in %s" % (options.flavor,
                                                    options.project, region)
 
@@ -98,7 +96,7 @@ def action_revoke():
     for region in regions:
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
-        update_access(nc, 'revoke')
+        update_access(nc, 'revoke', region)
         print "Revoke access to %s for %s in %s" % (options.flavor,
                                                     options.project, region)
 
@@ -121,15 +119,21 @@ def action_list_access():
                     continue
         printer.output_dict(output)
 
-def get_flavor_config():
-    flavors = himutils.load_config('config/flavors/%s.yaml' % options.flavor, logger)
+def get_flavor_config(region):
+    # First look for region version of flavor config, then the default one
+    if himutils.file_exists('config/flavors/%s-%s.yaml' % (options.flavor, region)):
+        configfile = 'config/flavors/%s-%s.yaml' % (options.flavor, region)
+    else:
+        configfile = 'config/flavors/%s.yaml' % (options.flavor)
+    kc.debug_log('use flavor config from %s' % configfile)
+    flavors = himutils.load_config(configfile)
     if not flavors:
         himutils.sys_error('Could not find flavor config file config/flavors/%s.yaml'
                            % options.flavor)
     return flavors
 
-def update_access(nc, access_action):
-    flavors = get_flavor_config()
+def update_access(nc, access_action, region):
+    flavors = get_flavor_config(region)
     if 'public' in flavors and flavors['public']:
         himutils.sys_error('grant or revoke will not work on public flavors!')
     project = kc.get_project_by_name(options.project)

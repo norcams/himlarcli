@@ -176,6 +176,14 @@ def load_region_config(configpath, filename='default', region=None, log=None):
         configfile = '%s/%s.yaml' % (configpath, filename)
     return load_config(configfile, log)
 
+def file_exists(test_file, log=None):
+    test_file = get_abs_path(test_file)
+    if not os.path.isfile(test_file):
+        if log:
+            log.debug('=> file not found: %s' % test_file)
+        return False
+    return True
+
 def load_config(configfile, log=None):
     configfile = get_abs_path(configfile)
     if not os.path.isfile(configfile):
