@@ -61,8 +61,14 @@ def action_update():
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
         for name, spec in sorted(flavors[options.flavor].iteritems()):
+            # Hack to override properties per flavor
+            flavor_properties = properties.copy()
+            if 'properties' in spec:
+                for p_name, property in spec['properties'].iteritems():
+                    flavor_properties[p_name] = property
+                del spec['properties']
             nc.update_flavor(name=name, spec=spec,
-                             properties=properties, public=public)
+                             properties=flavor_properties, public=public)
         # Update access
         access = nc.get_flavor_access(filters=options.flavor)
         all_projects = set()
