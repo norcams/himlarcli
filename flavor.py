@@ -48,7 +48,7 @@ def action_update():
         flavors = get_flavor_config(region)
         public = flavors['public'] if 'public' in flavors else False
         properties = flavors['properties'] if 'properties' in flavors else None
-        if not properties.get('aggregate_instance_extra_specs:type', None):
+        if not properties or not properties.get('aggregate_instance_extra_specs:type', None):
             properties['aggregate_instance_extra_specs:type'] = 's== standard'
         if (options.flavor not in flavors or
                 not isinstance(flavors[options.flavor], dict)):
