@@ -1,0 +1,8 @@
+---
+# flavor used for uib-kj-webmo
+public: false
+hpc:
+  'hpc.webmo':
+    ram:    262144
+    vcpus:  20
+    disk:   0
