@@ -30,7 +30,7 @@ def project():
              'education': 0,
              'admin': 0,
              'test': 0,
-             'hpc-osl': 0,
+             'hpc': 0,
              'total': 0}
     for name in sorted(regions['regions'].iterkeys()):
         logger.debug('=> count region %s' % name)
