@@ -33,7 +33,7 @@ opt_args:
     'dest':     'filter'
     'help':     'filter by project type'
     'default':  'all'
-    'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
+    'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc-osl']
   '-a':
     'sub':      ['create']
     'dest':     'admin'
@@ -43,7 +43,7 @@ opt_args:
     'sub':      ['create']
     'dest':     'type'
     'help':     'project type'
-    'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test']
+    'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc-osl']
     'required': true
   '--desc':
     'sub':      ['create']
