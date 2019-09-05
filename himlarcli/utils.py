@@ -47,6 +47,12 @@ def confirm_action(question):
     sys.stderr.write('Action aborted by user.\n')
     return False
 
+def append_to_file(filename, text):
+    filename = get_abs_path(filename)
+    f = open(filename, 'a+')
+    f.write("%s\n" % text)
+    f.close()
+
 def get_config(config_path):
     if not os.path.isfile(config_path):
         logging.critical("Could not find config file: %s" %config_path)
