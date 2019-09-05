@@ -25,7 +25,7 @@ def action_notify():
     fromaddr = mail.get_config('mail', 'from_addr')
     template_file = 'notify/mail_uio_feide.txt'
     logfile = 'logs/uio_mail_sent.log'
-    subject = '[UH-IaaS] Changes to user and project name for UiO users'
+    subject = '[UH-IaaS] Changes to username and project name for UiO users'
 
     users = kc.get_users(domain=options.domain)
     for u in users:
