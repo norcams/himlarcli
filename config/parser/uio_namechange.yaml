@@ -1,0 +1,9 @@
+---
+desc:           'Manage UiO change of email attribute in FEIDE'
+actions:
+  'notify':     'Notify users of the namechange'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'

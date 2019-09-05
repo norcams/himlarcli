@@ -1,0 +1,23 @@
+Dear user,
+
+On September 11 the University of Oslo will change the mail attributes for all
+users in its catalog services. The email address exported to Feide will change
+from the user's primary email address to a new shortened format which will
+affect multiple services using it for authentication, like UH-IaaS. You will
+receive a new email with all changes to your resources on September 11.
+
+The new username in UH-IaaS will be: <uio-username>@uio.no
+Demo and private project names will be changed accordingly.
+
+More information from UiO (in Norwegian):
+https://www.uio.no/tjenester/it/aktuelt/planlagte-tjenesteavbrudd/2019/2019-09-11-feide-weblogin-mail-attributt.html
+
+Consequences and action needed on your part: - This does not affect login to
+the dashboard, but note that project names have changed as described above - if
+you're using the Openstack command line or any automation tools like Terraform,
+you will have to manually update your configuration (e.g. keystonerc or openrc)
+to reflect these changes.
+
+Best regards,
+
+UH-IaaS
