@@ -48,6 +48,14 @@ class Mail(Client):
 
     def get_client(self):
         return self.client
+
+    @staticmethod
+    def get_mime_text(subject, body, fromaddr):
+        msg = MIMEText(body)
+        msg['subject'] = subject
+        msg['From'] = fromaddr
+        return msg
+
     def mail_instance_owner(self, instances, body, subject, admin=False, options=['status']):
         if not self.ksclient:
             self.logger.error('=> notify aborted: unable to find keystone client')
