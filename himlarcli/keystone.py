@@ -32,6 +32,19 @@ class Keystone(Client):
     def set_domain(self, domain):
         self.domain_id = self.__get_domain(domain)
 
+    def get_dataporten_domain(self):
+        """
+        This will find the auto generated dataporten domain used federated users
+        version: 2019-8
+        """
+        domain_desc = ('Auto generated federated domain for '
+                       'Identity Provider: dataporten')
+        domains = self.client.domains.list()
+        for domain in domains:
+            if domain.description == domain_desc:
+                return domain
+        return None
+
 ################################## REGIONS #####################################
 
     def get_regions(self):
@@ -110,32 +123,28 @@ class Keystone(Client):
 
     def get_user_by_email(self, email, user_type):
         """ Get dataporten (dp) or api user from email.
-            version: 2
+            version: 2019-8
             :return: user object
             :rtype: keystoneclient.v3.users.User
         """
         email = self.__get_uib_email(email)
-        user = dict()
         if user_type == 'api':
-            try:
-                user = self.client.users.list(domain=self.domain_id, name=email)
-            except exceptions.http.NotFound:
-                user = dict()
+            domain = self.domain_id
         elif user_type == 'dp':
-            users = self.client.users.list(domain=None)
-            user_found = list()
-            for user in users:
-                # To find dataporten user we need to match email and domain = None
-                if user.name == email and user.domain_id is None:
-                    self.logger.debug('=> user %s found by email', email)
-                    user_found.append(user)
-                    break
-            if not user_found:
-                self.logger.debug('=> no dataporten user found for email %s', email)
-            user = user_found
-        if user:
-            return user[0]
-        return dict()
+            domain = self.get_dataporten_domain()
+        else:
+            domain = None
+        user = None
+        try:
+            users = self.client.users.list(domain=domain, name=email)
+            if len(users) > 0:
+                user = users[0]
+        except exceptions.http.NotFound as e:
+            #self.debug_log(e)
+            user = None
+        if not user:
+            self.debug_log('no %s user found for email %s' % (user_type, email))
+        return user
 
     def get_group_by_email(self, email):
         """ Return group object based on email for user.
