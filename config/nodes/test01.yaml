@@ -171,3 +171,6 @@ nodes:
   volume-02:
     compute_profile: small
     compute_resource: controller-02
+  workflow-01:
+    compute_profile: small
+    compute_resource: controller-03
