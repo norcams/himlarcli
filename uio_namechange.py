@@ -45,12 +45,16 @@ def action_check():
     mapping = load_uio_users(options.inputfile)
     printer.output_dict({'header': 'Users not found in mapping csv:'})
     output = dict({'unknown': []})
+    count = 0
     for u in users:
         if not re.search(r"^[a-z0-9]+[\.'\-a-z0-9_]*[a-z0-9]+@[\.'\-a-z0-9_]*uio\.no$", u.name):
             continue
         if u.name not in mapping:
             output['unknown'].append(u.name)
+            count += 1
     printer.output_dict(output)
+    printer.output_dict({'header': 'Count', 'users': count})
+
 
 def action_notify():
     if not utils.confirm_action('Send mail to all UiO users?'):
