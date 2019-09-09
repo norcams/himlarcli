@@ -2,8 +2,15 @@
 desc:           'Manage UiO change of email attribute in FEIDE'
 actions:
   'notify':     'Notify users of the namechange'
+  'rename':     'Rename username and project names (and notify users)'
+  'check':      'Check user mapping. Will print all users without known mapping'
 opt_args:
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
+  '--file':
+    'sub':      ['rename','check']
+    'dest':     'inputfile'
+    'help':     'CSV file with user mapping <old>:<new>'
+    'default':  'mail_changes.csv'

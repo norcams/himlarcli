@@ -15,8 +15,12 @@ import urllib2
 from string import Template
 import socket
 
-def get_client(name, options, logger, region):
-    client = name(options.config, debug=options.debug, region=region, log=logger)
+def get_client(name, options, logger, region=None):
+    if region:
+        client = name(options.config, debug=options.debug,
+                      region=region, log=logger)
+    else:
+        client = name(options.config, debug=options.debug, log=logger)
     client.set_dry_run(options.dry_run)
     return client
 
