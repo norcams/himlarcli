@@ -66,3 +66,11 @@ opt_args:
     'sub':      ['validate', 'deactivate']
     'dest':     'limit'
     'help':     'limit the number of users'
+  '--force':
+    'sub':      'delete'
+    'dest':     'force'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+
+

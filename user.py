@@ -189,8 +189,9 @@ def action_create():
 def action_delete():
     if not ksclient.is_valid_user(email=options.user):
         himutils.sys_error('User %s not found as a valid user.' % options.user)
-    if not himutils.confirm_action('Delete user and all instances for %s' % options.user):
-        return
+    if not options.force:
+        if not himutils.confirm_action('Delete user and all instances for %s' % options.user):
+            return
     print "We are now deleting user, group, project and instances for %s" % options.user
     print 'Please wait...'
     ksclient.user_cleanup(email=options.user)
