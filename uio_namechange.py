@@ -22,21 +22,41 @@ kc.set_dry_run(options.dry_run)
 logger = kc.get_logger()
 
 def action_rename():
-    # mail = Mail(options.config, debug=options.debug)
-    # mail.set_dry_run(options.dry_run)
-    # fromaddr = mail.get_config('mail', 'from_addr')
-    # template_file = 'notify/mail_uio_feide.txt'
-    # logfile = 'logs/uio_mail_sent.log'
-    # subject = '[UH-IaaS] Changes to username and project name for UiO users'
-    # users = kc.get_users(domain=options.domain)
-    # if not users:
-    #     utils.sys_error('users mapping empty!')
-    # mapping = load_uio_users('mail_changes.csv')
-    # for u in users:
-    #     if not re.search("^[a-z0-9]+[\.'\-a-z0-9_]*[a-z0-9]+@[\.'\-a-z0-9_]*uib\.no$", u.name):
-    #         continue
-    #     print mapping[u.name]
-    pass
+    if not utils.confirm_action('Rename UiO users and send mail?'):
+        return
+    mail = Mail(options.config, debug=options.debug)
+    mail.set_dry_run(options.dry_run)
+    fromaddr = "support@uh-iaas.no"
+    template_file = 'notify/mail_uio_feide2.txt'
+    logfile = 'logs/uio_mail_sent2.log'
+    subject = '[UH-IaaS] Your username and project name has been changed'
+    users = kc.get_users(domain=options.domain)
+    if not users:
+        utils.sys_error('users mapping file empty!')
+    mapping = load_uio_users(options.inputfile)
+    for u in users:
+        if not re.search(r"^[a-z0-9]+[\.'\-a-z0-9_]*[a-z0-9]+@[\.'\-a-z0-9_]*darknet\.no$", u.name):
+            continue
+        if u.name not in mapping:
+            utils.sys_error('could not find mapping for %s' % u.name, 0)
+            continue
+        print 'rename %s' % u.name
+        changes = kc.rename_user(mapping[u.name], u.name)
+        body_content = utils.load_template(inputfile=template_file,
+                                           mapping={},
+                                           log=logger)
+        body_content += "\nThe following change has been made to your username:\n"
+        body_content += "%s => %s\n" % (u.name, mapping[u.name])
+        body_content += "\nThe following change has been made to your project name:\n"
+        for old_p, new_p in changes['projects'].iteritems():
+            body_content += "%s => %s\n" % (old_p, new_p)
+        body_content += "\nBest regards,\n\nUH-IaaS\n"
+        msg = mail.get_mime_text(subject, body_content, fromaddr)
+        mail.send_mail(u.name, msg, fromaddr)
+        if not options.dry_run:
+            utils.append_to_file(logfile, u.name)
+        print 'mail sent to %s' % u.name
+    mail.close()
 
 def action_check():
     users = kc.get_users(domain=options.domain)

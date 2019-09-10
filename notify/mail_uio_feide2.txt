@@ -1,0 +1,11 @@
+Dear user,
+
+As previously announced, the University of Oslo changed the mail attributes for
+all users in its catalog services on September 11 affecting multiple services
+using Feide for authentication, which includes UH-IaaS. Consequently, we've
+renamed UiO users and projects to conform to this new shortened standard.
+
+Please note that this does not affect dashboard login, however, if
+you're using the Openstack command line or any automation tools like Terraform,
+you will have to manually update your configuration (e.g. keystonerc or openrc)
+to reflect these changes.
