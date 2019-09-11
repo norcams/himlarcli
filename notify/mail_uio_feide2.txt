@@ -8,4 +8,8 @@ renamed UiO users and projects to conform to this new shortened standard.
 Please note that this does not affect dashboard login, however, if
 you're using the Openstack command line or any automation tools like Terraform,
 you will have to manually update your configuration (e.g. keystonerc or openrc)
-to reflect these changes.
+to reflect these changes:
+$changes
+Best regards,
+
+UH-IaaS

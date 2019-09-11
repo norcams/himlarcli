@@ -35,7 +35,7 @@ def action_rename():
         utils.sys_error('users mapping file empty!')
     mapping = load_uio_users(options.inputfile)
     for u in users:
-        if not re.search(r"^[a-z0-9]+[\.'\-a-z0-9_]*[a-z0-9]+@[\.'\-a-z0-9_]*darknet\.no$", u.name):
+        if not re.search(r"^[a-z0-9]+[\.'\-a-z0-9_]*[a-z0-9]+@[\.'\-a-z0-9_]*uio\.no$", u.name):
             continue
         if u.name not in mapping:
             utils.sys_error('could not find mapping for %s' % u.name, 0)
