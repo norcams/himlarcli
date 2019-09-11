@@ -42,15 +42,14 @@ def action_rename():
             continue
         print 'rename %s' % u.name
         changes = kc.rename_user(mapping[u.name], u.name)
-        body_content = utils.load_template(inputfile=template_file,
-                                           mapping={},
-                                           log=logger)
-        body_content += "\nThe following change has been made to your username:\n"
-        body_content += "%s => %s\n" % (u.name, mapping[u.name])
-        body_content += "\nThe following change has been made to your project name:\n"
+        changes_txt = "\nThe following change has been made to your username:\n"
+        changes_txt += "%s => %s\n" % (u.name, mapping[u.name])
+        changes_txt += "\nThe following change has been made to your project name:\n"
         for old_p, new_p in changes['projects'].iteritems():
-            body_content += "%s => %s\n" % (old_p, new_p)
-        body_content += "\nBest regards,\n\nUH-IaaS\n"
+            changes_txt += "%s => %s\n" % (old_p, new_p)
+        body_content = utils.load_template(inputfile=template_file,
+                                           mapping={'changes': changes_txt},
+                                           log=logger)
         msg = mail.get_mime_text(subject, body_content, fromaddr)
         mail.send_mail(u.name, msg, fromaddr)
         if not options.dry_run:
@@ -65,6 +64,7 @@ def action_check():
     mapping = load_uio_users(options.inputfile)
     printer.output_dict({'header': 'Users not found in mapping csv:'})
     output = dict({'unknown': []})
+    found = dict()
     count = 0
     for u in users:
         if not re.search(r"^[a-z0-9]+[\.'\-a-z0-9_]*[a-z0-9]+@[\.'\-a-z0-9_]*uio\.no$", u.name):
@@ -72,6 +72,12 @@ def action_check():
         if u.name not in mapping:
             output['unknown'].append(u.name)
             count += 1
+        else:
+            if mapping[u.name] in found:
+                utils.sys_error('multiple mapping to %s' % mapping[u.name], 0)
+                utils.sys_error('both %s and %s map to %s' % (u.name, found[mapping[u.name]], mapping[u.name]), 0)
+            else:
+                found[mapping[u.name]] = u.name
     printer.output_dict(output)
     printer.output_dict({'header': 'Count', 'users': count})
 

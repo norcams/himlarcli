@@ -328,6 +328,7 @@ class Keystone(Client):
             * rename personal project
             Version: 2018-1
         """
+        changes = {'api': {}, 'group': {}, 'projects': {}}
         # Rename api user
         api = self.get_user_by_email(old_email, 'api')
         if not api:
@@ -337,6 +338,7 @@ class Keystone(Client):
             self.client.users.update(user=api,
                                      name=new_email.lower(),
                                      email=new_email.lower())
+        changes['api'][api.name] = new_email.lower()
         # Rename group
         group = self.get_group_by_email(old_email)
         if not group:
@@ -345,6 +347,7 @@ class Keystone(Client):
         self.debug_log('rename group from %s to %s' % (group.name, new_group_name))
         if not self.dry_run:
             self.client.groups.update(group=group, name='%s' % new_group_name)
+        changes['group'][group.name] = new_group_name
         # Delete dataporten user
         self.delete_user(old_email, 'dp')
         # Rename old peronal project
@@ -358,6 +361,7 @@ class Keystone(Client):
                 self.client.projects.update(project=personal,
                                             admin=new_email,
                                             name=new_personal_name)
+            changes['projects'][personal.name] = new_personal_name
         # Rename old demo project
         new_demo_name = self.get_project_name(new_email, prefix='DEMO')
         demo = self.get_project_by_name(
@@ -369,6 +373,8 @@ class Keystone(Client):
                 self.client.projects.update(project=demo,
                                             admin=new_email,
                                             name=new_demo_name)
+            changes['projects'][demo.name] = new_demo_name
+        return changes
 
     def reset_password(self, email, password=None):
         """
