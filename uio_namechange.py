@@ -87,7 +87,6 @@ def action_notify():
         return
     mail = utils.get_client(Mail, options, logger, None)
     fromaddr = mail.get_config('mail', 'from_addr')
-    template_file = 'notify/mail_uio_feide.txt'
     logfile = 'logs/uio_mail_sent.log'
     subject = '[UH-IaaS] Changes to username and project name for UiO users'
 
@@ -97,7 +96,7 @@ def action_notify():
             if 'uio' in u.name:
                 print "User %s not matched as uio-user. Please check" % u.name
             continue
-        body_content = utils.load_template(inputfile=template_file,
+        body_content = utils.load_template(inputfile=options.template,
                                            mapping={},
                                            log=logger)
         msg = mail.get_mime_text(subject, body_content, fromaddr)

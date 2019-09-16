@@ -14,3 +14,8 @@ opt_args:
     'dest':     'inputfile'
     'help':     'CSV file with user mapping <old>:<new>'
     'default':  'mail_changes.csv'
+  '--template':
+    'sub':      ['notify']
+    'dest':     'template'
+    'help':     'mail template file. See notify/'
+    'required': true
