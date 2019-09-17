@@ -37,41 +37,17 @@ def action_compute():
         nc = Nova(options.config, debug=options.debug, region=region, log=logger)
         aggregates = nc.get_aggregates(False)
         for a in aggregates:
-            stats[a.name] = dict()
+            a_name = "%s-%s" % (region, a.name)
+            stats[a_name] = dict()
             if a.availability_zone in drop_az:
                 continue
             hosts = nc.get_aggregate_hosts(a.name, True)
             for host in hosts:
-                print host.to_dict()
+                #print host.to_dict()
                 for metric in metrics:
                     logger.debug('=> %s %s=%s', host.hypervisor_hostname, metric, getattr(host, metric))
-                    stats[a.name][metric] = int(getattr(host, metric) +
-                                                stats[a.name].get(metric, 0))
-
-        # azs = nc.get_availability_zones()
-
-        # zone_hosts = dict()
-        # # Availablity zones
-        # for az in azs:
-        #     if ('iaas-team-only' in az.zoneName or
-        #             region not in az.zoneName or not az.hosts):
-        #         continue
-        #     for host in az.hosts.iterkeys():
-        #         zone_hosts[host] = az.zoneName
-        #     stats[az.zoneName] = dict()
-        #     for metric in metrics:
-        #         stats[az.zoneName][metric] = 0
-        # # Hypervisor hosts
-        # hosts = nc.get_hosts()
-        # for host in hosts:
-        #     if not host.hypervisor_hostname in zone_hosts:
-        #         himutils.sys_error('host %s not enabled or in valid az'
-        #                            % host.hypervisor_hostname, 0)
-        #         continue
-        #     az = zone_hosts[host.hypervisor_hostname]
-        #     for metric in metrics:
-        #         logger.debug('=> %s %s=%s', host.hypervisor_hostname, metric, getattr(host, metric))
-        #         stats[az][metric] = int(getattr(host, metric) + stats[az][metric])
+                    stats[a_name][metric] = int(getattr(host, metric) +
+                                                stats[a_name].get(metric, 0))
     statsd.gauge_dict('compute', stats)
     if not options.quiet:
         for name, stat in stats.iteritems():

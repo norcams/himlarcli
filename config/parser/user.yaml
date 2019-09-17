@@ -73,7 +73,7 @@ opt_args:
     'const':    true
     'default':  false
   '--org':
-    'sub':      ['validate', 'deactivate']
+    'sub':      ['validate', 'deactivate', 'list-disabled']
     'dest':     'org'
     'help':     'only do one user organization, e.g. uio'
     'default':  'all'
