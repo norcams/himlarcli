@@ -229,15 +229,15 @@ def get_valid_users(organization=None):
     unknown = list()
     count = 0
     for user in users:
-        if options.limit and count >= int(options.limit):
-            break
-        count += 1
         if user in whitelist:
             ksclient.debug_log('user %s in whitelist' % user)
         org = ksclient.get_user_org(user)
         # Drop users if organization is set
         if organization and org != organization:
             continue
+        if options.limit and count >= int(options.limit):
+            break
+        count += 1
         # Only add a user to deactive if user also enabled in OS
         os_user = ksclient.get_user_by_email(user, 'api')
         if not os_user.enabled:
