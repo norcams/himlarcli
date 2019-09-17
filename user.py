@@ -235,14 +235,13 @@ def get_valid_users(organization=None):
         # Drop users if organization is set
         if organization and org != organization:
             continue
-        if options.limit and count >= int(options.limit):
-            break
-        count += 1
         # Only add a user to deactive if user also enabled in OS
         os_user = ksclient.get_user_by_email(user, 'api')
         if not os_user.enabled:
             continue
-        org_found = False
+        if options.limit and count >= int(options.limit):
+            break
+        count += 1
         # user in valid org
         if org and org in orgs:
             if (not ldap[org].get_user(email=user, org=org)
