@@ -156,12 +156,15 @@ def action_validate():
 def action_list_disabled():
     users = ksclient.get_users(domain=options.domain, enabled=False)
     printer.output_dict({'header': 'Disabled user list (name, date)'})
+    count = 0
     for user in users:
         output = {
             '1': user.name,
             '2': user.disabled
         }
         printer.output_dict(output, sort=True, one_line=True)
+        count += 1
+    printer.output_dict({'header': 'Count', 'disabled_users': count})
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
@@ -235,7 +238,8 @@ def get_valid_users():
             if not org in user:
                 continue
             org_found = True
-            if not ldap[org].get_user(user) and user not in whitelist:
+            if (not ldap[org].get_user(email=user, org=org)
+                    and user not in whitelist):
                 deactive.append(user)
             else:
                 active[org] = active.setdefault(org, 0) + 1
@@ -248,7 +252,7 @@ def get_valid_users():
                     unknown.append(org)
         time.sleep(2)
     total = 0
-    for k,v in active.iteritems():
+    for k, v in active.iteritems():
         total += v
     active['total'] = total
     return (active, deactive, unknown)

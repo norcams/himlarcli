@@ -812,6 +812,14 @@ class Keystone(Client):
                                region=self.region)
         return self.novaclient.set_quota(project.id, quota)
 
+    @staticmethod
+    def get_user_org(email):
+        if not "@" in email:
+            return None
+        domain = email.split("@")[1]
+        if domain and "." in domain:
+            return domain.split(".")[-2]
+        return None
 
     @staticmethod
     def __get_group_name(email):
