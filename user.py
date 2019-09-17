@@ -139,17 +139,20 @@ def action_deactivate():
     printer.output_dict(output)
 
 def action_validate():
-    active, deactive, unknown = get_valid_users()
+    if options.org == 'all':
+        active, deactive, unknown = get_valid_users()
+    else:
+        active, deactive, unknown = get_valid_users(options.org)
 
-    active['header'] = 'Active users:'
+    active['header'] = 'Validated active users:'
     printer.output_dict(active)
     output = dict()
-    output['header'] = 'Deactive users:'
+    output['header'] = 'Users that should be deactivated:'
     output['users'] = deactive
     output['count'] = len(deactive)
     printer.output_dict(output)
     output = dict()
-    output['header'] = 'Unknown user orgs:'
+    output['header'] = 'Untested user orgs:'
     output['orgs'] = unknown
     printer.output_dict(output)
 
@@ -209,15 +212,17 @@ def mail_user(email, template, subject):
     mail.mail_user(body_content, subject, email)
     mail.close()
 
-def get_valid_users():
+def get_valid_users(organization=None):
     whitelist = himutils.load_file('whitelist_users.txt', logger)
     if not whitelist:
         himutils.sys_error('Could not find whitelist_users.txt!')
     orgs = himutils.load_config('config/ldap.yaml', logger).keys()
+    if organization and organization not in orgs:
+        himutils.sys_error('Unknown org used: %s' % organization)
     ldap = dict()
-    for org in orgs:
-        ldap[org] = LdapClient(options.config, debug=options.debug, log=logger)
-        ldap[org].bind(org)
+    for o in orgs:
+        ldap[o] = LdapClient(options.config, debug=options.debug, log=logger)
+        ldap[o].bind(o)
     users = ksclient.list_users(domain=options.domain)
     deactive = list()
     active = dict()
@@ -229,28 +234,29 @@ def get_valid_users():
         count += 1
         if user in whitelist:
             ksclient.debug_log('user %s in whitelist' % user)
+        org = ksclient.get_user_org(user)
+        # Drop users if organization is set
+        if organization and org != organization:
+            continue
         # Only add a user to deactive if user also enabled in OS
         os_user = ksclient.get_user_by_email(user, 'api')
         if not os_user.enabled:
             continue
         org_found = False
-        for org in orgs:
-            if not org in user:
-                continue
-            org_found = True
+        # user in valid org
+        if org and org in orgs:
             if (not ldap[org].get_user(email=user, org=org)
                     and user not in whitelist):
                 deactive.append(user)
+                # Sleep after a ldap search
+                time.sleep(2)
             else:
                 active[org] = active.setdefault(org, 0) + 1
-            break
-        if not org_found:
-            #print "%s org not found" % user
+        else:
             if '@' in user:
                 org = user.split("@")[1]
                 if org not in unknown:
                     unknown.append(org)
-        time.sleep(2)
     total = 0
     for k, v in active.iteritems():
         total += v
