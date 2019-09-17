@@ -92,7 +92,11 @@ def action_rename():
 
 # pylint: disable=E1101
 def action_deactivate():
-    active, deactive, unknown = get_valid_users()
+    if options.org == 'all':
+        active, deactive, unknown = get_valid_users()
+    else:
+        active, deactive, unknown = get_valid_users(options.org)
+
     q = 'This will deactivate %s users (total active users %s)' \
         % (len(deactive), active['total'])
     if not himutils.confirm_action(q):
@@ -161,9 +165,13 @@ def action_list_disabled():
     printer.output_dict({'header': 'Disabled user list (name, date)'})
     count = 0
     for user in users:
+        if options.org != 'all':
+            org = ksclient.get_user_org(user.name)
+            if org and org != options.org:
+                continue
         output = {
             '1': user.name,
-            '2': user.disabled
+            '2': user.disabled if hasattr(user, 'disabled') else 'unknown'
         }
         printer.output_dict(output, sort=True, one_line=True)
         count += 1
