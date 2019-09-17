@@ -72,5 +72,8 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
-
-
+  '--org':
+    'sub':      ['validate', 'deactivate']
+    'dest':     'org'
+    'help':     'only do one user organization, e.g. uio'
+    'default':  'all'
