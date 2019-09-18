@@ -202,9 +202,6 @@ def action_purge():
     count = 0
     disabled = list()
     for user in users:
-        if options.limit and count >= int(options.limit):
-            break
-        count += 1
         if not hasattr(user, 'disabled'):
             himutils.sys_error("user %s is disabled but missing disabled date" % user.name)
             continue
@@ -217,6 +214,9 @@ def action_purge():
             org = ksclient.get_user_org(user.name)
             if org and org != options.org:
                 continue
+        if options.limit and count >= int(options.limit):
+            break
+        count += 1
         disabled.append(user)
 
     q = 'This will delete %s disabled users (total active users %s)' \
