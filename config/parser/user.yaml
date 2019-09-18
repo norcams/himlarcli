@@ -13,6 +13,7 @@ actions:
   'validate':       'Validate user against FEIDE ldap'
   'deactivate':     'Deactivate all users not found in LDAP.'
   'list-disabled':  'List disabled users'
+  'purge':          'Purge disabled users'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -65,7 +66,7 @@ opt_args:
     'dest':     'password'
     'help':     'user password (default: random password)'
   '--limit':
-    'sub':      ['validate', 'deactivate']
+    'sub':      ['validate', 'deactivate', 'purge']
     'dest':     'limit'
     'help':     'limit the number of users'
   '--force':
@@ -75,7 +76,7 @@ opt_args:
     'const':    true
     'default':  false
   '--org':
-    'sub':      ['validate', 'deactivate', 'list-disabled']
+    'sub':      ['validate', 'deactivate', 'list-disabled', 'purge']
     'dest':     'org'
     'help':     'only do one user organization, e.g. uio'
     'default':  'all'

@@ -196,6 +196,32 @@ def action_list_disabled():
         count += 1
     printer.output_dict({'header': 'Count', 'disabled_users': count})
 
+def action_purge():
+    active = ksclient.get_users(domain=options.domain, enabled=True)
+    users = ksclient.get_users(domain=options.domain, enabled=False)
+    count = 0
+    if options.org != 'all':
+        disabled = list()
+        for user in users:
+            if options.limit and count >= int(options.limit):
+                break
+            count += 1
+            org = ksclient.get_user_org(user.name)
+            if org and org != options.org:
+                continue
+            disabled.append(user)
+    else:
+        disabled = users
+
+    q = 'This will delete %s disabled users (total active users %s)' \
+        % (len(disabled), len(active))
+    if not himutils.confirm_action(q):
+        return
+
+    for user in disabled:
+        ksclient.user_cleanup(email=user.name)
+        print "%s deleted" % user.name
+
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
         himutils.sys_error("%s is not a valid user." % options.user, 1)
