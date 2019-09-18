@@ -65,10 +65,10 @@ def get_config(config_path):
     config.read(config_path)
     return config
 
-def get_date(datestr, default):
+def get_date(datestr, default, format='%d.%m.%Y'):
     if datestr:
         try:
-            return datetime.strptime(datestr, '%d.%m.%Y').date()
+            return datetime.strptime(datestr, format).date()
         except ValueError:
             sys_error('date format DD.MM.YYYY not valid for %s' % datestr, 1)
     else:
