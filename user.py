@@ -7,7 +7,7 @@ from himlarcli.printer import Printer
 from himlarcli.ldapclient import LdapClient
 from himlarcli.mail import Mail
 from himlarcli import utils as himutils
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import time
 
 # OPS! It might need some updates. We use class Mail instead of Notify now.
@@ -200,18 +200,24 @@ def action_purge():
     active = ksclient.get_users(domain=options.domain, enabled=True)
     users = ksclient.get_users(domain=options.domain, enabled=False)
     count = 0
-    if options.org != 'all':
-        disabled = list()
-        for user in users:
-            if options.limit and count >= int(options.limit):
-                break
-            count += 1
+    disabled = list()
+    for user in users:
+        if options.limit and count >= int(options.limit):
+            break
+        count += 1
+        if not hasattr(user, 'disabled'):
+            himutils.sys_error("user %s is disabled but missing disabled date" % user.name)
+            continue
+        # Allow 30 days gracetime before we delete
+        disabled_date = himutils.get_date(user.disabled, None, '%Y-%m-%d')
+        gracetime = timedelta(30)
+        if date.today() - disabled_date < gracetime:
+            continue
+        if options.org != 'all':
             org = ksclient.get_user_org(user.name)
             if org and org != options.org:
                 continue
-            disabled.append(user)
-    else:
-        disabled = users
+        disabled.append(user)
 
     q = 'This will delete %s disabled users (total active users %s)' \
         % (len(disabled), len(active))
