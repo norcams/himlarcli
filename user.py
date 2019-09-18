@@ -142,6 +142,25 @@ def action_deactivate():
     output['servers'] = count
     printer.output_dict(output)
 
+def action_enable():
+    if not ksclient.is_valid_user(email=options.user):
+        himutils.sys_error('User %s not found as a valid user.' % options.user)
+    user = ksclient.get_user_by_email(options.user, 'api')
+    ksclient.update_user(user_id=user.id, enabled=True, disabled='None')
+    print "User %s enabled" % user.name
+
+def action_disable():
+    if not ksclient.is_valid_user(email=options.user):
+        himutils.sys_error('User %s not found as a valid user.' % options.user)
+    user = ksclient.get_user_by_email(options.user, 'api')
+    date = datetime.today().strftime('%Y-%m-%d')
+    ksclient.update_user(user_id=user.id, enabled=False, disabled=date)
+    print "User %s disabled" % user.name
+    # TODO: check to see if we can disable dataporten user as well
+    # 2019-09 We can disable the user, but we appear that we still can login
+    #user = ksclient.get_user_by_email(options.user, 'dp')
+    #ksclient.update_user(user_id=user.id, enabled=False, disabled=date)
+
 def action_validate():
     if options.org == 'all':
         active, deactive, unknown = get_valid_users()

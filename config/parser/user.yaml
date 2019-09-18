@@ -2,14 +2,16 @@
 # Use empty value for None
 desc: 'Manage our users. Use <action> -h for help on each action'
 actions:
-  'list':     'List of users and show stats based on email domain'
-  'show':     'Show user information'
-  'delete':   'Delete user'
-  'rename':   'Use this when user changes affiliation'
-  'password': 'Reset API password for user'
-  'create':   'Create a user new local API only user'
-  'validate': 'Validate user against FEIDE ldap'
-  'deactivate': 'Deactivate all users not found in LDAP.'
+  'list':           'List of users and show stats based on email domain'
+  'show':           'Show user information'
+  'delete':         'Delete user'
+  'rename':         'Use this when user changes affiliation'
+  'password':       'Reset API password for user'
+  'create':         'Create a user new local API only user'
+  'enable':         'Enable a user'
+  'disable':        'Disable a user'
+  'validate':       'Validate user against FEIDE ldap'
+  'deactivate':     'Deactivate all users not found in LDAP.'
   'list-disabled':  'List disabled users'
 opt_args:
   '--domain':
@@ -17,7 +19,7 @@ opt_args:
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   'user':
-    'sub':      ['show', 'password', 'delete', 'create']
+    'sub':      ['show', 'password', 'delete', 'create', 'enable', 'disable']
     'help':     'username should be email addresses'
     'metavar':  'username'
   '--new':
