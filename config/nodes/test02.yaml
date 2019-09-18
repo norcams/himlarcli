@@ -117,6 +117,9 @@ nodes:
   novactrl-02:
     compute_profile: medium
     compute_resource: controller-02
+  nfs-01:
+    compute_profile: small
+    compute_resource: controller-03
   ns-01:
     compute_profile: small
     compute_resource: controller-01

@@ -195,6 +195,9 @@ nodes:
   novactrl-03:
     compute_profile: arge
     compute_resource: controller-03
+  nfs-01:
+    compute_profile: small
+    compute_resource: controller-04
   ns-01:
     compute_profile: small
     compute_resource: controller-02
