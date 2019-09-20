@@ -178,22 +178,25 @@ nodes:
     compute_profile: small
     compute_resource: controller-02
   network-01:
-    compute_profile: arge
+    compute_profile: large
     compute_resource: controller-01
   network-02:
-    compute_profile: arge
+    compute_profile: large
     compute_resource: controller-02
   network-03:
-    compute_profile: arge
+    compute_profile: large
     compute_resource: controller-03
+  nfs-01:
+    mac: b8:ac:6f:90:d7:75
+    hostgroup: 1
   novactrl-01:
-    compute_profile: arge
+    compute_profile: large
     compute_resource: controller-01
   novactrl-02:
-    compute_profile: arge
+    compute_profile: large
     compute_resource: controller-02
   novactrl-03:
-    compute_profile: arge
+    compute_profile: large
     compute_resource: controller-03
   ns-01:
     compute_profile: small
