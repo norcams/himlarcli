@@ -1,0 +1,37 @@
+---
+# flavor used for testing cyborg
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 's== cyborg'
+cyborg:
+  'cyborg.small':
+    vcpus: 1
+    ram: 2048
+    disk: 10
+  'cyborg.medium':
+    vcpus: 1
+    ram: 4096
+    disk: 20
+  'cyborg.large':
+    vcpus: 2
+    ram: 8192
+    disk: 20
+  'cyborg.xlarge':
+    vcpus: 4
+    ram: 16384
+    disk: 20
+  'cyborg.2xlarge':
+    vcpus: 8
+    ram: 32768
+    disk: 20
+  'cyborg.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 20
+  'cyborg.8xlarge':
+    vcpus: 32
+    ram: 131072
+    disk: 20
