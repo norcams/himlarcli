@@ -235,8 +235,8 @@ def action_show_quota():
         components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
         for comp, client in components.iteritems():
             quota = dict()
-            if hasattr(client, 'get_quota_class'):
-                quota = getattr(client, 'list_quota')(project.id)
+            if hasattr(client, 'get_quota'):
+                quota = getattr(client, 'get_quota')(project.id)
             else:
                 logger.debug('=> function get_quota_class not found for %s' % comp)
                 continue

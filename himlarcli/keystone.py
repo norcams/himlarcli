@@ -803,7 +803,7 @@ class Keystone(Client):
                                debug=self.debug,
                                log=self.logger,
                                region=self.region)
-        return self.novaclient.list_quota(project.id)
+        return self.novaclient.get_quota(project.id)
 
     def __set_compute_quota(self, project, quota):
         self.novaclient = Nova(config_path=self.config_path,

@@ -39,9 +39,9 @@ def action_save():
             cinder = himutils.get_client(Cinder, options, logger, region)
             neutron = himutils.get_client(Neutron, options, logger, region)
             for project in projects:
-                quotas = nova.list_quota(project.id).copy()
+                quotas = nova.get_quota(project.id).copy()
                 quotas.update(cinder.get_quota(project.id))
-                quotas.update(neutron.list_quota(project.id))
+                quotas.update(neutron.get_quota(project.id))
                 quotas['project_id'] = project.id
                 quotas['region'] = region
                 q = state.get_first(Quota, project_id=project.id, region=region)
@@ -80,9 +80,9 @@ def action_compare():
             cinder = himutils.get_client(Cinder, options, logger, region)
             neutron = himutils.get_client(Neutron, options, logger, region)
             for project in projects:
-                quotas = nova.list_quota(project.id).copy()
+                quotas = nova.get_quota(project.id).copy()
                 quotas.update(cinder.get_quota(project.id))
-                quotas.update(neutron.list_quota(project.id))
+                quotas.update(neutron.get_quota(project.id))
                 quotas['project_id'] = project.id
                 quotas['region'] = region
                 q = state.get_first(Quota, project_id=project.id, region=region)
@@ -115,7 +115,7 @@ def action_compare():
                     }
                     printer.output_dict(output, one_line=True)
 
-def action_update():
+def action_replace():
     print 'not implemented'
 
 def action_purge():

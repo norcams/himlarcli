@@ -86,7 +86,7 @@ class Neutron(Client):
         self.log_error('quota_class not defined for neutron', 0)
         return dict()
 
-    def list_quota(self, project_id, usage=False):
+    def get_quota(self, project_id, usage=False):
         result = self.client.show_quota(project_id=project_id)
         if 'quota' in result:
             return result['quota']

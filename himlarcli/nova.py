@@ -292,8 +292,8 @@ class Nova(Client):
             else:
                 self.logger.debug('=> DRY-RUN: delete instance %s (%s)' % (i.name, project.name))
 
-    def list_quota(self, project_id, detail=False):
-        """ List a projects nova quota.
+    def get_quota(self, project_id, detail=False):
+        """ Get a projects nova quota.
 
             :return: a dictionary with quota information
         """
