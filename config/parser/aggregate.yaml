@@ -51,3 +51,8 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  False
+  '--template':
+    'sub':      ['notify']
+    'dest':     'template'
+    'help':     'mail template file. See notify/'
+    'default':  'notify/notify_reboot.txt'

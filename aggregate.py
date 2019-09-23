@@ -13,7 +13,7 @@ from himlarcli.parser import Printer
 import novaclient.exceptions as novaexc
 import time
 import sys
-
+from datetime import date, datetime
 # OPS! It might need some updates. We use class Mail instead of Notify now.
 
 himutils.is_virtual_env()
@@ -33,7 +33,6 @@ logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=logger)
 domain = 'Dataporten'
 zone = '%s-default-1' % ksclient.region
-msg_file = 'notify/notify_reboot.txt'
 
 # aggregate in <loc>-legacy-1 AZ
 legacy_aggregate = ['group1', 'group2', 'group3']
@@ -186,24 +185,27 @@ def action_notify():
             users[email] = dict()
         users[email][i.name] = {'status': i.status}
     if users:
-        mapping = dict(region=ksclient.region.upper(),
-                       date=options.date,
-                       region_lower=ksclient.region.lower())
-        body_content = himutils.load_template(inputfile=msg_file,
-                                              mapping=mapping,
-                                              log=ksclient.get_logger())
-        if not body_content:
-            print 'ERROR! Could not find and parse mail body in \
-                  %s' % options.msg
-            sys.exit(1)
         mail = Mail(options.config, debug=options.debug)
     # Email each users
     for user, instances in users.iteritems():
         user_instances = ""
         for server, info in instances.iteritems():
             user_instances += "%s (current status %s)\n" % (server, info['status'])
-        msg = MIMEText(user_instances + body_content, 'plain', 'utf-8')
-        msg['Subject'] = ('[UH-IaaS]: Your instances will be rebooted on %s (%s)'
+        action_date = himutils.get_date(options.date, date.today(), '%Y-%m-%d')
+        mapping = dict(region=ksclient.region.upper(),
+                       date=action_date.strftime("%d %B %Y"),
+                       region_lower=ksclient.region.lower(),
+                       instances=user_instances)
+        body_content = himutils.load_template(inputfile=options.template,
+                                              mapping=mapping,
+                                              log=ksclient.get_logger())
+        if not body_content:
+            print 'ERROR! Could not find and parse mail body in \
+                  %s' % options.msg
+            sys.exit(1)
+
+        msg = MIMEText(body_content, 'plain', 'utf-8')
+        msg['Subject'] = ('[UH-IaaS]: Your legacy instances will be terminated on %s (%s)'
                           % (options.date, ksclient.region))
 
         if not options.dry_run:

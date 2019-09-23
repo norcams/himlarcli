@@ -1,0 +1,30 @@
+Dear user,
+
+As UH-IaaS is increasing in popularity, we've been forced to reallocate our
+resources from the obsolete "legacy" availability zones (AZ) to the current
+default ones running centralized storage. By doing this, we will greatly
+improve performance and stability for our users.
+
+Consequently, we need to terminate the following of your instances currently
+present in the legacy AZ in $region:
+
+$instances
+
+The termination will be performed on $date followed by the removal
+of the $region_lower-legacy-1 AZ. You are free to start new instances in the
+$region_lower-default-1 AZ.
+
+If you still need your old instances, we recommend that you create snapshots of
+them and use these snapshots to create new instances. Please see
+http://docs.uh-iaas.no/en/latest/create-snapshot.html for a walkthrough on how
+to do this.
+
+Further documentation and contact information can be found at
+http://docs.uh-iaas.no
+
+We apologize for the inconvenience. Please don't hesitate to contact us if you
+have any questions or concerns.
+
+Kind regards,
+
+UH-IaaS team
