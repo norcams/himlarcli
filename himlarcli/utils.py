@@ -70,7 +70,7 @@ def get_date(datestr, default, format='%d.%m.%Y'):
         try:
             return datetime.strptime(datestr, format).date()
         except ValueError:
-            sys_error('date format DD.MM.YYYY not valid for %s' % datestr, 1)
+            sys_error('date format %s not valid for %s' % (format,datestr), 1)
     else:
         return default
 
