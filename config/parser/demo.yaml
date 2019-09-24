@@ -1,21 +1,13 @@
 ---
 desc:       'Helper script to move from personal project to demo.'
 actions:
-  'create':   'Create demo proejct for all users'
-  'notify':   'Notify users and tag personal project for removal'
-  'convert':  'Rename and tag an old personal project to a new valid one'
-  'validate': 'Check that all users have demo project and old personal projects are removed'
-  'disable':  'Disable old personal project and stop running instances in project'
-  'cleanup':  'Remove old personal project and instances'
+  'list':       'list'
+  'instances':  'instances'
 opt_args:
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
-  '-p':
-    'sub':      ['convert']
-    'dest':     'project'
-    'help':     'project name'
-  #'--region':
-  #  'dest':     'region'
-  #  'help':     'only use this region'
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
