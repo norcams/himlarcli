@@ -29,7 +29,7 @@ if not regions:
     himutils.sys_error('no valid regions found!')
 
 def action_volume():
-    projects = ksclient.get_projects(domain=options.domain)
+    projects = ksclient.get_all_projects()
     for region in regions:
         cc = himutils.get_client(Cinder, options, logger, region)
         nc = himutils.get_client(Nova, options, logger, region)

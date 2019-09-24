@@ -39,7 +39,7 @@ def action_list():
     search_filter = dict()
     if options.type:
         search_filter['type'] = options.type
-    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+    projects = ksclient.get_projects(**search_filter)
     #regions = ksclient.get_regions()
     count = 0
     for region in regions:
@@ -74,7 +74,7 @@ def action_delete():
     search_filter = dict()
     if options.type:
         search_filter['type'] = options.type
-    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+    projects = ksclient.get_projects(**search_filter)
     count = 0
     for region in regions:
         #print "==============\n REGION=%s\n==============" % region
@@ -105,7 +105,7 @@ def action_notify():
     search_filter = dict()
     if options.type:
         search_filter['type'] = options.type
-    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+    projects = ksclient.get_projects(**search_filter)
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         for project in projects:

@@ -164,7 +164,7 @@ def action_list():
     search_filter = dict()
     if options.filter and options.filter != 'all':
         search_filter['type'] = options.filter
-    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+    projects = ksclient.get_projects(**search_filter)
     count = 0
     printer.output_dict({'header': 'Project list (id, name, type)'})
     for project in projects:

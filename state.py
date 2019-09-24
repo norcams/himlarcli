@@ -33,7 +33,7 @@ else:
 
 def action_save():
     if options.resource == 'quota':
-        projects = kc.get_all_projects(domain=options.domain)
+        projects = kc.get_all_projects()
         for region in regions:
             nova = himutils.get_client(Nova, options, logger, region)
             cinder = himutils.get_client(Cinder, options, logger, region)
@@ -73,7 +73,7 @@ def action_save():
 
 def action_compare():
     if options.resource == 'quota':
-        projects = kc.get_all_projects(domain=options.domain)
+        projects = kc.get_all_projects()
         for region in regions:
             printer.output_dict({'header': 'quota miss match found in %s' % region})
             nova = himutils.get_client(Nova, options, logger, region)

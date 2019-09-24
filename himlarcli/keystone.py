@@ -192,7 +192,7 @@ class Keystone(Client):
             self.client.users.update(user=user_id, **kwargs)
 
     def get_project_count(self, domain=False):
-        projects = self.__get_projects(domain)
+        projects = self.__get_projects(self.domain_id)
         return len(projects)
 
     def get_user_count(self, domain=False):
@@ -211,15 +211,18 @@ class Keystone(Client):
         project = self.__get_project(project, domain=domain)
         return project
 
-    def get_all_projects(self, domain=False):
-        """ Return all project in domain """
-        domain_id = self.__get_domain(domain) if domain else None
-        projects = self.client.projects.list(domain=domain_id)
-        self.debug_log('get all project from domain %s' % domain)
+    def get_all_projects(self):
+        """ Return all project in current domain
+            version: 2019-09
+        """
+        projects = self.client.projects.list(domain=self.domain_id)
+        self.debug_log('get all project from domain %s' % self.domain_id)
         return projects
 
-    def get_projects(self, domain=False, **kwargs):
-        project_list = self.__get_projects(domain, **kwargs)
+    def get_projects(self, **kwargs):
+        """ Get projects with filter. E.G. type=demo, or test=1
+            version: 2019-09 """
+        project_list = self.__get_projects(domain_id=self.domain_id, **kwargs)
         return project_list
 
     """
@@ -237,7 +240,8 @@ class Keystone(Client):
         return users
 
     def list_projects(self, domain=False, **kwargs):
-        project_list = self.__get_projects(domain, **kwargs)
+        domain_id = self.get_domain_id(domain)
+        project_list = self.__get_projects(domain_id, **kwargs)
         projects = list()
         for i in project_list:
             projects.append(i.name)
@@ -748,10 +752,9 @@ class Keystone(Client):
                 return domain_obj.id
         return None
 
-    def __get_projects(self, domain=False, **kwargs):
-        domain_id = self.__get_domain(domain) if domain else None
+    def __get_projects(self, domain_id, **kwargs):
         projects = self.client.projects.list(domain=domain_id)
-        self.logger.debug('=> get projects (domain=%s)' % (domain))
+        self.logger.debug('=> get projects (domain=%s)' % (domain_id))
         # Filter projects
         if kwargs:
             self.logger.debug('=> filter project %s' % kwargs)

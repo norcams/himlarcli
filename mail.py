@@ -100,11 +100,12 @@ def action_instance():
 
 # Send mail to a specific type of project
 def action_project():
+    himutils.sys_error('FIXME: this is not working')
     user_counter = 0
     sent_mail_counter = 0
     mail = Mail(options.config, debug=options.debug)
     search_filter = dict()
-    projects = ksclient.get_projects(domain=options.domain, **search_filter)
+    projects = ksclient.get_projects(**search_filter)
     if options.template:
         content = options.template
         email_content = open(content, 'r')
