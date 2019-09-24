@@ -24,6 +24,16 @@ class Cinder(Client):
     def get_client(self):
         return self.client
 
+    def get_volumes(self, detailed=False, project_id=None):
+        """ Return all or project volumes
+            version: 2019-09 """
+        if project_id:
+            search_opts = { 'project_id': project_id}
+        else:
+            search_opts = None
+        volumes = self.__get_volumes(detailed=detailed, search_opts=search_opts)
+        return volumes
+
     def get_volume_types(self):
         return self.client.volume_types.list()
 
@@ -64,3 +74,17 @@ class Cinder(Client):
 
     def get_quota_class(self, class_name='default'):
         return self.client.quota_classes.get(class_name)
+
+
+    def __get_volumes(self, detailed=False, search_opts=None):
+        if not search_opts:
+            search_opts = dict(all_tenants=1)
+        elif 'all_tenants' not in search_opts:
+            search_opts['all_tenants'] = 1
+        try:
+            volumes = self.client.volumes.list(detailed=detailed,
+                                               search_opts=search_opts)
+        except exceptions.ClientException as e:
+            self.log_error(e)
+            return None
+        return volumes
