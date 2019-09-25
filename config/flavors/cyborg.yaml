@@ -6,7 +6,7 @@ properties:
   hw_rng:rate_bytes: 1000000
   hw_rng:rate_period: 60
   aggregate_instance_extra_specs:type: 's== cyborg'
-  pci_passthrough:alias: 'vega10'
+  pci_passthrough:alias: 'vega10:2'
 cyborg:
   'cyborg.small':
     vcpus: 1
