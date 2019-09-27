@@ -1,8 +1,9 @@
 ---
 desc:       'Helper script to move from personal project to demo.'
 actions:
-  'list':       'list'
-  'instances':  'instances'
+  'list':       'List all demo projects'
+  'instances':  'List all instances in demo projects'
+  'notify':     'Notify demo project users about instances'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -11,3 +12,8 @@ opt_args:
   '--region':
     'dest':     'region'
     'help':     'only use this region'
+  '-t':
+    'sub':      ['notify']
+    'dest':     'template'
+    'help':     'mail template file. See notify/'
+    'required': true

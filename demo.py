@@ -10,7 +10,7 @@ from himlarcli.mail import Mail
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils
-from datetime import date
+from datetime import date, datetime
 
 parser = Parser()
 options = parser.parse_args()
@@ -54,9 +54,9 @@ def action_list():
             '4': vol_data['size']
         }
         printer.output_dict(output, one_line=True)
-        count['size'] = vol_data['size']
-        count['vcpus'] = ins_data['vcpus']
-        count['instances'] = ins_data['count']
+        count['size'] += vol_data['size']
+        count['vcpus'] += ins_data['vcpus']
+        count['instances'] += ins_data['count']
     printer.output_dict({
         'header': 'Count',
         'instances': count['instances'],
@@ -82,6 +82,39 @@ def action_instances():
                 count += 1
                 printer.output_dict(output, one_line=True)
     printer.output_dict({'header': 'Count', 'count': count})
+
+def action_notify():
+    projects = kc.get_projects(type='demo')
+    mail = Mail(options.config, debug=options.debug)
+    fromaddr = mail.get_config('mail', 'from_addr')
+    subject = '[UH-IaaS] Policy change: Termination of long running instances in demo projects'
+    logfile = 'logs/demo-notify-{}.log'.format(date.today().isoformat())
+    for project in projects:
+        demo_instances = ""
+        for region in regions:
+            nc = utils.get_client(Nova, options, logger, region)
+            instances = nc.get_project_instances(project_id=project.id)
+            for i in instances:
+                created = utils.get_date(i.created, None, '%Y-%m-%dT%H:%M:%SZ')
+                demo_instances += '{} (created {} days ago in {})'.format(i.name,
+                        (date.today() - created).days, region.upper())
+        if not demo_instances:
+            continue
+        if not hasattr(project, 'admin'):
+            utils.sys_error('could not find admin for {}'.format(project.name), 0)
+            continue
+
+        mapping = dict(project=project.name,
+                       instances=demo_instances)
+        body_content = utils.load_template(inputfile=options.template,
+                                           mapping=mapping,
+                                           log=logger)
+        msg = mail.get_mime_text(subject, body_content, fromaddr)
+        mail.send_mail(project.admin, msg, fromaddr)
+        print "mail sendt to {}".format(project.admin)
+        if not options.dry_run:
+            utils.append_to_file(logfile, project.admin)
+
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))

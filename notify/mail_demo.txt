@@ -1,0 +1,35 @@
+Dear user,
+
+UH-IaaS is increasing in popularity and we are encountering challenges in
+keeping up with the high demand, as our resources are limited.  As a result, we
+see that we need to implement a policy change in the near future for demo
+projects, which includes automatic termination of long running instances, in
+order to meet the requirements of standard projects.
+
+We have yet to determine when this will take effect and how long a demo period
+will be. For now, we ask you to consider whether your running demo instances
+are being actively used and to take note of this upcoming policy change. You
+will, of course, be notified again when the details have been determined.
+
+You have the following instances present in your demo project:
+
+$project:
+
+$instances
+
+Standard projects are not affected by this policy. You may apply for a standard
+project at:
+
+https://request.uh-iaas.no
+
+We do not currently charge for standard projects and requests are being granted
+by the UH-IaaS team based on available resources. However, this may be subject
+to change in the future.
+
+For more information, please read our terms of service:
+
+http://docs.uh-iaas.no/en/latest/terms-of-service.html
+
+Kind regards,
+
+The UH-IaaS team
