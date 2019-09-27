@@ -10,7 +10,7 @@ from himlarcli.mail import Mail
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils
-from datetime import date, datetime
+from datetime import date
 
 parser = Parser()
 options = parser.parse_args()
@@ -30,7 +30,7 @@ else:
 def action_list():
     projects = kc.get_projects(type='demo')
     printer.output_dict({'header': 'Demo project (instances, vcpus, volumes, gb, name)'})
-    count = { 'size': 0, 'vcpus': 0, 'instances': 0}
+    count = {'size': 0, 'vcpus': 0, 'instances': 0}
     for project in projects:
         ins_data = {'count': 0, 'vcpu': 0}
         vol_data = dict({'count': 0, 'size': 0})
@@ -96,8 +96,9 @@ def action_notify():
             instances = nc.get_project_instances(project_id=project.id)
             for i in instances:
                 created = utils.get_date(i.created, None, '%Y-%m-%dT%H:%M:%SZ')
-                demo_instances += '{} (created {} days ago in {})'.format(i.name,
-                        (date.today() - created).days, region.upper())
+                demo_instances += '{} (created {} days ago in {})'. \
+                        format(i.name,
+                               (date.today() - created).days, region.upper())
         if not demo_instances:
             continue
         if not hasattr(project, 'admin'):
