@@ -1,5 +1,6 @@
 import sys
 import ConfigParser
+import unicodedata
 from keystoneclient.auth.identity import v3
 from keystoneauth1 import session
 from himlarcli import utils
@@ -119,6 +120,16 @@ class Client(object):
             return getattr(obj, 'to_dict')()
         else:
             return dict()
+
+    @staticmethod
+    def convert_ascii(text, format='replace'):
+        """ Convert string to acsci.
+            :param: format: replace (with ?) or ignore non-ascii characters
+            version: 2019-10
+        """
+        text_unicode = unicode(text, 'utf-8')
+        text_normalize = unicodedata.normalize('NFKD', text_unicode)
+        return text_normalize.encode('ascii', format)
 
     @staticmethod
     def log_error(msg, code=0):

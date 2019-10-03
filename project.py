@@ -50,8 +50,9 @@ def action_create():
         enddate = None
     createdate = datetime.today()
     if not options.force:
-        print 'Project name: %s\nAdmin: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
+        print 'Project name: %s\nDescription: %s\nAdmin: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
                 % (options.project,
+                   ksclient.convert_ascii(options.desc),
                    options.admin.lower(),
                    options.type,
                    str(enddate),
