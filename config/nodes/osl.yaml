@@ -254,10 +254,10 @@ nodes:
     mac: 4c:d9:8f:68:34:6c
     hostgroup: 10
   storage-arccache-10:
-    mac: 4c:d9:8f:68:3a:e5
+    mac: 4c:d9:8f:68:34:0c
     hostgroup: 10
   storage-arccache-11:
-    mac: 4c:d9:8f:68:34:0c
+    mac: 4c:d9:8f:68:3a:e5
     hostgroup: 10
   storage-arccache-12:
     mac: 4c:d9:8f:68:3a:0d
