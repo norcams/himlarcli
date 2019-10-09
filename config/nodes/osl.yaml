@@ -247,6 +247,21 @@ nodes:
   storage-07:
     mac: d0:94:66:33:06:b0
     hostgroup: 8
+  storage-arccache-08:
+    mac: 18:66:da:bd:57:6d
+    hostgroup: 8
+  storage-arccache-09:
+    mac: 18:66:da:bc:ea:14
+    hostgroup: 8
+  storage-arccache-10:
+    mac: 18:66:da:bd:62:4c
+    hostgroup: 8
+  storage-arccache-11:
+    mac: 18:66:da:bd:5b:aa
+    hostgroup: 8
+  storage-arccache-12:
+    mac: 18:66:da:bd:65:03
+    hostgroup: 8
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
