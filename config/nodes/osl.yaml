@@ -248,19 +248,19 @@ nodes:
     mac: d0:94:66:33:06:b0
     hostgroup: 8
   storage-arccache-08:
-    mac: 18:66:da:bd:57:6d
+    mac: 4c:d9:8f:68:39:dd
     hostgroup: 8
   storage-arccache-09:
-    mac: 18:66:da:bc:ea:14
+    mac: 4c:d9:8f:68:34:6c
     hostgroup: 8
   storage-arccache-10:
-    mac: 18:66:da:bd:62:4c
+    mac: 4c:d9:8f:68:3a:e5
     hostgroup: 8
   storage-arccache-11:
-    mac: 18:66:da:bd:5b:aa
+    mac: 4c:d9:8f:68:34:0c
     hostgroup: 8
   storage-arccache-12:
-    mac: 18:66:da:bd:65:03
+    mac: 4c:d9:8f:68:3a:0d
     hostgroup: 8
   telemetry-01:
     compute_profile: xlarge
