@@ -55,8 +55,7 @@ nodes:
     # mac: 78:45:c4:f9:ac:8b
     mac: f8:bc:12:40:44:30
   controller-03:
-    # mac: f8:bc:12:52:d8:68
-    mac: e0:db:55:04:e8:02
+    mac: f8:bc:12:52:d8:68
   dashboard-01:
     compute_profile: small
     compute_resource: controller-02
