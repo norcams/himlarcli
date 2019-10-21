@@ -67,6 +67,17 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
+  'debian10':
+    'name':             'GOLD Debian 10'
+    'depricated':       'Outdated (Debian)'
+    'url':              'http://builder/'
+    'latest':           'debian10-latest.qcow2'
+    'min_ram':          768
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
   'fedora_30':
     'name':             'GOLD Fedora 30'
     'depricated':       'Outdated (Fedora)'
