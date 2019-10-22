@@ -10,6 +10,7 @@ actions:
   'delete':       'Delete project and all resources'
   'instances':    'List of all instances in project'
   'expired':      'List expired projects'
+  'checkdate':    'Check createdate of a project'
 #  'update': 'TODO'
 #  'revoke': 'TODO'
 opt_args:
@@ -18,7 +19,7 @@ opt_args:
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   'project':
-   'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'delete', 'instances']
+   'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'delete', 'instances', 'checkdate']
    'metavar':   'project'
   '--region':
     'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota', 'expired']

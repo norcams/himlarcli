@@ -273,6 +273,15 @@ def action_instances():
             printer.output_dict(output, sort=True, one_line=True)
         printer.output_dict({'header': 'Total instances in this project', 'count': count})
 
+def action_checkdate():
+    project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.sys_error('No project found with name %s' % options.project)
+    output_project = project.to_dict()
+    createdate = project.createdate.split('T')
+    print('createdate of %s is %s' % (project.name, createdate[0]))
+
+
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
