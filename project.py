@@ -275,12 +275,21 @@ def action_instances():
 
 def action_checkdate():
     project = ksclient.get_project_by_name(project_name=options.project)
+    search_filter = dict()
+    projects = ksclient.get_projects(**search_filter)
     if not project:
         himutils.sys_error('No project found with name %s' % options.project)
-    output_project = project.to_dict()
-    createdate = project.createdate.split('T')
-    print('createdate of %s is %s' % (project.name, createdate[0]))
 
+    startdate = project.createdate
+    convert_sd = datetime.strptime(startdate, '%Y-%m-%dT%H:%M:%S.%f')
+    sd = convert_sd.strftime('%Y-%m-%d')
+
+    print('The createdate for %s is %s' % (project.name, sd))
+
+    todaydate = datetime.today()
+    td = todaydate.strftime('%Y-%m-%d')
+
+    countdays = abs((td - sd).days) #todo
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
