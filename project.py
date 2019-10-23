@@ -279,18 +279,15 @@ def action_activity():
     projects = ksclient.get_projects(**search_filter)
     if not project:
         himutils.sys_error('No project found with name %s' % options.project)
-
     startdate = project.createdate
     convert_sd = datetime.strptime(startdate, '%Y-%m-%dT%H:%M:%S.%f')
     sd = convert_sd.strftime('%Y-%m-%d')
     sd_to_s = convert_sd.strftime('%s')
     print('Project\'s createdate: %s' % sd)
-
     todaydate = datetime.today()
     td = todaydate.strftime('%Y-%m-%d')
     td_to_s = todaydate.strftime('%s')
     print('Today\'s date: %s' % td)
-
     countseconds = abs(int(td_to_s) - int(sd_to_s))
     countdays = (countseconds // (24 * 3600))
     print('The project %s has been running for %s days.' % (project.name, countdays))
