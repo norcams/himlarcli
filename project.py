@@ -273,7 +273,7 @@ def action_instances():
             printer.output_dict(output, sort=True, one_line=True)
         printer.output_dict({'header': 'Total instances in this project', 'count': count})
 
-def action_checkdate():
+def action_activity():
     project = ksclient.get_project_by_name(project_name=options.project)
     search_filter = dict()
     projects = ksclient.get_projects(**search_filter)
@@ -292,7 +292,7 @@ def action_checkdate():
     print('Today\'s date: %s' % td)
 
     countseconds = abs(int(td_to_s) - int(sd_to_s))
-    countdays =  (( countseconds // (24 * 3600)))
+    countdays = (countseconds // (24 * 3600))
     print('The project %s has been running for %s days.' % (project.name, countdays))
 
 # Run local function with the same name as the action (Note: - => _)
