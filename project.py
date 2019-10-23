@@ -283,13 +283,17 @@ def action_checkdate():
     startdate = project.createdate
     convert_sd = datetime.strptime(startdate, '%Y-%m-%dT%H:%M:%S.%f')
     sd = convert_sd.strftime('%Y-%m-%d')
-
-    print('The createdate for %s is %s' % (project.name, sd))
+    sd_to_s = convert_sd.strftime('%s')
+    print('Project\'s createdate: %s' % sd)
 
     todaydate = datetime.today()
     td = todaydate.strftime('%Y-%m-%d')
+    td_to_s = todaydate.strftime('%s')
+    print('Today\'s date: %s' % td)
 
-    countdays = abs((td - sd).days) #todo
+    countseconds = abs(int(td_to_s) - int(sd_to_s))
+    countdays =  (( countseconds // (24 * 3600)))
+    print('The project %s has been running for %s days.' % (project.name, countdays))
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
