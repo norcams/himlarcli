@@ -185,7 +185,7 @@ def action_terminate():
             users[email] = dict()
         users[email][i.name] = {'snapshot': i.name + snapshot_name}
         # Snapshot and terminate instance
-        if not options.dry_run and email == 'raymond.kristiansen@uib.no':
+        if not options.dry_run:
             project = ksclient.get_by_id('project', i.tenant_id)
             metadata = {
                 'created_by': 'automated by uh-iaas team',

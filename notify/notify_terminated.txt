@@ -11,9 +11,6 @@ names:
 
 $instances
 
-Note that even though the visibility attribute of the snapshot is "shared", it
-is in fact a private image only visible to you.
-
 Further documentation and contact information can be found at
 http://docs.uh-iaas.no
 
