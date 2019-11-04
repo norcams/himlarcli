@@ -1,0 +1,25 @@
+Dear user,
+
+We have now terminated all instances in the legacy AZ in VAGRANT. Please
+refer to prior communication for the reasoning behind this.
+
+All instances have been backed up to snapshots which can later be used to
+recreate them in a valid AZ.
+
+The list below shows your terminated instances and their respective snapshot
+names:
+
+$instances
+
+Note that even though the visibility attribute of the snapshot is "shared", it
+is in fact a private image only visible to you.
+
+Further documentation and contact information can be found at
+http://docs.uh-iaas.no
+
+We apologize for the inconvenience. Please don't hesitate to contact us if you
+have any questions.
+
+Kind regards,
+
+UH-IaaS team

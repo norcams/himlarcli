@@ -8,9 +8,10 @@ actions:
   'notify':     'Notify all users with instances in aggregate of migration'
   'migrate':    'Migrate all instances out of aggregate'
   'activate':   'Enable aggregate and disable all other aggregates'
+  'terminate':
 opt_args:
   'aggregate':
-    'sub':      ['show', 'instances', 'users', 'notify', 'migrate', 'activate']
+    'sub':      ['show', 'instances', 'users', 'notify', 'migrate', 'activate','terminate']
     'metavar':  'aggregate'
   '-m':
     'sub':      'notify'
@@ -52,7 +53,7 @@ opt_args:
     'const':    true
     'default':  False
   '--template':
-    'sub':      ['notify']
+    'sub':      ['notify', 'terminate']
     'dest':     'template'
     'help':     'mail template file. See notify/'
     'default':  'notify/notify_reboot.txt'

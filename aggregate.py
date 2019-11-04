@@ -31,6 +31,8 @@ printer = Printer(options.format)
 ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=logger)
+novaclient.set_dry_run(options.dry_run)
+
 domain = 'Dataporten'
 zone = '%s-default-1' % ksclient.region
 
@@ -157,6 +159,76 @@ def action_migrate():
         if options.hard_limit and count >= options.limit:
             logger.debug('=> use of hard limit and exit after %s instances', options.limit)
             break
+
+def action_terminate():
+    users = dict()
+    instances = novaclient.get_instances(options.aggregate)
+    snapshot_name = "-legacy_terminate_" + datetime.now().strftime("%Y-%m-%d")
+    # Generate instance list per user
+    for i in instances:
+        email = None
+        user = ksclient.get_by_id('user', i.user_id)
+        if not user:
+            project = ksclient.get_by_id('project', i.tenant_id)
+            if hasattr(project, 'admin'):
+                email = project.admin
+            else:
+                continue
+        if not email:
+            if not user.name:
+                continue
+            if "@" not in user.name:
+                continue
+            email = user.name.lower()
+        if email not in users:
+            users[email] = dict()
+        users[email][i.name] = {'snapshot': i.name + snapshot_name}
+        # Snapshot and terminate instance
+        if not options.dry_run:
+            project = ksclient.get_by_id('project', i.tenant_id)
+            metadata = {
+                'created_by': 'automated by uh-iaas team',
+                'owner': project.id
+            }
+            if i.status == ACTIVE:
+                i.stop()
+                time.sleep(5)
+            i.create_image(image_name=i.name + snapshot_name, metadata=metadata)
+            i.delete()
+    if users:
+        mail = Mail(options.config, debug=options.debug)
+    # Email each users
+    for user, instances in users.iteritems():
+        user_instances = ""
+        for server, info in instances.iteritems():
+            user_instances += "%s (snapshot: %s)\n" % (server, info['snapshot'])
+        #action_date = himutils.get_date(options.date, date.today(), '%Y-%m-%d')
+        mapping = dict(region=ksclient.region.upper(),
+                       #date=action_date.strftime("%d %B %Y"),
+                       region_lower=ksclient.region.lower(),
+                       instances=user_instances)
+        body_content = himutils.load_template(inputfile=options.template,
+                                              mapping=mapping,
+                                              log=ksclient.get_logger())
+        if not body_content:
+            print 'ERROR! Could not find and parse mail body in \
+                  %s' % options.msg
+            sys.exit(1)
+
+        msg = MIMEText(body_content, 'plain', 'utf-8')
+        msg['Subject'] = ('[UH-IaaS]: Your legacy instances have been terminated (%s)'
+                          % (ksclient.region))
+
+        if not options.dry_run:
+            mail.send_mail(user, msg)
+            print "Sending email to user %s" % user
+        else:
+            print "Dry-run: Mail would be sendt to user %s" % user
+    pp = pprint.PrettyPrinter(indent=1)
+    print "\nComplete list of users and instances:"
+    print "====================================="
+    pp.pprint(users)
+
 
 def action_notify():
     users = dict()
