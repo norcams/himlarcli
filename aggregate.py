@@ -166,7 +166,11 @@ def action_terminate():
     instances = novaclient.get_instances(options.aggregate)
     snapshot_name = "-legacy_terminate_" + datetime.now().strftime("%Y-%m-%d")
     # Generate instance list per user
+    count = 0
     for i in instances:
+        count += 1
+        if count > options.limit:
+            break
         email = None
         user = ksclient.get_by_id('user', i.user_id)
         if not user:
@@ -194,7 +198,11 @@ def action_terminate():
             }
             if i.status == 'ACTIVE':
                 i.stop()
-                time.sleep(5)
+                status = i.status
+                while status != 'SHUTOFF':
+                    time.sleep(5)
+                    tmp_i = novaclient.get_by_id('server', i.id)
+                    status = tmp_i.status
             image_name = i.name + snapshot_name
             image_id = i.create_image(image_name=image_name, metadata=metadata)
             time.sleep(2)
@@ -204,7 +212,7 @@ def action_terminate():
                 time.sleep(5)
                 image = glclient.get_image_by_id(image_id)
                 ksclient.debug_log('waiting for snapshot %s to be ready' % image_name)
-            i.delete()
+            #i.delete()
     if users:
         mail = Mail(options.config, debug=options.debug)
     # Email each users

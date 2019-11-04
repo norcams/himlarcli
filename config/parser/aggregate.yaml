@@ -23,7 +23,7 @@ opt_args:
     'dest':     'az'
     'help':     'availability zone'
   '--limit':
-    'sub':      'migrate'
+    'sub':      ['migrate', 'terminate']
     'type':     int
     'dest':     'limit'
     'help':     'number of instances to migrate before sleep'
