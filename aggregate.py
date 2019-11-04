@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from email.mime.text import MIMEText
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
-#from himlarcli.glance import Glance
+from himlarcli.glance import Glance
 from himlarcli import utils as himutils
 from himlarcli.mail import Mail
 #from himlarcli.state import State
@@ -32,6 +32,7 @@ ksclient = Keystone(options.config, debug=options.debug)
 logger = ksclient.get_logger()
 novaclient = Nova(options.config, debug=options.debug, log=logger)
 novaclient.set_dry_run(options.dry_run)
+glclient = Glance(options.config, debug=options.debug, log=logger)
 
 domain = 'Dataporten'
 zone = '%s-default-1' % ksclient.region
@@ -184,16 +185,25 @@ def action_terminate():
             users[email] = dict()
         users[email][i.name] = {'snapshot': i.name + snapshot_name}
         # Snapshot and terminate instance
-        if not options.dry_run:
+        if not options.dry_run and email == 'raymond.kristiansen@uib.no':
             project = ksclient.get_by_id('project', i.tenant_id)
             metadata = {
                 'created_by': 'automated by uh-iaas team',
-                'owner': project.id
+                'owner': project.id,
+                'visibility': 'shared'
             }
             if i.status == 'ACTIVE':
                 i.stop()
                 time.sleep(5)
-            i.create_image(image_name=i.name + snapshot_name, metadata=metadata)
+            image_name = i.name + snapshot_name
+            image_id = i.create_image(image_name=image_name, metadata=metadata)
+            time.sleep(2)
+            image = glclient.get_image_by_id(image_id)
+            glclient.debug_log('create snapshot %s' % image_name)
+            while image.status == 'queued':
+                time.sleep(5)
+                image = ksclient.get_image_by_id(image_id)
+                ksclient.debug_log('waiting for snapshot %s to be ready' % image_name)
             i.delete()
     if users:
         mail = Mail(options.config, debug=options.debug)
