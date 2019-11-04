@@ -190,7 +190,7 @@ def action_terminate():
                 'created_by': 'automated by uh-iaas team',
                 'owner': project.id
             }
-            if i.status == ACTIVE:
+            if i.status == 'ACTIVE':
                 i.stop()
                 time.sleep(5)
             i.create_image(image_name=i.name + snapshot_name, metadata=metadata)
