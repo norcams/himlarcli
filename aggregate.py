@@ -200,7 +200,7 @@ def action_terminate():
             time.sleep(2)
             image = glclient.get_image_by_id(image_id)
             ksclient.debug_log('create snapshot %s' % image_name)
-            while image.status == 'queued':
+            while image.status != 'active':
                 time.sleep(5)
                 image = glclient.get_image_by_id(image_id)
                 ksclient.debug_log('waiting for snapshot %s to be ready' % image_name)
