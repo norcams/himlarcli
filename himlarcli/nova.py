@@ -15,7 +15,7 @@ class Nova(Client):
     instances = dict()
     ksclient = None
 
-    valid_objects = ['flavor']
+    valid_objects = ['flavor', 'server']
 
     def __init__(self, config_path, debug=False, log=None, region=None):
         """ Create a new nova client to manaage a host
