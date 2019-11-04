@@ -199,10 +199,10 @@ def action_terminate():
             image_id = i.create_image(image_name=image_name, metadata=metadata)
             time.sleep(2)
             image = glclient.get_image_by_id(image_id)
-            glclient.debug_log('create snapshot %s' % image_name)
+            ksclient.debug_log('create snapshot %s' % image_name)
             while image.status == 'queued':
                 time.sleep(5)
-                image = ksclient.get_image_by_id(image_id)
+                image = glclient.get_image_by_id(image_id)
                 ksclient.debug_log('waiting for snapshot %s to be ready' % image_name)
             i.delete()
     if users:
