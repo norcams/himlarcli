@@ -57,6 +57,11 @@ def action_show():
         himutils.sys_error('Could not find valid host %s' % options.host)
     printer.output_dict(host.to_dict())
 
+def action_users():
+    users = nc.get_users(options.aggregate, simple=True)
+    printer.output_dict({'header': 'User in %s' % options.aggregate,
+                         'users': list(users)})
+
 def action_move():
     hostname = nc.get_fqdn(options.host)
     instances = nc.get_instances(host=hostname)
