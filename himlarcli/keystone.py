@@ -255,10 +255,10 @@ class Keystone(Client):
 
 ############################# DELETE FUNCTIONS ################################
 
-    def delete_project(self, project_name):
+    def delete_project(self, project_name, region=None):
         """
             Delete project based on name and all instances
-            Version: 2018-1
+            Version: 2019-10
             :param project_name: name of project to delete
         """
         project = self.get_project_by_name(project_name=project_name)
@@ -266,12 +266,16 @@ class Keystone(Client):
             self.logger.debug('=> could not delete project %s: not found',
                               project_name)
             return None
+        if not region:
+            region = self.find_regions()
         # Delete instances
-        self.__delete_instances(project)
+        self.__delete_instances(project, region)
         # Delete images
-        self.__delete_images(project)
+        self.__delete_images(project, region)
         # Delete security groups
-        self.__delete_security_groups(project)
+        self.__delete_security_groups(project, region)
+        # Delete volume
+        self.__delete_volumes(project, region)
 
         self.debug_log('delete project %s' % project_name)
         if not self.dry_run:
@@ -748,11 +752,12 @@ class Keystone(Client):
 
     def __get_domain(self, domain):
         """ Get domain id from name """
-        if domain:
+        try:
             domain_obj = self.client.domains.find(name=domain)
-            if domain_obj:
-                return domain_obj.id
-        return None
+        except exceptions.http.NotFound:
+            self.debug_log('could not find domain {}'.format(domain))
+            domain_obj = None
+        return domain_obj.id if domain_obj else None
 
     def __get_projects(self, domain_id, **kwargs):
         projects = self.client.projects.list(domain=domain_id)
@@ -778,30 +783,44 @@ class Keystone(Client):
             users = self.client.users.list(**kwargs)
         return users
 
-    def __delete_instances(self, project):
-        """ Use novaclient to delete all instances for a project """
-        novaclient = Nova(config_path=self.config_path,
-                          debug=self.debug,
-                          log=self.logger,
-                          region=self.region)
-        novaclient.set_dry_run(self.dry_run)
-        novaclient.delete_project_instances(project, self.dry_run)
+    def __delete_instances(self, project, region):
+        """ Use novaclient to delete all instances for a project in
+            one or more regions
+            version: 2019-10 """
+        regions = [region] if not isinstance(region, list) else region
+        for region in regions:
+            nc = Nova(config_path=self.config_path,
+                      debug=self.debug,
+                      log=self.logger,
+                      region=region)
+            nc.set_dry_run(self.dry_run)
+            nc.delete_project_instances(project, self.dry_run)
 
-    def __delete_images(self, project):
-        glclient = Glance(config_path=self.config_path,
-                          debug=self.debug,
-                          log=self.logger,
-                          region=self.region)
-        glclient.set_dry_run(self.dry_run)
-        glclient.delete_private_images(project.id)
+    def __delete_images(self, project, region):
+        """ Use glanceclient to delete all private images for a project in
+            one or more regions
+            version: 2019-10 """
+        regions = [region] if not isinstance(region, list) else region
+        for region in regions:
+            gc = Glance(config_path=self.config_path,
+                        debug=self.debug,
+                        log=self.logger,
+                        region=region)
+            gc.set_dry_run(self.dry_run)
+            gc.delete_private_images(project.id)
 
     def __delete_security_groups(self, project):
-        neutronclient = Neutron(config_path=self.config_path,
-                                debug=self.debug,
-                                log=self.logger,
-                                region=self.region)
-        neutronclient.set_dry_run(self.dry_run)
-        neutronclient.purge_security_groups(project)
+        """ Use neutronclient to delete all security groups for a project in
+            one or more regions
+            version: 2019-10 """
+        regions = [region] if not isinstance(region, list) else region
+        for region in regions:
+            nc = Neutron(config_path=self.config_path,
+                         debug=self.debug,
+                         log=self.logger,
+                         region=region)
+            nc.set_dry_run(self.dry_run)
+            nc.purge_security_groups(project)
 
     def __list_compute_quota(self, project):
         self.novaclient = Nova(config_path=self.config_path,
