@@ -127,7 +127,7 @@ class Client(object):
             :param: format: replace (with ?) or ignore non-ascii characters
             version: 2019-10
         """
-        text_unicode = unicode(text, 'utf-8')
+        text_unicode = unicode(text, 'utf-8') if  isinstance(text, str) else text
         text_normalize = unicodedata.normalize('NFKD', text_unicode)
         return text_normalize.encode('ascii', format)
 
