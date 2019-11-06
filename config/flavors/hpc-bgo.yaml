@@ -1,6 +1,7 @@
 ---
 # flavor used for uib-kj-webmo
 public: false
+properties: {}
 hpc:
   'hpc.webmo':
     ram:    262144
