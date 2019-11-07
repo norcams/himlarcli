@@ -24,13 +24,9 @@ class Cinder(Client):
     def get_client(self):
         return self.client
 
-    def get_volumes(self, detailed=False, project_id=None):
+    def get_volumes(self, detailed=False, search_opts=None):
         """ Return all or project volumes
             version: 2019-09 """
-        if project_id:
-            search_opts = { 'project_id': project_id}
-        else:
-            search_opts = None
         volumes = self.__get_volumes(detailed=detailed, search_opts=search_opts)
         return volumes
 

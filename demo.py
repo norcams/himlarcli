@@ -42,7 +42,7 @@ def action_list():
             for i in instances:
                 ins_data['vcpus'] += i.flavor['vcpus']
                 ins_data['count'] += 1
-            volumes = cc.get_volumes(detailed=True, project_id=project.id)
+            volumes = cc.get_volumes(detailed=True, search_opts={'project_id': project.id})
             for volume in volumes:
                 vol_data['size'] += volume.size
                 vol_data['count'] += 1

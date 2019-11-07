@@ -1,0 +1,24 @@
+---
+desc:   'Manage openstack volumes (single region script)'
+actions:
+  list:     'list volumes'
+  orphan:   'list orphan volumes'
+
+opt_args:
+  '--region':
+    'dest':     'region'
+    'help':     'override current region'
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '-t':
+    'sub':      ['list']
+    'dest':     'type'
+    'help':     'volume type'
+    'metavar':  'volume type'
+  '-p':
+    'sub':      ['list']
+    'dest':     'project'
+    'help':     'project name'
+    'metavar':  'project name'
