@@ -51,6 +51,8 @@ class Cinder(Client):
         try:
             if not self.dry_run:
                 result = self.client.quotas.update(tenant_id=project_id, **updates)
+            else:
+                result = None
         except exceptions.NotFound as e:
             self.log_error(e)
         return result
@@ -71,6 +73,19 @@ class Cinder(Client):
     def get_quota_class(self, class_name='default'):
         return self.client.quota_classes.get(class_name)
 
+
+    def delete_volume(self, volume_id, cascade=False):
+        """ Delete volume
+            version: 2019-11 """
+        try:
+            self.debug_log('delete volume with id {}'.format(volume_id))
+            if not self.dry_run:
+                result = self.client.volumes.delete(volume=volume_id, cascade=cascade)
+            else:
+                result = None
+        except exceptions.NotFound as e:
+            self.log_error(e)
+        return result
 
     def __get_volumes(self, detailed=False, search_opts=None):
         if not search_opts:

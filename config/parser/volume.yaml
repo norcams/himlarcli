@@ -22,3 +22,9 @@ opt_args:
     'dest':     'project'
     'help':     'project name'
     'metavar':  'project name'
+  '--purge':
+    'sub':      ['orphan']
+    'dest':     'purge'
+    'help':     'purge the orphan volumes'
+    'action':   'store_const'
+    'const':    true

@@ -48,7 +48,10 @@ def action_list():
         'size': count['size']})
 
 def action_orphan():
-    cc = Cinder(options.config, debug=options.debug, log=logger, region=region)
+    question = "This will also purge all orphan volumes. Are you sure?"
+    if options.purge and not utils.confirm_action(question):
+        return
+    cc = utils.get_client(Cinder, options, logger, region)
     volumes = cc.get_volumes(detailed=True)
     printer.output_dict({'header': 'Volumes (id, name, type)'})
     count = {'count': 0, 'size': 0}
@@ -57,6 +60,8 @@ def action_orphan():
         if project: # not orphan volume
             continue
         count = print_and_count(volume, count)
+        if options.purge:
+            cc.delete_volume(volume.id, True)
     printer.output_dict({
         'header': 'Count',
         'volumes': count['count'],
