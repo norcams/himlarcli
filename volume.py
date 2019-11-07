@@ -34,13 +34,13 @@ def action_list():
         search_opts['project_id'] = project.id
     else:
         project_id = None
-    if options.type:
-        search_opts['volume_type'] = options.type
     cc = Cinder(options.config, debug=options.debug, log=logger, region=region)
     volumes = cc.get_volumes(detailed=True, search_opts=search_opts)
     printer.output_dict({'header': 'Volumes (id, name, type)'})
     count = {'count': 0, 'size': 0}
     for volume in volumes:
+        if options.type and options.type != volume.volume_type:
+            continue
         count = print_and_count(volume, count)
     printer.output_dict({
         'header': 'Count',
