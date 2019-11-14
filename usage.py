@@ -42,7 +42,7 @@ def action_volume():
             hosts = nc.get_aggregate_hosts(aggregate, True)
             for host in hosts:
                 vms_pool['in_use_gb'] += int(host.local_gb_used)
-        printer.output_dict({'header': '%s pool vms (max usage)' % region})
+        printer.output_dict({'header': 'Nova OS-disk: %s pool vms (max usage)' % region})
         printer.output_dict(vms_pool)
 
         # cinder quotas and volume usages
@@ -58,6 +58,13 @@ def action_volume():
             quotas['in_use'] += quota['gigabytes']['in_use']
             quotas['quota'] += quota['gigabytes']['limit']
 
+        # cinder volume usage
+        volumes = cc.get_volumes(True)
+        volume_usage = {'count': 0, 'size': 0}
+        for volume in volumes:
+            volume_usage['size'] += volume.size
+            volume_usage['count'] += 1
+
         # cinder pools
         pools = cc.get_pools(detail=True)
         tmp = pools.to_dict()
@@ -67,13 +74,16 @@ def action_volume():
             out_pool = dict()
             out_pool['total_capacity_gb'] = pool['capabilities']['total_capacity_gb']
             out_pool['free_capacity_gb'] = pool['capabilities']['free_capacity_gb']
-            printer.output_dict({'header': '%s pool %s' % (region, name)})
+            printer.output_dict({'header': 'Cinder pool: %s pool %s' % (region, name)})
             printer.output_dict(out_pool)
         out_pools = dict()
-        out_pools['used_in_volume_gb'] = float(quotas['in_use'])
+        out_pools['number_of_volumes'] = volume_usage['count']
         out_pools['total_quota_gb'] = float(quotas['quota'])
+        out_pools['total_in_volume_gb'] = volume_usage['size']
+        out_pools['used_in_volume_gb'] = float(quotas['in_use'])
         printer.output_dict({'header': '%s openstack volume service' % region})
         printer.output_dict(out_pools)
+
 
 def action_instance():
     #ToDo
