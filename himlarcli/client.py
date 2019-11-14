@@ -9,6 +9,9 @@ from abc import ABCMeta, abstractmethod
 
 class Client(object):
 
+    """ Constant used to mark a class as region aware """
+    USE_REGION = False
+
     __metaclass__ = ABCMeta
     region = None
 
@@ -136,3 +139,23 @@ class Client(object):
         sys.stderr.write("%s\n" % msg)
         if code > 0:
             sys.exit(code)
+
+    # protected method
+    def _get_client(self, client_class, region=None):
+        """ Use to get an instance of a different client than the one calling
+            version: 2019-11
+            :param: client_class: the class of the client """
+        class_without_region = ['Keystone', 'Designate']
+        if not region:
+            region = self.region
+        if client_class.USE_REGION:
+            client = client_class(config_path=self.config_path,
+                                  debug=self.debug,
+                                  log=self.logger,
+                                  region=region)
+        else:
+            client = client_class(config_path=self.config_path,
+                                  debug=self.debug,
+                                  log=self.logger)
+        client.set_dry_run(self.dry_run)
+        return client

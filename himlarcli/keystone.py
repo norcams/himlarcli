@@ -1,4 +1,5 @@
 from himlarcli.client import Client
+from himlarcli.cinder import Cinder
 from himlarcli.nova import Nova
 from himlarcli.neutron import Neutron
 from himlarcli.glance import Glance
@@ -258,8 +259,9 @@ class Keystone(Client):
     def delete_project(self, project_name, region=None):
         """
             Delete project based on name and all instances
-            Version: 2019-10
+            Version: 2019-11
             :param project_name: name of project to delete
+            :param region: region name to delete project resources (None = all)
         """
         project = self.get_project_by_name(project_name=project_name)
         if not project:
@@ -789,11 +791,7 @@ class Keystone(Client):
             version: 2019-10 """
         regions = [region] if not isinstance(region, list) else region
         for region in regions:
-            nc = Nova(config_path=self.config_path,
-                      debug=self.debug,
-                      log=self.logger,
-                      region=region)
-            nc.set_dry_run(self.dry_run)
+            nc = self._get_client(Nova, region)
             nc.delete_project_instances(project, self.dry_run)
 
     def __delete_images(self, project, region):
@@ -802,25 +800,25 @@ class Keystone(Client):
             version: 2019-10 """
         regions = [region] if not isinstance(region, list) else region
         for region in regions:
-            gc = Glance(config_path=self.config_path,
-                        debug=self.debug,
-                        log=self.logger,
-                        region=region)
-            gc.set_dry_run(self.dry_run)
+            gc = self._get_client(Glance, region)
             gc.delete_private_images(project.id)
 
-    def __delete_security_groups(self, project):
+    def __delete_security_groups(self, project, region):
         """ Use neutronclient to delete all security groups for a project in
             one or more regions
             version: 2019-10 """
         regions = [region] if not isinstance(region, list) else region
         for region in regions:
-            nc = Neutron(config_path=self.config_path,
-                         debug=self.debug,
-                         log=self.logger,
-                         region=region)
-            nc.set_dry_run(self.dry_run)
+            nc = self._get_client(Neutron, region)
             nc.purge_security_groups(project)
+
+    def __delete_volumes(self, project, region):
+        """ Use cinder client to delete all project volumes in one or all regions
+            version: 2019-11 """
+        regions = [region] if not isinstance(region, list) else region
+        for region in regions:
+            cc = self._get_client(Cinder, region)
+            cc.purge_project_volumes(project.id)
 
     def __list_compute_quota(self, project):
         self.novaclient = Nova(config_path=self.config_path,
