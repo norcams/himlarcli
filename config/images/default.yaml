@@ -90,3 +90,15 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
       'hw_rng_model':   'virtio'
+  'fedora_31':
+    'name':             'GOLD Fedora 31'
+    'depricated':       'Outdated (Fedora)'
+    'url':              'http://builder/'
+    'latest':           'fedora_31-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
+      'hw_rng_model':   'virtio'
