@@ -40,8 +40,9 @@ def action_list():
 
 def action_migrate():
     target = nc.get_fqdn(options.target)
-    if not nc.get_host(target):
-        himutils.sys_error('Could not find target host %s' % target)
+    target_details = nc.get_host(target)
+    if not target_details or target_details.status != 'enabled':
+        himutils.sys_error('Could not find enabled target host %s' % options.target)
     q = 'Migrate all instances from %s to %s' % (source, target)
     if not himutils.confirm_action(q):
         return
