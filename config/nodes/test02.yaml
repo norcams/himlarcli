@@ -39,9 +39,6 @@ nodes:
   compute-03:
     mac: b8:ac:6f:91:62:ed
     hostgroup: 3
-  compute-242:
-    mac: ac:1f:6b:62:11:e4
-    hostgroup: 3
   console-01:
     compute_profile: small
     compute_resource: controller-02
