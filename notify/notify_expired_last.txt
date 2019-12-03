@@ -1,0 +1,2 @@
+Your project $project has reached the end date on $enddate and have now been
+disabled and scheduled for deletion.

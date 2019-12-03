@@ -1,0 +1,3 @@
+Your project $project has reached the end date $enddate. It will be
+deleted in 30 days. To apply for an extention send an email to
+support@uh-iaas.no

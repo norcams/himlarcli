@@ -1,0 +1,23 @@
+---
+desc:   'Management of expired project for UH-IaaS'
+actions:
+  'list':     'List expired projects'
+  'notify':   'Send warning mail to expired projects and disable them'
+  'disable':  'Disable project, stop resources and inform project admin'
+
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  # 'project':
+  #  'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'delete', 'instances']
+  #  'metavar':   'project'
+  # '--region':
+  #   'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota', 'expired']
+  #   'dest':     'region'
+  #   'help':     'specify region'
+  '-t':
+    'sub':      ['notify', 'disable']
+    'dest':     'template'
+    'help':     'override default mail template file with path to new template'
