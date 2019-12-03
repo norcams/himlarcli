@@ -6,6 +6,9 @@ import sys
 
 class Glance(Client):
 
+    """ Constant used to mark a class as region aware """
+    USE_REGION = True
+
     version = 2
     """ All images """
     images = None

@@ -5,6 +5,9 @@ from cinderclient import exceptions
 
 class Cinder(Client):
 
+    """ Constant used to mark a class as region aware """
+    USE_REGION = True
+
     version = 2
     service_type = 'volumev3'
 
@@ -73,7 +76,6 @@ class Cinder(Client):
     def get_quota_class(self, class_name='default'):
         return self.client.quota_classes.get(class_name)
 
-
     def delete_volume(self, volume_id, cascade=False):
         """ Delete volume
             version: 2019-11 """
@@ -86,6 +88,12 @@ class Cinder(Client):
         except exceptions.NotFound as e:
             self.log_error(e)
         return result
+
+    def purge_project_volumes(self, project_id):
+        """ Simple wrapper method to purge all project volumes """
+        volumes = self.get_volumes(search_opts={'project_id': project_id})
+        for volume in volumes:
+            self.delete_volume(volume_id=volume.id, cascade=True)
 
     def __get_volumes(self, detailed=False, search_opts=None):
         if not search_opts:

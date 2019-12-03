@@ -12,6 +12,9 @@ import time
 
 class Nova(Client):
 
+    """ Constant used to mark a class as region aware """
+    USE_REGION = True
+
     instances = dict()
     ksclient = None
 
