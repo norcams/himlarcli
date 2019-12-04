@@ -4,6 +4,9 @@ from neutronclient.common import exceptions
 
 class Neutron(Client):
 
+    """ Constant used to mark a class as region aware """
+    USE_REGION = True
+
     def __init__(self, config_path, debug=False, log=None, region=None):
         super(Neutron, self).__init__(config_path, debug, log, region)
         self.logger.debug('=> init neutron client for region %s' % self.region)
