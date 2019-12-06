@@ -1,2 +1,11 @@
-Your project $project has reached the end date on $enddate and have now been
-disabled and scheduled for deletion.
+Dear user,
+
+30 days has passed since your project's end date was reached and you were first
+notified of its expiry. As you haven't applied for an extension the project has
+now been disabled and scheduled for deletion. If you were granted an extension
+and believe you have received this message by mistake, please contact us as
+soon as possible at support@uh-iaas.no
+
+Kind regards,
+
+The UH-IaaS Team
