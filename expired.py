@@ -106,7 +106,7 @@ def action_list():
         elif hasattr(project, 'notified'):
             project_mail = 'notified'
         else:
-            project_mail = 'NA'
+            project_mail = 'N/A'
         output_project = {
             0: project.enddate,
             1: project.type,
