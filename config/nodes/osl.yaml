@@ -101,7 +101,7 @@ nodes:
     hostgroup: 3
   compute-vgpu-42:
     mac: ac:1f:6b:64:72:84
-    hostgroup: 3
+    hostgroup: 11
   compute-gpu-17:
     mac: ac:1f:6b:62:15:be
     hostgroup: 3
