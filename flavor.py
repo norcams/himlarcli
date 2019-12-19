@@ -53,7 +53,7 @@ def action_instances():
                 output = {
                     '1': i.id,
                     '3': i.name,
-                    #'4': region,
+                    '4': i.status,
                     #'2': i.updated,
                     #'6'': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
                     '5': i.flavor['original_name']
