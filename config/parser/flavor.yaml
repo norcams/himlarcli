@@ -7,6 +7,7 @@ actions:
   'grant':  ''
   'revoke': ''
   'list-access': 'List project with access to flavors of this class'
+  'instances': 'list instances with flavor this class'
 opt_args:
   '--domain':
     'dest':     'domain'

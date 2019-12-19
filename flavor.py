@@ -38,6 +38,33 @@ def action_list():
                 output[out] = getattr(flavor, out)
             printer.output_dict(objects=output, one_line=True, sort=False)
 
+def action_instances():
+    printer.output_dict({'header': 'Instance list (id, name, status, updated)'})
+    status = dict({'total': 0})
+
+    for region in regions:
+        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
+        flavors = nc.get_flavors(filters=options.flavor)
+
+        for flavor in flavors:
+            search_opts = dict(all_tenants=1, flavor=flavor.id)
+            instances = nc.get_all_instances(search_opts=search_opts)
+
+            for i in instances:
+                output = {
+                    '1': i.id,
+                    '3': i.name,
+                    '4': i.status,
+                    #'2': i.updated,
+                    #'6'': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
+                    '5': i.flavor['original_name']
+                }
+                printer.output_dict(output, sort=True, one_line=True)
+                status['total'] += 1
+                status[str(i.status).lower()] = status.get(str(i.status).lower(), 0) + 1
+    printer.output_dict({'header': 'Counts'})
+    printer.output_dict(status)
+
 def action_update():
     question = ("This will delete the flavor and recreate it for all other "
                 "changes than properties. Check project access after. Continue?")
