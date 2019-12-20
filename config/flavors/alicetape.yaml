@@ -1,17 +1,21 @@
 ---
 public: false
-properties:
-  hw_rng:allowed: 'True'
-  hw_rng:rate_bytes: 1000000
-  hw_rng:rate_period: 60
-  aggregate_instance_extra_specs:type: 's== alicetape'
-  pci_passthrough:alias: 'isp2532:2'
-alicetape:
-  'alicetape.2xlarge':
-    vcpus: 8
-    ram: 32767
-    disk: 20
-  'alicetape.4xlarge':
-    vcpus: 16
-    ram: 65535
-    disk: 20
+properties: {}
+alicetape: {}
+
+# public: false
+# properties:
+#   hw_rng:allowed: 'True'
+#   hw_rng:rate_bytes: 1000000
+#   hw_rng:rate_period: 60
+#   aggregate_instance_extra_specs:type: 's== alicetape'
+#   pci_passthrough:alias: 'isp2532:2'
+# alicetape:
+#   'alicetape.2xlarge':
+#     vcpus: 8
+#     ram: 32767
+#     disk: 20
+#   'alicetape.4xlarge':
+#     vcpus: 16
+#     ram: 65535
+#     disk: 20
