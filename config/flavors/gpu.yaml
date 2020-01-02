@@ -1,0 +1,38 @@
+---
+# flavor used for uio-gpu
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 's== gpu'
+  pci_passthrough:alias: 'vega10:2'
+gpu:
+  'gpu.small':
+    vcpus: 1
+    ram: 2048
+    disk: 10
+  'gpu.medium':
+    vcpus: 1
+    ram: 4096
+    disk: 20
+  'gpu.large':
+    vcpus: 2
+    ram: 8192
+    disk: 20
+  'gpu.xlarge':
+    vcpus: 4
+    ram: 16384
+    disk: 20
+  'gpu.2xlarge':
+    vcpus: 8
+    ram: 32768
+    disk: 20
+  'gpu.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 20
+  'gpu.8xlarge':
+    vcpus: 32
+    ram: 131072
+    disk: 20
