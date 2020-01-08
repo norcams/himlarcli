@@ -1,0 +1,20 @@
+Hi,
+
+An HPC project named $project_name has been created.
+Admin user is $admin. End date is $end_date.
+
+It is important to note that the HPC service is in a beta stage. The stability
+of the service may be lacking compared to the standard UH-IaaS services. Things
+such as flavors and policies may change.
+
+Please read the end user documentation at
+
+http://docs.uh-iaas.no/en/latest/hpc.html
+
+before you start using the service.
+
+If you have any questions or problems using the service, please let us know.
+
+Best regards,
+
+The UH-IaaS team

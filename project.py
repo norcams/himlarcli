@@ -18,6 +18,7 @@ parser.set_autocomplete(True)
 options = parser.parse_args()
 printer = Printer(options.format)
 project_msg_file = 'notify/project_created.txt'
+project_hpc_msg_file = 'notify/project_created_hpc.txt'
 access_msg_file = 'notify/access_granted_rt.txt'
 access_user_msg_file = 'notify/access_granted_user.txt'
 
@@ -41,6 +42,7 @@ def action_create():
     if options.quota and not quota:
         himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
     test = 1 if options.type == 'test' else 0
+    project_msg = project_msg_file
     if options.enddate:
         try:
             enddate = datetime.strptime(options.enddate, '%d.%m.%Y').date()
@@ -48,6 +50,10 @@ def action_create():
             himutils.sys_error('date format DD.MM.YYYY not valid for %s' % options.enddate, 1)
     else:
         enddate = None
+    if options.type == 'hpc':
+        project_msg = project_hpc_msg_file
+        if not enddate:
+            himutils.sys_error('HPC projects must have an enddate', 1)
     createdate = datetime.today()
     if not options.force:
         print 'Project name: %s\nDescription: %s\nAdmin: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
@@ -106,7 +112,7 @@ def action_create():
                            quota=options.quota,
                            end_date=str(enddate))
             subject = 'UH-IaaS: Project %s has been created' % options.project
-            body_content = himutils.load_template(inputfile=project_msg_file,
+            body_content = himutils.load_template(inputfile=project_msg,
                                                   mapping=mapping)
         if not body_content:
             himutils.sys_error('ERROR! Could not find and parse mail body in \
