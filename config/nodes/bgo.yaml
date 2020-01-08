@@ -204,6 +204,16 @@ nodes:
   monitor-01:
     compute_profile: large
     compute_resource: controller-04
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '20G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   mq-01:
     compute_profile: xlarge
     compute_resource: controller-01
