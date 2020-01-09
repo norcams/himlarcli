@@ -85,3 +85,22 @@ default:
           pool_name:    'dirpool'
           capacity:     '10G'
           format_type:  'qcow2'
+  2xlarge:
+    vm_attrs:
+      cpus:   '4'
+      memory: '8589934592'
+      nics_attributes:
+        '0':
+          bridge: br0
+          model:  'virtio'
+          type:   'bridge'
+        'br1':
+          bridge: br1
+          model:  'virtio'
+          type:   'bridge'
+      volumes_attributes:
+        '0':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '10G'
+          format_type:  'qcow2'
