@@ -105,6 +105,9 @@ nodes:
   compute-gpu-17:
     mac: ac:1f:6b:62:15:be
     hostgroup: 3
+  compute-robin-18:
+    mac: f4:02:70:c4:76:d8
+    hostgroup: 3
   console-01:
     compute_profile: medium
     compute_resource: controller-03
