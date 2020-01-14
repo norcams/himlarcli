@@ -628,39 +628,58 @@ class Keystone(Client):
                                       type='demo',
                                       description=desc)
 
-    """
-    Federation settings for identity provider """
-    def set_identity_provider(self, name, remote_id):
-        providers = self.client.federation.identity_providers.list()
-        for i in providers:
-            if name == i.id:
-                self.logger.debug('=> identity provider %s exists' % name)
-                return
+    def set_identity_provider(self, name, remote_id, description):
+        """
+            Create identity provider
+            version: 2020-01
+        """
+        try:
+            self.client.federation.identity_providers.find(id=name)
+            self.debug_log('identity provider {} exists'.format(name))
+            return
+        except exceptions.http.NotFound:
+            pass
+        self.debug_log('create identity_provider {}'.format(name))
+        if self.dry_run:
+            return
         self.client.federation.identity_providers.create(id=name,
                                                          enabled=True,
-                                                         remote_ids=[remote_id])
+                                                         remote_ids=[remote_id],
+                                                         description=description)
 
-    """
-    Federation settings for identity mappping """
-    def set_mapping(self, id, rules):
-        mappings = self.client.federation.mappings.list()
-        for i in mappings:
-            if id == i.id:
-                self.logger.debug('=> mapping %s exists' % id)
-                return
-        self.client.federation.mappings.create(mapping_id=id, rules=rules)
+    def set_mapping(self, mapping_id, rules):
+        """
+            Create federated identity mapping
+            version: 2020-01
+        """
+        try:
+            self.client.federation.mappings.find(id=mapping_id)
+            self.debug_log('mapping {} exists'.format(mapping_id))
+            return
+        except exceptions.http.NotFound:
+            pass
+        self.debug_log('create identity mapping {}'.format(mapping_id))
+        if not self.dry_run:
+            self.client.federation.mappings.create(mapping_id=mapping_id,
+                                                   rules=rules)
 
-    """
-    Federation settings for protocol container """
-    def set_protocol(self, id, provider, mapping):
-        protocols = self.client.federation.protocols.list(provider)
-        for i in protocols:
-            if id == i.id:
-                self.logger.debug('=> protocol %s exists' % id)
-                return
-        self.client.federation.protocols.create(id,
-                                                identity_provider=provider,
-                                                mapping=mapping)
+    def set_protocol(self, protocol_id, provider, mapping):
+        """
+            Create federation protocol for identity provider
+            version: 2020-01
+        """
+        try:
+            self.client.federation.protocols.find(id=protocol_id)
+            self.debug_log('federation protocol {} exists'.format(protocol_id))
+            return
+        except exceptions.http.NotFound:
+            pass
+        self.debug_log('create federation protocol {} for provider {}'
+                       .format(protocol_id, provider))
+        if not self.dry_run:
+            self.client.federation.protocols.create(protocol_id,
+                                                    identity_provider=provider,
+                                                    mapping=mapping)
 
     def create_group(self, name, description, domain):
         self.logger.debug('=> create group %s' % (name))
