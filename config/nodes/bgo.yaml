@@ -403,19 +403,19 @@ nodes:
     hostgroup: 9
   storage-v2d-35:
     mac: 20:04:0f:fb:a5:42
-    hostgroup: 12
+    hostgroup: 13
   storage-v2d-36:
     mac: 34:17:eb:32:45:8e
-    hostgroup: 12
+    hostgroup: 13
   storage-v2d-37:
     mac: 34:17:eb:32:45:8f
-    hostgroup: 12
+    hostgroup: 13
   storage-v2d-38:
     mac: 34:17:eb:32:45:90
-    hostgroup: 12
+    hostgroup: 13
   storage-v2d-39:
     mac: 34:17:eb:32:45:91
-    hostgroup: 12
+    hostgroup: 13
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
