@@ -402,7 +402,7 @@ nodes:
     mac: 20:04:0f:f4:76:ca
     hostgroup: 9
   storage-v2d-35:
-    mac: 34:17:eb:32:45:8d
+    mac: 20:04:0f:fb:a5:42
     hostgroup: 12
   storage-v2d-36:
     mac: 34:17:eb:32:45:8e
