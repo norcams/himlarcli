@@ -401,19 +401,19 @@ nodes:
   storage-dcache-34:
     mac: 20:04:0f:f4:76:ca
     hostgroup: 9
-  storage-dcache-35:
+  storage-v2d-35:
     mac: 34:17:eb:32:45:8d
     hostgroup: 12
-  storage-dcache-36:
+  storage-v2d-36:
     mac: 34:17:eb:32:45:8e
     hostgroup: 12
-  storage-dcache-37:
+  storage-v2d-37:
     mac: 34:17:eb:32:45:8f
     hostgroup: 12
-  storage-dcache-38:
+  storage-v2d-38:
     mac: 34:17:eb:32:45:90
     hostgroup: 12
-  storage-dcache-39:
+  storage-v2d-39:
     mac: 34:17:eb:32:45:91
     hostgroup: 12
   telemetry-01:
