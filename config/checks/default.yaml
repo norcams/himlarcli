@@ -19,4 +19,4 @@ checks:
     ssl:  false
     host: 'docs.uh-iaas.no'
     url:  '/en/latest'
-    code: 301
+    code: 302
