@@ -4,10 +4,10 @@ nodes:
     compute_resource: controller-03
   api-01:
     compute_profile: small
-    compute_resource: controller-03
+    compute_resource: controller-01
   builder-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
         '1':
@@ -54,7 +54,7 @@ nodes:
     compute_resource: controller-02
   db-regional-01:
     compute_profile: small
-    compute_resource: controller-03
+    compute_resource: controller-01
   dns-01:
     compute_profile: small
     compute_resource: controller-02
@@ -263,7 +263,7 @@ nodes:
     compute_resource: controller-03
   status-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-03
   telemetry-01:
     compute_profile: small
     compute_resource: controller-01
