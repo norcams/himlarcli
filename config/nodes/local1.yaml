@@ -4,7 +4,7 @@ nodes:
     compute_resource: controller-03
   api-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-03
   builder-01:
     compute_profile: small
     compute_resource: controller-01
@@ -27,7 +27,7 @@ nodes:
     mac: 00:23:24:5e:35:20 #2
   console-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-03
   controller-00:
     mac: 18:03:73:e4:b1:25
   controller-01:
@@ -63,7 +63,7 @@ nodes:
     compute_resource: controller-02
   identity-02:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-03
   image-01:
     compute_profile: small
     compute_resource: controller-02
@@ -119,10 +119,10 @@ nodes:
     compute_resource: controller-03
   network-01:
     compute_profile: small
-    compute_resource: controller-03
+    compute_resource: controller-02
   novactrl-01:
     compute_profile: medium
-    compute_resource: controller-03
+    compute_resource: controller-02
   ns-01:
     compute_profile: small
     compute_resource: controller-01
@@ -260,7 +260,7 @@ nodes:
     compute_resource: controller-01
   rgw-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-03
   status-01:
     compute_profile: small
     compute_resource: controller-01
@@ -269,4 +269,4 @@ nodes:
     compute_resource: controller-01
   volume-01:
     compute_profile: small
-    compute_resource: controller-03
+    compute_resource: controller-01
