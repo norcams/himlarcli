@@ -19,7 +19,7 @@ logger = ksclient.get_logger()
 # Update these before running the script
 emails_file = 'notify/user_emails.txt'
 content = 'notify/mailto_all.txt'
-subject = 'INFO UH-IaaS'
+subject = 'INFO NREC'
 
 if hasattr(options, 'region'):
     regions = ksclient.find_regions(region_name=options.region)
@@ -58,7 +58,7 @@ def action_file():
                     user_counter += 1
                     try:
                         logger.debug('=> Sending email ...')
-                        mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
+                        mail.send_mail(toaddr, msg, fromaddr='noreply@nrec.no')
                         sent_mail_counter += 1
                     except ValueError:
                         himutils.sys_error('Not able to send the email.')
@@ -164,7 +164,7 @@ def action_sendtoall():
                     if hasattr(user, 'email'):
                         try:
                             logger.debug('=> Sending email ...')
-                            mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
+                            mail.send_mail(toaddr, msg, fromaddr='noreply@nrec.no')
                             sent_mail_counter += 1
                         except ValueError:
                             himutils.sys_error('Not able to send the email.')

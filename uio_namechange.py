@@ -26,10 +26,10 @@ def action_rename():
         return
     mail = Mail(options.config, debug=options.debug)
     mail.set_dry_run(options.dry_run)
-    fromaddr = "support@uh-iaas.no"
+    fromaddr = "support@nrec.no"
     template_file = 'notify/mail_uio_feide2.txt'
     logfile = 'logs/uio_mail_sent2.log'
-    subject = '[UH-IaaS] Your username and project name has been changed'
+    subject = '[NREC] Your username and project name has been changed'
     users = kc.get_users(domain=options.domain)
     if not users:
         utils.sys_error('users mapping file empty!')
@@ -88,7 +88,7 @@ def action_notify():
     mail = utils.get_client(Mail, options, logger, None)
     fromaddr = mail.get_config('mail', 'from_addr')
     logfile = 'logs/uio_mail_sent.log'
-    subject = '[UH-IaaS] Changes to username and project name for UiO users'
+    subject = '[NREC] Changes to username and project name for UiO users'
 
     users = kc.get_users(domain=options.domain)
     for u in users:

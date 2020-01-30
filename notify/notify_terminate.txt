@@ -1,6 +1,6 @@
 Dear user,
 
-As UH-IaaS is increasing in popularity, we've been forced to reallocate our
+As NREC is increasing in popularity, we've been forced to reallocate our
 resources from the obsolete "legacy" availability zones (AZ) to the current
 default ones running centralized storage. By doing this, we will greatly
 improve performance and stability for our users.
@@ -16,15 +16,15 @@ $region_lower-default-1 AZ.
 
 If you still need your old instances, we recommend that you create snapshots of
 them and use these snapshots to create new instances. Please see
-http://docs.uh-iaas.no/en/latest/create-snapshot.html for a walkthrough on how
+http://docs.nrec.no/en/latest/create-snapshot.html for a walkthrough on how
 to do this.
 
 Further documentation and contact information can be found at
-http://docs.uh-iaas.no
+http://docs.nrec.no
 
 We apologize for the inconvenience. Please don't hesitate to contact us if you
 have any questions or concerns.
 
 Kind regards,
 
-UH-IaaS team
+NREC team

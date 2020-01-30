@@ -192,7 +192,7 @@ def action_terminate():
         if not options.dry_run:
             project = ksclient.get_by_id('project', i.tenant_id)
             metadata = {
-                'created_by': 'automated by uh-iaas team',
+                'created_by': 'automated by nrec team',
                 'owner': project.id,
                 'visibility': 'shared'
             }
@@ -234,7 +234,7 @@ def action_terminate():
             sys.exit(1)
 
         msg = MIMEText(body_content, 'plain', 'utf-8')
-        msg['Subject'] = ('[UH-IaaS]: Your legacy instances have been terminated (%s)'
+        msg['Subject'] = ('[NREC]: Your legacy instances have been terminated (%s)'
                           % (ksclient.region))
 
         if not options.dry_run:
@@ -295,7 +295,7 @@ def action_notify():
             sys.exit(1)
 
         msg = MIMEText(body_content, 'plain', 'utf-8')
-        msg['Subject'] = ('[UH-IaaS]: Your legacy instances will be terminated on %s (%s)'
+        msg['Subject'] = ('[NREC]: Your legacy instances will be terminated on %s (%s)'
                           % (options.date, ksclient.region))
 
         if not options.dry_run:

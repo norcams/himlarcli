@@ -89,7 +89,7 @@ class Notify(object):
         for user, instances in users.iteritems():
             user_instances = (
                 "You are receiving this e-mail because you (or a team you're part of)\n"
-                "have the following instances running in UH-IaaS:\n\n"
+                "have the following instances running in NREC:\n\n"
             )
             for server, info in instances.iteritems():
                 extra = list()

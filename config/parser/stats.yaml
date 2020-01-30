@@ -1,7 +1,7 @@
 ---
-desc:   'Collect stats for UH-IaaS'
+desc:   'Collect stats for NREC'
 actions:
-  legacy:   'Old legacy stats used on status.uh-iaas.no'
+  legacy:   'Old legacy stats used on status.nrec.no'
   compute:  'Total compute resources available and used'
 
 opt_args:

@@ -87,7 +87,7 @@ def action_notify():
     projects = kc.get_projects(type='demo')
     mail = Mail(options.config, debug=options.debug)
     fromaddr = mail.get_config('mail', 'from_addr')
-    subject = '[UH-IaaS] Policy change: Termination of long running instances in demo projects'
+    subject = '[NREC] Policy change: Termination of long running instances in demo projects'
     logfile = 'logs/demo-notify-{}.log'.format(date.today().isoformat())
     for project in projects:
         demo_instances = ""

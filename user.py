@@ -101,7 +101,7 @@ def action_deactivate():
         % (len(deactive), active['total'])
     if not himutils.confirm_action(q):
         return
-    subject = '[UH-IaaS] Your account have been disabled'
+    subject = '[NREC] Your account have been disabled'
     regions = ksclient.find_regions()
     count = 0
     users_deactivated = list()

@@ -1,5 +1,5 @@
 ---
-desc: 'Manage the UH-IaaS status backend'
+desc: 'Manage the NREC status backend'
 actions:
   list:    'List all status messages'
   delete:  'Delete status message (ID)'

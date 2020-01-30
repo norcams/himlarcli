@@ -1,10 +1,10 @@
 ---
-desc: 'Publish status message to Slack, Twitter and UH-IaaS status backend'
+desc: 'Publish status message to Slack, Twitter and NREC status backend'
 actions:
-  important: 'Publish to Slack, Twitter and UH-IaaS status backend (tagged important)'
-  news:      'Publish to Slack, Twitter and UH-IaaS status backend (tagged info)'
-  info:      'Publish to Twitter and UH-IaaS status backend (tagged info)'
-  event:     'Publish to UH-IaaS event backend'
+  important: 'Publish to Slack, Twitter and NREC status backend (tagged important)'
+  news:      'Publish to Slack, Twitter and NREC status backend (tagged info)'
+  info:      'Publish to Twitter and NREC status backend (tagged info)'
+  event:     'Publish to NREC event backend'
 opt_args:
   '-t':
     'dest':     'template'
@@ -22,7 +22,7 @@ opt_args:
   '-l':
     'sub':      ['important']
     'dest':     'link'
-    'help':     'Link to status.uh-iaas.no on important Slack and Twitter messages'
+    'help':     'Link to status.nrec.no on important Slack and Twitter messages'
     'action':   'store_const'
     'const':    true
     'default':  false

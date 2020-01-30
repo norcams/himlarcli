@@ -1,5 +1,5 @@
 ---
-desc:   'Management of expired project for UH-IaaS'
+desc:   'Management of expired project for NREC'
 actions:
   'list':     'List expired projects'
   'notify':   'Send warning mail to expired projects and disable them'

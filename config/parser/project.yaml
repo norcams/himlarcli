@@ -1,5 +1,5 @@
 ---
-desc:   'Project management for UH-IaaS'
+desc:   'Project management for NREC'
 actions:
   'list':         'List project. Use -f to filter result by project type'
   'show':         'Show all attributes for a project'

@@ -2,24 +2,24 @@ Dear user,
 
 Last week we updated the username and project name of all UiO users to conform
 to the new shortened email standard used for Feide logins etc. As an unforeseen
-consequence, UiO users' key pairs disappeared from the UH-IaaS dashboard and,
+consequence, UiO users' key pairs disappeared from the NREC dashboard and,
 unfortunately, we are unable to restore them.
 
 This does NOT mean that you've lost access to your instances, nor does it affect
 any key pairs created via the API (Terraform, Openstack CLI etc.). It does
 however mean that it will not show up on the list of available key pairs when
-creating a new instance in the UH-IaaS dashboard.
+creating a new instance in the NREC dashboard.
 
 The only action needed on your part is to re-add any key pairs you want to use
 for future instances. If you've created the key pair in the dashboard and only
 have the private key stored locally, we've created a short guide on how to
 regenerate the public key here:
 
-http://docs.uh-iaas.no/en/latest/FAQ.html#how-to-regenerate-your-public-ssh-key
+http://docs.nrec.no/en/latest/FAQ.html#how-to-regenerate-your-public-ssh-key
 
 Please get in touch with us if you have any questions:
-http://docs.uh-iaas.no/en/latest/support.html
+http://docs.nrec.no/en/latest/support.html
 
 Best regards,
 
-The UH-IaaS team
+The NREC team

@@ -111,7 +111,7 @@ def action_create():
                            admin=options.admin.lower(),
                            quota=options.quota,
                            end_date=str(enddate))
-            subject = 'UH-IaaS: Project %s has been created' % options.project
+            subject = 'NREC: Project %s has been created' % options.project
             body_content = himutils.load_template(inputfile=project_msg,
                                                   mapping=mapping)
         if not body_content:
@@ -119,7 +119,7 @@ def action_create():
                                %s' % options.msg)
 
         mime = mail.rt_mail(options.rt, subject, body_content)
-        mail.send_mail('support@uh-iaas.no', mime)
+        mail.send_mail('support@nrec.no', mime)
 
 def action_grant():
     for user in options.users:
@@ -145,21 +145,21 @@ def action_grant():
             himutils.sys_error('--rt parameter is missing.')
         else:
             rt_mapping = dict(users='\n'.join(options.users))
-            rt_subject = 'UH-IaaS: Access granted to users in %s' % options.project
+            rt_subject = 'NREC: Access granted to users in %s' % options.project
             rt_body_content = himutils.load_template(inputfile=access_msg_file,
                                                      mapping=rt_mapping)
 
         rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
-        mail.send_mail('support@uh-iaas.no', rt_mime)
+        mail.send_mail('support@nrec.no', rt_mime)
 
         for user in options.users:
             mapping = dict(project_name=options.project, admin=project.admin)
             body_content = himutils.load_template(inputfile=access_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
-            msg['subject'] = 'UH-IaaS: You have been given access to project %s' % options.project
+            msg['subject'] = 'NREC: You have been given access to project %s' % options.project
 
-            mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
+            mail.send_mail(user, msg, fromaddr='no-reply@nrec.no')
 
 def action_delete():
     question = 'Delete project %s and all resources' % options.project

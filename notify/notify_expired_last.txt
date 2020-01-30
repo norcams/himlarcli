@@ -4,8 +4,8 @@ Dear user,
 notified of its expiry. As you haven't applied for an extension the project has
 now been disabled and scheduled for deletion. If you were granted an extension
 and believe you have received this message by mistake, please contact us as
-soon as possible at support@uh-iaas.no
+soon as possible at support@nrec.no
 
 Kind regards,
 
-The UH-IaaS Team
+The NREC Team
