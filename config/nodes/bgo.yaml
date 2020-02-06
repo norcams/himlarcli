@@ -302,18 +302,12 @@ nodes:
   storage-05:
     mac: b0:83:fe:cd:44:0f
     hostgroup: 2
-  storage-06:
+  storage-v2d-06:
     mac: d0:94:66:19:c2:39
-    hostgroup: 2
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sdg'
-  storage-07:
+    hostgroup: 13
+  storage-v2d-07:
     mac: d0:94:66:19:c1:eb
-    hostgroup: 2
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sdg'
+    hostgroup: 13
   storage-08:
     mac: b0:26:28:21:65:cc
     hostgroup: 2
