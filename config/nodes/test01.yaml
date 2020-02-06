@@ -28,13 +28,13 @@ nodes:
     compute_profile: medium
     compute_resource: controller-03
   cephmon-01:
-    compute_profile: xlarge
+    compute_profile: large
     compute_resource: controller-01
   cephmon-02:
-    compute_profile: xlarge
+    compute_profile: large
     compute_resource: controller-02
   cephmon-03:
-    compute_profile: xlarge
+    compute_profile: large
     compute_resource: controller-03
   compute-01:
     hostgroup: 3
@@ -97,7 +97,7 @@ nodes:
     compute_profile: medium
     compute_resource: controller-01
   monitor-01:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-01
   mq-01:
     compute_profile: medium
