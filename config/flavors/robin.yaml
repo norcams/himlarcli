@@ -23,12 +23,19 @@ robin:
     ram: 122880
     disk: 20
     properties:
-      hw:numa_nodes: 2
+      hw:numa_nodes: 1
       hw:cpu_sockets: 1
   'robin.16xlarge':
     vcpus: 64
     ram: 245760
     disk: 20
     properties:
-      hw:numa_nodes: 4
+      hw:numa_nodes: 1
+      hw:cpu_sockets: 1
+  'robin.32xlarge':
+    vcpus: 128
+    ram: 491520
+    disk: 20
+    properties:
+      hw:numa_nodes: 1
       hw:cpu_sockets: 1
