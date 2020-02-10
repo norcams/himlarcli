@@ -30,7 +30,7 @@ robin:
     vcpus: 128
     ram: 245760
     disk: 20
- 'robin.64xlarge':
+  'robin.64xlarge':
     vcpus: 256
     ram: 491520
     disk: 20
