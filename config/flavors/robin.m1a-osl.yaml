@@ -9,6 +9,15 @@ properties:
   hw:cpu_thread_policy: 'require'
   hw:mem_page_size: 2048
   aggregate_instance_extra_specs:type: 's== robin'
+
+# Memmory calculations:
+# Total: 491520 MB
+# We always set ram 2 MB lower per flavor type to be safe
+# Example:
+# 2xlarge  (491520 / 16) - 2 =  30718
+# 8xlarge  (491520 / 4)  - 2 = 122878
+# 32xlarge (491520 / 1)  - 2 = 491518
+
 robin.m1a:
   'robin.m1a.2xlarge':
     vcpus: 8
