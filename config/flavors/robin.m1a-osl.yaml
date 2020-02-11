@@ -30,7 +30,7 @@ robin.m1a:
     vcpus: 128
     ram: 245760
     disk: 20
- 'robin.m1a.64xlarge':
+  'robin.m1a.64xlarge':
     vcpus: 256
     ram: 491520
     disk: 20
