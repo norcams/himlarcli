@@ -39,7 +39,7 @@ for name, check in sorted(services['checks'].iteritems()):
         logger.debug("=> error on connect: %s" % e)
         status = 0
     statsd.gauge(name, status)
-    if status == check['code']:
+    if status in check['code']:
         statsd.gauge(name, 1)
         print '%s -> ok' % check['host']
     else:
