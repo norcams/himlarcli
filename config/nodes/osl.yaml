@@ -88,40 +88,40 @@ nodes:
     mac: 0c:c4:7a:fb:c8:1e
     hostgroup: 3
   compute-atlas-29:
-    mac: 00:25:90:bc:ca:15
+    mac: 0c:c4:7a:ff:3e:56
     hostgroup: 3
   compute-atlas-30:
-    mac: 00:25:90:bc:e3:87
+    mac: 0c:c4:7a:ff:3d:b6
     hostgroup: 3
   compute-atlas-31:
-    mac: 00:25:90:bc:c9:d7
+    mac: 0c:c4:7a:ff:3e:04
     hostgroup: 3
   compute-atlas-32:
-    mac: 00:25:90:bc:e3:3d
+    mac: 0c:c4:7a:ff:3d:a0
     hostgroup: 3
   compute-atlas-33:
-    mac: 00:25:90:bc:e3:17
+    mac: 0c:c4:7a:ff:3d:34
     hostgroup: 3
   compute-atlas-34:
-    mac: 00:25:90:bc:e3:89
+    mac: 0c:c4:7a:ff:3d:f4
     hostgroup: 3
   compute-atlas-35:
-    mac: 00:25:90:bc:e3:31
+    mac: 0c:c4:7a:ff:3d:ae
     hostgroup: 3
   compute-atlas-36:
-    mac: 00:25:90:bc:e3:57
+    mac: 0c:c4:7a:ff:3d:fa
     hostgroup: 3
   compute-atlas-37:
-    mac: 00:25:90:bc:e3:6f
+    mac: 0c:c4:7a:ff:3d:dc
     hostgroup: 3
   compute-atlas-38:
-    mac: 00:25:90:bc:69:f4
+    mac: 0c:c4:7a:ff:3d:d6
     hostgroup: 3
   compute-atlas-39:
-    mac: 00:25:90:bc:e3:4d
+    mac: 0c:c4:7a:ff:3d:e0
     hostgroup: 3
   compute-atlas-40:
-    mac: 00:25:90:bc:e3:63
+    mac: 0c:c4:7a:ff:3d:b2
     hostgroup: 3
   compute-hpc-25:
     mac: 0c:c4:7a:fb:c8:28
