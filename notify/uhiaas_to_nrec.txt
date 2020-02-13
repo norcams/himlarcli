@@ -1,0 +1,6 @@
+On February 18, we'll be changing the name of the UH-IaaS service to NREC
+(Norwegian Research and Education Cloud). There will be a small interruption in
+the service on Tuesday 18 February between 14:00 and 15:00 when we will deploy
+the necessary changes to our configuration. Running instances will not be
+affected by this. All registered users should've received an e-mail with more
+information.
