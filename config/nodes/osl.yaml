@@ -100,7 +100,7 @@ nodes:
     mac: 0c:c4:7a:ff:3d:a0
     hostgroup: 3
   compute-atlas-33:
-    mac: 0c:c4:7a:ff:3d:34
+    mac: 0c:c4:7a:ff:3d:e4
     hostgroup: 3
   compute-atlas-34:
     mac: 0c:c4:7a:ff:3d:f4
