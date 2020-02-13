@@ -7,7 +7,7 @@ checks:
     code: 200
   api:
     ssl:  true
-    host: 'apih-iaas.no:5000'
+    host: 'api.nrec.no:5000'
     url:  '/v3'
     code: 200
   dashboard:
