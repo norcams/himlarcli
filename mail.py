@@ -6,6 +6,7 @@ from himlarcli.printer import Printer
 from himlarcli import utils as himutils
 from himlarcli.mail import Mail
 from email.mime.text import MIMEText
+import time
 
 himutils.is_virtual_env()
 
@@ -162,10 +163,10 @@ def action_sendtoall():
             toaddr = user.email
             user_counter += 1
             if hasattr(user, 'email') and '@' in user.email:
-                toddr = user.email
                 try:
                     mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
                     sent_mail_counter += 1
+                    time.sleep(2)
                 except ValueError:
                     himutils.sys_error('Not able to send the email.')
         print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
