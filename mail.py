@@ -144,7 +144,7 @@ def action_project():
 def action_sendtoall():
     user_counter = 0
     sent_mail_counter = 0
-    users = ksclient.get_users(domain=options.domain)
+    users = ksclient.get_users(domain=options.domain, enabled=True)
     mail = Mail(options.config, debug=False, log=logger)
     mail.set_dry_run(options.dry_run)
     if options.template:
@@ -158,7 +158,7 @@ def action_sendtoall():
             body_content = email_content.read()
         for user in users:
             msg = MIMEText(body_content)
-            msg['subject'] = subject
+            msg['subject'] = options.subject
             toaddr = user.email
             user_counter += 1
             if hasattr(user, 'email') and '@' in user.email:
