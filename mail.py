@@ -164,7 +164,6 @@ def action_sendtoall():
             if hasattr(user, 'email') and '@' in user.email:
                 toddr = user.email
                 try:
-                    ksclient.debug_log('Sending email to {}'.format(toaddr))
                     mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
                     sent_mail_counter += 1
                 except ValueError:
