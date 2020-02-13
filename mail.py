@@ -14,6 +14,8 @@ options = parser.parse_args()
 printer = Printer(options.format)
 
 ksclient = Keystone(options.config, debug=options.debug)
+ksclient.set_dry_run(options.dry_run)
+ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 
 # Update these before running the script
@@ -89,9 +91,9 @@ def action_instance():
                     logger.debug('=> Sending email ...')
                     mail.set_keystone_client(ksclient)
                     users = mail.mail_instance_owner(instances=instances,
-                                                       body=body_content,
-                                                       subject=subject,
-                                                       admin=True)
+                                                     body=body_content,
+                                                     subject=subject,
+                                                     admin=True)
                     sent_mail_counter += 1
                 except ValueError:
                         himutils.sys_error('Not able to send the email.')
@@ -143,32 +145,31 @@ def action_sendtoall():
     user_counter = 0
     sent_mail_counter = 0
     users = ksclient.get_users(domain=options.domain)
-    projects = ksclient.list_projects('Dataporten')
-    mail = Mail(options.config, debug=options.debug)
+    mail = Mail(options.config, debug=False, log=logger)
+    mail.set_dry_run(options.dry_run)
     if options.template:
         content = options.template
         email_content = open(content, 'r')
         body_content = email_content.read()
-        if options.dry_run:
-            print body_content
-        else:
-            with open(content, 'r') as email_content:
-                body_content = email_content.read()
-            for user in users:
-                for project in projects:
-                    mail = Mail(options.config, debug=options.debug)
-                    msg = MIMEText(body_content)
-                    msg['subject'] = subject
-                    toaddr = user.email
-                    user_counter += 1
-                    if hasattr(user, 'email'):
-                        try:
-                            logger.debug('=> Sending email ...')
-                            mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
-                            sent_mail_counter += 1
-                        except ValueError:
-                            himutils.sys_error('Not able to send the email.')
-            print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
+        # if options.dry_run:
+        #     print body_content
+        # else:
+        with open(content, 'r') as email_content:
+            body_content = email_content.read()
+        for user in users:
+            msg = MIMEText(body_content)
+            msg['subject'] = subject
+            toaddr = user.email
+            user_counter += 1
+            if hasattr(user, 'email') and '@' in user.email:
+                toddr = user.email
+                try:
+                    ksclient.debug_log('Sending email to {}'.format(toaddr))
+                    mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
+                    sent_mail_counter += 1
+                except ValueError:
+                    himutils.sys_error('Not able to send the email.')
+        print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
     mail.close()
 
 # Run local function with the same name as the action (Note: - => _)

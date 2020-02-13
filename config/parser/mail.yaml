@@ -35,3 +35,8 @@ opt_args:
       'sub':    ['flavor']
       'dest':   'flavortype'
       'help':   'filter flavor by type, e.g. m1.xlarge'
+  '-s':
+    'sub':      ['sendtoall']
+    'dest':     'subject'
+    'help':     'mail subject'
+    'required': True
