@@ -28,7 +28,7 @@ class Mail(Client):
                 self.log_error(e)
             except smtplib.SMTPServerDisconnected as e:
                 self.log_error(e)
-        self.debug_log('log_msg)
+        self.debug_log(log_msg)
 
     def close(self):
         self.server.quit()
