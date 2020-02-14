@@ -21,14 +21,13 @@ class Mail(Client):
             mail['From'] = fromaddr
         mail['To'] = toaddr
         if not self.dry_run:
-            log_msg = 'Sending mail to %s' % toaddr
             try:
                 self.server.sendmail(fromaddr, toaddr, mail.as_string())
             except smtplib.SMTPRecipientsRefused as e:
                 self.log_error(e)
             except smtplib.SMTPServerDisconnected as e:
                 self.log_error(e)
-        self.debug_log(log_msg)
+        self.debug_log('Sending mail to %s' % toaddr)
 
     def close(self):
         self.server.quit()
