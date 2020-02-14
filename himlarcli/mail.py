@@ -26,9 +26,9 @@ class Mail(Client):
                 self.server.sendmail(fromaddr, toaddr, mail.as_string())
             except smtplib.SMTPRecipientsRefused as e:
                 self.log_error(e)
-        else:
-            log_msg = 'DRY-RUN:' + mail.as_string()
-        self.logger.debug('=> %s', log_msg)
+            except smtplib.SMTPServerDisconnected as e:
+                self.log_error(e)
+        self.debug_log('log_msg)
 
     def close(self):
         self.server.quit()
