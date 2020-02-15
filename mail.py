@@ -7,6 +7,7 @@ from himlarcli import utils as himutils
 from himlarcli.mail import Mail
 from email.mime.text import MIMEText
 import time
+from datetime import date
 
 himutils.is_virtual_env()
 
@@ -143,6 +144,7 @@ def action_project():
 
 # Send mail to all the users
 def action_sendtoall():
+    logfile = 'logs/mail-sendtoall-{}.log'.format(date.today().isoformat())
     user_counter = 0
     sent_mail_counter = 0
     users = ksclient.get_users(domain=options.domain, enabled=True)
@@ -169,6 +171,8 @@ def action_sendtoall():
                     time.sleep(2)
                 except ValueError:
                     himutils.sys_error('Not able to send the email.')
+            if not options.dry_run:
+                himutils.append_to_file(logfile, toaddr)
         print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
     mail.close()
 
