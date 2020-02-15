@@ -30,7 +30,11 @@ class Mail(Client):
         self.debug_log('Sending mail to %s' % toaddr)
 
     def close(self):
-        self.server.quit()
+        self.debug_log('Closing mail server connection...')
+        try:
+            self.server.quit()
+        except smtplib.SMTPServerDisconnected as e:
+            self.log_error(e)
 
     @staticmethod
     def rt_mail(ticket, subject, msg):
