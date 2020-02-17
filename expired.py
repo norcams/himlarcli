@@ -26,7 +26,7 @@ regions = kc.find_regions()
 
 def action_disable():
     projects = kc.get_projects()
-    subject = '[UH-IaaS] Your project is due for deletion'
+    subject = '[NREC] Your project is due for deletion'
     logfile = 'logs/expired-disabled-{}.log'.format(date.today().isoformat())
     if options.template:
         template = options.template
@@ -68,7 +68,7 @@ def action_disable():
 
 def action_notify():
     projects = kc.get_projects()
-    subject = '[UH-IaaS] Your project has expired'
+    subject = '[NREC] Your project has expired'
     logfile = 'logs/expired-notify-{}.log'.format(date.today().isoformat())
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')

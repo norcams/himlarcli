@@ -8,4 +8,4 @@ We welcome you back after we are back online to help us test the
 production setup.
 
 --
-UH-IaaS team
+NREC team

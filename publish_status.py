@@ -36,7 +36,7 @@ def parse_template():
 def action_important():
     important_msg = msg
     if options.link:
-        important_msg += " For live updates visit https://status.uh-iaas.no"
+        important_msg += " For live updates visit https://status.nrec.no"
     confirm_publish(important_msg)
     if not twitter.twitter_length(important_msg):
         himutils.sys_error("Message cannot contain more than 280 characters")

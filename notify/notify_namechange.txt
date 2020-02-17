@@ -10,7 +10,7 @@ our configuration. Running instances will not be affected by this.
 There will be no changes to the service apart from the name itself and
 the associated domain. The only action required on your part is to change
 your configuration files to our new endpoints - simply replace
-uh-iaas.no with nrec.no There's no urgency as we will keep the old
+nrec.no with nrec.no There's no urgency as we will keep the old
 domain for a while, but we recommend that you do it as soon as possible.
 
 Why are we doing this?

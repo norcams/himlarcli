@@ -1,1 +1,1 @@
-All UH-IaaS services (dashboard, API, access, status) will be unavailable on ${date} due to upgrading. Running instances will not be affected.
+All NREC services (dashboard, API, access, status) will be unavailable on ${date} due to upgrading. Running instances will not be affected.

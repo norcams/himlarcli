@@ -3,11 +3,11 @@ Hi,
 A project named $project_name has been created with a $quota quota.
 Admin user is $admin. End date is $end_date.
 
-Please read the end user documentation at http://docs.uh-iaas.no before
+Please read the end user documentation at http://docs.nrec.no before
 you start using the service.
 
 If you have any questions or problems using the service, please let us know.
 
 Best regards,
 
-The UH-IaaS team
+The NREC team

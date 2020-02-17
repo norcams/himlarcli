@@ -41,7 +41,7 @@ class Mail(Client):
         mail = MIMEMultipart('alternative')
         mail['References'] = 'RT-Ticket-%s@uninett.no' % ticket
         mail['Subject'] = '[uninett.no #%s] %s' % (ticket, subject)
-        mail['From'] = 'UH-IaaS support <support@uh-iaas.no>'
+        mail['From'] = 'NREC support <support@uh-iaas.no>'
         mail['Reply-To'] = 'support@uh-iaas.no'
         mail['X-RT-Owner'] = 'Nobody'
         mail['X-RT-Queue'] = 'UH-IaaS'
@@ -86,7 +86,7 @@ class Mail(Client):
         for user, instances in users.iteritems():
             user_instances = (
                 "You are receiving this e-mail because you (or a team you're part of)\n"
-                "have the following instances running in UH-IaaS:\n\n"
+                "have the following instances running in NREC:\n\n"
             )
             for server, info in instances.iteritems():
                 extra = list()

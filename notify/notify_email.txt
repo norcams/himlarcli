@@ -1,9 +1,9 @@
 
-These instances running in UH-IaaS will be terminated tomorrow.
+These instances running in NREC will be terminated tomorrow.
 Read more at http://iaas.readthedocs.io/en/latest/enduser/pilot.html
 
 We welcome feedback on this email warning:
 https://github.com/norcams/iaas/issues/3
 
 --
-UH-IaaS team
+NREC team
