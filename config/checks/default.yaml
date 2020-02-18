@@ -2,21 +2,21 @@
 checks:
   access:
     ssl:  true
-    host: 'access.uh-iaas.no'
+    host: 'access.nrec.no'
     url:  ''
     code: [200]
   api:
     ssl:  true
-    host: 'api.uh-iaas.no:5000'
+    host: 'api.nrec.no:5000'
     url:  '/v3'
     code: [200]
   dashboard:
     ssl:  true
-    host: 'dashboard.uh-iaas.no'
+    host: 'dashboard.nrec.no'
     url:  '/dashboard'
     code: [302]
   docs:
-    ssl:  false
-    host: 'docs.uh-iaas.no'
-    url:  '/en/latest'
-    code: [301,302]
+    ssl:  true
+    host: 'docs.nrec.no'
+    url:  ''
+    code: [200]
