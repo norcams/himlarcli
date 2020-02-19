@@ -22,27 +22,27 @@ robin.c1a:
   'robin.c1a.2xlarge':
     vcpus: 8
     ram: 15358
-    disk: 20
+    disk: 12
   'robin.c1a.4xlarge':
     vcpus: 16
     ram: 30718
-    disk: 20
+    disk: 25
   'robin.c1a.8xlarge':
     vcpus: 32
     ram: 61438
-    disk: 20
+    disk: 50
   'robin.c1a.16xlarge':
     vcpus: 64
     ram: 122878
-    disk: 20
+    disk: 100
   'robin.c1a.32xlarge':
     vcpus: 128
     ram: 245758
-    disk: 20
+    disk: 200
   'robin.c1a.64xlarge':
     vcpus: 256
     ram: 491518
-    disk: 20
+    disk: 400
     properties:
       hw:numa_nodes: 2
       hw:cpu_sockets: 2
