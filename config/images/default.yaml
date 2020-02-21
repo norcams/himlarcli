@@ -3,7 +3,7 @@ type: 'gold'
 images:
   'ubuntu_1604':
     'name':             'GOLD Ubuntu 16.04 LTS'
-    'depricated':       'Outdated (Ubuntu)'
+    'depricated':       'Outdated (Ubuntu 16)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1604-latest.qcow2'
     'min_ram':          768
@@ -14,7 +14,7 @@ images:
       'hw_scsi_model':  'virtio-scsi'
   'ubuntu_1804':
     'name':             'GOLD Ubuntu 18.04 LTS'
-    'depricated':       'Outdated (Ubuntu)'
+    'depricated':       'Outdated (Ubuntu 18)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1804-latest.qcow2'
     'min_ram':          768
@@ -25,7 +25,7 @@ images:
       'hw_scsi_model':  'virtio-scsi'
   'ubuntu_1904':
     'name':             'GOLD Ubuntu 19.04'
-    'depricated':       'Outdated (Ubuntu)'
+    'depricated':       'Outdated (Ubuntu 19)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1904-latest.qcow2'
     'min_ram':          768
@@ -36,7 +36,7 @@ images:
       'hw_scsi_model':  'virtio-scsi'
   'centos6':
     'name':             'GOLD CentOS 6'
-    'depricated':       'Outdated (CentOS)'
+    'depricated':       'Outdated (CentOS 6)'
     'url':              'http://builder/'
     'latest':           'centos6-latest.qcow2'
     'min_ram':          1024
@@ -47,7 +47,7 @@ images:
       'hw_scsi_model':  'virtio-scsi'
   'centos7':
     'name':             'GOLD CentOS 7'
-    'depricated':       'Outdated (CentOS)'
+    'depricated':       'Outdated (CentOS 7)'
     'url':              'http://builder/'
     'latest':           'centos7-latest.qcow2'
     'min_ram':          1024
@@ -56,9 +56,20 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
+  'centos8':
+    'name':             'GOLD CentOS 8'
+    'depricated':       'Outdated (CentOS 8)'
+    'url':              'http://builder/'
+    'latest':           'centos8-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
   'debian9':
     'name':             'GOLD Debian 9'
-    'depricated':       'Outdated (Debian)'
+    'depricated':       'Outdated (Debian 9)'
     'url':              'http://builder/'
     'latest':           'debian9-latest.qcow2'
     'min_ram':          768
@@ -69,7 +80,7 @@ images:
       'hw_scsi_model':  'virtio-scsi'
   'debian10':
     'name':             'GOLD Debian 10'
-    'depricated':       'Outdated (Debian)'
+    'depricated':       'Outdated (Debian 10)'
     'url':              'http://builder/'
     'latest':           'debian10-latest.qcow2'
     'min_ram':          768
@@ -80,7 +91,7 @@ images:
       'hw_scsi_model':  'virtio-scsi'
   'fedora_30':
     'name':             'GOLD Fedora 30'
-    'depricated':       'Outdated (Fedora)'
+    'depricated':       'Outdated (Fedora 30)'
     'url':              'http://builder/'
     'latest':           'fedora_30-latest.qcow2'
     'min_ram':          1024
@@ -92,7 +103,7 @@ images:
       'hw_rng_model':   'virtio'
   'fedora_31':
     'name':             'GOLD Fedora 31'
-    'depricated':       'Outdated (Fedora)'
+    'depricated':       'Outdated (Fedora 31)'
     'url':              'http://builder/'
     'latest':           'fedora_31-latest.qcow2'
     'min_ram':          1024
