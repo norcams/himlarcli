@@ -22,9 +22,9 @@ default:
     'disk_format':      'qcow2'
     'min_ram':          1024
     'min_disk':         8
-  'centos':
+  'centos7':
     'name':             'GOLD CentOS 7'
-    'depricated':       'Outdated (CentOS)'
+    'depricated':       'Outdated (CentOS 7)'
     'url':              'http://cloud.centos.org/centos/7/images/'
     'latest':           'CentOS-7-x86_64-GenericCloud.qcow2'
     'checksum_file':    'sha256sum.txt'
@@ -33,32 +33,43 @@ default:
     'disk_format':      'qcow2'
     'min_ram':          768
     'min_disk':         8
-  'fedora_24':
-    'name':             'GOLD Fedora 24'
-    'depricated':       'Outdated (Fedora)'
-    'url':              'https://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/24/CloudImages/x86_64/images/'
-    'latest':           'Fedora-Cloud-Base-24-1.2.x86_64.qcow2'
-    'checksum_file':    'Fedora-CloudImages-24-1.2-x86_64-CHECKSUM'
+  'centos8':
+    'name':             'GOLD CentOS 8'
+    'depricated':       'Outdated (CentOS 8)'
+    'url':              'http://cloud.centos.org/centos/8/x86_64/images/'
+    'latest':           'CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2'
+    'checksum_file':    'CHECKSUM'
+    'checksum':         'sha256'
+    'visibility':       'public'
+    'disk_format':      'qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+  'fedora_30':
+    'name':             'GOLD Fedora 30'
+    'depricated':       'Outdated (Fedora 30)'
+    'url':              'http://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/30/Cloud/x86_64/images/'
+    'latest':           'Fedora-Cloud-Base-30-1.2.x86_64.qcow2'
+    'checksum_file':    'Fedora-Cloud-30-1.2-x86_64-CHECKSUM'
     'checksum':         'sha256'
     'visibility':       'public'
     'disk_format':      'qcow2'
     'min_ram':          768
     'min_disk':         8
-  'fedora_25':
-    'name':             'GOLD Fedora 25'
-    'depricated':       'Outdated (Fedora)'
-    'url':              'https://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/25/CloudImages/x86_64/images/'
-    'latest':           'Fedora-Cloud-Base-25-1.3.x86_64.qcow2'
-    'checksum_file':    'Fedora-CloudImages-25-1.3-x86_64-CHECKSUM'
+  'fedora_31':
+    'name':             'GOLD Fedora 31'
+    'depricated':       'Outdated (Fedora 31)'
+    'url':              'http://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/31/Cloud/x86_64/images/'
+    'latest':           'Fedora-Cloud-Base-31-1.9.x86_64.qcow2'
+    'checksum_file':    'Fedora-Cloud-31-1.9-x86_64-CHECKSUM'
     'checksum':         'sha256'
     'visibility':       'public'
     'disk_format':      'qcow2'
     'min_ram':          768
     'min_disk':         8
-  'ubuntu':
+  'ubuntu1604':
     'name':             'GOLD Ubuntu server 16.04'
-    'depricated':       'Outdated (Ubuntu)'
-    'url':              'https://cloud-images.ubuntu.com/xenial/current/'
+    'depricated':       'Outdated (Ubuntu 16)'
+    'url':              'http://cloud-images.ubuntu.com/xenial/current/'
     'latest':           'xenial-server-cloudimg-amd64-disk1.img'
     'checksum_file':    'SHA256SUMS'
     'checksum':         'sha256'
@@ -66,11 +77,44 @@ default:
     'disk_format':      'qcow2'
     'min_ram':          768
     'min_disk':         8
-  'debian':
-    'name':             'GOLD Debian 8'
-    'depricated':       'Outdated (Debian)'
-    'url':              'http://cdimage.debian.org/cdimage/openstack/current-8/'
-    'latest':           'debian-8-openstack-amd64.qcow2'
+  'ubuntu1804':
+    'name':             'GOLD Ubuntu server 18.04'
+    'depricated':       'Outdated (Ubuntu 18)'
+    'url':              'http://cloud-images.ubuntu.com/bionic/current/'
+    'latest':           'bionic-server-cloudimg-amd64.img'
+    'checksum_file':    'SHA256SUMS'
+    'checksum':         'sha256'
+    'visibility':       'public'
+    'disk_format':      'qcow2'
+    'min_ram':          768
+    'min_disk':         8
+  'ubuntu1904':
+    'name':             'GOLD Ubuntu server 19.04'
+    'depricated':       'Outdated (Ubuntu 19)'
+    'url':              'http://cloud-images.ubuntu.com/bionic/current/'
+    'latest':           'disco-server-cloudimg-amd64.img'
+    'checksum_file':    'SHA256SUMS'
+    'checksum':         'sha256'
+    'visibility':       'public'
+    'disk_format':      'qcow2'
+    'min_ram':          768
+    'min_disk':         8
+  'debian9':
+    'name':             'GOLD Debian 9'
+    'depricated':       'Outdated (Debian 9)'
+    'url':              'http://cdimage.debian.org/cdimage/openstack/current-9/'
+    'latest':           'debian-9-openstack-amd64.qcow2'
+    'checksum_file':    'SHA256SUMS'
+    'checksum':         'sha256'
+    'visibility':       'public'
+    'disk_format':      'qcow2'
+    'min_ram':          768
+    'min_disk':         8
+  'debian10':
+    'name':             'GOLD Debian 10'
+    'depricated':       'Outdated (Debian 10)'
+    'url':              'http://cdimage.debian.org/cdimage/openstack/current-10/'
+    'latest':           'debian-9-openstack-amd64.qcow2'
     'checksum_file':    'SHA256SUMS'
     'checksum':         'sha256'
     'visibility':       'public'
