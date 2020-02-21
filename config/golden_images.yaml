@@ -114,7 +114,7 @@ default:
     'name':             'GOLD Debian 10'
     'depricated':       'Outdated (Debian 10)'
     'url':              'http://cdimage.debian.org/cdimage/openstack/current-10/'
-    'latest':           'debian-9-openstack-amd64.qcow2'
+    'latest':           'debian-10-openstack-amd64.qcow2'
     'checksum_file':    'SHA256SUMS'
     'checksum':         'sha256'
     'visibility':       'public'
