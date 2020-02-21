@@ -1,0 +1,18 @@
+---
+# Flavor used to test instances with multiple sockets, cores and threads
+# NB! Should NOT be used for HPC workloads
+
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  hw:cpu_sockets: 2
+  hw:cpu_cores: 2
+  hw:cpu_threads: 2
+
+hpc.test:
+  'hpc.test.2xlarge':
+    vcpus: 8
+    ram: 32768
+    disk: 20
