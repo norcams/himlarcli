@@ -14,5 +14,5 @@ properties:
 hpc.test:
   'hpc.test.2xlarge':
     vcpus: 8
-    ram: 32768
-    disk: 20
+    ram: 8192
+    disk: 10
