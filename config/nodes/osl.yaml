@@ -146,28 +146,28 @@ nodes:
     hostgroup: 3
   compute-43:
     mac: 1c:20:db:ec:60:a8 
-    hostgroup: 12
+    hostgroup: 13
   compute-44:
     mac: 1c:20:db:ec:0a:dd 
-    hostgroup: 12
+    hostgroup: 13
   compute-45:
     mac: 1c:20:db:eb:fe:8b 
-    hostgroup: 12
+    hostgroup: 13
   compute-46:
     mac: 1c:20:db:eb:fe:3e 
-    hostgroup: 12
+    hostgroup: 13
   compute-47:
     mac: 1c:20:db:eb:fe:92 
-    hostgroup: 12
+    hostgroup: 13
   compute-48:
     mac: 1c:20:db:ec:61:1f 
-    hostgroup: 12
+    hostgroup: 13
   compute-50:
     mac: 1c:20:db:eb:fe:4c 
-    hostgroup: 12
+    hostgroup: 13
   compute-51:
     mac: 1c:20:db:ec:60:93 
-    hostgroup: 12
+    hostgroup: 13
   console-01:
     compute_profile: medium
     compute_resource: controller-03
