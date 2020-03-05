@@ -144,6 +144,30 @@ nodes:
   compute-robin-18:
     mac: f4:02:70:c4:76:d8
     hostgroup: 3
+  compute-43:
+    mac: 1c:20:db:ec:60:a8 
+    hostgroup: 3
+  compute-44:
+    mac: 1c:20:db:ec:0a:dd 
+    hostgroup: 3
+  compute-45:
+    mac: 1c:20:db:eb:fe:8b 
+    hostgroup: 3
+  compute-46:
+    mac: 1c:20:db:eb:fe:3e 
+    hostgroup: 3
+  compute-47:
+    mac: 1c:20:db:eb:fe:92 
+    hostgroup: 3
+  compute-48:
+    mac: 1c:20:db:ec:61:1f 
+    hostgroup: 3
+  compute-49:
+    mac: 1c:20:db:eb:fe:4c 
+    hostgroup: 3
+  compute-50:
+    mac: 1c:20:db:ec:60:93 
+    hostgroup: 3
   console-01:
     compute_profile: medium
     compute_resource: controller-03
