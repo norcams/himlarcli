@@ -17,7 +17,7 @@ print "Remove these lines if you want to run this and send mail to all!"
 sys.exit(0)
 
 # Edit this to send new email to all users
-subject = 'UH-IaaS: Purge of all data (%s)' % region
+subject = 'NREC: Purge of all data (%s)' % region
 body_file = 'notify/notify_reinstall.txt'
 
 with open(body_file, 'r') as body_txt:

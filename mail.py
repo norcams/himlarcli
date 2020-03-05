@@ -23,7 +23,7 @@ logger = ksclient.get_logger()
 # Update these before running the script
 emails_file = 'notify/user_emails.txt'
 content = 'notify/mailto_all.txt'
-subject = 'INFO UH-IaaS'
+subject = 'INFO NREC'
 
 if hasattr(options, 'region'):
     regions = ksclient.find_regions(region_name=options.region)

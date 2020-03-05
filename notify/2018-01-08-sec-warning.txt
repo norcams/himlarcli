@@ -2,11 +2,11 @@
 Recently, multiple vulnerabilities related to design and implementation of
 modern computer hardware have been discovered. Operating system vendors are
 shipping patches to mitigate these issues, but in order for these patches to
-take effect on your virtual machines, you as customer of UH-IaaS must take
+take effect on your virtual machines, you as customer of NREC must take
 action.
 
-Read more at http://docs.uh-iaas.no/en/latest/speculativeexecution.html
+Read more at http://docs.nrec.no/speculativeexecution.html
 
 --
-UH-IaaS team
-http://www.uh-iaas.no
+NREC team
+http://www.nrec.no

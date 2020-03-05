@@ -1,4 +1,4 @@
-Dear UH-IaaS user,
+Dear NREC user,
 
 As you may know, we recently hit a constraint in our networking
 infrastructure, which forced the deletion of demo instances in the OSL
@@ -57,5 +57,5 @@ expedite the process.
 
 Best Regards,
 --
-The UH-IaaS team
-http://docs.uh-iaas.no/
+The NREC team
+http://docs.nrec.no/

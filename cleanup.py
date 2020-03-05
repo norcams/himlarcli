@@ -121,7 +121,7 @@ def action_notify():
                 body_content = himutils.load_template(inputfile=options.template,
                                                       mapping=mapping,
                                                       log=logger)
-                subject = ('UH-IaaS: Your instances will be terminated (%s)' % (region))
+                subject = ('NREC: Your instances will be terminated (%s)' % (region))
 
                 notify = Notify(options.config, debug=False, log=logger)
                 notify.set_keystone_client(ksclient)

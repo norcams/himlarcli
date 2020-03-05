@@ -12,11 +12,11 @@ names:
 $instances
 
 Further documentation and contact information can be found at
-http://docs.uh-iaas.no
+http://docs.nrec.no
 
 We apologize for the inconvenience. Please don't hesitate to contact us if you
 have any questions.
 
 Kind regards,
 
-UH-IaaS team
+NREC team

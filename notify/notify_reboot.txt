@@ -1,5 +1,5 @@
 
-Due to scheduled maintenance these instances in UH-IaaS region $region
+Due to scheduled maintenance these instances in NREC region $region
 will be rebooted on $date if they are running.
 
 These instances are running in availability zone (AZ) $region_lower-legacy-1.
@@ -8,9 +8,9 @@ instances and start new ones in AZ $region_lower-default-1.
 
 We would also appreciate if you delete unused instances. Resources are limited.
 
-Read more at http://docs.uh-iaas.no/en/latest/terms-of-service.html#availability
+Read more at http://docs.nrec.no/terms-of-service.html#availability
 
-Support and contact information can be found at http://docs.uh-iaas.no
+Support and contact information can be found at http://docs.nrec.no
 
 --
-UH-IaaS team
+NREC team
