@@ -89,40 +89,40 @@ nodes:
     hostgroup: 3
   compute-atlas-29:
     mac: 0c:c4:7a:ff:3e:56
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-30:
     mac: 0c:c4:7a:ff:3d:b6
     hostgroup: 13
   compute-atlas-31:
     mac: 0c:c4:7a:ff:3e:04
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-32:
     mac: 0c:c4:7a:ff:3d:a0
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-33:
     mac: 0c:c4:7a:ff:3d:e4
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-34:
     mac: 0c:c4:7a:ff:3d:f4
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-35:
     mac: 0c:c4:7a:ff:3d:ae
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-36:
     mac: 0c:c4:7a:ff:3d:fa
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-37:
     mac: 0c:c4:7a:ff:3d:dc
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-38:
     mac: 0c:c4:7a:ff:3d:d6
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-39:
     mac: 0c:c4:7a:ff:3d:e0
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-40:
     mac: 0c:c4:7a:ff:3d:b2
-    hostgroup: 3
+    hostgroup: 13
   compute-hpc-25:
     mac: 0c:c4:7a:fb:c8:28
     hostgroup: 3
