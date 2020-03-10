@@ -1,0 +1,14 @@
+---
+type: 'uio'
+images:
+  'uio_rhel7':
+    'name':             'UiO Managed RHEL 7'
+    'depricated':       'Outdated (UiO RHEL7)'
+    'url':              'http://builder/'
+    'latest':           'rhel-server-7.7-x86_64-kvm.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'private'
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
