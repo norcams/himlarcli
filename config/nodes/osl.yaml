@@ -92,7 +92,7 @@ nodes:
     hostgroup: 3
   compute-atlas-30:
     mac: 0c:c4:7a:ff:3d:b6
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-31:
     mac: 0c:c4:7a:ff:3e:04
     hostgroup: 3
