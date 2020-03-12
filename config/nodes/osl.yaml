@@ -80,10 +80,10 @@ nodes:
     hostgroup: 3
   compute-atlas-22:
     mac: 0c:c4:7a:fb:c9:da
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-23:
     mac: 0c:c4:7a:fb:c8:36
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-24:
     mac: 0c:c4:7a:fb:c8:1e
     hostgroup: 3
