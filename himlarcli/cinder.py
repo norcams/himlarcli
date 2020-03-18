@@ -19,9 +19,9 @@ class Cinder(Client):
         version = self.get_config('openstack', 'volume_api_version', '3.50')
         self.debug_log('using cinder volume api_version %s' % version)
         self.client = cinderclient.Client(APIVersion(version),
-                                        session=self.sess,
-                                        service_type=self.service_type,
-                                        region_name=self.region)
+                                          session=self.sess,
+                                          service_type=self.service_type,
+                                          region_name=self.region)
 
 
     def get_client(self):
@@ -59,7 +59,7 @@ class Cinder(Client):
         except exceptions.NotFound as e:
             self.log_error(e)
         except exceptions.ClientException as e:
-            self.log_error(e)
+            self.log_error('Cinder: {}'.format(e))
         return result
 
     def get_quota(self, project_id, usage=False):
@@ -108,6 +108,6 @@ class Cinder(Client):
             volumes = self.client.volumes.list(detailed=detailed,
                                                search_opts=search_opts)
         except exceptions.ClientException as e:
-            self.log_error(e)
+            self.log_error('Cinder: {}'.format(e))
             return None
         return volumes

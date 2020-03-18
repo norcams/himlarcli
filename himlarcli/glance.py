@@ -49,7 +49,7 @@ class Glance(Client):
             images = list(result) if result else list()
             return images
         except exc.HTTPServiceUnavailable as e:
-            self.log_error('Glance service unavailable!')
+            self.log_error('Glance: Service Unavailable')
         return list()
 
     def get_image(self, name):

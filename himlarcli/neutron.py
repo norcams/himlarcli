@@ -63,7 +63,7 @@ class Neutron(Client):
         try:
             sec_groups = self.client.list_security_groups(tenant_id=project.id)
         except exceptions.ServiceUnavailable:
-            self.log_error('Neutron service unavailable!')
+            self.log_error('Neutron: Service Unavailable')
             sec_groups = None
         if not sec_groups:
             return
@@ -111,4 +111,6 @@ class Neutron(Client):
                 result = self.client.update_quota(project_id=project_id, body={'quota': updates})
         except exceptions.NotFound as e:
             self.log_error(e)
+        except exceptions.ServiceUnavailable:
+            self.log_error('Neutron: Service unavailable!')
         return result
