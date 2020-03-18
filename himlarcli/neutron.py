@@ -60,8 +60,13 @@ class Neutron(Client):
 
     def purge_security_groups(self, project):
         """ Remove all security groups for a project """
-        sec_groups = self.client.list_security_groups(tenant_id=project.id)
-
+        try:
+            sec_groups = self.client.list_security_groups(tenant_id=project.id)
+        except exceptions.ServiceUnavailable:
+            self.log_error('Neutron service unavailable!')
+            sec_groups = None
+        if not sec_groups:
+            return
         for sg in sec_groups['security_groups']:
             self.delete_security_group(sg['id'])
 

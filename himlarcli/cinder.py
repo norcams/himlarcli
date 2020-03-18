@@ -58,6 +58,8 @@ class Cinder(Client):
                 result = None
         except exceptions.NotFound as e:
             self.log_error(e)
+        except exceptions.ClientException as e:
+            self.log_error(e)
         return result
 
     def get_quota(self, project_id, usage=False):
@@ -92,6 +94,8 @@ class Cinder(Client):
     def purge_project_volumes(self, project_id):
         """ Simple wrapper method to purge all project volumes """
         volumes = self.get_volumes(search_opts={'project_id': project_id})
+        if not volumes:
+            return
         for volume in volumes:
             self.delete_volume(volume_id=volume.id, cascade=True)
 

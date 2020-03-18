@@ -44,8 +44,13 @@ class Glance(Client):
         """ Same as get_images but return a list.
             This should only be used for small sets!
             This can be achieved by using limit=1 in filters """
-        images = self.client.images.list(**kwargs)
-        return list(images)
+        result = self.client.images.list(**kwargs)
+        try:
+            images = list(result) if result else list()
+            return images
+        except exc.HTTPServiceUnavailable as e:
+            self.log_error('Glance service unavailable!')
+        return list()
 
     def get_image(self, name):
         """ depricated use find_image"""
@@ -68,7 +73,7 @@ class Glance(Client):
         return self.image
 
     def delete_private_images(self, project_id):
-        images = self.get_images(filters={'owner': project_id})
+        images = self.find_image(filters={'owner': project_id})
         for image in images:
             self.delete_image(image.id)
 
@@ -79,8 +84,11 @@ class Glance(Client):
         if not image_id:
             image_id = self.image.id
         self.debug_log('image delete %s' % image_id)
-        if not self.dry_run:
-            self.client.images.delete(image_id)
+        try:
+            if not self.dry_run:
+                self.client.images.delete(image_id)
+        except exc.HTTPServiceUnavailable as e:
+            self.log_error(e)
 
     def update_image(self, name, image_id=None, **kwargs):
         if not self.image and not image_id:
