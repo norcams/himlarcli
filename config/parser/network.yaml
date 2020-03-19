@@ -2,6 +2,7 @@
 desc:           'Manage network in openstack'
 actions:
   'dualstack':  'List instances with public IPv4 addresses'
+  'list':       ''
 opt_args:
   '--domain':
     'dest':     'domain'

@@ -1,6 +1,7 @@
 from himlarcli.client import Client
 from neutronclient.v2_0.client import Client as neutronclient
 from neutronclient.common import exceptions
+import ipaddress
 
 class Neutron(Client):
 
@@ -80,6 +81,27 @@ class Neutron(Client):
         for network in networks['networks']:
             network_list.append(network)
         return network_list
+
+    def list_subnets(self, retrieve_all=True, **kwargs):
+        try:
+            subnets = self.client.list_subnets(retrieve_all=retrieve_all, **kwargs)
+        except exceptions.ServiceUnavailable:
+            self.log_error('Neutron: Service unavailable!')
+        if 'subnets' not in subnets:
+            return list()
+        else:
+            return subnets['subnets']
+
+    def get_allocation_pool_size(self, network_id, ip_version=4):
+        subnets = self.list_subnets(retrieve_all=True,
+                                    network_id=network_id,
+                                    ip_version=ip_version)
+        pool_size = 0
+        for subnet in subnets:
+            start = ipaddress.ip_address(subnet['allocation_pools'][0]['start'])
+            end = ipaddress.ip_address(subnet['allocation_pools'][0]['end'])
+            pool_size += int(end) - int(start)
+        return pool_size
 
 # ==================================== QUOTA ==================================
     def get_quota_class(self, class_name='default'):

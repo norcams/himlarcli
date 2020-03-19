@@ -5,10 +5,12 @@ tests.is_virtual_env()
 
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
+from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
 import time
+
 
 parser = Parser()
 options = parser.parse_args()
@@ -25,6 +27,19 @@ if hasattr(options, 'region'):
     regions = kc.find_regions(region_name=options.region)
 else:
     regions = kc.find_regions()
+
+def action_list():
+    for region in regions:
+        nc = himutils.get_client(Neutron, options, logger, region)
+        networks = nc.list_networks()
+        printer.output_dict({'header': 'networks (name, shared, IPv4 addresses)'})
+        for net in networks:
+            output = {
+                '0': net['name'],
+                '1': net['shared'],
+                '2': nc.get_allocation_pool_size(network_id=net['id'], ip_version=4)
+            }
+            printer.output_dict(output, sort=True, one_line=True)
 
 def action_dualstack():
     for region in regions:
