@@ -68,10 +68,10 @@ nodes:
     compute_profile: small
     compute_resource: controller-02
   image-01:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-01
   image-02:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-02
   logger-01:
     compute_profile: medium
