@@ -1,6 +1,6 @@
 Dear user,
 
-UH-IaaS is increasing in popularity and we are encountering challenges in
+NREC is increasing in popularity and we are encountering challenges in
 keeping up with the high demand, as our resources are limited.  As a result, we
 see that we need to implement a policy change in the near future for demo
 projects, which includes automatic termination of long running instances, in
@@ -20,16 +20,16 @@ $instances
 Standard projects are not affected by this policy. You may apply for a standard
 project at:
 
-https://request.uh-iaas.no
+https://request.nrec.no
 
 We do not currently charge for standard projects and requests are being granted
-by the UH-IaaS team based on available resources. However, this may be subject
+by the NREC team based on available resources. However, this may be subject
 to change in the future.
 
 For more information, please read our terms of service:
 
-http://docs.uh-iaas.no/en/latest/terms-of-service.html
+http://docs.nrec.no/en/latest/terms-of-service.html
 
 Kind regards,
 
-The UH-IaaS team
+The NREC team

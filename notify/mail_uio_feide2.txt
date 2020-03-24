@@ -2,7 +2,7 @@ Dear user,
 
 As previously announced, the University of Oslo changed the mail attributes for
 all users in its catalog services on September 11 affecting multiple services
-using Feide for authentication, which includes UH-IaaS. Consequently, we've
+using Feide for authentication, which includes NREC. Consequently, we've
 renamed UiO users and projects to conform to this new shortened standard.
 
 Please note that this does not affect dashboard login, however, if
@@ -12,4 +12,4 @@ to reflect these changes:
 $changes
 Best regards,
 
-UH-IaaS
+NREC

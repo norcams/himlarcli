@@ -1,6 +1,6 @@
 Dear user,
 
-On February 18, we'll be changing the name of the UH-IaaS service to
+On February 18, we'll be changing the name of the NREC service to
 NREC (Norwegian Research and Education Cloud).
 
 IMPORTANT: There will be a small interruption in the service on Tuesday 18
@@ -22,7 +22,7 @@ look, a new logo and, perhaps most importantly for our current users, a
 new domain name.
 
 NREC will be run by the same team and remain exactly as it is today.
-If you have any questions, feel free to contact us at support@uh-iaas.no or
+If you have any questions, feel free to contact us at support.nrec.no or
 our Slack channel.
 
 Kind regards,

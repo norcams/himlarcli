@@ -2,8 +2,8 @@ Dear user,
 
 Your project $project has reached its end date $enddate and will be
 deleted in 30 days. To apply for an extension, please send an email to
-support@uh-iaas.no
+support.nrec.no
 
 Kinds regards,
 
-The UH-IaaS Team
+The NREC Team
