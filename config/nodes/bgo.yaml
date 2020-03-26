@@ -161,6 +161,12 @@ nodes:
   db-regional-01:
     compute_profile: xlarge
     compute_resource: controller-01
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '10G'
+          format_type:  'qcow2'
   dns-01:
     compute_profile: small
     compute_resource: controller-02
