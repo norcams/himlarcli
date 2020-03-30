@@ -149,7 +149,7 @@ nodes:
     mac: ec:f4:bb:cc:d0:9c
   controller-04:
     mac: b0:83:fe:e8:3a:31
-  controller-04:
+  controller-05:
     mac: dc:f4:01:e7:eb:fe
     hostgroup: 14
   dashboard-01:
