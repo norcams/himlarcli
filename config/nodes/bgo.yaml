@@ -152,6 +152,12 @@ nodes:
   controller-05:
     mac: dc:f4:01:e7:eb:fe
     hostgroup: 14
+  controller-06:
+    mac: dc:f4:01:e7:ee:4e
+    hostgroup: 14
+  controller-07:
+    mac: dc:f4:01:e7:d8:32
+    hostgroup: 14
   dashboard-01:
     compute_profile: xlarge
     compute_resource: controller-02
@@ -164,6 +170,7 @@ nodes:
   db-regional-01:
     compute_profile: xlarge
     compute_resource: controller-01
+    compute_attributes:
       volumes_attributes:
         '1':
           allocation:   '0G'
