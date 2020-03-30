@@ -144,6 +144,9 @@ nodes:
   compute-clarino-37:
     mac: b0:26:28:bb:86:da
     hostgroup: 14
+  compute-38:
+    mac: dc:f4:01:e7:ea:2e
+    hostgroup: 14
   console-01:
     compute_profile: medium
     compute_resource: controller-03
