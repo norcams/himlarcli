@@ -138,6 +138,12 @@ nodes:
   compute-alice-34:
     mac: 20:04:0f:ed:6c:9e
     hostgroup: 10
+  compute-alice-36:
+    mac: f4:02:70:d0:04:ee
+    hostgroup: 14
+  compute-alice-37:
+    mac: b0:26:28:bb:86:da
+    hostgroup: 14
   console-01:
     compute_profile: medium
     compute_resource: controller-03
