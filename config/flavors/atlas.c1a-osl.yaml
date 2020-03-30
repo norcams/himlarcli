@@ -1,0 +1,25 @@
+---
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  hw:numa_nodes: 1
+  hw:cpu_sockets: 1
+  hw:cpu_policy: 'dedicated'
+  hw:cpu_thread_policy: 'require'
+  hw:mem_page_size: 2048
+  aggregate_instance_extra_specs:type: 's== atlas'
+atlas.c1a:
+  'atlas.c1a.xlarge':
+    vcpus: 4
+    ram:   7678
+    disk:  8
+  'atlas.c1a.2xlarge':
+    vcpus: 8
+    ram:   15358
+    disk:  8
+  'atlas.c1a.4xlarge':
+    vcpus: 16
+    ram:   30718 
+    disk:  8
