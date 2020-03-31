@@ -153,6 +153,12 @@ nodes:
   compute-40:
     mac: dc:f4:01:e8:1f:92
     hostgroup: 14
+  compute-hpc-41:
+    mac: f4:02:70:d7:8b:3c
+    hostgroup: 14
+  compute-hpc-42:
+    mac: f4:02:70:d7:8c:76
+    hostgroup: 14
   console-01:
     compute_profile: medium
     compute_resource: controller-03
