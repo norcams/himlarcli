@@ -11,10 +11,11 @@ properties:
   hw:mem_page_size: 2048
   aggregate_instance_extra_specs:type: 's== atlas'
 atlas.m1a:
-  'atlas.m1a.xlarge':
-    vcpus: 4
-    ram: 15358
-    disk: 8
+#  Disk limitation
+#  'atlas.m1a.xlarge':
+#    vcpus: 4
+#    ram: 15358
+#    disk: 8
   'atlas.m1a.2xlarge':
     vcpus: 8
     ram: 30718
