@@ -142,7 +142,7 @@ nodes:
     mac: f4:02:70:d0:04:ee
     hostgroup: 14
   compute-clarino-37:
-    mac: b0:26:28:bb:86:da
+    mac: f4:02:70:cd:de:48
     hostgroup: 14
   compute-38:
     mac: dc:f4:01:e7:ea:2e
