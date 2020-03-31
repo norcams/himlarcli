@@ -150,6 +150,9 @@ nodes:
   compute-39:
     mac: dc:f4:01:e7:e9:f6
     hostgroup: 14
+  compute-40:
+    mac: dc:f4:01:e8:1f:92
+    hostgroup: 14
   console-01:
     compute_profile: medium
     compute_resource: controller-03
