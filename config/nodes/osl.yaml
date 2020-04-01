@@ -77,7 +77,7 @@ nodes:
     hostgroup: 3
   compute-atlas-21:
     mac: 0c:c4:7a:fb:c8:30
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-22:
     mac: 0c:c4:7a:fb:c9:da
     hostgroup: 13
@@ -86,7 +86,7 @@ nodes:
     hostgroup: 13
   compute-atlas-24:
     mac: 0c:c4:7a:fb:c8:1e
-    hostgroup: 3
+    hostgroup: 13
   compute-atlas-29:
     mac: 0c:c4:7a:ff:3e:56
     hostgroup: 13
