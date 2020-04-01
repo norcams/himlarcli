@@ -9,18 +9,18 @@ properties:
   hw:cpu_policy: 'dedicated'
   hw:cpu_thread_policy: 'require'
   hw:mem_page_size: 2048
-  aggregate_instance_extra_specs:type: 's== atlas_m1a'
-atlas_m1a:
+  aggregate_instance_extra_specs:type: 's== atlas_c1a'
+atlas_c1a:
 #  Disk limitation
-#  'atlas_m1a.xlarge':
+#  'atlas_c1a.xlarge':
 #    vcpus: 4
-#    ram: 15358
-#    disk: 8
-  'atlas_m1a.2xlarge':
+#    ram:   10238
+#    disk:  8
+  'atlas_c1a.2xlarge':
     vcpus: 8
-    ram: 30718
-    disk: 8
-  'atlas_m1a.4xlarge':
+    ram:   20438
+    disk:  8
+  'atlas_c1a.4xlarge':
     vcpus: 16
-    ram: 61438
-    disk: 8
+    ram:   40958 
+    disk:  8
