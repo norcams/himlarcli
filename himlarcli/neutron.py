@@ -100,7 +100,7 @@ class Neutron(Client):
         for subnet in subnets:
             start = ipaddress.ip_address(subnet['allocation_pools'][0]['start'])
             end = ipaddress.ip_address(subnet['allocation_pools'][0]['end'])
-            pool_size += int(end) - int(start)
+            pool_size += int(end) - int(start) + 1
         return pool_size
 
 # ==================================== QUOTA ==================================
