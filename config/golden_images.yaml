@@ -68,7 +68,7 @@ default:
     'min_disk':         8
   'ubuntu1604':
     'name':             'GOLD Ubuntu server 16.04'
-    'depricated':       'Outdated (Ubuntu 16)'
+    'depricated':       'Outdated (Ubuntu 16.04)'
     'url':              'http://cloud-images.ubuntu.com/xenial/current/'
     'latest':           'xenial-server-cloudimg-amd64-disk1.img'
     'checksum_file':    'SHA256SUMS'
@@ -79,7 +79,7 @@ default:
     'min_disk':         8
   'ubuntu1804':
     'name':             'GOLD Ubuntu server 18.04'
-    'depricated':       'Outdated (Ubuntu 18)'
+    'depricated':       'Outdated (Ubuntu 18.04)'
     'url':              'http://cloud-images.ubuntu.com/bionic/current/'
     'latest':           'bionic-server-cloudimg-amd64.img'
     'checksum_file':    'SHA256SUMS'
@@ -88,11 +88,11 @@ default:
     'disk_format':      'qcow2'
     'min_ram':          768
     'min_disk':         8
-  'ubuntu1904':
-    'name':             'GOLD Ubuntu server 19.04'
-    'depricated':       'Outdated (Ubuntu 19)'
-    'url':              'http://cloud-images.ubuntu.com/bionic/current/'
-    'latest':           'disco-server-cloudimg-amd64.img'
+  'ubuntu1910':
+    'name':             'GOLD Ubuntu server 19.10'
+    'depricated':       'Outdated (Ubuntu 19.10)'
+    'url':              'http://cloud-images.ubuntu.com/eoan/current/'
+    'latest':           'eoan-server-cloudimg-amd64.img'
     'checksum_file':    'SHA256SUMS'
     'checksum':         'sha256'
     'visibility':       'public'
