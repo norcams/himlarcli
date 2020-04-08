@@ -2,28 +2,20 @@
 # Use empty value for None
 desc: 'Manage images in current region! Use <action> -h for help on each action'
 actions:
-  'list':     'List all images. Output depends on visibility, tags and status'
-  'update':   'Update images from config file'
-  'usage':    'Check image usage. Output depends on visibility, tags and status'
-  'purge':    'Delete unused deactive images'
-  'grant':    'Grant access to a shared image'
-  'revoke':   'Revoke access to a shared image'
-  'list-access': 'List project with access to shared images'
-#  'test':     'Create instances base on images'
-#  'retire':   'Will retire one or more images (deactivate and rename)'
+  'list':         'List all images. Output depends on visibility, tags and status'
+  'update':       'Update images from config file'
+  'usage':        'Check image usage. Output depends on visibility, tags and status'
+  'purge':        'Delete unused deactive images'
+  'grant':        'Grant access to a shared image'
+  'revoke':       'Revoke access to a shared image'
+  'list-access':  'List project with access to shared images'
+
 opt_args:
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
     'weight':   60
-  # '--deactive':
-  #   'sub':      ['list', 'usage']
-  #   'dest':     'deactive'
-  #   'help':     'only deactivated images'
-  #   'action':   'store_const'
-  #   'const':    true
-  #   'default':  false
   '--detailed':
     'sub':      ['usage']
     'dest':     'detailed'
