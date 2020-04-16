@@ -171,6 +171,18 @@ nodes:
   compute-hpc-46:
     mac: f4:02:70:d7:8c:ea
     hostgroup: 14
+  compute-hpc-48:
+    mac: f4:02:70:d3:42:0c
+    hostgroup: 14
+  compute-hpc-49:
+    mac: f4:02:70:cd:da:de
+    hostgroup: 14
+  compute-hpc-50:
+    mac: f4:02:70:cd:de:86
+    hostgroup: 14
+  compute-hpc-51:
+    mac: f4:02:70:d0:04:e0
+    hostgroup: 14
   console-01:
     compute_profile: medium
     compute_resource: controller-03
