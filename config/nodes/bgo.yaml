@@ -171,6 +171,9 @@ nodes:
   compute-hpc-46:
     mac: f4:02:70:d7:8c:ea
     hostgroup: 14
+  compute-hpc-47:
+    mac: f4:02:70:d3:42:70
+    hostgroup: 14
   compute-hpc-48:
     mac: f4:02:70:d3:42:0c
     hostgroup: 14
