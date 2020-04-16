@@ -41,7 +41,7 @@ robin.c1a:
     disk: 200
   'robin.c1a.64xlarge':
     vcpus: 256
-    ram: 491518
+    ram: 491516
     disk: 400
     properties:
       hw:numa_nodes: 2
