@@ -34,6 +34,17 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
+  'ubuntu_2004':
+    'name':             'GOLD Ubuntu 20.04'
+    'depricated':       'Outdated (Ubuntu 20.04)'
+    'url':              'http://builder/'
+    'latest':           'ubuntu_2004-latest.qcow2'
+    'min_ram':          768
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
   'centos6':
     'name':             'GOLD CentOS 6'
     'depricated':       'Outdated (CentOS 6)'
