@@ -35,7 +35,7 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
   'ubuntu_2004':
-    'name':             'GOLD Ubuntu 20.04'
+    'name':             'GOLD Ubuntu 20.04 LTS'
     'depricated':       'Outdated (Ubuntu 20.04)'
     'url':              'http://builder/'
     'latest':           'ubuntu_2004-latest.qcow2'
