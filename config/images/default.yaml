@@ -23,17 +23,6 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
-  'ubuntu_1910':
-    'name':             'GOLD Ubuntu 19.10'
-    'depricated':       'Outdated (Ubuntu 19.10)'
-    'url':              'http://builder/'
-    'latest':           'ubuntu_1910-latest.qcow2'
-    'min_ram':          768
-    'min_disk':         8
-    'visibility':       'public'
-    'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
   'ubuntu_2004':
     'name':             'GOLD Ubuntu 20.04 LTS'
     'depricated':       'Outdated (Ubuntu 20.04)'
@@ -61,6 +50,17 @@ images:
     'depricated':       'Outdated (CentOS 7)'
     'url':              'http://builder/'
     'latest':           'centos7-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
+  'centos8':
+    'name':             'GOLD CentOS 8'
+    'depricated':       'Outdated (CentOS 8)'
+    'url':              'http://builder/'
+    'latest':           'centos8-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
