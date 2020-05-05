@@ -89,11 +89,11 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
-  'fedora_30':
-    'name':             'GOLD Fedora 30'
-    'depricated':       'Outdated (Fedora 30)'
+  'fedora_31':
+    'name':             'GOLD Fedora 31'
+    'depricated':       'Outdated (Fedora 31)'
     'url':              'http://builder/'
-    'latest':           'fedora_30-latest.qcow2'
+    'latest':           'fedora_31-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
@@ -101,11 +101,11 @@ images:
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
       'hw_rng_model':   'virtio'
-  'fedora_31':
-    'name':             'GOLD Fedora 31'
-    'depricated':       'Outdated (Fedora 31)'
+  'fedora_32':
+    'name':             'GOLD Fedora 32'
+    'depricated':       'Outdated (Fedora 32)'
     'url':              'http://builder/'
-    'latest':           'fedora_31-latest.qcow2'
+    'latest':           'fedora_32-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
