@@ -7,3 +7,16 @@ images:
   'fedora_28':
     'name':             'GOLD Fedora 27'
     'depricated':       'Outdated (Fedora)'
+  'fedora_29':
+    'name':             'GOLD Fedora 29'
+    'depricated':       'Outdated (Fedora)'
+  'fedora_30':
+    'name':             'GOLD Fedora 30'
+    'depricated':       'Outdated (Fedora)'
+  'ubuntu_1904':
+    'name':             'GOLD Ubuntu 19.04 LTS'
+    'depricated':       'Outdated (Ubuntu 19.04)'
+  'ubuntu_1910':
+    'name':             'GOLD Ubuntu 19.10'
+    'depricated':       'Outdated (Ubuntu 19.10)'
+
