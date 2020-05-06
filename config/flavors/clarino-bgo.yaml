@@ -20,5 +20,5 @@ properties:
 clarino:
   'clarino.48xlarge': # one kembo flavor to fill a host
     vcpus: 96
-    ram: 1015800
+    ram: 1007608
     disk: 5800
