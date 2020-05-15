@@ -10,8 +10,9 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
   'ubuntu_1804':
     'name':             'GOLD Ubuntu 18.04 LTS'
     'depricated':       'Outdated (Ubuntu 18.04)'
@@ -21,8 +22,9 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
   'ubuntu_2004':
     'name':             'GOLD Ubuntu 20.04 LTS'
     'depricated':       'Outdated (Ubuntu 20.04)'
@@ -32,8 +34,9 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
   'centos6':
     'name':             'GOLD CentOS 6'
     'depricated':       'Outdated (CentOS 6)'
@@ -56,6 +59,9 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
   'centos8':
     'name':             'GOLD CentOS 8'
     'depricated':       'Outdated (CentOS 8)'
@@ -67,6 +73,9 @@ images:
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
   'debian9':
     'name':             'GOLD Debian 9'
     'depricated':       'Outdated (Debian 9)'
@@ -76,8 +85,9 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
   'debian10':
     'name':             'GOLD Debian 10'
     'depricated':       'Outdated (Debian 10)'
@@ -87,8 +97,9 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
   'fedora_31':
     'name':             'GOLD Fedora 31'
     'depricated':       'Outdated (Fedora 31)'
@@ -98,9 +109,10 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
-      'hw_rng_model':   'virtio'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_rng_model':           'virtio'
+      'hw_qemu_guest_agent':    'yes'
   'fedora_32':
     'name':             'GOLD Fedora 32'
     'depricated':       'Outdated (Fedora 32)'
@@ -110,6 +122,7 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
-      'hw_rng_model':   'virtio'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_rng_model':           'virtio'
+      'hw_qemu_guest_agent':    'yes'
