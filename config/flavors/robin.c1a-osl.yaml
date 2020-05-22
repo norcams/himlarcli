@@ -12,7 +12,7 @@ properties:
 
 # Memmory calculations:
 # Total: 491520 MB
-# We always set ram 2 MB lower per flavor type to be safe
+# We always set ram (1920MB) 2MB lower per flavor type to be safe
 # (ram pr vcpu)x(vcpu)-2x(numa_nodes)
 # Example:
 # 2xlarge  (491520 / 16) - 2 =  30718
@@ -41,8 +41,8 @@ robin.c1a:
     ram: 245758
     disk: 200
   'robin.c1a.64xlarge':
-    vcpus: 255
-    ram: 489596
+    vcpus: 240
+    ram: 460796
     disk: 400
     properties:
       hw:numa_nodes: 2
