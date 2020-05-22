@@ -4,7 +4,6 @@ properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 2048
   hw_rng:rate_period: 1
-  hw:mem_page_size: 2048
   aggregate_instance_extra_specs:type: 's== elixir'
 elixir.m1a:
   'elixir.m1a.4xlarge':
