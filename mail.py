@@ -50,6 +50,7 @@ def action_file():
     for email in emails:
         msg = Mail.get_mime_text(options.subject, body_content, email)
         mail.send_mail(email, msg)
+        sent_mail_counter += 1
     mail.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter })
 
