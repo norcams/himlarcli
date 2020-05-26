@@ -48,8 +48,7 @@ def action_file():
     body_content = utils.load_template(inputfile=options.template, mapping={}, log=logger)
     emails = utils.load_file(inputfile=options.email_file, log=logger)
     for email in emails:
-        msg = Mail.get_mime_text(options.subject, body_content, email)
-        mail.send_mail(email, msg)
+        mail.mail_user(body_content, options.subject, email)
         sent_mail_counter += 1
     mail.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter })
