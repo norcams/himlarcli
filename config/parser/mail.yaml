@@ -2,41 +2,52 @@
 desc:           'Send mail to users'
 actions:
   'file':       'Send mail to all the users listed in a file'
-  'instance':   'Get admins from instances'
-  'project':    'Get admins from projects'
+#  'instance':   'Get admins from instances'
+#  'project':    'Get admins from projects'
 #  'flavor':     'Send mail to a specific flavor'
-  'sendtoall':  'Send to all the users in the system'
+#  'sendtoall':  'Send to all the users in the system'
 opt_args:
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
-  '--region':
-    'sub':      ['instance']
-    'dest':     'region'
-    'help':     'only use this region'
+    'weight':   100
+  # '--region':
+  #   'sub':      ['instance']
+  #   'dest':     'region'
+  #   'help':     'only use this region'
   '-t':
     'dest':     'template'
     'help':     'mail body template file'
-    'default':  'notify/mailto_all.txt'
-  '--type':
-    'sub':      ['project']
-    'dest':     'type'
-    'help':     'project type'
-    'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc']
-    'required': true
-  '--filter':
-    'sub':      ['project']
-    'dest':     'filter'
-    'help':     'filter by project type'
-    'default':  'all'
-    'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc']
-  '--flavortype':
-      'sub':    ['flavor']
-      'dest':   'flavortype'
-      'help':   'filter flavor by type, e.g. m1.xlarge'
+    'metavar':  '/path/to/template'
+    'required': True
   '-s':
-    'sub':      ['sendtoall']
     'dest':     'subject'
     'help':     'mail subject'
     'required': True
+  '-f':
+    'sub':       ['file']
+    'dest':      'email_file'
+    'metavar':   '/path/to/emails'
+    'required': True
+  # '--type':
+  #   'sub':      ['project']
+  #   'dest':     'type'
+  #   'help':     'project type'
+  #   'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc']
+  #   'required': true
+  # '--filter':
+  #   'sub':      ['project']
+  #   'dest':     'filter'
+  #   'help':     'filter by project type'
+  #   'default':  'all'
+  #   'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc']
+  # '--flavortype':
+  #     'sub':    ['flavor']
+  #     'dest':   'flavortype'
+  #     'help':   'filter flavor by type, e.g. m1.xlarge'
+  # '-s':
+  #   'sub':      ['sendtoall']
+  #   'dest':     'subject'
+  #   'help':     'mail subject'
+  #   'required': True
