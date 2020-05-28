@@ -44,17 +44,6 @@ default:
     'disk_format':      'qcow2'
     'min_ram':          1024
     'min_disk':         8
-  'fedora_30':
-    'name':             'GOLD Fedora 30'
-    'depricated':       'Outdated (Fedora 30)'
-    'url':              'http://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/30/Cloud/x86_64/images/'
-    'latest':           'Fedora-Cloud-Base-30-1.2.x86_64.qcow2'
-    'checksum_file':    'Fedora-Cloud-30-1.2-x86_64-CHECKSUM'
-    'checksum':         'sha256'
-    'visibility':       'public'
-    'disk_format':      'qcow2'
-    'min_ram':          768
-    'min_disk':         8
   'fedora_31':
     'name':             'GOLD Fedora 31'
     'depricated':       'Outdated (Fedora 31)'
