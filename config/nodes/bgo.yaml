@@ -138,6 +138,9 @@ nodes:
   compute-alice-34:
     mac: 20:04:0f:ed:6c:9e
     hostgroup: 10
+  compute-vgpu-35:
+    mac: b0:26:28:f0:b4:58
+    hostgroup: 14
   compute-clarino-36:
     mac: f4:02:70:d0:04:ee
     hostgroup: 14
