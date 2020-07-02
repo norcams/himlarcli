@@ -8,7 +8,20 @@ images:
     'latest':           'uio_rhel7-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
-    'visibility':       'private'
+    'visibility':       'shared'
+    'owner':            'nrec-images'
+    'properties':
+      'hw_disk_bus':    'scsi'
+      'hw_scsi_model':  'virtio-scsi'
+  'uio_rhel8':
+    'name':             'UiO Managed RHEL 8'
+    'depricated':       'Outdated (UiO RHEL8)'
+    'url':              'http://builder/'
+    'latest':           'uio_rhel8-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'shared'
+    'owner':            'nrec-images'
     'properties':
       'hw_disk_bus':    'scsi'
       'hw_scsi_model':  'virtio-scsi'
