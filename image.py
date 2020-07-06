@@ -126,7 +126,7 @@ def action_purge():
     images = get_image_usage()
     count = 0
     printer.output_dict({'header': 'Images deleted'})
-    limit = options.limit
+    limit = int(options.limit) if options.limit else options.limit
     for image in images.itervalues():
         if image['count'] > 0:
             kc.debug_log('no purge: image {} in use!'.format(image['name']))
@@ -140,7 +140,7 @@ def action_purge():
         printer.output_dict(out_image, sort=True, one_line=True)
         count += 1
         # break purging if limit reached
-        if limit and int(limit) >= count:
+        if limit and count >= int(limit):
             kc.debug_log('limit of {} reached'.format(limit))
             break
     printer.output_dict({'header': 'Image count', 'count': count})
