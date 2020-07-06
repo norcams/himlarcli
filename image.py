@@ -93,10 +93,12 @@ def action_usage():
     output = get_image_usage(options.detailed)
     out_image = {'header': 'Images with usage count'}
     printer.output_dict(out_image)
-    distros['header'] = 'Distros'
+    distros['header'] = 'Used distros'
     tag_count = dict()
-    tag_count['header'] = 'Tags'
+    tag_count['header'] = 'Used image tags'
+    count = 0
     for image in output.itervalues():
+        count += 1
         out_image = {
             'name': image['name'],
             'id': image['id'],
@@ -115,6 +117,7 @@ def action_usage():
                 continue
     printer.output_dict(distros)
     printer.output_dict(tag_count)
+    printer.output_dict({'header': 'Image count', 'count': count})
     return output
 
 def action_purge():
