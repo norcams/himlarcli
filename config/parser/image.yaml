@@ -9,7 +9,7 @@ actions:
   'grant':        'Grant access to a shared image'
   'revoke':       'Revoke access to a shared image'
   'list-access':  'List project with access to shared images'
-
+  'retire':       'Retire manage images. Hint: Move config to retire.yaml and use this as config'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -31,7 +31,7 @@ opt_args:
     'const':    true
     'default':  false
   '-i':
-    'sub':      ['update']
+    'sub':      ['update', 'retire']
     'dest':     'image_config'
     'help':     'config file under config/images/'
     'default':  'default.yaml'
@@ -53,9 +53,13 @@ opt_args:
     'help':     'image type tag'
     'default':  'all'
   '-n':
-    'sub':      ['list', 'usage', 'purge', 'update', 'grant', 'revoke', 'list-access']
+    'sub':      ['list', 'usage', 'purge', 'grant', 'revoke', 'list-access', 'update']
     'dest':     'name'
     'help':     'image name tag (short name)'
+  'name':
+    'sub':      ['retire']
+    'metavar':  'name'
+    'help':     'Image short name. Must be both in config file and name tag for active image'
   '-p':
     'sub':      ['grant', 'revoke']
     'dest':     'project'

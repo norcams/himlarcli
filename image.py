@@ -148,6 +148,41 @@ def action_purge():
             break
     printer.output_dict({'header': 'Image count', 'count': count})
 
+def action_retire():
+    tags = get_tags(names=True)
+    tag_str = 'all tags' if not tags else '[' + ', '.join(tags) + ']'
+
+    # Load config file
+    config_filename = 'config/images/{}'.format(options.image_config)
+    if not utils.file_exists(config_filename, logger):
+        utils.sys_error('Could not find config file {}'.format(config_filename))
+    image_config = utils.load_config('config/images/{}'.format(options.image_config))
+    if 'images' not in image_config or 'type' not in image_config:
+        utils.sys_error('Images hash not found in config file {}'.format(config_filename))
+
+    if options.name not in image_config['images']:
+        utils.sys_error('Unable to retire {}. Missing from config file {}'
+            .format(options.name, options.image_config))
+
+    # Point of no return
+    if not utils.confirm_action('Retire active images matching {}'
+            .format(tag_str)):
+        return
+
+    # Find image(s)
+    tags = get_tags(names=True)
+    filters = {'status': 'active', 'tag': tags}
+    kc.debug_log('filter: {}'.format(filters))
+    images = gc.get_images(filters=filters, limit=1)
+    for image in images:
+        new_name = image_config['images'][options.name]['depricated']
+        timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
+        gc.update_image(image_id=image['id'],
+                        name=new_name,
+                        depricated=timestamp)
+        gc.deactivate(image_id=image['id'])
+        print('Retire image {}'.format(image['name']))
+
 def action_update():
     # Load config file
     config_filename = 'config/images/{}'.format(options.image_config)
