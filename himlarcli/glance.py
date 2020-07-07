@@ -105,6 +105,9 @@ class Glance(Client):
         try:
             if not self.dry_run:
                 self.client.images.update(image_id=image_id, name=name, **kwargs)
+            updated_data = dict(kwargs)
+            updated_data['name'] = name
+            self.debug_log('update image: {}'.format(updated_data))
         except exc.HTTPServiceUnavailable as e:
             self.log_error(e)
 
