@@ -1,10 +1,10 @@
 nodes:
   access-01:
     compute_profile: small
-    compute_resource: controller-03
+    compute_resource: controller-06
   api-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-06
   builder-01:
     compute_profile: medium
     compute_resource: controller-04
@@ -211,16 +211,16 @@ nodes:
     hostgroup: 14
   dashboard-01:
     compute_profile: xlarge
-    compute_resource: controller-02
+    compute_resource: controller-06
   dashboard-mgmt-01:
     compute_profile: small
     compute_resource: controller-04
   db-global-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-06
   db-regional-01:
     compute_profile: xlarge
-    compute_resource: controller-01
+    compute_resource: controller-05
     compute_attributes:
       volumes_attributes:
         '1':
@@ -230,7 +230,7 @@ nodes:
           format_type:  'qcow2'
   dns-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-05
   identity-01:
     compute_profile: medium
     compute_resource: controller-01
@@ -280,7 +280,7 @@ nodes:
         value:          'vda'
   mq-01:
     compute_profile: xlarge
-    compute_resource: controller-01
+    compute_resource: controller-05
   nat-linux-01:
     compute_profile: small
     compute_resource: controller-01
