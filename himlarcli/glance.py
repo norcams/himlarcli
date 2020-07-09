@@ -72,6 +72,7 @@ class Glance(Client):
             self.log_error('image name missing!')
             return None
         self.debug_log('create new image {}'.format(kwargs['name']))
+        image = None
         try:
             if not self.dry_run:
                 image = self.client.images.create(**kwargs)

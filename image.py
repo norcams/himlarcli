@@ -194,6 +194,9 @@ def action_update():
 
     image_type = image_config['type']
     for name, image_data in image_config['images'].iteritems():
+        if 'retired' in image_data and image_data['retired'] == 1:
+            kc.debug_log('dropped {}: image retired'.format(name))
+            continue
         if options.name and name != options.name:
             kc.debug_log('dropped {}: image name spesified'.format(name))
             continue
