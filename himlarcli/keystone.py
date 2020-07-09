@@ -778,6 +778,8 @@ class Keystone(Client):
         except exceptions.http.NotFound:
             self.debug_log('could not find domain {}'.format(domain))
             domain_obj = None
+        except exceptions.connection.ConnectFailure as e:
+            self.log_error('connection failure: {}'.format(e), 1)
         return domain_obj.id if domain_obj else None
 
     def __get_projects(self, domain_id, **kwargs):
