@@ -10,4 +10,4 @@ images:
     'checksum':         'md5'
     'min_ram':          256
     'min_disk':         1
-    'visibility':       'private'
+    'visibility':       'shared'
