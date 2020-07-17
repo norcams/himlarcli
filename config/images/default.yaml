@@ -1,18 +1,6 @@
 ---
 type: 'gold'
 images:
-  'ubuntu_1604':
-    'name':             'GOLD Ubuntu 16.04 LTS'
-    'depricated':       'Outdated (Ubuntu 16.04)'
-    'url':              'http://builder/'
-    'latest':           'ubuntu_1604-latest.qcow2'
-    'min_ram':          768
-    'min_disk':         8
-    'visibility':       'public'
-    'properties':
-      'hw_disk_bus':            'scsi'
-      'hw_scsi_model':          'virtio-scsi'
-      'hw_qemu_guest_agent':    'yes'
   'ubuntu_1804':
     'name':             'GOLD Ubuntu 18.04 LTS'
     'depricated':       'Outdated (Ubuntu 18.04)'
@@ -37,17 +25,6 @@ images:
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
-  'centos6':
-    'name':             'GOLD CentOS 6'
-    'depricated':       'Outdated (CentOS 6)'
-    'url':              'http://builder/'
-    'latest':           'centos6-latest.qcow2'
-    'min_ram':          1024
-    'min_disk':         8
-    'visibility':       'public'
-    'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
   'centos7':
     'name':             'GOLD CentOS 7'
     'depricated':       'Outdated (CentOS 7)'
@@ -57,8 +34,6 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
@@ -71,8 +46,6 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
@@ -99,19 +72,6 @@ images:
     'properties':
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
-      'hw_qemu_guest_agent':    'yes'
-  'fedora_31':
-    'name':             'GOLD Fedora 31'
-    'depricated':       'Outdated (Fedora 31)'
-    'url':              'http://builder/'
-    'latest':           'fedora_31-latest.qcow2'
-    'min_ram':          1024
-    'min_disk':         8
-    'visibility':       'public'
-    'properties':
-      'hw_disk_bus':            'scsi'
-      'hw_scsi_model':          'virtio-scsi'
-      'hw_rng_model':           'virtio'
       'hw_qemu_guest_agent':    'yes'
   'fedora_32':
     'name':             'GOLD Fedora 32'
