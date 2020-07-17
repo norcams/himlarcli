@@ -134,12 +134,12 @@ nodes:
         value:          'vda'
     compute_attributes:
       volumes_attributes:
-        '1': # SSD
+        '1': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        '2': # SSD
+        '2': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
@@ -177,12 +177,12 @@ nodes:
         value:          'vda'
     compute_attributes:
       volumes_attributes:
-        '1': # SSD
+        '1': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        '2': # SSD
+        '2': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
@@ -220,12 +220,12 @@ nodes:
         value:          'vda'
     compute_attributes:
       volumes_attributes:
-        '1': # SSD
+        '1': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        '2': # SSD
+        '2': # HDD
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '5G'
