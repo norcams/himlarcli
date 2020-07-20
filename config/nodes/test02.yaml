@@ -156,16 +156,6 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        '6': # HDD
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '5G'
-          format_type:  'qcow2'
-        '7': # HDD
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '5G'
-          format_type:  'qcow2'
   object-ceph-02:
     compute_profile: small
     compute_resource: controller-02
@@ -199,16 +189,6 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '5G'
           format_type:  'qcow2'
-        '6': # HDD
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '5G'
-          format_type:  'qcow2'
-        '7': # HDD
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '5G'
-          format_type:  'qcow2'
   object-ceph-03:
     compute_profile: small
     compute_resource: controller-03
@@ -219,37 +199,27 @@ nodes:
       volumes_attributes:
         '1': # HDD
           allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '5G'
           format_type:  'qcow2'
         '2': # HDD
           allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '5G'
           format_type:  'qcow2'
         '3': # HDD
           allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '5G'
           format_type:  'qcow2'
         '4': # HDD
           allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '5G'
           format_type:  'qcow2'
         '5': # HDD
           allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '5G'
-          format_type:  'qcow2'
-        '6': # HDD
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '5G'
-          format_type:  'qcow2'
-        '7': # HDD
-          allocation:   '0G'
-          pool_name:    'dirpool'
+          pool_name:    'masstorage'
           capacity:     '5G'
           format_type:  'qcow2'
   proxy-01:
