@@ -123,6 +123,9 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-01
+  rgw-01:
+    compute_profile: medium
+    compute_resource: controller-03
   object-ceph-01:
     compute_profile: small
     compute_resource: controller-01
