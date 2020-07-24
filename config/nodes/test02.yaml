@@ -21,6 +21,9 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  cephmon-object-01:
+    compute_profile: small
+    compute_resource: controller-03
   cephmon-01:
     compute_profile: large
     compute_resource: controller-01
@@ -120,6 +123,108 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-01
+  rgw-01:
+    compute_profile: medium
+    compute_resource: controller-03
+  object-ceph-01:
+    compute_profile: small
+    compute_resource: controller-01
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+    compute_attributes:
+      volumes_attributes:
+        '1': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '2': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '3': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '4': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '5': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+  object-ceph-02:
+    compute_profile: small
+    compute_resource: controller-02
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+    compute_attributes:
+      volumes_attributes:
+        '1': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '2': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '3': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '4': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '5': # HDD
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '5G'
+          format_type:  'qcow2'
+  object-ceph-03:
+    compute_profile: small
+    compute_resource: controller-03
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
+    compute_attributes:
+      volumes_attributes:
+        '1': # HDD
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '2': # HDD
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '3': # HDD
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '4': # HDD
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '5G'
+          format_type:  'qcow2'
+        '5': # HDD
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '5G'
+          format_type:  'qcow2'
   proxy-01:
     compute_profile: small
     compute_resource: controller-03
