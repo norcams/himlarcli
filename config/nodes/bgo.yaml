@@ -189,6 +189,9 @@ nodes:
   compute-hpc-51:
     mac: f4:02:70:d0:04:e0
     hostgroup: 14
+  compute-vgpu-52:
+    mac: f0:d4:e2:e6:ae:d2
+    hostgroup: 14
   console-01:
     compute_profile: medium
     compute_resource: controller-03
