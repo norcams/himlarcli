@@ -54,13 +54,17 @@ class ForemanClient(Client):
         # the literal string
         formatted_name_string = '\"' + name + '\"'
         try:
+            self.logger.debug('Looking up %s' % name)
             results = resource_object.index(
                 search=formatted_name_string)['results']
             if results:
                 resource_id = results[0]['id']
+                self.logger.debug('Found %s with %s' % name, resource_id)
             else:
                 resource_id = None
+                self.logger.debug('Could not find resource %s' % name)
         except KeyError:
+            self.logger.debug('Lookup failed')
             resource_id = None
         return resource_id
 
@@ -69,8 +73,10 @@ class ForemanClient(Client):
         found_resource = self.get_resource_by_name(obj_type, name)
         if found_resource:
             resource_id = found_resource
+            self.logger.debug('Updating resource %s', name)
             resource_object.update(found_resource, params)
         else:
+            self.logger.debug('Creating resource %s', name)
             resource_id = resource_object.create(params)['id']
         return resource_id
 
