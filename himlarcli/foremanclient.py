@@ -45,6 +45,36 @@ class ForemanClient(Client):
     def get_client(self):
         return self.foreman
 
+    def get_resource_object(self, obj_type):
+        return getattr(self.foreman, obj_type)
+
+    def get_resource_by_name(self, obj_type, name):
+        resource_object = self.get_resource_object(obj_type)
+        # We need to wrap name in double quotes so the API search will use
+        # the literal string
+        formatted_name_string = '\"' + name + '\"'
+        try:
+            results = resource_object.index(
+                search=formatted_name_string)['results']
+            if results:
+                resource_id = results[0]['id']
+            else:
+                resource_id = None
+        except KeyError:
+            resource_id = None
+        return resource_id
+
+    def create_or_update_resource(self, obj_type, name, params):
+        resource_object = self.get_resource_object(obj_type)
+        found_resource = self.get_resource_by_name(obj_type, name)
+        if found_resource:
+            resource_id = found_resource
+            resource_object.update(found_resource, params)
+        else:
+            resource_id = resource_object.create(params)['id']
+        return resource_id
+
+    # REWRITE/REMOVE THIS AT SOME POINT
     def get_compute_resources(self):
         resources = self.foreman.index_computeresources()
         found_resources = dict({})
