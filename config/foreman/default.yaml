@@ -58,9 +58,9 @@ subnets:
    'name': 'mgmt'
 
 media:
-  'name': 'CentOS download.iaas.uio.no'
+  'name': 'CentOS download.iaas.uio.no test'
   'os-family': 'Redhat'
-  'path': "{lookup_config_values.repo_url}"
+  'path': 'https://download.iaas.uio.no/uh-iaas/test/centos-base/'
 
 operatingsytems:
   centos7:
