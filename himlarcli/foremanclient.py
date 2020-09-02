@@ -58,8 +58,10 @@ class ForemanClient(Client):
             results = resource_object.index(
                 search=formatted_name_string)['results']
             if results:
+                if len(results) > 1:
+                    self.logger.warning('Found more than 1 match for %s' % name)
                 resource_id = results[0]['id']
-                self.logger.debug('Found %s with %s' % name, resource_id)
+                self.logger.debug('Found %s with %s' % (name, resource_id))
             else:
                 resource_id = None
                 self.logger.debug('Could not find resource %s' % name)
