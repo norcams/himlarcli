@@ -1,84 +1,89 @@
 ---
-lookup_config_values:
-  himlar_domain: true
-  network: true
-  mask: true
-  repo_url: true
-
-location:
-  'name': 'Default Location'
-
-organization:
-  'name': 'Default Organization'
-
 global_params:
-  - 'name': 'enable-puppetlabs-repo'
-    'value': 'false'
-  - 'name': 'enable-puppetlabs-pc1-repo'
-    'value': 'false'
-  - 'name': 'enable-puppet5'
-    'value': 'true'
-  - 'name': 'enable-epel'
-    'value': 'false'
-  - 'name': 'enable-norcams-epel'
-    'value': 'true'
-  - 'name': 'enable-norcams-repo'
-    'value': 'true'
-  - 'name': 'puppet_systemd_firstboot'
-    'value': 'true'
-  - 'name': 'run-puppet-in-installer'
-    'value': 'true'
-  - 'name': 'time-zone'
-    'value': 'Europe/Oslo'
-  - 'name': 'ntp-server'
-    'value': 'no.pool.ntp.org'
+  - name: 'enable-puppetlabs-repo'
+    value: 'false'
+  - name: 'enable-puppetlabs-pc1-repo'
+    value: 'false'
+  - name: 'enable-puppet5'
+    value: 'true'
+  - name: 'enable-epel'
+    value: 'false'
+  - name: 'enable-norcams-epel'
+    value: 'true'
+  - name: 'enable-norcams-repo'
+    value: 'true'
+  - name: 'puppet_systemd_firstboot'
+    value: 'true'
+  - name: 'run-puppet-in-installer'
+    value: 'true'
+  - name: 'time-zone'
+    value: 'Europe/Oslo'
+  - name: 'ntp-server'
+    value: 'no.pool.ntp.org'
 
 global_settings:
-  - 'name': 'root_pass'
-    'value': '$1$jslKP.Wo$dtqCd5M8Lyc5J9UggVk1f0'
-  - 'name': 'entries_per_page'
-    'value': '100'
-    #  - 'name': 'foreman_url'
-    #    'value': 'https://' + himlar_domain
-    #  - 'name': 'unattended_url'
-    #    'value': 'http://'+ himlar_domain
-  - 'name': 'trusted_puppetmaster_hosts'
-    'value': ['himlar_domain']
-  - 'name': 'discovery_fact_column'
-    'value': 'ipmi_ipaddress'
-  - 'name': 'update_ip_from_built_request'
-    'value': 'true'
-  - 'name': 'use_shortname_for_vms'
-    'value': 'true'
-  - 'name': 'idle_timeout'
-    'value': '180'
+  - name: 'root_pass'
+    value: '$1$jslKP.Wo$dtqCd5M8Lyc5J9UggVk1f0'
+  - name: 'entries_per_page'
+    value: '100'
+  - name: 'foreman_url'
+    value: 'https://' + himlar_domain
+  - name: 'unattended_url'
+    value: 'http://'+ himlar_domain
+  - name: 'trusted_puppetmaster_hosts'
+    value: ['himlar_domain']
+  - name: 'discovery_fact_column'
+    value: 'ipmi_ipaddress'
+  - name: 'update_ip_from_built_request'
+    value: 'true'
+  - name: 'use_shortname_for_vms'
+    value: 'true'
+  - name: 'idle_timeout'
+    value: '180'
 
 subnets:
-  name:
-   'name': 'mgmt'
+  name: 'mgmt'
+  network: 'network'
+  mask: 'mask'
+  domain_ids: 'mgmt'
+  tftp_id: 'TFTP'
 
 media:
-  'name': 'CentOS download.iaas.uio.no test'
-  'os-family': 'Redhat'
-  'path': 'https://download.iaas.uio.no/uh-iaas/test/centos-base/'
+  nam': 'CentOS download.iaas.uio.no test'
+  os-family: 'Redhat'
+  path: 'https://download.iaas.uio.no/uh-iaas/test/centos-base/'
 
 operatingsytems:
   centos7:
-    'name': 'CentOS'
-    'family': 'Redhat'
-    'major': '7'
-    'minor': '8'
+    name: 'CentOS'
+    family: 'Redhat'
+    major: '7'
+    minor: '8'
+    architecture_ids:
+      - 'x86_64'
+    medium_ids:
+      - 'CentOS download.iaas.uio.no'
+    ptables_ids:
+      - 'Community norcams ptable default'
+      - 'norcams Kickstart default uefi'
 
 hostgroups:
   base:
-    'name': 'base'
-    'architecture': 'x86_64'
-    'operatingsystem': 'norcams CentOS'
-    'environment': 'production'
-    'pxe_loader': 'PXELinux BIOS'
+    name: 'base'
+    architecture: 'x86_64'
+    operatingsystem: 'norcams CentOS'
+    environment: 'production'
+    pxe_loader: 'PXELinux BIOS'
+    medium_id: 'CentOS download.iaas.uio.no'
+    ptables_ids:
+      - 'Community norcams ptable default'
+      - 'norcams Kickstart default uefi'
+    subnet_id: 'mgmt',
+    puppet_proxy_id: 'TFTP'
+    puppet_ca_proxy_id: 'TFTP'
   storage:
-    'name': 'storage'
-    'parent': 'base'
+    name: 'storage'
+    parent: 'base'
   compute:
-    'name': 'compute'
-    'parent': 'base'
+    name: 'compute'
+    parent: 'base'

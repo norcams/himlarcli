@@ -1,0 +1,89 @@
+---
+domains:
+  domain:
+    source: config
+    config_key: foreman
+    lookup_key: name
+    default: None
+
+subnets:
+  network:
+    source: config
+    config_key: foreman
+    lookup_key: name
+    default: None
+
+  mask:
+    source: config
+    config_key: foreman
+    lookup_key: mask
+    default: None
+
+  domain_ids:
+    source: foreman
+    config_key: domains
+    lookup_key: name
+    default: None
+
+  tftp_id:
+    source: foreman
+    config_key: smart_proxies
+    lookup_key: name
+    default: None
+
+media:
+  path:
+    source: config
+    config_key: foreman
+    lookup_key: name
+    default: None
+
+operatingsytems:
+  architectures_ids:
+    source: foreman
+    config_key: architectures
+    lookup_key: name
+    default: x86_64
+
+  medium_ids:
+    source: foreman
+    config_key: media
+    lookup_key: name
+    default: None
+
+  ptable_ids:
+    source: foreman
+    config_key: ptables
+    lookup_key: name
+    default: None
+
+hostgroups:
+  medium_id:
+    source: foreman
+    config_key: media
+    lookup_key: name
+    default: None
+
+  ptables_ids:
+    source: foreman
+    config_key: media
+    lookup_key: name
+    default: None
+
+  subnet_id:
+    source: foreman
+    config_key: subnets
+    lookup_key: name
+    default: mgmt
+
+  puppet_proxy_id:
+    source: foreman
+    config_key: smart_proxies
+    lookup_key: name
+    default: TFTP
+
+  puppet_ca_proxy_id:
+    source: foreman
+    config_key: smart_proxies
+    lookup_key: name
+    default: TFTP
