@@ -33,10 +33,16 @@ Requirements
 ```
 yum install -y python-virtualenv PyYAML openldap-devel openssl-devel gcc
 ```
-After virtualenv run 
+After virtualenv run
 ```
 pip install --upgrade setuptools
 ```
+
+### Config file
+
+All script should have the `-c` option to set a custom config file. If this is
+not set it will look for  `config.ini` in the root of himlarcli and then in
+`/etc/himlarcli`
 
 ### pylint
 
@@ -60,6 +66,9 @@ This is for use with himlar in vagrant.
 
 Use config.ini.example and remember to change keystone_cachain: with
 path to root CA used in vagrant
+
+If you have a `config.ini` in the himlarcli root directory it will use this
+automatically in all scripts.
 
 #### Hosts
 

@@ -1,3 +1,4 @@
+import os
 import sys
 import ConfigParser
 import unicodedata
@@ -16,8 +17,7 @@ class Client(object):
     region = None
 
     def __init__(self, config_path, debug, log=None, region=None):
-        self.config_path = config_path
-        self.config = utils.get_config(config_path)
+        self.config = self.load_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug, log)
         self.logger.debug('=> config file: %s' % config_path)
         self.debug = debug
@@ -64,7 +64,7 @@ class Client(object):
             sys.exit(1)
         return dict(openstack)
 
-    def get_config(self, section, option, default = None):
+    def get_config(self, section, option, default=None):
         try:
             value = self.config.get(section, option)
             return value
@@ -74,6 +74,32 @@ class Client(object):
         except ConfigParser.NoSectionError:
             self.logger.debug('=> config file missing section %s' % section)
         return default
+
+    def load_config(self, config_path):
+        """ The config file will be loaded from the path given with the -c
+            option path when running the script. If no -c option given it will
+            also look for config.ini in:
+                - local himlarcli root
+                - /etc/himlarcli/
+            If no config is found it will exit.
+        """
+        if config_path and not os.path.isfile(config_path):
+            self.log_error("Could not find config file: {}".format(config_path), 1)
+        elif not config_path:
+            self.config_path = None
+            local_config = utils.get_abs_path('config.ini')
+            etc_config = '/etc/himlarcli/config.ini'
+            if os.path.isfile(local_config):
+                self.config_path = local_config
+            else:
+                if os.path.isfile(etc_config):
+                    self.config_path = etc_config
+            if not self.config_path:
+                msg = "Config file not found in default locations:\n  {}\n  {}"
+                self.log_error(msg.format(local_config, etc_config), 1)
+        else:
+            self.config_path = config_path
+        return utils.get_config(self.config_path)
 
     def get_logger(self):
         """

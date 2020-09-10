@@ -113,15 +113,13 @@ class Parser(object):
                                     dest='config',
                                     metavar='config.ini',
                                     action='store',
-                                    default='/etc/himlarcli/config.ini',
-                                    help='path to ini file with config')
+                                    help='override config.ini path')
         elif self.SHOW['config']:
             self.parser.add_argument('-c',
                                      dest='config',
                                      metavar='config.ini',
                                      action='store',
-                                     default='/etc/himlarcli/config.ini',
-                                     help='path to ini file with config')
+                                     help='override config.ini path')
 
     def __add_debug(self):
         if self.SHOW['debug'] and self.parsers:
