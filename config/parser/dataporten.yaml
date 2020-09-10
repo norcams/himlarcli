@@ -1,0 +1,9 @@
+---
+desc:           'Setup or update dataporten support for keystone'
+actions:
+  'update':     'Update the keystone federation for dataporten'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
