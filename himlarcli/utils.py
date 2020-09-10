@@ -59,7 +59,7 @@ def append_to_file(filename, text):
 
 def get_config(config_path):
     if not os.path.isfile(config_path):
-        logging.critical("Could not find config file: %s" %config_path)
+        logging.critical("Could not find config file: %s", config_path)
         sys.exit(1)
     config = ConfigParser.ConfigParser()
     config.read(config_path)
@@ -70,7 +70,7 @@ def get_date(datestr, default, format='%d.%m.%Y'):
         try:
             return datetime.strptime(datestr, format).date()
         except ValueError:
-            sys_error('date format %s not valid for %s' % (format,datestr), 1)
+            sys_error('date format %s not valid for %s' % (format, datestr), 1)
     else:
         return default
 
