@@ -1,0 +1,13 @@
+---
+type: 'test'
+images:
+  'cirros':
+    'name':             'CirrOS vagrant image'
+    'depricated':       'Outdated (CirrOS)'
+    'url':              'http://download.cirros-cloud.net/0.5.0/'
+    'latest':           'cirros-0.5.0-x86_64-disk.img'
+    'checksum_file':    'MD5SUMS'
+    'checksum':         'md5'
+    'min_ram':          256
+    'min_disk':         1
+    'visibility':       'public'
