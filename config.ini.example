@@ -21,6 +21,12 @@ instance_file=active_instances.txt
 server=172.31.0.14
 port = 8125
 
+[rabbitmq]
+host=172.31.0.31
+username=himlarcli
+password=himlarcli
+vhost=himlarcli
+
 [state]
 db=db/state.db
 

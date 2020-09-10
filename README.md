@@ -51,6 +51,7 @@ To check new or updated python files run:
 ```
 pytlint <script>.py
 ```
+or to run the full test travis uses with `test.sh`
 
 #### disable
 
@@ -69,6 +70,21 @@ path to root CA used in vagrant
 
 If you have a `config.ini` in the himlarcli root directory it will use this
 automatically in all scripts.
+
+#### Dataporten access
+
+If the vagrant installation is setup with support for Dataporten login
+you can use `access.py` to provision the user and project without the need
+to install the access node:
+
+```
+./access.py push --email <feide-email> --password <password>
+./access.py pop --debug
+```
+
+exit the last script after the user is created.
+
+*NOTE*: Make sure the rabbitmq section is present in your config.ini first!
 
 #### Hosts
 
