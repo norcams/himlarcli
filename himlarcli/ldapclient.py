@@ -9,7 +9,7 @@ class LdapClient(Client):
     def __init__(self, config_path, ldap_config='config/ldap.yaml', debug=False, log=None):
         self.config = self.load_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug, log)
-        self.logger.debug('=> config file: %s' % config_path)
+        self.logger.debug('=> config file: {}'.format(self.config_path))
         self.ldap_config = utils.load_config(ldap_config, self.logger)
         self.debug = debug
         self.dry_run = False
