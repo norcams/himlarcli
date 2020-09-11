@@ -20,3 +20,4 @@ backports.functools_lru_cache
 configparser
 tweepy
 python-foreman==0.4.20
+tabulate
