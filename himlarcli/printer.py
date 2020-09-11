@@ -23,7 +23,7 @@ class Printer(object):
             self.__list_dicts_to_text(lists=lists, sort=sort, one_line=one_line)
         elif self.format == 'json':
             self.__list_dicts_to_json(lists=lists, sort=sort)
-        elif self.formant == csv:
+        elif self.format == csv:
             print 'not implemented'
 
     def output_dict(self, objects, sort=True, one_line=False):
