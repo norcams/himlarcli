@@ -5,9 +5,10 @@ tests.is_virtual_env()
 
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
+from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
-from himlarcli import utils as utils
+from himlarcli import utils
 from himlarcli.mail import Mail
 
 parser = Parser()
@@ -19,10 +20,10 @@ kc.set_domain(options.domain)
 kc.set_dry_run(options.dry_run)
 logger = kc.get_logger()
 
-# if hasattr(options, 'region'):
-#     regions = ksclient.find_regions(region_name=options.region)
-# else:
-#     regions = ksclient.find_regions()
+if hasattr(options, 'region'):
+    regions = kc.find_regions(region_name=options.region)
+else:
+    regions = kc.find_regions()
 #
 # if not regions:
 #     himutils.sys_error('no valid regions found!')
@@ -36,7 +37,8 @@ logger = kc.get_logger()
 # else:
 #     host = None
 
-# Send mail to all emails in a template file
+
+# Send mail template to all emails in a address file
 def action_file():
     q = 'Send mail template {} to all emails in {}'.format(options.template,
                                                            options.email_file)
@@ -51,34 +53,69 @@ def action_file():
         mail.mail_user(body_content, options.subject, email)
         sent_mail_counter += 1
     mail.close()
-    printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter })
+    printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 
-    # user_counter = 0
-    # sent_mail_counter = 0
-    # if options.template:
-    #     content = options.template
-    #     email_content = open(content, 'r')
-    #     body_content = email_content.read()
-    #     if options.dry_run:
-    #         print body_content
-    #     else:
-    #         mail = Mail(options.config, debug=options.debug)
-    #         msg = MIMEText(body_content)
-    #         msg['subject'] = subject
-    #         print msg
-    #         with open(emails_file, 'r') as emails:
-    #             for toaddr in emails.readlines():
-    #                 user_counter += 1
-    #                 try:
-    #                     logger.debug('=> Sending email ...')
-    #                     mail.send_mail(toaddr, msg, fromaddr='noreply@uh-iaas.no')
-    #                     sent_mail_counter += 1
-    #                 except ValueError:
-    #                     himutils.sys_error('Not able to send the email.')
-    #         emails.close()
-    #         print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
-    # email_content.close()
-    # mail.close()
+def action_aggregate():
+    users = dict()
+    for region in regions:
+        nova = utils.get_client(Nova, options, logger)
+        #neutron = utils.get_client(Neutron, options, logger)
+        #network = neutron.list_networks()
+        instances = nova.get_instances(options.aggregate)
+
+        for i in instances:
+            email = None
+            project = kc.get_by_id('project', i.tenant_id)
+            if hasattr(project, 'admin'):
+                email = project.admin
+            else:
+                kc.debug_log('could not find admin for project {}'.
+                             format(project.name))
+                continue
+            instance_data = {
+                'name': i.name,
+                'region': region,
+                #'status': i.status,
+                #'created': i.created,
+                #'flavor': i.flavor['original_name'],
+                #'ip': next(iter(neutron.get_network_ip(i.addresses, network)), None),
+                'project': project.name
+
+            }
+            if email not in users:
+                users[email] = list()
+            users[email].append(instance_data)
+
+        # Add metadata to aggregate
+        metadata = {'maintenance': options.date + ' (updated {})'.
+                                   format(utils.get_current_date())}
+        nova.update_aggregate(options.aggregate, metadata=metadata)
+
+    mailer = utils.get_client(Mail, options, logger)
+    if '[NREC]' not in options.subject:
+        subject = '[NREC] ' + options.subject
+    else:
+        subject = options.subject
+    sent_mail_counter = 0
+    for user, instances in users.iteritems():
+        columns = ['project', 'region']
+        mapping = dict(region=options.region,
+                       date=options.date,
+                       instances=utils.get_instance_table(instances, columns),
+                       admin=user)
+        body_content = utils.load_template(inputfile=options.template,
+                                           mapping=mapping,
+                                           log=logger)
+        message = mailer.get_mime_text(subject, body_content, options.from_addr)
+        mailer.send_mail(user, message)
+        sent_mail_counter += 1
+
+    if options.dry_run and message:
+        print "\nExample mail sendt from this run:"
+        print "----------------------------------"
+        print message
+    mailer.close()
+    printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 
 # Send mail to all running instances
 # def action_instance():
@@ -188,5 +225,5 @@ def action_file():
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    himutils.sys_error("Function action_%s() not implemented" % options.action)
+    utils.sys_error("Function action_%s() not implemented" % options.action)
 action()

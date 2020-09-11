@@ -8,11 +8,12 @@ class Mail(Client):
 
     def __init__(self, config_path, debug=False, log=None):
         super(Mail, self).__init__(config_path, debug, log)
-        debug_level = 1 if debug else 0
-        self.logger.debug('=> config file: %s' % config_path)
         self.server = smtplib.SMTP(self.get_config('mail', 'smtp'), 25)
-        self.server.set_debuglevel(debug_level)
         self.server.starttls()
+
+    def enable_mail_debug(self, level=1):
+        """ Turn on debug mode on smtplib """
+        self.server.set_debuglevel(level)
 
     def send_mail(self, toaddr, mail, fromaddr=None):
         if fromaddr is None:
@@ -50,12 +51,12 @@ class Mail(Client):
         return mail
 
     def get_client(self):
-        return self.client
+        return self.server
 
     @staticmethod
     def get_mime_text(subject, body, fromaddr):
         msg = MIMEText(body)
-        msg['subject'] = subject
+        msg['Subject'] = subject
         msg['From'] = fromaddr
         return msg
 

@@ -198,8 +198,13 @@ class Nova(Client):
         return hosts
 
     def update_aggregate(self, aggregate, metadata):
-        aggregate = self.__get_aggregate(aggregate)
-        return self.client.aggregates.set_metadata(aggregate.id, metadata)
+        """
+            Update aggregate metadata
+            Version: 2020-9
+        """
+        aggregate = self.get_aggregate(aggregate)
+        if not self.dry_run:
+            self.client.aggregates.set_metadata(aggregate.id, metadata)
 
     def get_instances(self, aggregate=None, host=None, simple=False):
         if not aggregate:

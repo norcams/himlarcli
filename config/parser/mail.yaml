@@ -2,6 +2,7 @@
 desc:           'Send mail to users'
 actions:
   'file':       'Send mail to all the users listed in a file'
+  'aggregate':  'Send mail to all users with instances in this aggregate. Defaults to all regions with this aggregate'
 #  'instance':   'Get admins from instances'
 #  'project':    'Get admins from projects'
 #  'flavor':     'Send mail to a specific flavor'
@@ -12,10 +13,10 @@ opt_args:
     'help':     'openstack domain to use'
     'default':  'Dataporten'
     'weight':   100
-  # '--region':
-  #   'sub':      ['instance']
-  #   'dest':     'region'
-  #   'help':     'only use this region'
+  '--region':
+    'sub':      ['aggregate']
+    'dest':     'region'
+    'help':     'only use this region'
   '-t':
     'dest':     'template'
     'help':     'mail body template file'
@@ -26,10 +27,22 @@ opt_args:
     'help':     'mail subject'
     'required': True
   '-f':
-    'sub':       ['file']
-    'dest':      'email_file'
-    'metavar':   '/path/to/emails'
+    'sub':      ['file']
+    'dest':     'email_file'
+    'metavar':  '/path/to/emails'
     'required': True
+  '--date':
+    'dest':     'date'
+    'help':     'date string to use in template'
+  '--fromaddr':
+    'dest':     'from_addr'
+    'default':  'support@uh-iaas.no'
+    'metavar':  'email'
+    'help':     'replyto address in email'
+  'aggregate':
+    'sub':       ['aggregate']
+    'metavar':   'aggregate'
+    'help':      'aggregate name'
   # '--type':
   #   'sub':      ['project']
   #   'dest':     'type'

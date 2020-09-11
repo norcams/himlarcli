@@ -1,0 +1,19 @@
+Hi,
+
+Due to scheduled maintenance, running HPC instances in NREC will experience
+downtime on $date.
+
+Contact: $admin
+
+$instances
+
+If you have unused HPC instances, we would also appreciate if you delete them.
+Resources are limited.
+
+In the future there will be the possibility of a scheduled maintenance on the
+second Tuesday of every month.
+
+Support and contact information can be found at https://docs.nrec.no
+
+--
+NREC team
