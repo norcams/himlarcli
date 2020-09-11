@@ -136,3 +136,12 @@ class Neutron(Client):
         except exceptions.ServiceUnavailable:
             self.log_error('Neutron: Service unavailable!')
         return result
+
+    @staticmethod
+    def get_network_ip(addresses, networks, version=4):
+        ip_list = list()
+        for name, ips in addresses.iteritems():
+            for ip in ips:
+                if ip['version'] == version:
+                    ip_list.append(ip['addr'])
+        return ip_list
