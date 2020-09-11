@@ -1,9 +1,11 @@
 #!/usr/bin/env python
+
+from himlarcli import tests as tests
+tests.is_virtual_env()
+
 from himlarcli.keystone import Keystone
 from himlarcli.parser import Parser
 from himlarcli import utils
-
-utils.is_virtual_env()
 
 # Load parser config from config/parser/*
 parser = Parser()
