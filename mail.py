@@ -5,7 +5,7 @@ tests.is_virtual_env()
 
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
-from himlarcli.neutron import Neutron
+#from himlarcli.neutron import Neutron
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils
@@ -58,7 +58,7 @@ def action_file():
 def action_aggregate():
     users = dict()
     for region in regions:
-        nova = utils.get_client(Nova, options, logger)
+        nova = utils.get_client(Nova, options, logger, region)
         #neutron = utils.get_client(Neutron, options, logger)
         #network = neutron.list_networks()
         instances = nova.get_instances(options.aggregate)
