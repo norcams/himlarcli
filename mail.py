@@ -97,6 +97,7 @@ def action_aggregate():
     else:
         subject = options.subject
     sent_mail_counter = 0
+    message = None
     for user, instances in users.iteritems():
         columns = ['project', 'region']
         mapping = dict(region=options.region,
