@@ -179,7 +179,7 @@ class Nova(Client):
         try:
             aggregate = self.client.aggregates.find(name=aggregate)
         except novaclient.exceptions.NotFound as e:
-            self.logger.warning(e)
+            self.debug_log('{}: {}'.format(self.region, e))
             return None
         return aggregate
 
@@ -211,7 +211,7 @@ class Nova(Client):
             instances = self.__get_instances(host=host)
         else:
             agg = self.__get_aggregate(aggregate)
-            if 'hosts' not in agg or not agg.hosts:
+            if not agg or 'hosts' not in agg or not agg.hosts:
                 self.logger.debug('=> not hosts found in aggregate %s' % aggregate)
                 instances = list()
             else:
