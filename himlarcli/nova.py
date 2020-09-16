@@ -211,7 +211,7 @@ class Nova(Client):
             instances = self.__get_instances(host=host)
         else:
             agg = self.__get_aggregate(aggregate)
-            if not agg.hosts:
+            if 'hosts' not in agg or not agg.hosts:
                 self.logger.debug('=> not hosts found in aggregate %s' % aggregate)
                 instances = list()
             else:
