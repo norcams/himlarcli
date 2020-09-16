@@ -263,7 +263,7 @@ def action_show():
 def action_instances():
     project = ksclient.get_project_by_name(project_name=options.project)
     for region in regions:
-        novaclient = Nova(options.config, debug=options.debug, log=logger)
+        novaclient = himutils.get_client(Nova, options, logger, region)
         instances = novaclient.get_project_instances(project_id=project.id)
         if not instances:
             himutils.sys_error('No instances found for the project %s' % options.project)
