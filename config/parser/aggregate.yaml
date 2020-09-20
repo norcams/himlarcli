@@ -4,7 +4,6 @@ desc: 'Manage host aggregates! Use <action> -h for help on each action'
 actions:
   'list':           'List host aggregates'
   'show':           'Show host aggregates'
-  'projects':       'List all project in aggregate'
   'instances':      'List all instances in the aggregate'
   'stop-instance':  'Stop all instances in aggregate and save state'
   'start-instance': 'Start all instances which have running saved state'
