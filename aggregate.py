@@ -81,7 +81,7 @@ def action_stop_instance():
         for i in instances:
             instance_data = i.to_dict().copy()
             instance_data['region'] = region
-            instance_data['host'] = nova.get_compute_host(i)
+            instance_data['aggregate'] = options.aggregate
             instance_data['instance_id'] = i.id
             instance_data.pop('created', None) # not instance created, but db
 
@@ -99,7 +99,8 @@ def action_start_instance():
 
     for region in regions:
         nova = utils.get_client(Nova, options, logger, region)
-        instances = state.get_all(Instance, region=region)
+        instances = state.get_all(Instance, region=region,
+                                  aggregate=options.aggregate)
 
         for i in instances:
             if i.status == 'ACTIVE':

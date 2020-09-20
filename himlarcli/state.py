@@ -101,7 +101,7 @@ class Instance(Base):
     instance_id = Column(String(63), nullable=False, index=True)
     created = Column(DateTime, default=datetime.now)
     name = Column(String(255))
-    host = Column(String(255))
+    aggregate = Column(String(255))
     status = Column(String(15))
     region = Column(String(15), index=True)
 
