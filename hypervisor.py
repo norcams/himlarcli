@@ -8,7 +8,6 @@ from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
-import time
 
 parser = Parser()
 options = parser.parse_args()
@@ -92,7 +91,9 @@ def action_list():
         hosts = nc.get_hosts()
     else:
         hosts = nc.get_aggregate_hosts(options.aggregate, True)
-    printer.output_dict({'header': 'Hypervisor list (name, aggregate, vms, vcpu_used, ram_gb_used, state, status)'})
+    header = {'header': 'Hypervisor list (name, aggregate, vms, vcpu_used,' +
+                        'ram_gb_used, state, status)'}
+    printer.output_dict(header)
     for host in hosts:
         output = {
             '1': host.hypervisor_hostname,
