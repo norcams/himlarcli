@@ -236,13 +236,13 @@ nodes:
     compute_resource: controller-05
   identity-01:
     compute_profile: medium
-    compute_resource: controller-01
+    compute_resource: controller-05
   identity-02:
     compute_profile: medium
-    compute_resource: controller-02
+    compute_resource: controller-06
   identity-03:
     compute_profile: medium
-    compute_resource: controller-03
+    compute_resource: controller-07
   image-01:
     compute_profile: medium
     compute_resource: controller-01
