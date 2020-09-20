@@ -211,7 +211,7 @@ class Nova(Client):
             instances = self.__get_instances(host=host)
         else:
             agg = self.__get_aggregate(aggregate)
-            if not agg or 'hosts' not in agg or not agg.hosts:
+            if not agg or not hasattr(agg, 'hosts') or not agg.hosts:
                 self.logger.debug('=> not hosts found in aggregate %s' % aggregate)
                 instances = list()
             else:
@@ -265,10 +265,7 @@ class Nova(Client):
         az = self.client.availability_zones.list()
         return az
 
-# ============================== INSTANCES ====================================
-
-    def get_instance(self, server_id):
-        return self.client.servers.get(server=server_id)
+################################## INSTANCES ##################################
 
     def get_all_instances(self, search_opts=None):
         if not search_opts:
@@ -285,6 +282,26 @@ class Nova(Client):
         self.logger.debug('=> found %s instances for project %s' % (len(instances), project_id))
         return instances
 
+    def stop_instance(self, instance):
+        """
+            Wrapper to stop an instance
+            Version: 2020-09
+        """
+        if instance.status == 'ACTIVE' and not self.dry_run:
+            instance.stop()
+        if instance.status == 'ACTIVE':
+            self.debug_log('stop instance {}'.format(instance.id))
+
+    def start_instance(self, instance):
+        """
+            Wrapper to start an instance
+            Version: 2020-09
+        """
+        if instance.status == 'SHUTOFF' and not self.dry_run:
+            instance.start()
+        if instance.status == 'SHUTOFF':
+            self.debug_log('start instance {}'.format(instance.id))
+
     def delete_project_instances(self, project, dry_run=False):
         """ Delete all instances for a project """
         search_opts = dict(tenant_id=project.id, all_tenants=1)
@@ -299,6 +316,8 @@ class Nova(Client):
                 time.sleep(5)
             else:
                 self.logger.debug('=> DRY-RUN: delete instance %s (%s)' % (i.name, project.name))
+
+#################################### QUOTA ####################################
 
     def get_quota(self, project_id, detail=False):
         """ Get a projects nova quota.
@@ -366,12 +385,6 @@ class Nova(Client):
         return usage
 
 
-    def save_states(self):
-        instances = self.__get_all_instances()
-        if instances:
-            self.state.add_active(instances)
-            self.state.close()
-
     def get_stats(self):
         instances = self.__get_all_instances()
         stats = dict()
@@ -395,20 +408,6 @@ class Nova(Client):
         """
         self.__change_status('start', 'SHUTOFF')
 
-
-    def start_instances_from_state(self):
-        """ Start all instances from a previous saved state """
-        instances = self.state.get_instances(state='ACTIVE', host=self.host)
-        count = 0
-        for i in instances:
-            instance = self.client.servers.get(i[0])
-            if instance.status != 'ACTIVE':
-                instance.start()
-                count += 1
-                self.logger.debug("=> starting %s" % i[1])
-            else:
-                self.logger.debug("=> already running %s" % i[1])
-        print "Run start on %s instances with previous state ACTIVE" % (count)
 
     def delete_instances(self, state='SHUTOFF'):
         """ Delete all instances on a host with one state
@@ -548,6 +547,16 @@ class Nova(Client):
                 continue
             access_list[flavor.name] = self.client.flavor_access.list(flavor=flavor.id)
         return access_list
+
+################################## STATIC #####################################
+
+    @staticmethod
+    def get_compute_host(instance, short=True):
+        """ This will return the name of the compte host for an instance """
+        hostname = getattr(instance, 'OS-EXT-SRV-ATTR:host')
+        if short:
+            return hostname.split('.')[0]
+        return hostname
 
 ################################## PRIVATE ####################################
 

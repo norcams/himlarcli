@@ -26,7 +26,7 @@ def action_instance():
     start = himutils.get_date(options.start, date.today() - timedelta(days=1))
     stop = himutils.get_date(options.end, date.today() + timedelta(days=1))
     gc = Gnocchi(options.config, debug=options.debug, log=logger)
-    instance = nc.get_instance(options.instance)
+    instance = nc.get_by_id('server', options.instance)
     resources = gc.get_resource(resource_type='instance', resource_id=instance.id)
     metrics = resources['metrics']
     del resources['metrics']
