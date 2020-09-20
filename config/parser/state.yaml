@@ -17,4 +17,4 @@ opt_args:
   'resource':
     'metavar':  'resource'
     'help':     'resource name'
-    'choices':  ['keypair', 'quota']
+    'choices':  ['keypair', 'quota', 'instance']

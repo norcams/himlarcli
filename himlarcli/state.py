@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 from datetime import datetime
 #from himlarcli import utils
 from himlarcli.client import Client
@@ -38,13 +39,16 @@ class State(Client):
     def connect(self):
         """ Connect to the sqlite database """
         db = self.get_config('state', 'db')
-        self.engine = create_engine('sqlite:///%s' % db)
+        self.engine = create_engine('sqlite:///%s' % db, poolclass=NullPool)
         Base.metadata.bind = self.engine
         DBSession = sessionmaker()
         self.session = DBSession()
         Base.metadata.create_all(self.engine)
         self.debug_log("sqlite driver %s" % self.engine.driver)
         self.debug_log("connected to %s" % db)
+
+    def close(self):
+        self.session.close()
 
     def add(self, resource):
         """ Add a new resource to database """
@@ -87,6 +91,22 @@ class Keypair(Base):
 
     def to_str(self):
         return 'keys for user id %s' % self.user_id
+
+    def compare(self, attributes):
+        pass
+
+class Instance(Base):
+    __tablename__ = 'instance'
+    id = Column(Integer, primary_key=True)
+    instance_id = Column(String(63), nullable=False, index=True)
+    created = Column(DateTime, default=datetime.now)
+    name = Column(String(255))
+    host = Column(String(255))
+    status = Column(String(15))
+    region = Column(String(15), index=True)
+
+    def to_str(self):
+        return 'instance with id {}'.format(self.instance_id)
 
     def compare(self, attributes):
         pass
