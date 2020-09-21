@@ -35,7 +35,7 @@ nodes:
     compute_resource: controller-02
   cephmon-object-03:
     compute_profile: large
-    compute_resource: controller-03
+    compute_resource: controller-07
   compute-01:
     hostgroup: 3
     mac: ec:f4:bb:ce:21:84
