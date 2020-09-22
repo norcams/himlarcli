@@ -245,13 +245,13 @@ nodes:
     compute_resource: controller-07
   image-01:
     compute_profile: medium
-    compute_resource: controller-01
+    compute_resource: controller-05
   image-02:
     compute_profile: medium
-    compute_resource: controller-02
+    compute_resource: controller-06
   image-03:
     compute_profile: medium
-    compute_resource: controller-03
+    compute_resource: controller-07
   logger-01:
     compute_profile: xlarge
     compute_resource: controller-04
@@ -483,7 +483,10 @@ nodes:
     compute_resource: controller-03
   volume-01:
     compute_profile: large
-    compute_resource: controller-01
+    compute_resource: controller-05
   volume-02:
     compute_profile: large
-    compute_resource: controller-02
+    compute_resource: controller-06
+  volume-03:
+    compute_profile: large
+    compute_resource: controller-07
