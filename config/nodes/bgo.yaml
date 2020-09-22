@@ -351,7 +351,7 @@ nodes:
     compute_resource: controller-05
   resolver-01:
     compute_profile: small
-    compute_resource: controller-03
+    compute_resource: controller-07
   resolver-02:
     compute_profile: small
     compute_resource: controller-04
