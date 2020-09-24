@@ -236,10 +236,10 @@ nodes:
     compute_resource: controller-05
   identity-01:
     compute_profile: medium
-    compute_resource: controller-01
+    compute_resource: controller-05
   identity-02:
     compute_profile: medium
-    compute_resource: controller-02
+    compute_resource: controller-06
   identity-03:
     compute_profile: medium
     compute_resource: controller-07
@@ -299,22 +299,22 @@ nodes:
     compute_resource: controller-06
   network-01:
     compute_profile: large
-    compute_resource: controller-01
+    compute_resource: controller-05
   network-02:
     compute_profile: large
-    compute_resource: controller-02
+    compute_resource: controller-06
   network-03:
     compute_profile: large
     compute_resource: controller-07
   novactrl-01:
     compute_profile: large
-    compute_resource: controller-01
+    compute_resource: controller-05
   novactrl-02:
     compute_profile: large
-    compute_resource: controller-02
+    compute_resource: controller-06
   novactrl-03:
     compute_profile: large
-    compute_resource: controller-03
+    compute_resource: controller-07
   ns-01:
     compute_profile: small
     compute_resource: controller-02
