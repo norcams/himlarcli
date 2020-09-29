@@ -267,7 +267,7 @@ nodes:
         value:          'vda'
   metric-01:
     compute_profile: xlarge
-    compute_resource: controller-01
+    compute_resource: controller-05
     compute_attributes:
       volumes_attributes:
         '1':
@@ -317,7 +317,7 @@ nodes:
     compute_resource: controller-07
   ns-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-06
   object-ceph-01:
     mac: d0:94:66:09:0d:6c
     hostgroup: 7
@@ -360,7 +360,7 @@ nodes:
     compute_resource: controller-05
   status-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-06
   storage-01:
     mac: b0:83:fe:cd:64:7c
     hostgroup: 2
@@ -480,7 +480,7 @@ nodes:
     hostgroup: 13
   telemetry-01:
     compute_profile: xlarge
-    compute_resource: controller-03
+    compute_resource: controller-05
   volume-01:
     compute_profile: large
     compute_resource: controller-05
