@@ -87,7 +87,7 @@ def action_notify():
     projects = kc.get_projects(type='demo')
     mail = Mail(options.config, debug=options.debug)
     fromaddr = mail.get_config('mail', 'from_addr')
-    subject = '[UH-IaaS] Policy change: Termination of long running instances in demo projects'
+    subject = '[NREC] Policy change: Termination of long running instances in demo projects'
     logfile = 'logs/demo-notify-{}.log'.format(date.today().isoformat())
     for project in projects:
         demo_instances = ""
@@ -116,6 +116,22 @@ def action_notify():
         if not options.dry_run:
             utils.append_to_file(logfile, project.admin)
 
+def action_expired():
+    projects = kc.get_projects(type='demo')
+    for project in projects:
+        demo_instances = ""
+        for region in regions:
+            nc = utils.get_client(Nova, options, logger, region)
+            instances = nc.get_project_instances(project_id=project.id)
+            for i in instances:
+                created = utils.get_date(i.created, None, '%Y-%m-%dT%H:%M:%SZ')
+                active_days = (date.today() - created).days
+                demo_instances += '{} (created {} days ago in {})'. \
+                        format(i.name,
+                               active_days, region.upper())
+                if (active_days >= 90):
+                    print('--------------------------------------')
+                    printer.output_dict({'Project' : project.name, 'Created date' : created, 'Days': demo_instances})
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
