@@ -11,6 +11,9 @@ from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils
 from datetime import date
+from himlarcli import utils as himutils
+
+himutils.is_virtual_env()
 
 parser = Parser()
 options = parser.parse_args()
@@ -132,6 +135,11 @@ def action_expired():
                 if (active_days >= 90):
                     print('--------------------------------------')
                     printer.output_dict({'Project' : project.name, 'Created date' : created, 'Days': demo_instances})
+#                    if himutils.confirm_action('Do you want to notify the users?'):
+#                        action_notify()
+#                    else:
+#                        himutils.sys_error('Aborted', 1)
+
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
