@@ -9,11 +9,8 @@ from himlarcli.cinder import Cinder
 from himlarcli.mail import Mail
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
-from himlarcli import utils
-from datetime import date
-#from himlarcli import utils as himutils
 from himlarcli import utils as utils
-
+from datetime import date
 
 himutils.is_virtual_env()
 
@@ -120,8 +117,6 @@ def action_expired():
                         #ToDo add exp volume and image
                     kc.update_project(project_id=project.id, notified=str(date.today()))
                     #ToDo add metadata for inst
-
-
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
