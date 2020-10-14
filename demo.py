@@ -111,6 +111,8 @@ def action_expired():
                     mapping = dict(project=project.name, enddate=active_days)
                     body_content = utils.load_template(inputfile=' ', mapping=mapping, log=logger)
                     msg = mail.get_mime_text(subject, body_content, fromaddr)
+                    if not utils.confirm_action('Notify instances that have been running for more than 90 days?'):
+                        return
                     mail.send_mail(project.admin, msg, fromaddr)
                     print "mail sendt to {}".format(project.admin)
                     if not options.dry_run:
