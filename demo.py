@@ -12,8 +12,6 @@ from himlarcli.printer import Printer
 from himlarcli import utils as utils
 from datetime import date
 
-himutils.is_virtual_env()
-
 parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
