@@ -4,7 +4,7 @@ actions:
   'list':       'List all demo projects'
   'instances':  'List all instances in demo projects'
   'notify':     'Notify demo project users about instances'
-  'expired':    'List all demo projects older than 90 days'
+  'expired':    'List all demo instances older than 90 days'
 opt_args:
   '--domain':
     'dest':     'domain'
