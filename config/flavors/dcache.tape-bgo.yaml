@@ -1,0 +1,21 @@
+---
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  hw:numa_nodes: 1
+  hw:cpu_sockets: 1
+  hw:cpu_policy: 'dedicated'
+  hw:cpu_thread_policy: 'require'
+  hw:mem_page_size: 2048
+  aggregate_instance_extra_specs:type: 's== alice'
+dcache.tape:
+  'dcache.tape.2xlarge':
+    vcpus: 8
+    ram: 30718
+    disk: 9000
+  'dcache.tape.4xlarge':
+    vcpus: 16
+    ram: 61440
+    disk: 9000
