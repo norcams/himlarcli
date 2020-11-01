@@ -86,6 +86,7 @@ def action_instances():
 def action_expired():
     projects = kc.get_projects(type='demo')
     subject = '[NREC] Your instance is due for deletion'
+    template = 'notify/demo_expired_30days.txt'
     logfile = 'logs/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')
@@ -97,19 +98,19 @@ def action_expired():
             for i in instances:
                 created = utils.get_date(i.created, None, '%Y-%m-%dT%H:%M:%SZ')
                 active_days = (date.today() - created).days
-                demo_instances += '{} (created {} days ago in {})'. \
+                demo_instances += '\n {} (active for {} days in {})'. \
                         format(i.name,
                                active_days, region.upper())
                 if (active_days >= 90):
-                    print('--------------------------------------')
-                    printer.output_dict({'Project' : project.name, 'Created date' : created, 'Days': demo_instances})
+                    print('----------------------------------------------------------------------------')
+                    printer.output_dict({'Project' : project.name, 'Created' : created, 'Instance': demo_instances})
                     mapping = dict(project=project.name, enddate=active_days)
-                    body_content = utils.load_template(inputfile=' ', mapping=mapping, log=logger)
+                    body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                     msg = mail.get_mime_text(subject, body_content, fromaddr)
                     if not utils.confirm_action('Notify instances that have been running for more than 90 days?'):
                         return
                     mail.send_mail(project.admin, msg, fromaddr)
-                    print "mail sendt to {}".format(project.admin)
+                    print("Mail sendt to {}".format(project.admin))
                     if not options.dry_run:
                         utils.append_to_logfile(logfile, date.today(), project.admin, instances)
                         #ToDo add exp volume and image

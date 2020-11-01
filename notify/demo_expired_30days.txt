@@ -1,0 +1,16 @@
+Dear user,
+
+Your demo instances have reached their end date and will be deleted in 30 days. 
+
+If you are in need a project with a larger quota for more permanent usage,
+you may request one here:
+
+https://skjema.uio.no/iaas-project
+
+For more details about NREC and contact information, please visit
+
+http://docs.nrec.no
+
+--
+NREC team
+
