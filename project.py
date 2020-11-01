@@ -43,13 +43,7 @@ def action_create():
         himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
     test = 1 if options.type == 'test' else 0
     project_msg = project_msg_file
-    if options.enddate:
-        try:
-            enddate = datetime.strptime(options.enddate, '%d.%m.%Y').date()
-        except ValueError:
-            himutils.sys_error('date format DD.MM.YYYY not valid for %s' % options.enddate, 1)
-    else:
-        enddate = None
+    enddate = himutils.get_date(options.enddate, None, '%d.%m.%Y')
     if options.type == 'hpc':
         project_msg = project_hpc_msg_file
         if not enddate:
@@ -121,6 +115,16 @@ def action_create():
         mime = mail.rt_mail(options.rt, subject, body_content)
         mail.send_mail('support@uh-iaas.no', mime)
 
+def action_extend():
+    project = ksclient.get_project_by_name(options.project)
+    if not project:
+        msg = 'Could not find any project named {}'.format(options.project)
+        himutils.sys_error(msg)
+
+    enddate = himutils.get_date(options.enddate, None, '%d.%m.%Y')
+    ksclient.update_project(project_id=project.id, enddate=str(enddate),
+                            disabled=None, notified=None)
+
 def action_grant():
     for user in options.users:
         if not ksclient.is_valid_user(email=user, domain=options.domain):
@@ -184,45 +188,6 @@ def action_list():
         count += 1
         printer.output_dict(output_project, sort=True, one_line=True)
     printer.output_dict({'header': 'Project list count', 'count': count})
-
-def action_expired():
-    search_filter = dict()
-    # if options.filter and options.filter != 'all':
-    #     search_filter['type'] = options.filter
-    projects = ksclient.get_projects(**search_filter)
-    count = 0
-    i_count = 0
-    printer.output_dict({'header': 'Project list (id, name, type, enddate, instances)'})
-    for project in projects:
-        if not hasattr(project, 'enddate'):
-            continue
-        project_type = project.type if hasattr(project, 'type') else '(unknown)'
-        # hack to fix manually edited project end dates with wrong format
-        if re.search('\d{2}\.\d{2}\.\d{4}', project.enddate):
-            new_enddate = himutils.convert_date(project.enddate, '%d.%m.%Y')
-            ksclient.update_project(project_id=project.id,
-                                    enddate=new_enddate)
-            project.enddate = new_enddate
-        if project.enddate == 'None' or not himutils.past_date(project.enddate):
-            continue
-        output_project = {
-            0: project.id,
-            1: project_type,
-            2: project.name,
-            3: project.enddate
-        }
-        resources = dict({'compute': 0, 'volume': 0})
-        for region in regions:
-            nc = himutils.get_client(Nova, options, logger, region)
-            instances = nc.get_project_instances(project_id=project.id)
-            resources['compute'] = resources.get('compute', 0) + len(instances)
-            # Todo find volume usage
-            #cc = himutils.get_client(Cinder, options, logger, region)
-        output_project[4] = resources['compute']
-        i_count += int(resources['compute'])
-        count += 1
-        printer.output_dict(output_project, sort=True, one_line=True)
-    printer.output_dict({'header': 'Counts', 'projects': count, 'instances': i_count})
 
 def action_show_access():
     project = ksclient.get_project_by_name(project_name=options.project)

@@ -9,7 +9,7 @@ actions:
   'grant':        'Grant access to project for user.'
   'delete':       'Delete project and all resources'
   'instances':    'List of all instances in project'
-  'expired':      'List expired projects'
+  'extend':       'Change or set the endate for a project'
 #  'update': 'TODO'
 #  'revoke': 'TODO'
 opt_args:
@@ -21,11 +21,11 @@ opt_args:
    'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'delete', 'instances']
    'metavar':   'project'
   '--region':
-    'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota', 'expired']
+    'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota']
     'dest':     'region'
     'help':     'specify region'
   '--end':
-    'sub':      ['create']
+    'sub':      ['create', 'extend']
     'dest':     'enddate'
     'help':     'set end date for projects (DD.MM.YYYY)'
   '-f':
