@@ -212,6 +212,9 @@ nodes:
   controller-07:
     mac: dc:f4:01:e7:d8:32
     hostgroup: 14
+  controller-08:
+    mac: 34:48:ed:f7:8c:86
+    hostgroup: 14
   dashboard-01:
     compute_profile: xlarge
     compute_resource: controller-06
