@@ -4,7 +4,7 @@ default:
 osl:
   num_resources: 4
 bgo:
-  num_resources: 7
+  num_resources: 8
 test01:
   num_resources: 3
 test02:
