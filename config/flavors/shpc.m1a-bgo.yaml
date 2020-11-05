@@ -1,0 +1,20 @@
+---
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  aggregate_instance_extra_specs:type: 's== shpc_cpu'
+shpc.m1a:
+  'shpc.m1a.2xlarge':
+    vcpus: 8
+    ram: 32768
+    disk: 20
+  'shpc.m1a.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 20
+  'shpc.m1a.8xlarge':
+    vcpus: 32
+    ram: 131072
+    disk: 20
