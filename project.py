@@ -123,7 +123,7 @@ def action_extend():
 
     enddate = himutils.get_date(options.enddate, None, '%d.%m.%Y')
     ksclient.update_project(project_id=project.id, enddate=str(enddate),
-                            disabled=None, notified=None)
+                            disabled='', notified='', enabled=True)
 
 def action_grant():
     for user in options.users:
