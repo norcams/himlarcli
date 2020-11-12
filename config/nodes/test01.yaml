@@ -153,7 +153,7 @@ nodes:
     compute_resource: controller-03
   storage-01:
     hostgroup: 2
-    mac: d0:67:e5:ef:12:29
+    mac: 18:66:da:51:60:64
   storage-02:
     hostgroup: 2
     mac: 00:24:e8:3f:90:e8
