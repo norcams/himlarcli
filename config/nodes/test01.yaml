@@ -38,21 +38,27 @@ nodes:
     compute_resource: controller-03
   compute-01:
     hostgroup: 3
-    mac: f8:bc:12:3f:97:90
+    mac: 00:0a:f7:75:2f:80
+    # mac: f8:bc:12:3f:97:90
   compute-02:
     hostgroup: 3
-    mac: 74:86:7a:d1:64:d6
+    mac: f4:e9:d4:ad:38:e0
+    # mac: 74:86:7a:d1:64:d6
   compute-03:
     hostgroup: 3
-    mac: f8:bc:12:52:d8:48
+    mac: f4:e9:d4:ad:60:d0
+    # mac: f8:bc:12:52:d8:48
   console-01:
     compute_profile: medium
     compute_resource: controller-03
+  controller-01:
+    mac: 00:0a:f7:19:4c:c0
   controller-02:
-    # mac: 78:45:c4:f9:ac:8b
-    mac: f8:bc:12:40:44:30
+    mac: f4:e9:d4:88:c9:c0
+    # mac: f8:bc:12:40:44:30
   controller-03:
-    mac: f8:bc:12:52:d8:68
+    mac: 00:0e:1e:8b:df:50
+    # mac: f8:bc:12:52:d8:68
   dashboard-01:
     compute_profile: large
     compute_resource: controller-02
