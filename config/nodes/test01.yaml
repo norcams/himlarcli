@@ -156,16 +156,16 @@ nodes:
     mac: 18:66:da:51:60:64
   storage-02:
     hostgroup: 2
-    mac: 00:24:e8:3f:90:e8
+    mac: 18:66:da:51:62:1f
   storage-03:
     hostgroup: 2
-    mac: bc:30:5b:e0:4f:90
+    mac: 18:66:da:51:70:a7
   storage-04:
     hostgroup: 2
-    mac: bc:30:5b:e0:0c:0f
+    mac: 18:66:da:51:6e:65
   storage-05:
     hostgroup: 2
-    mac: bc:30:5b:e0:4e:4f
+    mac: b0:83:fe:e8:3a:31
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
