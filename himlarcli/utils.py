@@ -58,6 +58,12 @@ def append_to_file(filename, text):
     f.write("%s\n" % text)
     f.close()
 
+def append_to_logfile(filename, date, region text1, text2):
+    filename = get_abs_path(filename)
+    f = open(filename, 'a+')
+    f.write("%s, %s, %s, %s\n" % (date, region, text, text2))
+    f.close()
+
 def get_config(config_path):
     if not os.path.isfile(config_path):
         logging.critical("Could not find config file: %s", config_path)

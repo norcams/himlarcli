@@ -1,0 +1,17 @@
+Dear user,
+
+Your demo instances have reached their end date and will be deleted soon.
+
+| $region | $instances |
+
+Demo projects are only meant for testing purposes, so if you are in
+need a project for more permanent usage, you may request one here:
+
+https://skjema.uio.no/iaas-project
+
+For more details about NREC and contact information, please visit:
+
+http://docs.nrec.no
+
+--
+NREC team
