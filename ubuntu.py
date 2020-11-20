@@ -28,24 +28,33 @@ def action_list():
 
     instances = utils.load_file('/tmp/q35-{}.txt'.format(region))
 
+    images = dict()
     for i, line in enumerate(instances):
         if 'osl-compute-' in line:
             continue
         if options.limit and i > options.limit:
             break
         instance = nc.get_by_id('server', line.split(' ')[-1])
-        image = gc.get_image_by_id(instance.image['id'])
-        image_name = image.tags
-        if 'gold' in image_name:
-            image_name.remove('gold')
-
+        if instance.image and hasattr(instance.image, 'id'):
+            image = gc.get_image_by_id(instance.image['id'])
+            image_names = image.tags
+            if 'gold' in image_names:
+                image_names.remove('gold')
+                # pick one, for gold this is the official name tag
+                image_name = next(iter(image_names), None)
+        else:
+            image_name = 'unknown'
         output = {
-            '0': instance.id,
-            '1': instance.name,
-            '2': image_name[0]
+            '1': instance.id,
+            '2': instance.name,
+            '3': instance.created,
+            '4': image_name
         }
         printer.output_dict(output, sort=False, one_line=True)
 
+        images[image_name] = images.get(image_name, 0) + 1
+
+    printer.output_dict(images)
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
