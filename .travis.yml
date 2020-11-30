@@ -2,10 +2,11 @@ language: python
 
 sudo: required
 
-dist: trusty
+dist: xenial
 
 before_install:
-  - sudo apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev
+  - sudo apt-get update
+  - sudo apt-get install -y libsasl2-dev libldap2-dev libssl-dev python2.7-dev
 
 python:
   - "2.7"

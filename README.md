@@ -22,7 +22,7 @@ Use virtualenv:
 cd himlarcli
 virtualenv .
 source bin/activate
-pip install --upgrade setuptools
+pip install setuptools==44.1.1
 python setup.py develop
 pip install -r requirements.txt
 ```
