@@ -231,7 +231,9 @@ def action_instances():
         novaclient = himutils.get_client(Nova, options, logger, region)
         instances = novaclient.get_project_instances(project_id=project.id)
         if not instances:
-            himutils.sys_error('No instances found for the project %s' % options.project)
+            ksclient.debug_log('No instances found for the project {} in {}'.
+                               format(options.project, region))
+            continue
         printer.output_dict({'header': 'Instances list (id, name, region)'})
         count = 0
         for i in instances:
