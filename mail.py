@@ -107,7 +107,7 @@ def action_aggregate():
         body_content = utils.load_template(inputfile=options.template,
                                            mapping=mapping,
                                            log=logger)
-        message = mailer.get_mime_text(subject, body_content, from_addr='noreply@uh-iaas.no')
+        message = mailer.get_mime_text(subject, body_content, fromaddr='noreply@uh-iaas.no')
         mailer.send_mail(user, message)
         sent_mail_counter += 1
 
