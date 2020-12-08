@@ -93,3 +93,17 @@ images:
       'hw_rng_model':           'virtio'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+  'fedora_33':
+    'name':             'GOLD Fedora 33'
+    'depricated':       'Outdated (Fedora 33)'
+    'url':              'http://builder/'
+    'latest':           'fedora_33-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_rng_model':           'virtio'
+      'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
