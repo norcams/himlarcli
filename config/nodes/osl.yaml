@@ -184,6 +184,16 @@ nodes:
         value:          'sda'
   controller-05:
     mac: b0:26:28:f6:18:b6
+    hostgroup: 13
+  controller-06:
+    mac: b0:26:28:f6:18:c2
+    hostgroup: 13
+  controller-07:
+    mac: b0:26:28:f6:1b:a8 
+    hostgroup: 13
+  controller-08:
+    mac: b0:26:28:f6:1b:aa
+    hostgroup: 13
   dashboard-01:
     compute_profile: xlarge
     compute_resource: controller-02
