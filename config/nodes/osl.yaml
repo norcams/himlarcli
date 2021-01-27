@@ -364,6 +364,9 @@ nodes:
   storage-arccache-12:
     mac: 4c:d9:8f:68:3a:0d
     hostgroup: 10
+  storage-v2h-13:
+    mac: 48:dc:2d:10:92:8e
+    hostgroup: 13
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
