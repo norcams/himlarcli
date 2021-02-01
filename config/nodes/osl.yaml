@@ -388,6 +388,9 @@ nodes:
   storage-v2h-21:
     mac: 48:dc:2d:10:93:41
     hostgroup: 14
+  storage-v2h-22:
+    mac: 48:dc:2d:10:92:d4
+    hostgroup: 14
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
