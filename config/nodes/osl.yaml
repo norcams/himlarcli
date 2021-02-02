@@ -382,6 +382,9 @@ nodes:
   storage-v2h-18:
     mac: 48:dc:2d:10:92:9c
     hostgroup: 14
+  storage-v2h-19:
+    mac: 48:dc:2d:10:93:3a
+    hostgroup: 14
   storage-v2h-20:
     mac: 48:dc:2d:10:93:2c
     hostgroup: 14
