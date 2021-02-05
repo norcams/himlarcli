@@ -4,7 +4,7 @@ We have implemented a policy change for demo projects, which includes
 automatic termination of demo instances after 90 days to meet
 the requirements of standard projects.
 
-Your demo instance has reached its end date and will be deleted soon.
+Your demo instance has reached its end date and will be deleted in 30 days.
 
 | $region | $instance |
 
