@@ -8,7 +8,10 @@ Your demo instance has reached its end date and will be deleted soon.
 
 | $region | $instance |
 
-Demo projects are intended for testing the functionality of NREC, andi
+If you need the instance for later use, create a snapshot of it.
+For details, visit the NREC documentation.
+
+Demo projects are intended for testing the functionality of NREC, and
 thus only for very short lived instances. If you require a project for
 more permanent usage, you can apply for one using the following link:
 
