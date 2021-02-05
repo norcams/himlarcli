@@ -3,7 +3,7 @@ desc:       'Helper script to move from personal project to demo.'
 actions:
   'list':       'List all demo projects'
   'instances':  'List all instances in demo projects'
-  'notify':     'Notify demo project users about instances'
+  'expired':    'Notify demo project users about expired instances'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -13,7 +13,12 @@ opt_args:
     'dest':     'region'
     'help':     'only use this region'
   '-t':
-    'sub':      ['notify']
+    'sub':      ['expired']
     'dest':     'template'
     'help':     'mail template file. See notify/'
+    'required': true
+  '-d':
+    'sub':      ['expired']
+    'dest':     'day'
+    'help':     'number of days instances have run'
     'required': true
