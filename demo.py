@@ -102,7 +102,7 @@ def action_expired():
             for instance in instances:
                 created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                 active_days = (date.today() - created).days
-                if (int(active_days) == int(inputday)):
+                if (int(active_days) >= int(inputday)):
                     print('----------------------------------------------------------------------------')
                     printer.output_dict({'Region' : region.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
                     mapping = dict(project=project.name, enddate=active_days, region=region.upper(), instance=instance.name)
