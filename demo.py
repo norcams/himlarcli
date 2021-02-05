@@ -115,7 +115,8 @@ def action_expired():
                     if not options.dry_run:
                         utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name)
                         #ToDo add exp volume and image
-                    kc.update_project(project_id=project.id, notified=str(date.today()))
+                    #FIXME instances' tag 
+		    #kc.update_project(project_id=project.id, notified=str(date.today()))
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))

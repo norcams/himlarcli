@@ -1,17 +1,22 @@
 Dear user,
 
-Your demo instances have reached their end date and will be deleted soon.
+We have implemented a policy change for demo projects, which includes
+automatic termination of demo instances after 90 days to meet
+the requirements of standard projects.
 
-| $region | $instances |
+Your demo instance has reached its end date and will be deleted soon.
 
-Demo projects are only meant for testing purposes, so if you are in
-need a project for more permanent usage, you may request one here:
+| $region | $instance |
+
+Demo projects are intended for testing the functionality of NREC, andi
+thus only for very short lived instances. If you require a project for
+more permanent usage, you can apply for one using the following link:
 
 https://skjema.uio.no/iaas-project
 
 For more details about NREC and contact information, please visit:
 
-http://docs.nrec.no
+https://docs.nrec.no
 
 --
 NREC team
