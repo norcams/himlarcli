@@ -11,8 +11,10 @@ images:
     'visibility':       'shared'
     'owner':            'nrec-images'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
   'uio_rhel8':
     'name':             'UiO Managed RHEL 8'
     'depricated':       'Outdated (UiO RHEL8)'
@@ -23,5 +25,7 @@ images:
     'visibility':       'shared'
     'owner':            'nrec-images'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'

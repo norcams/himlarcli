@@ -13,6 +13,7 @@ images:
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
   'ubuntu_2004':
     'name':             'GOLD Ubuntu 20.04 LTS'
     'depricated':       'Outdated (Ubuntu 20.04)'
@@ -25,6 +26,7 @@ images:
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
   'centos7':
     'name':             'GOLD CentOS 7'
     'depricated':       'Outdated (CentOS 7)'
@@ -37,6 +39,7 @@ images:
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
   'centos8':
     'name':             'GOLD CentOS 8'
     'depricated':       'Outdated (CentOS 8)'
@@ -49,6 +52,7 @@ images:
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
   'debian9':
     'name':             'GOLD Debian 9'
     'depricated':       'Outdated (Debian 9)'
@@ -61,6 +65,7 @@ images:
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
   'debian10':
     'name':             'GOLD Debian 10'
     'depricated':       'Outdated (Debian 10)'
@@ -73,6 +78,7 @@ images:
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
   'fedora_32':
     'name':             'GOLD Fedora 32'
     'depricated':       'Outdated (Fedora 32)'
@@ -86,3 +92,18 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_rng_model':           'virtio'
       'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
+  'fedora_33':
+    'name':             'GOLD Fedora 33'
+    'depricated':       'Outdated (Fedora 33)'
+    'url':              'http://builder/'
+    'latest':           'fedora_33-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_rng_model':           'virtio'
+      'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'

@@ -1,0 +1,16 @@
+---
+desc:           'Temp script for Q35 chipset on ubuntu instances'
+actions:
+  list:         'list'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+    'weight':   100
+  '--limit':
+    'sub':      ['list']
+    'type':     int
+    'dest':     'limit'
+    'metavar':  '<int>'
+    'help':     'number of lines to parse'

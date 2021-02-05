@@ -182,6 +182,18 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
+  controller-05:
+    mac: b0:26:28:f6:18:b6
+    hostgroup: 13
+  controller-06:
+    mac: b0:26:28:f6:18:c2
+    hostgroup: 13
+  controller-07:
+    mac: b0:26:28:f6:1b:a8 
+    hostgroup: 13
+  controller-08:
+    mac: b0:26:28:f6:1b:aa
+    hostgroup: 13
   dashboard-01:
     compute_profile: xlarge
     compute_resource: controller-02
@@ -352,6 +364,45 @@ nodes:
   storage-arccache-12:
     mac: 4c:d9:8f:68:3a:0d
     hostgroup: 10
+  storage-v2h-13:
+    mac: 48:dc:2d:10:92:8e
+    hostgroup: 14
+  storage-v2h-14:
+    mac: 48:dc:2d:10:92:db
+    hostgroup: 14
+  storage-v2h-15:
+    mac: 48:dc:2d:10:92:f0
+    hostgroup: 14
+  storage-v2h-16:
+    mac: 48:dc:2d:10:92:aa
+    hostgroup: 14
+  storage-v2h-17:
+    mac: 48:dc:2d:0f:8d:b3
+    hostgroup: 14
+  storage-v2h-18:
+    mac: 48:dc:2d:10:92:9c
+    hostgroup: 14
+  storage-v2h-19:
+    mac: 48:dc:2d:10:93:3a
+    hostgroup: 14
+  storage-v2h-20:
+    mac: 48:dc:2d:10:93:2c
+    hostgroup: 14
+  storage-v2h-21:
+    mac: 48:dc:2d:10:93:41
+    hostgroup: 14
+  storage-v2h-22:
+    mac: 48:dc:2d:10:92:d4
+    hostgroup: 14
+  storage-v2h-23:
+    mac: 48:dc:2d:10:92:64
+    hostgroup: 14
+  storage-v2h-24:
+    mac: 48:dc:2d:10:92:72
+    hostgroup: 14
+  storage-v2h-25:
+    mac: 48:dc:2d:10:92:fe
+    hostgroup: 14
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
