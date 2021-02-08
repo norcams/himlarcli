@@ -192,6 +192,15 @@ nodes:
   compute-vgpu-52:
     mac: f0:d4:e2:e6:ae:d2
     hostgroup: 14
+  compute-58:
+    mac: 34:48:ed:f9:6c:02
+    hostgroup: 14
+  compute-59:
+    mac: 34:48:ed:f9:61:8a
+    hostgroup: 14
+  compute-60:
+    mac: 34:48:ed:f9:87:da
+    hostgroup: 14
   console-01:
     compute_profile: medium
     compute_resource: controller-05
