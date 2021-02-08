@@ -25,9 +25,19 @@ def action_list():
         if not hasattr(project, 'admin'):
             roles = kc.list_roles(project_name=project.name)
             if len(roles) > 0:
-                admin = roles[0]['group'].split('-')[0]
+                admin = roles[0]['group'].split('-')[0].lower()
                 print "{} => {}".format(project.name, admin)
+                kc.update_project(project.id, admin=admin)
 
+def action_update():
+    projects = kc.get_projects(type='demo')
+    for project in projects:
+        if not hasattr(project, 'admin'):
+            roles = kc.list_roles(project_name=project.name)
+            if len(roles) > 0:
+                admin = roles[0]['group'].split('-')[0].lower()
+                print "{} => {}".format(project.name, admin)
+                kc.update_project(project.id, admin=admin)
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
