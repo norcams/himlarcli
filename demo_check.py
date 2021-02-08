@@ -8,7 +8,7 @@ from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as utils
-from datetime import date
+from datetime import date, timedelta
 
 parser = Parser()
 options = parser.parse_args()
@@ -32,9 +32,11 @@ def action_count():
                 continue
             count_all += 1
             for i in instances:
-                created_at = utils.get_date(i.created_a, None, '%Y-%m-%d')
-                if date.today() - created_at >= 60:
+                created_at = utils.get_date(i.created, None, '%Y-%m-%dT%H:%M:%SZ')
+                if (date.today() - created_at) >= timedelta(60):
                     count_60 += 1
+                else:
+                    print created_at
     printer.output_dict({'header': 'count', 'all': count_all, '>60': count_60})
     #print count
 
