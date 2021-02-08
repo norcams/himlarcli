@@ -1,0 +1,10 @@
+---
+desc:   'Check demo projects'
+actions:
+  'count':     'count demo instances'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+    'weight':   100
