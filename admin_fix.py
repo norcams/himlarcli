@@ -35,7 +35,7 @@ def action_update():
         if not hasattr(project, 'admin'):
             roles = kc.list_roles(project_name=project.name)
             if len(roles) > 0:
-                admin = roles[0]['group'].split('-')[0].lower()
+                admin = roles[0]['group'].split('-group')[0].lower()
                 print "{} => {}".format(project.name, admin)
                 kc.update_project(project.id, admin=admin)
 
