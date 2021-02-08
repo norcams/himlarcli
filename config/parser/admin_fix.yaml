@@ -1,0 +1,11 @@
+---
+desc:   'Fix admin'
+actions:
+  'list':     'List projects with missing admin'
+
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+    'weight':   100
