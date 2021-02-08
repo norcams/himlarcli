@@ -87,6 +87,7 @@ def action_expired():
     projects = kc.get_projects(type='demo')
     subject = '[NREC] Your instance is due for deletion'
     logfile = 'logs/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
+    lognoneadmin = 'logs/demo-notify-expired-instances-noneadmin-{}.log'.format(date.today().isoformat())
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')
     template = options.template
@@ -118,7 +119,7 @@ def action_expired():
                             #ToDo add exp volume and image
                     except:
                         print("Admin not found for %s" % project.name)
-                        utils.append_to_logfile(lognoneadmin, date.today(), region, " ", instance.name)
+                        utils.append_to_logfile(lognoneadmin, date.today(), region, " ", instance.id)
 
                     #FIXME instances' tag 
 		    #kc.update_project(project_id=project.id, notified=str(date.today()))
