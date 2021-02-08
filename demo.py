@@ -108,13 +108,18 @@ def action_expired():
                     mapping = dict(project=project.name, enddate=active_days, region=region.upper(), instance=instance.name)
                     body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                     msg = mail.get_mime_text(subject, body_content, fromaddr)
-                    #if not utils.confirm_action('Notify instances that have been running for %s days?' %(inputday)):
-                    #    return
-                    mail.send_mail(project.admin, msg, fromaddr)
-                    if not options.dry_run:
-		        print("Mail sendt to {}".format(project.admin))
-                        utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name)
-                        #ToDo add exp volume and image
+		    try:
+                        if not options.dry_run:
+			    if not utils.confirm_action('Send mail to instances that have been running for %s days?' %(inputday)):
+                                return
+                            mail.send_mail(project.admin, msg, fromaddr)
+		            print("Mail sendt to {}".format(project.admin))
+                            utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name)
+                            #ToDo add exp volume and image
+                    except:
+                        print("Admin not found for %s" % project.name)
+                        utils.append_to_logfile(lognoneadmin, date.today(), region, " ", instance.name)
+
                     #FIXME instances' tag 
 		    #kc.update_project(project_id=project.id, notified=str(date.today()))
 
