@@ -30,8 +30,8 @@ def action_count():
             instances = nc.get_project_instances(project_id=project.id)
             if not instances:
                 continue
-            count_all += 1
             for i in instances:
+                count_all += 1
                 created_at = utils.get_date(i.created, None, '%Y-%m-%dT%H:%M:%SZ')
                 if (date.today() - created_at) >= timedelta(60):
                     count_60 += 1
