@@ -104,15 +104,15 @@ def action_expired():
                 created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                 active_days = (date.today() - created).days
                 if (int(active_days) >= int(inputday)):
-                    print('----------------------------------------------------------------------------')
-                    #printer.output_dict({'Region' : region.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
+#                    print('----------------------------------------------------------------------------')
+#                    printer.output_dict({'Region' : region.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
                     mapping = dict(project=project.name, enddate=active_days, region=region.upper(), instance=instance.name)
                     body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                     msg = mail.get_mime_text(subject, body_content, fromaddr)
 		    try:
                         if not options.dry_run:
-			    if not utils.confirm_action('Send mail to instances that have been running for %s days?' %(inputday)):
-                                return
+#			    if not utils.confirm_action('Send mail to instances that have been running for %s days?' %(inputday)):
+#                                return
                             mail.send_mail(project.admin, msg, fromaddr)
 		            print("Mail sendt to {}".format(project.admin))
                             utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name)
