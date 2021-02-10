@@ -1,0 +1,25 @@
+Dear user,
+
+We have implemented a policy change for demo projects, which includes
+automatic termination of demo instances after 90 days to meet
+the requirements of standard projects.
+
+Your demo instance has reached its end date and will be deleted in 30 days.
+
+| $region | $instance |
+
+If you need the instance for later use, create a snapshot of it.
+For details, please visit the NREC documentation.
+
+Demo projects are intended for testing the functionality of NREC, and
+thus only for very short lived instances. If you require a project for
+more permanent usage, you can apply for one using the following link:
+
+https://skjema.uio.no/iaas-project
+
+For more details about NREC and contact information, please visit:
+
+https://docs.nrec.no
+
+--
+NREC team
