@@ -81,7 +81,7 @@ def action_instances():
                 }
                 count += 1
                 printer.output_dict(output, one_line=True)
-    printer.output_dict({'header': 'Count', 'count': count})
+    printer.output_dict({'header': 'Count', 'count': count}
 
 def action_expired():
     projects = kc.get_projects(type='demo')
@@ -91,38 +91,61 @@ def action_expired():
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')
     template = options.template
+    inputday = options.day
+    inputregion = options.region
+    question = 'Send mail to instances that have been running for %s days?' % inputday
     if not options.template:
         utils.sys_error("Specify a template file. E.g. -t notify/demo-notify-expired-instances.txt")
-    inputday = options.day
     if not options.day:
         utils.sys_error("Specify the number of days for running demo instances. E.g. -d 30")
     for project in projects:
-        for region in regions:
-            nc = utils.get_client(Nova, options, logger, region)
+        for inputregion in regions:
+            nc = utils.get_client(Nova, options, logger, inputregion)
             instances = nc.get_project_instances(project_id=project.id)
             for instance in instances:
-                created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
-                active_days = (date.today() - created).days
-                if (int(active_days) == int(inputday)):
-#                    print('----------------------------------------------------------------------------')
-#                    printer.output_dict({'Region' : region.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
-                    mapping = dict(project=project.name, enddate=active_days, region=region.upper(), instance=instance.name)
-                    body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
-                    msg = mail.get_mime_text(subject, body_content, fromaddr)
-		    try:
-                        if not options.dry_run:
-#			    if not utils.confirm_action('Send mail to instances that have been running for %s days?' %(inputday)):
-#                                return
-                            mail.send_mail(project.admin, msg, fromaddr)
-		            print("Mail sendt to {}".format(project.admin))
-                            utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name)
-                            #ToDo add exp volume and image
-                    except:
-                        print("Admin not found for %s" % project.name)
-                        utils.append_to_logfile(lognoneadmin, date.today(), region, " ", instance.id)
+               created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
+               active_days = (date.today() - created).days
+               if (int(active_days) == int(inputday)):
+                   print('----------------------------------------------------------------------------')
+                   printer.output_dict({'Region' : inputregion.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
+                   mapping = dict(project=project.name, enddate=active_days, region=inputregion.upper(), instance=instance.name)
+                   body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
+                   msg = mail.get_mime_text(subject, body_content, fromaddr)
+                   try:
+                       if not options.dry_run:
+                           if not options.force and not utils.confirm_action(question):
+                               return
+                           mail.send_mail(project.admin, msg, fromaddr)
+                           print("Mail sendt to {}".format(project.admin))
+                           utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name)
+                                #ToDo add exp volume and image
+                   except:
+                       print("Admin not found for %s" % project.name)
+                       utils.append_to_logfile(lognoneadmin, date.today(), inputregion, " ", instance.id)
 
-                    #FIXME instances' tag 
-		    #kc.update_project(project_id=project.id, notified=str(date.today()))
+def action_delete_expired_instance():
+    projects = kc.get_projects(type='demo')
+    inputday = options.day
+    inputregion = options.region
+    for project in projects:
+        for inputregion in regions:
+           nc = utils.get_client(Nova, options, logger, inputregion)
+           instances = nc.get_project_instances(project_id=project.id)
+           for instance in instances:
+               created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
+               active_days = (date.today() - created).days
+
+               if (int(active_days) == int(inputday)): #89 days
+                   printer.output_dict({'Region' : inputregion.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
+                   try:
+                       if not options.dry_run:
+                           question = 'Delete the instance [%s] from the project [%s] and all its resources?' % (instance.name, project.name)
+                           if not options.force and not utils.confirm_action(question):
+                               return
+                           nc.delete_project_one_instance(instance.name, project)
+                           print("Deleted %s " % instance.name)
+                   except:
+                       print("No demo instances deleted")
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
