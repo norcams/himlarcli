@@ -116,11 +116,12 @@ def action_expired():
                            if not options.force and not utils.confirm_action(question):
                                return
                            mail.send_mail(project.admin, msg, fromaddr)
+			   #kc.update_instance(instance_id=instance.id, notified=str(date.today()))
                            print("Mail sendt to {}".format(project.admin))
                            utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name)
                                 #ToDo add exp volume and image
                    except:
-                       print("Admin not found for %s" % project.name)
+                       print("Couldn't send mail to %s" % project.name)
                        utils.append_to_logfile(lognoneadmin, date.today(), inputregion, " ", instance.id)
 
 def action_delete_expired_instance():
@@ -134,8 +135,7 @@ def action_delete_expired_instance():
            for instance in instances:
                created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                active_days = (date.today() - created).days
-
-               if (int(active_days) == int(inputday)): #89 days
+               if (int(active_days) == int(inputday)): #or check if it is > 89+ days?
                    printer.output_dict({'Region' : inputregion.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
                    try:
                        if not options.dry_run:
