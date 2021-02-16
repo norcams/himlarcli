@@ -11,7 +11,7 @@ opt_args:
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   '--region':
-    'sub':      ['expired', 'instances', 'list']
+    'sub':      ['expired', 'delete_expired_instance', 'instances', 'list']
     'dest':     'region'
     'help':     'only use this region'
     'required': true
