@@ -509,26 +509,6 @@ class Keystone(Client):
             self.log_error(e)
             self.log_error('Project %s not updated' % project_id)
 
-    def update_instance(self, instance_id, instance_name=None, description=None, **kwargs):
-        if self.dry_run:
-            data = kwargs.copy()
-            data.update({'id': instance_id})
-            if instance_name:
-                data['name'] = instance_name
-            if description:
-                data['description'] = description
-            self.log_dry_run('update_project', **data)
-            return
-        try:
-            instance = self.client.instance.update(instance=instance_id,
-                                                  name=instance_name,
-                                                  description=description,
-                                                  **kwargs)
-            self.logger.debug('=> updated instance %s' % instance.name)
-        except exceptions.http.BadRequest as e:
-            self.log_error(e)
-            self.log_error('Instance %s not updated' % instance_id)
-
     def create_project(self, project_name, admin=None, description=None, **kwargs):
         """
         Create new project in domain and grant user role to admin if valid user.
