@@ -17,5 +17,5 @@ dcache:
     disk: 20
   'dcache.4xlarge':
     vcpus: 16
-    ram: 61440
+    ram: 61430
     disk: 20
