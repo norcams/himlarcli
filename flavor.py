@@ -9,6 +9,7 @@ from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
 from collections import OrderedDict
+import glob
 
 parser = Parser()
 options = parser.parse_args()
@@ -144,6 +145,15 @@ def action_list_access():
                     himutils.sys_error('project not found %s' % project_id.tenant_id, 0)
                     continue
         printer.output_dict(output)
+
+def action_available_flavors():
+    path = '/opt/himlarcli/config/flavors/*.yaml'
+    files = glob.glob(path)
+    for file in files:
+        f = open(file, 'r')
+        print(file)
+        print(f.readlines()[1])
+        f.close()
 
 def get_flavor_config(region):
     # First look for region version of flavor config, then the default one

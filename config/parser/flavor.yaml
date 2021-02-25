@@ -8,6 +8,7 @@ actions:
   'revoke': ''
   'list-access': 'List project with access to flavors of this class'
   'instances': 'list instances with flavor this class'
+  'available-flavors': "list all available flavor files"
 opt_args:
   '--domain':
     'dest':     'domain'
