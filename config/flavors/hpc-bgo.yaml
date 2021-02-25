@@ -1,5 +1,5 @@
 ---
-# flavor used for uib-kj-webmo
+# Flavor used for uib-kj-webmo
 public: false
 properties: {}
 hpc:

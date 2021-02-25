@@ -1,5 +1,5 @@
 ---
-# flavor used for testing cyborg
+# Flavor used for testing cyborg
 public: false
 properties:
   hw_rng:allowed: 'True'

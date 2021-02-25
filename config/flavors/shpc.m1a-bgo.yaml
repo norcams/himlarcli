@@ -1,4 +1,5 @@
 ---
+# M1 flavor used for sHPC
 public: false
 properties:
   hw_rng:allowed: 'True'

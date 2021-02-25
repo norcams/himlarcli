@@ -1,4 +1,5 @@
 ---
+# Alicetape flavor ONLY in BGO
 public: false
 properties: {}
 alicetape: {}

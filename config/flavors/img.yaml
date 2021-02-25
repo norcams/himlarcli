@@ -1,5 +1,5 @@
 ---
-# flavors used for image builder
+# Flavors used for image builder
 public: false
 properties:
   hw_rng:allowed: 'True'

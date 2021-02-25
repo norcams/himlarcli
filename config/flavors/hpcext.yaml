@@ -1,4 +1,5 @@
 ---
+# Flavor used for HPCext
 public: false
 properties:
   hw_rng:allowed: 'True'

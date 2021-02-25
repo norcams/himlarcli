@@ -1,4 +1,5 @@
 ---
+# Flavor for Clarino ONLY in BGO
 public: false
 properties: {}
 clarino: {}

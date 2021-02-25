@@ -1,4 +1,5 @@
 ---
+# M2 flavor - more RAM and vCPU than default
 public: false
 properties:
   hw_rng:allowed: 'True'

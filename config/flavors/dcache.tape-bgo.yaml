@@ -1,4 +1,5 @@
 ---
+# Flavor used for dcache tape
 public: false
 properties:
   hw_rng:allowed: 'True'

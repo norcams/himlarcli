@@ -1,4 +1,5 @@
 ---
+# Flavor used for UiA
 public: false
 uia:
   'uia.cloudera':

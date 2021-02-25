@@ -1,4 +1,5 @@
 ---
+# C1 flavor - more vCPU than default
 public: false
 properties:
   hw_rng:allowed: 'True'
