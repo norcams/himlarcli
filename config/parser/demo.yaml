@@ -1,17 +1,20 @@
 ---
-desc:       'Helper script to move from personal project to demo.'
+desc:           'Helper script to move from personal project to demo.'
 actions:
   'list':       'List all demo projects'
   'instances':  'List all instances in demo projects'
   'expired':    'Notify demo project users about expired instances'
+  'delete':     'Delete 90+ days demo instances'
 opt_args:
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   '--region':
+    'sub':      ['expired', 'delete', 'instances', 'list']
     'dest':     'region'
     'help':     'only use this region'
+    'required': true
   '-t':
     'sub':      ['expired']
     'dest':     'template'
@@ -22,3 +25,10 @@ opt_args:
     'dest':     'day'
     'help':     'number of days instances have run'
     'required': true
+  '--force':
+    'sub':      ['expired', 'delete']
+    'dest':     'force'
+    'help':     'Skip interactive confirmation'
+    'action':   'store_const'
+    'const':    true
+    'default':  false

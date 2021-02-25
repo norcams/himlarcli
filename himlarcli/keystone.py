@@ -509,7 +509,6 @@ class Keystone(Client):
             self.log_error(e)
             self.log_error('Project %s not updated' % project_id)
 
-
     def create_project(self, project_name, admin=None, description=None, **kwargs):
         """
         Create new project in domain and grant user role to admin if valid user.
