@@ -1,4 +1,5 @@
 ---
+# C1 flavor used for sHPC ONLY in BGO
 public: false
 properties: {}
 shpc.c1a: {}

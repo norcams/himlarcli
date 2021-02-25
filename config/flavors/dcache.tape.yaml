@@ -1,4 +1,5 @@
 ---
+# Flavor for dcache tape ONLY in BGO
 public: false
 properties: {}
 dcache.tape: {}
