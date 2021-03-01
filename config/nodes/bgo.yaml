@@ -171,16 +171,16 @@ nodes:
   compute-epyc-45:
     mac: f4:02:70:d3:42:02
     hostgroup: 14
-  compute-hpc-46:
+  compute-epyc-46:
     mac: f4:02:70:d7:8c:ea
     hostgroup: 14
-  compute-hpc-47:
+  compute-epyc-47:
     mac: f4:02:70:d3:42:70
     hostgroup: 14
-  compute-hpc-48:
+  compute-epyc-48:
     mac: f4:02:70:d3:42:0c
     hostgroup: 14
-  compute-hpc-49:
+  compute-epyc-49:
     mac: f4:02:70:cd:da:de
     hostgroup: 14
   compute-hpc-50:
