@@ -192,6 +192,12 @@ nodes:
   compute-vgpu-52:
     mac: f0:d4:e2:e6:ae:d2
     hostgroup: 14
+  compute-vgpu-53:
+    mac: 34:48:ed:f9:59:c2
+    hostgroup: 14
+  compute-gpu1:
+    mac: 34:48:ed:f9:5a:de
+    hostgroup: 14
   compute-epyc-55:
     mac: 70:b5:e8:d0:b0:a8
     hostgroup: 14
