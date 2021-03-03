@@ -54,10 +54,12 @@ class Mail(Client):
         return self.server
 
     @staticmethod
-    def get_mime_text(subject, body, fromaddr):
+    def get_mime_text(subject, body, fromaddr, cc):
         msg = MIMEText(body)
         msg['Subject'] = subject
         msg['From'] = fromaddr
+        msg['Reply-To'] = 'support@uh-iaas.no'
+        msg['CC'] = cc
         return msg
 
     def mail_instance_owner(self, instances, body, subject, admin=False, options=['status']):

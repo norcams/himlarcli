@@ -81,7 +81,7 @@ def action_instances():
                 }
                 count += 1
                 printer.output_dict(output, one_line=True)
-    printer.output_dict({'header': 'Count', 'count': count}
+    printer.output_dict({'header': 'Count', 'count': count})
 
 def action_expired():
     projects = kc.get_projects(type='demo')
@@ -90,6 +90,7 @@ def action_expired():
     lognoneadmin = 'logs/demo-notify-expired-instances-noneadmin-{}.log'.format(date.today().isoformat())
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')
+    cc = 'support@uh-iaas.no'
     template = options.template
     inputday = options.day
     question = 'Send mail to instances that have been running for %s days?' % inputday
@@ -109,7 +110,7 @@ def action_expired():
                    # printer.output_dict({'Region' : region.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
                    mapping = dict(project=project.name, enddate=active_days, region=region.upper(), instance=instance.name)
                    body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
-                   msg = mail.get_mime_text(subject, body_content, fromaddr)
+                   msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
                    try:
                        if not options.dry_run:
                            if not options.force and not utils.confirm_action(question):
