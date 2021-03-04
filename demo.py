@@ -105,6 +105,7 @@ def action_expired():
             for instance in instances:
                created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                active_days = (date.today() - created).days
+	       kc.debug_log('{} running for {} days'.format(instance.id, active_days))
                if (int(active_days) == int(inputday)):
                    # print('----------------------------------------------------------------------------')
                    # printer.output_dict({'Region' : region.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
@@ -112,6 +113,7 @@ def action_expired():
                    body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                    msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
                    try:
+                       kc.debug_log('{} running for {} days'.format(instance.id, active_days))		 
                        if not options.dry_run:
                            if not options.force and not utils.confirm_action(question):
                                return
@@ -134,9 +136,11 @@ def action_delete():
            for instance in instances:
                created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                active_days = (date.today() - created).days
+               kc.debug_log('sendt mail for {} to {}'.format(instance.id, project.admin)) 
                if (int(active_days) >= 90):
                    printer.output_dict({'Region' : region.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
                    try:
+                       kc.debug_log('sendt mail for {} to {}'.format(instance.id, project.admin)) 
                        if not options.dry_run:
                            question = 'Delete the instance [%s] from the project [%s] and all its resources?' % (instance.name, project.name)
                            if not options.force and not utils.confirm_action(question):
