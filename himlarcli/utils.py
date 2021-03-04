@@ -58,10 +58,10 @@ def append_to_file(filename, text):
     f.write("%s\n" % text)
     f.close()
 
-def append_to_logfile(filename, date, region, text1, text2):
+def append_to_logfile(filename, date, region, text1, text2, text3):
     filename = get_abs_path(filename)
     f = open(filename, 'a+')
-    f.write("%s, %s, %s, %s\n" % (date, region, text1, text2))
+    f.write("%s, %s, %s, %s, %s\n" % (date, region, text1, text2, text3))
     f.close()
 
 def get_config(config_path):

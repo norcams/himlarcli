@@ -86,8 +86,8 @@ def action_instances():
 def action_expired():
     projects = kc.get_projects(type='demo')
     subject = '[NREC] Your instance is due for deletion'
-    logfile = 'logs/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
-    lognoneadmin = 'logs/demo-notify-expired-instances-noneadmin-{}.log'.format(date.today().isoformat())
+    logfile = 'logs/expired_instances/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
+    lognoneadmin = 'logs/expired/demo-notify-expired-instances-noneadmin-{}.log'.format(date.today().isoformat())
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')
     cc = 'support@uh-iaas.no'
@@ -119,16 +119,16 @@ def action_expired():
                                return
                            mail.send_mail(project.admin, msg, fromaddr)
                            print("Mail sendt to {}".format(project.admin))
-                           utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name)
+                           utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name, active_days)
                            #ToDo add exp volume and image
                    except:
                        print("Couldn't send mail to %s" % project.name)
-                       utils.append_to_logfile(lognoneadmin, date.today(), region, " ", instance.id)
+                       utils.append_to_logfile(lognoneadmin, date.today(), region, " ", instance.id, active_days)
 
 # Delete demo instances older than 90 days
 def action_delete():
     projects = kc.get_projects(type='demo')
-    logfile = 'logs/deleted-expired-demo-instances-{}.log'.format(date.today().isoformat())
+    logfile = 'logs/deleted_instances/deleted-expired-demo-instances-{}.log'.format(date.today().isoformat())
     for project in projects:
         for region in regions:
            nc = utils.get_client(Nova, options, logger, region)

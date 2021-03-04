@@ -18,7 +18,7 @@ opt_args:
     'dest':     'region'
     'help':     'only use this region'
   'flavor':
-    #'sub':       ['list', 'create', 'grant', 'delete', 'instances']
+    'sub':       ['list', 'create', 'grant', 'delete', 'instances']
     'metavar':   'flavor'
     'help':      'flavor class name (e.g. m1)'
   'project':
