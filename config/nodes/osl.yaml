@@ -138,12 +138,18 @@ nodes:
   compute-vgpu-42:
     mac: ac:1f:6b:64:72:84
     hostgroup: 11
-  compute-gpu-17:
-    mac: ac:1f:6b:62:15:be
-    hostgroup: 3
+  compute-vgpu-17:
+    mac: 34:48:ed:f9:88:d2
+    hostgroup: 13
   compute-robin-18:
     mac: f4:02:70:c4:76:d8
     hostgroup: 3
+  compute-vgpu-19:
+    mac: 34:48:ed:f9:69:f6
+    hostgroup: 13
+  compute-vgpu-20:
+    mac: 34:48:ed:f9:79:8e
+    hostgroup: 13
   compute-43:
     mac: 1c:20:db:ec:60:a8
     hostgroup: 13
