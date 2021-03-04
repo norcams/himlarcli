@@ -87,7 +87,7 @@ def action_expired():
     projects = kc.get_projects(type='demo')
     subject = '[NREC] Your instance is due for deletion'
     logfile = 'logs/expired_instances/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
-    lognoneadmin = 'logs/expired/demo-notify-expired-instances-noneadmin-{}.log'.format(date.today().isoformat())
+    lognoneadmin = 'logs/expired_instances/demo-notify-expired-instances-noneadmin-{}.log'.format(date.today().isoformat())
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')
     cc = 'support@uh-iaas.no'
