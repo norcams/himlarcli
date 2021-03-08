@@ -508,6 +508,18 @@ nodes:
   storage-v2d-39:
     mac: 20:04:0f:fb:a5:46
     hostgroup: 13
+  storage-v2d-40:
+    mac: 34:48:ed:f9:84:d2
+    hostgroup: 13
+  storage-v2d-41:
+    mac: 34:48:ed:f9:84:f2
+    hostgroup: 13
+  storage-v2d-42:
+    mac: 34:48:ed:f9:5d:e2
+    hostgroup: 13
+  storage-v2d-43:
+    mac: 34:48:ed:f9:58:b2
+    hostgroup: 13
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-05
