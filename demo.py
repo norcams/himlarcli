@@ -98,8 +98,8 @@ def action_expired():
         utils.sys_error("Specify a template file. E.g. -t notify/demo-notify-expired-instances.txt")
     if not options.day:
         utils.sys_error("Specify the number of days for running demo instances. E.g. -d 30")
-    for project in projects:
-        for region in regions:
+    for region in regions:
+        for project in projects:
             nc = utils.get_client(Nova, options, logger, region)
             instances = nc.get_project_instances(project_id=project.id)
             for instance in instances:
