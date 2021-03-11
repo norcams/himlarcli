@@ -543,16 +543,21 @@ class Nova(Client):
             deleted = True
         return deleted
 
-    def update_flavor_access(self, filters, project_id, action):
+    def update_flavor_access(self, class_filter, project_id, action):
         """
-        Grant or revoke access to flavor from project
+            Grant or revoke access to flavor from project
+            :param class_filter: flavor class, e.g. m1 or vgpu.m1.
+            Version: 2021-3
         """
         dry_run_txt = 'DRY-RUN: ' if self.dry_run else ''
         if action == 'revoke':
             action_func = 'remove_tenant_access'
         else:
             action_func = 'add_tenant_access'
-        flavors = self.get_flavors(filters)
+        flavors = self.get_flavors(class_filter=class_filter)
+        access_updated = False
+        if not flavors:
+            self.debug_log('no flavors match class {}'.format(class_filter))
         for flavor in flavors:
             try:
                 if not self.dry_run:
@@ -560,13 +565,14 @@ class Nova(Client):
                                                                     project_id)
                 self.logger.debug('=> %s%s access to %s' %
                                   (dry_run_txt, action, flavor.name))
-
+                access_updated = True
             except novaclient.exceptions.Conflict:
                 self.logger.debug('=> access exsists for %s' %
                                   (flavor.name))
             except novaclient.exceptions.NotFound:
                 self.logger.debug('=> unable to %s %s' %
                                   (action, flavor.name))
+        return access_updated
 
     def get_flavor_access(self, filters):
         flavors = self.get_flavors(filters)

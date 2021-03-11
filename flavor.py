@@ -192,9 +192,12 @@ def update_access(nc, access_action, region):
     project = kc.get_project_by_name(options.project)
     if not project:
         himutils.sys_error('project not found %s' % project)
-    nc.update_flavor_access(filters=options.flavor,
-                            project_id=project.id,
-                            action=access_action)
+    result = nc.update_flavor_access(class_filter=options.flavor,
+                                     project_id=project.id,
+                                     action=access_action)
+    if not result:
+        himutils.sys_error('Update access for {} failed. Check debug log'
+                           .format(options.flavor))
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
