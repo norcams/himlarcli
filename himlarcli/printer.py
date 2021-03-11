@@ -37,6 +37,14 @@ class Printer(object):
         elif self.format == 'csv':
             self.__dict_to_csv(objects=objects, sort=sort)
 
+    def output_msg(self, msg):
+        if self.format == 'text':
+            print "\n{}\n".format(msg)
+        elif self.format == 'json':
+            self.__dict_to_json(objects={'message': msg})
+        elif self.format == 'csv':
+            print "{};".format(msg)
+
     def __dict_to_json(self, objects, sort=True):
         if 'header' in objects:
             del objects['header']
