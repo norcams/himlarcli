@@ -113,7 +113,7 @@ def action_purge():
         nc.debug_log('Start purge of flavor class {} from region {}'.format(options.flavor, region))
         result = nc.purge_flavors(class_filter=options.flavor, flavors=flavors)
         if result:
-            printer.output_msg('Purge flavors of class {} from region {}'
+            printer.output_msg('Purged flavors of class {} from region {}'
                                .format(options.flavor, region))
         else:
             printer.output_msg('Nothing to purge from region {}'.format(region))
@@ -127,7 +127,7 @@ def action_delete():
         nc.debug_log('Start delete all {} from region {}'.format(options.flavor, region))
         result = nc.delete_flavors(class_filter=options.flavor)
         if result:
-            printer.output_msg('Delete all {} from region {}'.format(options.flavor, region))
+            printer.output_msg('Deleted all {} from region {}'.format(options.flavor, region))
         else:
             printer.output_msg('Nothing to delete from region {}'.format(region))
 
