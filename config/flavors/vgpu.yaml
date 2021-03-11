@@ -1,38 +1,5 @@
 ---
-# Flavor used for uio-vgpu testing
+# Old flavor for uio-vgpu testing
 public: false
-properties:
-  hw_rng:allowed: 'True'
-  hw_rng:rate_bytes: 1000000
-  hw_rng:rate_period: 60
-  aggregate_instance_extra_specs:type: 's== vgpu'
-  #ToDo resources: VGPU='1'
-vgpu:
-  'vgpu.small':
-    vcpus: 1
-    ram: 2048
-    disk: 10
-  'vgpu.medium':
-    vcpus: 1
-    ram: 4096
-    disk: 20
-  'vgpu.large':
-    vcpus: 2
-    ram: 8192
-    disk: 20
-  'vgpu.xlarge':
-    vcpus: 4
-    ram: 16384
-    disk: 20
-  'vgpu.2xlarge':
-    vcpus: 8
-    ram: 32768
-    disk: 20
-  'vgpu.4xlarge':
-    vcpus: 16
-    ram: 65536
-    disk: 20
-  'vgpu.8xlarge':
-    vcpus: 32
-    ram: 131072
-    disk: 20
+properties: {}
+vgpu: {}
