@@ -99,7 +99,7 @@ def action_update():
             for project_id in projects:
                 all_projects.add(project_id.tenant_id)
         for project in all_projects:
-            nc.update_flavor_access(filters=options.flavor,
+            nc.update_flavor_access(class_filter=options.flavor,
                                     project_id=project,
                                     action='grant')
 
