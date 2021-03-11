@@ -1,14 +1,15 @@
 ---
-desc:           'Manage flavors. Defaults to all regions'
+desc:                   'Manage flavor classes. Defaults to all regions'
 actions:
-  'list':   ''
-  'update': ''
-  'purge':  ''
-  'grant':  ''
-  'revoke': ''
-  'list-access': 'List project with access to flavors of this class'
-  'instances': 'list instances with flavor this class'
-  'available-flavors': "list all available flavor files"
+  'list':               'List all flavors of a class'
+  'update':             'Create or update all flavors of class'
+  'purge':              'Purge flavor(s) not defined in config (cleanup)'
+  'delete':             'Delete all flavors of a class'
+  'grant':              'Grant access to a flavor for a project'
+  'revoke':             'Revoke access to a flavor for a project'
+  'list-access':        'List project with access to flavors of this class'
+  'instances':          'List instances with flavor this class'
+  'available-flavors':  'List all available flavor files'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -18,11 +19,11 @@ opt_args:
     'dest':     'region'
     'help':     'only use this region'
   'flavor':
-    'sub':       ['list', 'create', 'grant', 'delete', 'instances']
+    'sub':       ['list', 'list-access' ,'update', 'grant', 'revoke', 'purge', 'delete','instances']
     'metavar':   'flavor'
     'help':      'flavor class name (e.g. m1)'
   'project':
     'sub':       ['grant', 'revoke']
     'metavar':   'project'
     'help':      'project name (e.g. iaas-team)'
-    'weight':   10
+    'weight':     10

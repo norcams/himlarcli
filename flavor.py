@@ -28,8 +28,8 @@ else:
 
 def action_list():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
-        flavors = nc.get_flavors(filters=options.flavor)
+        nc = himutils.get_client(Nova, options, logger, region)
+        flavors = nc.get_flavors(class_filter=options.flavor)
         outputs = ['name', 'vcpus', 'ram', 'disk']
         header = 'flavors in %s (%s)' % (region, ', '.join(outputs))
         printer.output_dict({'header': header})
@@ -41,8 +41,8 @@ def action_list():
 
 def action_instances():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
-        flavors = nc.get_flavors(filters=options.flavor)
+        nc = himutils.get_client(Nova, options, logger, region)
+        flavors = nc.get_flavors(class_filter=options.flavor)
 
         printer.output_dict({'header': 'Instance list %s (id, name, flavor)' % region})
         status = dict({'total': 0})
@@ -104,33 +104,50 @@ def action_update():
                                     action='grant')
 
 def action_purge():
+    q = 'Purge flavors from class {} in region(s) {}'.format(options.flavor, ','.join(regions))
+    if not himutils.confirm_action(q):
+        return
     for region in regions:
         flavors = get_flavor_config(region)
-        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
-        nc.set_dry_run(options.dry_run)
-        print 'Purge %s flavors in %s' % (options.flavor, region)
-        nc.purge_flavors(options.flavor, flavors)
+        nc = himutils.get_client(Nova, options, logger, region)
+        nc.debug_log('Start purge of flavor class {} from region {}'.format(options.flavor, region))
+        result = nc.purge_flavors(class_filter=options.flavor, flavors=flavors)
+        if result:
+            printer.output_msg('Purge flavors of class {} from region {}'
+                               .format(options.flavor, region))
+        else:
+            printer.output_msg('Nothing to purge from region {}'.format(region))
+
+def action_delete():
+    q = 'Delete flavor class {} in region(s) {}'.format(options.flavor, ','.join(regions))
+    if not himutils.confirm_action(q):
+        return
+    for region in regions:
+        nc = himutils.get_client(Nova, options, logger, region)
+        nc.debug_log('Start delete all {} from region {}'.format(options.flavor, region))
+        result = nc.delete_flavors(class_filter=options.flavor)
+        if result:
+            printer.output_msg('Delete all {} from region {}'.format(options.flavor, region))
+        else:
+            printer.output_msg('Nothing to delete from region {}'.format(region))
 
 def action_grant():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
-        nc.set_dry_run(options.dry_run)
+        nc = himutils.get_client(Nova, options, logger, region)
         update_access(nc, 'grant', region)
-        print "Grant access to %s for %s in %s" % (options.flavor,
-                                                   options.project, region)
+        printer.output_msg("Grant access to {} for {} in {}"
+                           .format(options.flavor, options.project, region))
 
 def action_revoke():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
-        nc.set_dry_run(options.dry_run)
+        nc = himutils.get_client(Nova, options, logger, region)
         update_access(nc, 'revoke', region)
-        print "Revoke access to %s for %s in %s" % (options.flavor,
-                                                    options.project, region)
+        printer.output_msg("Revoke access to {} for {} in {}"
+                           .format(options.flavor, options.project, region))
 
 def action_list_access():
     for region in regions:
-        nc = Nova(options.config, debug=options.debug, log=logger, region=region)
-        nc.set_dry_run(options.dry_run)
+        nc = himutils.get_client(Nova, options, logger, region)
         access = nc.get_flavor_access(filters=options.flavor)
         header = 'access to %s flavor in %s' % (options.flavor, region)
         printer.output_dict({'header': header})
