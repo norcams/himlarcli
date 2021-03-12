@@ -126,28 +126,26 @@ def action_expired():
 def action_delete():
     projects = kc.get_projects(type='demo')
     logfile = 'logs/deleted_instances/deleted-expired-demo-instances-{}.log'.format(date.today().isoformat())
-    for project in projects:
-        for region in regions:
+    for region in regions:
+        for project in projects:
            nc = utils.get_client(Nova, options, logger, region)
            instances = nc.get_project_instances(project_id=project.id)
            for instance in instances:
                created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                active_days = (date.today() - created).days
-               kc.debug_log('sendt mail for {} to {}'.format(instance.id, project.admin))
+               kc.debug_log('Instance {} to terminate {}'.format(instance.id, project.admin))
                if (int(active_days) >= 90):
-                   printer.output_dict({'Region' : region.upper(), 'Project' : project.name, 'Instance': instance.name, 'Active days' : active_days})
                    try:
-                       kc.debug_log('sendt mail for {} to {}'.format(instance.id, project.admin))
+                       kc.debug_log('Instance {} active for {}'.format(instance.id, active_days))
                        if not options.dry_run:
                            question = 'Delete the instance [%s] from the project [%s] and all its resources?' % (instance.name, project.name)
                            if not options.force and not utils.confirm_action(question):
                                continue
-                           elif options.force and utils.confirm_action(question):
-                               instance.delete()
                            else:
-                                return
-                           print(">>> Deleted %s " % instance.name)
+			       instance.delete()
+			       kc.debug_log('>>> Deleted the instance {}'.format(instance.id))
                    except:
+                       kc.debug_log('>>> Could not delete instance {}'.format(instance.id)
                        print("No demo instances deleted")
 
 # Run local function with the same name as the action (Note: - => _)
