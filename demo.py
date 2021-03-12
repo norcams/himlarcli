@@ -131,20 +131,17 @@ def action_delete():
            nc = utils.get_client(Nova, options, logger, region)
            instances = nc.get_project_instances(project_id=project.id)
            for instance in instances:
+               question = 'Delete the instance [%s] from the project [%s] and all its resources?' % (instance.name, project.name)
+               if not options.force and not utils.confirm_action(question):
+                   continue
                created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                active_days = (date.today() - created).days
                kc.debug_log('Instance {} to terminate {}'.format(instance.id, project.admin))
                if (int(active_days) >= 90):
                    try:
-                       kc.debug_log('Instance {} active for {}'.format(instance.id, active_days))
-                       if not options.dry_run:
-                           question = 'Delete the instance [%s] from the project [%s] and all its resources?' % (instance.name, project.name)
-                           if not options.force and not utils.confirm_action(question):
-                               continue
-                           else:
-                               instance.delete()
-			       utils.append_to_logfile(logfile, "deleted:", project.name, instance.name, "active for:", active_days)
-                               kc.debug_log('>>> Deleted the instance {}'.format(instance.id))
+                       nc.delete_instance(instance)
+                       utils.append_to_logfile(logfile, "deleted:", project.name, instance.name, "active for:", active_days)
+                       kc.debug_log('>>> Deleted the instance {}'.format(instance.id))
                    except:
                        kc.debug_log('>>> Could not delete instance {}'.format(instance.id)
 
