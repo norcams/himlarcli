@@ -325,7 +325,7 @@ class Nova(Client):
 
     def delete_instance(self, instance):
         if not self.dry_run:
-            self.debug_log('Delete instance with id %s' % (i.name))
+            self.debug_log('Delete instance with id %s' % (instance.name))
             instance.delete()
             #time.sleep(5)
 
