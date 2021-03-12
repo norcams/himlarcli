@@ -143,6 +143,7 @@ def action_delete():
                                continue
                            else:
                                instance.delete()
+			       utils.append_to_logfile(logfile, "deleted:", project.name, instance.name, "active for:", active_days)
                                kc.debug_log('>>> Deleted the instance {}'.format(instance.id))
                    except:
                        kc.debug_log('>>> Could not delete instance {}'.format(instance.id)
