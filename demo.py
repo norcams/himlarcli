@@ -74,7 +74,7 @@ def action_instances():
             for i in instances:
                 created = utils.get_date(i.created, None, '%Y-%m-%dT%H:%M:%SZ')
                 active_days = (date.today() - created).days
-                if int(active_days) < int(options.days):
+                if int(active_days) < int(options.day):
                     continue
                 output = {
                     '0': i.id,
