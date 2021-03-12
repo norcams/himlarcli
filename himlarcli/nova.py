@@ -323,6 +323,12 @@ class Nova(Client):
             else:
                 self.logger.debug('=> DRY-RUN: delete instance %s (%s)' % (i.name, project.name))
 
+    def delete_instance(self, instance):
+        if not self.dry_run:
+            self.debug_log('Delete instance with id %s' % (instance.name))
+            instance.delete()
+            #time.sleep(5)
+
 #################################### QUOTA ####################################
 
     def get_quota(self, project_id, detail=False):
