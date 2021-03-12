@@ -5,6 +5,7 @@ from datetime import date
 import ConfigParser
 import logging
 import logging.config
+import inspect
 #import warnings
 import yaml
 import hashlib
@@ -108,7 +109,9 @@ def get_logger(name, config, debug, log=None):
         except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             path = '/opt/himlarcli/'
         mylog = setup_logger(name, debug, path)
-    mylog.debug('=> logger config loaded from logging.yaml')
+        caller = inspect.stack()[1][1].replace(os.environ.get('VIRTUAL_ENV'), '')
+        mylog.debug('=> logger startet from %s at %s', caller, datetime.now())
+        mylog.debug('=> logger config loaded from logging.yaml')
     return mylog
 
 def is_virtual_env():
