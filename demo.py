@@ -73,6 +73,9 @@ def action_instances():
             instances = nc.get_project_instances(project_id=project.id)
             for i in instances:
                 created = utils.get_date(i.created, None, '%Y-%m-%dT%H:%M:%SZ')
+                active_days = (date.today() - created).days
+                if int(active_days) < int(options.days):
+                    continue
                 output = {
                     '0': i.id,
                     '2': i.name,

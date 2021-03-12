@@ -21,7 +21,7 @@ opt_args:
     'help':     'mail template file. See notify/'
     'required': true
   '-d':
-    'sub':      ['expired']
+    'sub':      ['expired', 'instances']
     'dest':     'day'
     'help':     'number of days instances have run'
     'required': true
