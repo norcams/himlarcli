@@ -323,6 +323,21 @@ class Nova(Client):
             else:
                 self.logger.debug('=> DRY-RUN: delete instance %s (%s)' % (i.name, project.name))
 
+    def delete_project_instances(self, instance):
+#        search_opts = dict(tenant_id=project.id, all_tenants=1)
+        instances = self.__get_all_instances(search_opts=search_opts)
+        if not instances:
+            self.logger.debug('=> no instances found with id %s' % instance.id)
+            return
+        for i in instances:
+            if not dry_run:
+                self.logger.debug('=> delete instance %s' % (i.name))
+                i.delete()
+                time.sleep(5)
+            else:
+                self.logger.debug('=> DRY-RUN: delete instance %s' % (i.name))
+
+
 #################################### QUOTA ####################################
 
     def get_quota(self, project_id, detail=False):
