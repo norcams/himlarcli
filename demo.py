@@ -111,7 +111,7 @@ def action_expired():
                    body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                    msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
                    try:
-                       kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days))		 
+                       kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days)) 
                        if not options.force and not utils.confirm_action(question):
                          return
                        mail.send_mail(project.admin, msg, fromaddr)
@@ -142,11 +142,10 @@ def action_delete():
                            if not options.force and not utils.confirm_action(question):
                                continue
                            else:
-			       instance.delete()
-			       kc.debug_log('>>> Deleted the instance {}'.format(instance.id))
+                               instance.delete()
+                               kc.debug_log('>>> Deleted the instance {}'.format(instance.id))
                    except:
                        kc.debug_log('>>> Could not delete instance {}'.format(instance.id)
-                       print("No demo instances deleted")
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
