@@ -111,7 +111,7 @@ def action_expired():
                    body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                    msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
                    try:
-                       kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days)) 
+                       kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days))
                        if not options.force and not utils.confirm_action(question):
                          return
                        mail.send_mail(project.admin, msg, fromaddr)
@@ -124,26 +124,24 @@ def action_expired():
 
 # Delete demo instances older than 90 days
 def action_delete():
+    days = 90
+    question = 'Delete demo instances older than {} days?'.format(days)
+    if not options.force and not utils.confirm_action(question):
+        return
     projects = kc.get_projects(type='demo')
     logfile = 'logs/deleted_instances/deleted-expired-demo-instances-{}.log'.format(date.today().isoformat())
     for region in regions:
         for project in projects:
-           nc = utils.get_client(Nova, options, logger, region)
-           instances = nc.get_project_instances(project_id=project.id)
-           for instance in instances:
-               question = 'Delete the instance [%s] from the project [%s] and all its resources?' % (instance.name, project.name)
-               if not options.force and not utils.confirm_action(question):
-                   continue
-               created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
-               active_days = (date.today() - created).days
-               kc.debug_log('Instance {} to terminate {}'.format(instance.id, project.admin))
-               if (int(active_days) >= 90):
-                   try:
-                       nc.delete_instance(instance)
-                       utils.append_to_logfile(logfile, "deleted:", project.name, instance.name, "active for:", active_days)
-                       kc.debug_log('>>> Deleted the instance {}'.format(instance.id))
-                   except:
-                       kc.debug_log('>>> Could not delete instance {}'.format(instance.id)
+            nc = utils.get_client(Nova, options, logger, region)
+            instances = nc.get_project_instances(project_id=project.id)
+            for instance in instances:
+                created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
+                active_days = (date.today() - created).days
+                kc.debug_log('Found instance {} for user {}'.format(instance.id, project.admin))
+                if int(active_days) >= days:
+                    nc.delete_instance(instance)
+                    if not options.dry_run:
+                        utils.append_to_logfile(logfile, "deleted:", project.name, instance.name, "active for:", active_days)
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))

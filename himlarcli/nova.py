@@ -324,10 +324,18 @@ class Nova(Client):
                 self.logger.debug('=> DRY-RUN: delete instance %s (%s)' % (i.name, project.name))
 
     def delete_instance(self, instance):
-        if not self.dry_run:
-            self.debug_log('Delete instance with id %s' % (instance.name))
-            instance.delete()
-            #time.sleep(5)
+        """
+            Wrapper for delete instance
+            Version: 2021-03
+        """
+        self.debug_log('Delete instance with id %s' % (instance.name))
+        try:
+            if not self.dry_run:
+                instance.delete()
+        except Exception as e:
+            self.debug_log('failed to delete instance {}'.format(instance.id))
+            self.log_error(e)
+        #time.sleep(5)
 
 #################################### QUOTA ####################################
 
