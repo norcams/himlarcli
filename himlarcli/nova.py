@@ -328,7 +328,7 @@ class Nova(Client):
             Wrapper for delete instance
             Version: 2021-03
         """
-        self.debug_log('Delete instance with id %s' % (instance.name))
+        self.debug_log('Delete instance with id %s' % (instance.id))
         try:
             if not self.dry_run:
                 instance.delete()
