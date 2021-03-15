@@ -200,12 +200,16 @@ def action_show_access():
 
 def action_show_quota():
     project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.sys_error('could not find project {}'.format(options.project))
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
         neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
         components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
         for comp, client in components.iteritems():
+            if options.service != 'all' and comp != options.service:
+                continue
             quota = dict()
             if hasattr(client, 'get_quota'):
                 quota = getattr(client, 'get_quota')(project.id)

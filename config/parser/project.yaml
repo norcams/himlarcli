@@ -80,3 +80,10 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  False
+  '-n':
+    'sub':      [ 'show-quota' ]
+    'dest':     'service'
+    'metavar':  'service type'
+    'help':     'openstack service type'
+    'choices':  ['all', 'nova', 'cinder', 'neutron']
+    'default':  'all'
