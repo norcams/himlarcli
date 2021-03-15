@@ -1,21 +1,25 @@
 Dear user,
 
-This is the final reminder that your demo instance has reached its
-end date and will be deleted tomorrow.
+This is a reminder that your demo instance has reached its end date
+and will be deleted in 1 day.
 
-| $region | $project | $instance
+Project: $project
+Region: $region
+Instance: $instance
+Active days: $enddate
 
 If you need the instance for later use, create a snapshot of it.
 For details, please visit the NREC documentation.
 
-Demo projects are intended for testing the functionality of NREC, and
-thus only for very short lived instances. If you require a project for
-more permanent usage, you can apply for one using the following link:
+Demo projects are intended for testing the functionality of NREC,
+and thus only for very short lived instances. Demo instances will
+be automatically deleted after 90 days.
 
+If you require a project for more permanent usage, you can apply
+for one using the following link:
 https://skjema.uio.no/iaas-project
 
 For more details about NREC and contact information, please visit:
-
 https://docs.nrec.no
 
 --
