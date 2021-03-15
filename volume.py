@@ -28,7 +28,7 @@ else:
 def action_list():
     search_opts = {}
     if options.project:
-        project = project = kc.get_project(options.project)
+        project = kc.get_project_by_name(project_name=options.project)
         if not project:
             utils.sys_error('Project {} not found'.format(options.project))
         search_opts['project_id'] = project.id
