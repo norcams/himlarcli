@@ -88,42 +88,41 @@ def action_instances():
 
 def action_expired():
     projects = kc.get_projects(type='demo')
-    subject = '[NREC] Your instance is due for deletion'
+    subject = '[NREC] Your demo instance is due for deletion'
     logfile = 'logs/expired_instances/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
-    lognoneadmin = 'logs/expired_instances/demo-notify-expired-instances-noneadmin-{}.log'.format(date.today().isoformat())
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')
     cc = 'support@uh-iaas.no'
-    template = options.template
     inputday = options.day
-    question = 'Send mail to instances that have been running for %s days?' % inputday
+    question = 'Send mail to instances that have been running for {} days?'.format(inputday)
+    if not options.force and not utils.confirm_action(question):
+        return
+    template = options.template
+    if not utils.file_exists(template, logger):
+        utils.sys_error('Could not find template file {}'.format(template))
     if not options.template:
-        utils.sys_error("Specify a template file. E.g. -t notify/demo-notify-expired-instances.txt")
+        utils.sys_error('Specify a template file. E.g. -t notify/demo-notify-expired-instances.txt')
     if not options.day:
-        utils.sys_error("Specify the number of days for running demo instances. E.g. -d 30")
+        utils.sys_error('Specify the number of days for running demo instances. E.g. -d 30')
     for region in regions:
         for project in projects:
             nc = utils.get_client(Nova, options, logger, region)
             instances = nc.get_project_instances(project_id=project.id)
             for instance in instances:
-               created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
-               active_days = (date.today() - created).days
-	       kc.debug_log('{} running for {} days'.format(instance.id, active_days))
-               if (int(active_days) == int(inputday)):
-                   mapping = dict(project=project.name, enddate=active_days, region=region.upper(), instance=instance.name)
-                   body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
-                   msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
-                   try:
-                       kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days))
-                       if not options.force and not utils.confirm_action(question):
-                         return
-                       mail.send_mail(project.admin, msg, fromaddr)
-                       print("Mail sendt to {}".format(project.admin))
-                       utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name, active_days)
-                       #ToDo add exp volume and image
-                   except:
-                       print("Couldn't send mail to %s" % project.name)
-                       utils.append_to_logfile(lognoneadmin, date.today(), region, " ", instance.id, active_days)
+                created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
+                active_days = (date.today() - created).days
+                kc.debug_log('{} running for {} days'.format(instance.id, active_days))
+                if (int(active_days) == int(inputday)):
+                    mapping = dict(project=project.name, enddate=active_days, region=region.upper(), instance=instance.name)
+                    body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
+                    msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
+                    kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days))
+                    try:
+                        mail.send_mail(project.admin, msg, fromaddr)
+                        utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name, active_days)
+                    except Exception as e:
+                        logger.error('Unable to send mail', exc_info=e)
+                    print('Mail sendt to {}'.format(project.admin))
 
 # Delete demo instances older than 90 days
 def action_delete():

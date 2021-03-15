@@ -6,7 +6,7 @@ the requirements of standard projects.
 
 Your demo instance has reached its end date and will be deleted in 30 days.
 
-| $region | $instance |
+| $region | $project | $instance
 
 If you need the instance for later use, create a snapshot of it.
 For details, please visit the NREC documentation.
