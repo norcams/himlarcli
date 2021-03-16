@@ -87,6 +87,7 @@ def action_instances():
     printer.output_dict({'header': 'Count', 'count': count})
 
 def action_expired():
+    max_days = 90
     projects = kc.get_projects(type='demo')
     subject = '[NREC] Your demo instance is due for deletion'
     logfile = 'logs/expired_instances/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
@@ -113,7 +114,7 @@ def action_expired():
                 active_days = (date.today() - created).days
                 kc.debug_log('{} running for {} days'.format(instance.id, active_days))
                 if (int(active_days) == int(inputday)):
-                    mapping = dict(project=project.name, enddate=active_days, region=region.upper(), instance=instance.name)
+                    mapping = dict(project=project.name, enddate=int((max_days)-int(inputday)), activity=int(active_days), region=region.upper(), instance=instance.name)
                     body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                     msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
                     kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days))

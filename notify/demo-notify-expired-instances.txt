@@ -1,12 +1,12 @@
 Dear user,
 
-This is a reminder that your demo instance has reached its end date
-and will be deleted soon.
+This is a reminder that your demo instance has almost reached its
+end date and will be deleted in $enddate day(s).
 
 Project: $project
 Region: $region
 Instance: $instance
-Active days: $enddate
+Active days: $activity
 
 If you need the instance for later use, create a snapshot of it.
 For details, please visit the NREC documentation.
