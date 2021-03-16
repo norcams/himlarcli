@@ -61,9 +61,14 @@ def append_to_file(filename, text):
 
 def append_to_logfile(filename, date, region, text1, text2, text3):
     filename = get_abs_path(filename)
-    f = open(filename, 'a+')
-    f.write("%s, %s, %s, %s, %s\n" % (date, region, text1, text2, text3))
-    f.close()
+    try:
+        f = open(filename, 'a+')
+        try:
+            f.write("%s, %s, %s, %s, %s\n" % (date, region, text1, text2, text3))
+	finally:
+            f.close()
+    except IOError as exc:
+        logger.warn('=> ERROR: could not append to logfile %s' % exc)
 
 def get_config(config_path):
     if not os.path.isfile(config_path):
