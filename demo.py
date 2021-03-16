@@ -105,8 +105,8 @@ def action_expired():
     if not options.day:
         utils.sys_error('Specify the number of days for running demo instances. E.g. -d 30')
     for region in regions:
+        nc = utils.get_client(Nova, options, logger, region)
         for project in projects:
-            nc = utils.get_client(Nova, options, logger, region)
             instances = nc.get_project_instances(project_id=project.id)
             for instance in instances:
                 created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
@@ -117,11 +117,8 @@ def action_expired():
                     body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                     msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
                     kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days))
-                    try:
-                        mail.send_mail(project.admin, msg, fromaddr)
-                        utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name, active_days)
-                    except Exception as e:
-                        logger.error('Unable to send mail', exc_info=e)
+                    mail.send_mail(project.admin, msg, fromaddr)
+                    utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name, active_days)
                     print('Mail sendt to {}'.format(project.admin))
 
 # Delete demo instances older than 90 days
