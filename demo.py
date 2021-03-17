@@ -90,7 +90,7 @@ def action_expired():
     max_days = 90
     projects = kc.get_projects(type='demo')
     subject = '[NREC] Your demo instance is due for deletion'
-    logfile = 'logs/expired_instances/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
+    logfile = 'logs/demo-logs/expired_instances/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
     mail = utils.get_client(Mail, options, logger)
     fromaddr = mail.get_config('mail', 'from_addr')
     cc = 'support@uh-iaas.no'
@@ -129,7 +129,7 @@ def action_delete():
     if not options.force and not utils.confirm_action(question):
         return
     projects = kc.get_projects(type='demo')
-    logfile = 'logs/deleted_instances/deleted-expired-demo-instances-{}.log'.format(date.today().isoformat())
+    logfile = 'logs/demo-logs/deleted_instances/deleted-expired-demo-instances-{}.log'.format(date.today().isoformat())
     for region in regions:
         for project in projects:
             nc = utils.get_client(Nova, options, logger, region)
