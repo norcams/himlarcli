@@ -12,8 +12,11 @@ images:
     'min_disk':         39
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':    'scsi'
-      'hw_scsi_model':  'virtio-scsi'
+      'hw_disk_bus':         'scsi'
+      'hw_scsi_model':       'virtio-scsi'
+      'hw_machine_type':     'q35'
+      'hw_qemu_guest_agent': 'yes'
+      'os_require_quiesce':  'yes'
 #  'winsrv2019core':
 #    'name':             'GOLD Windows Server 2019 Core'
 #    'depricated':       'Outdated Windows Server 2019 Core (Windows)'
