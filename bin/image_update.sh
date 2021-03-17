@@ -11,4 +11,4 @@ sleep 60
 sleep 60
 
 # vgpu images
-/opt/himlarcli/image.py update -i vgpu.yaml
+#/opt/himlarcli/image.py update -i vgpu.yaml
