@@ -14,6 +14,7 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'os_require_quiesce':  'yes'
   'ubuntu_2004':
     'name':             'GOLD Ubuntu 20.04 LTS'
     'depricated':       'Outdated (Ubuntu 20.04)'
@@ -27,6 +28,7 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'os_require_quiesce':  'yes'
   'centos7':
     'name':             'GOLD CentOS 7'
     'depricated':       'Outdated (CentOS 7)'
@@ -40,6 +42,7 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'os_require_quiesce':  'yes'
   'centos8':
     'name':             'GOLD CentOS 8'
     'depricated':       'Outdated (CentOS 8)'
@@ -53,6 +56,7 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'os_require_quiesce':  'yes'
   'debian9':
     'name':             'GOLD Debian 9'
     'depricated':       'Outdated (Debian 9)'
@@ -66,6 +70,7 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'os_require_quiesce':  'yes'
   'debian10':
     'name':             'GOLD Debian 10'
     'depricated':       'Outdated (Debian 10)'
@@ -79,6 +84,7 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'os_require_quiesce':  'yes'
   'fedora_32':
     'name':             'GOLD Fedora 32'
     'depricated':       'Outdated (Fedora 32)'
@@ -93,6 +99,7 @@ images:
       'hw_rng_model':           'virtio'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'os_require_quiesce':  'yes'
   'fedora_33':
     'name':             'GOLD Fedora 33'
     'depricated':       'Outdated (Fedora 33)'
@@ -107,3 +114,4 @@ images:
       'hw_rng_model':           'virtio'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'os_require_quiesce':  'yes'
