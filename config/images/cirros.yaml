@@ -4,8 +4,8 @@ images:
   'cirros':
     'name':             'CirrOS debug image'
     'depricated':       'Outdated (CirrOS)'
-    'url':              'http://download.cirros-cloud.net/0.4.0/'
-    'latest':           'cirros-0.4.0-x86_64-disk.img'
+    'url':              'http://download.cirros-cloud.net/0.5.2/'
+    'latest':           'cirros-0.5.2-x86_64-disk.img'
     'checksum_file':    'MD5SUMS'
     'checksum':         'md5'
     'min_ram':          256
