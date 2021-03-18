@@ -183,10 +183,10 @@ nodes:
   compute-epyc-49:
     mac: f4:02:70:cd:da:de
     hostgroup: 14
-  compute-hpc-50:
+  compute-epyc-50:
     mac: f4:02:70:cd:de:86
     hostgroup: 14
-  compute-hpc-51:
+  compute-epyc-51:
     mac: f4:02:70:d0:04:e0
     hostgroup: 14
   compute-vgpu-52:
