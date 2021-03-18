@@ -33,7 +33,7 @@ opt_args:
     'dest':     'filter'
     'help':     'filter by project type'
     'default':  'all'
-    'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc']
+    'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'vgpu', 'test', 'hpc']
   '-a':
     'sub':      ['create']
     'dest':     'admin'
