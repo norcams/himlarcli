@@ -134,16 +134,18 @@ def action_delete():
 def action_grant():
     for region in regions:
         nc = himutils.get_client(Nova, options, logger, region)
-        update_access(nc, 'grant', region)
-        printer.output_msg("Grant access to {} for {} in {}"
-                           .format(options.flavor, options.project, region))
+        result = update_access(nc, 'grant', region)
+        if result:
+            printer.output_msg("Grant access to {} for {} in {}"
+                               .format(options.flavor, options.project, region))
 
 def action_revoke():
     for region in regions:
         nc = himutils.get_client(Nova, options, logger, region)
-        update_access(nc, 'revoke', region)
-        printer.output_msg("Revoke access to {} for {} in {}"
-                           .format(options.flavor, options.project, region))
+        result = update_access(nc, 'revoke', region)
+        if result:
+            printer.output_msg("Revoke access to {} for {} in {}"
+                               .format(options.flavor, options.project, region))
 
 def action_list_access():
     for region in regions:
@@ -187,6 +189,8 @@ def get_flavor_config(region):
 
 def update_access(nc, access_action, region):
     flavors = get_flavor_config(region)
+    if options.flavor in flavors and not flavors[options.flavor]:
+        return False
     if 'public' in flavors and flavors['public']:
         himutils.sys_error('grant or revoke will not work on public flavors!')
     project = kc.get_project_by_name(options.project)
@@ -197,7 +201,9 @@ def update_access(nc, access_action, region):
                                      action=access_action)
     if not result:
         himutils.sys_error('Update access for {} failed. Check debug log'
-                           .format(options.flavor))
+                           .format(options.flavor), 0)
+        return False
+    return True
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
