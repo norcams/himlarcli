@@ -50,8 +50,8 @@ def set_access(image_action):
     images = gc.get_images(filters=filters)
     for image in images:
         gc.set_image_access(image_id=image.id, project_id=project.id, action=image_action)
-        print('{} access to image {} for project {}'.
-              format(image_action.capitalize(), image.name, options.project))
+        printer.output_msg('{} access to image {} for project {}'.
+                           format(image_action.capitalize(), image.name, options.project))
 
 def action_list_access():
     tags = get_tags(names=True)
@@ -260,6 +260,16 @@ def update_image(name, image_data, image_type):
                             name=image_data['depricated'],
                             depricated=timestamp)
             gc.deactivate(image_id=images[0]['id'])
+            # keep access to shared images
+            if images[0]['visibility'] == 'shared':
+                members = gc.get_image_access(images[0]['id'])
+                for member in members:
+                    if not options.dry_run:
+                        gc.set_image_access(project_id=member.member_id,
+                                            image_id=result.id, action='grant')
+                    else:
+                        gc.debug_log('grant access to new image for {}'
+                                     .format(member.member_id))
         else:
             result = None
             kc.debug_log('no new image needed: checksum match found')

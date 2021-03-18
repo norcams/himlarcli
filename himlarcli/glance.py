@@ -127,7 +127,7 @@ class Glance(Client):
         if action == 'grant':
             if self.__get_project_image_member(image_id, project_id):
                 self.debug_log(('membership exsist: dropping grant for project '
-                    + '{} on image {}').format(project_id, image_id))
+                                + '{} on image {}').format(project_id, image_id))
                 return
             if not self.dry_run:
                 try:
