@@ -1,0 +1,33 @@
+---
+# Win flavor in bgo
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 's== windows'
+win:
+  'win.small':
+    vcpus: 1
+    ram: 2048
+    disk: 40
+  'win.medium':
+    vcpus: 1
+    ram: 4096
+    disk: 40
+  'win.large':
+    vcpus: 2
+    ram: 8192
+    disk: 60
+  'win.xlarge':
+    vcpus: 4
+    ram: 16384
+    disk: 80
+  'win.2xlarge':
+    vcpus: 8
+    ram: 32768
+    disk: 80
+  'win.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 80
