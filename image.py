@@ -35,7 +35,7 @@ def action_grant():
 def action_revoke():
     set_access('revoke')
 
-def set_access(action):
+def set_access(image_action):
     project = kc.get_project_by_name(options.project)
     if not project:
         utils.sys_error('Unknown project {}'.format(options.project))
@@ -43,15 +43,15 @@ def set_access(action):
     tags = get_tags(names=True)
     tag_str = 'all tags' if not tags else '[' + ', '.join(tags) + ']'
     if not utils.confirm_action('{} access to shared images matching {}'
-            .format(action.capitalize(), tag_str)):
+                                .format(image_action.capitalize(), tag_str)):
         return
     filters = {'status': 'active', 'tag': tags, 'visibility': 'shared'}
     kc.debug_log('filter: {}'.format(filters))
     images = gc.get_images(filters=filters)
     for image in images:
-        gc.set_image_access(image_id=image.id, project_id=project.id, action=action)
+        gc.set_image_access(image_id=image.id, project_id=project.id, action=image_action)
         print('{} access to image {} for project {}'.
-                format(action.capitalize(), image.name, options.project))
+              format(image_action.capitalize(), image.name, options.project))
 
 def action_list_access():
     tags = get_tags(names=True)
@@ -124,7 +124,7 @@ def action_purge():
     tags = get_tags(names=True)
     tag_str = 'all tags' if not tags else '[' + ', '.join(tags) + ']'
     if not utils.confirm_action('Purge unused {} deactive images matching {}'
-            .format(options.visibility, tag_str)):
+                                .format(options.visibility, tag_str)):
         return
     images = get_image_usage()
     count = 0
@@ -162,11 +162,11 @@ def action_retire():
 
     if options.name not in image_config['images']:
         utils.sys_error('Unable to retire {}. Missing from config file {}'
-            .format(options.name, options.image_config))
+                        .format(options.name, options.image_config))
 
     # Point of no return
     if not utils.confirm_action('Retire active images matching {}'
-            .format(tag_str)):
+                                .format(tag_str)):
         return
 
     # Find image(s)
@@ -181,7 +181,7 @@ def action_retire():
                         name=new_name,
                         depricated=timestamp)
         gc.deactivate(image_id=image['id'])
-        print('Retire image {}'.format(image['name']))
+        printer.output_msg('Retire image {}'.format(image['name']))
 
 def action_update():
     # Load config file
