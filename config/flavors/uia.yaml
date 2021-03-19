@@ -1,8 +1,0 @@
----
-# Flavor used for UiA
-public: false
-uia:
-  'uia.cloudera':
-    ram:    8192
-    vcpus:  2
-    disk:   70

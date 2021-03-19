@@ -1,0 +1,36 @@
+---
+# M1 HPC flavor
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  hw:numa_nodes: 1
+  hw:cpu_sockets: 1
+  hw:cpu_policy: 'dedicated'
+  hw:cpu_thread_policy: 'require'
+  hw:mem_page_size: 2048
+  aggregate_instance_extra_specs:type: 's== hpc'
+hpc.m1a:
+  'hpc.m1a.2xlarge':
+    vcpus: 8
+    ram: 30718
+    disk: 20
+  'hpc.m1a.4xlarge':
+    vcpus: 16
+    ram: 61440
+    disk: 20
+  'hpc.m1a.8xlarge':
+    vcpus: 32
+    ram: 122880
+    disk: 20
+    properties:
+      hw:numa_nodes: 2
+      hw:cpu_sockets: 1
+  'hpc.m1a.16xlarge':
+    vcpus: 64
+    ram: 245760
+    disk: 20
+    properties:
+      hw:numa_nodes: 4
+      hw:cpu_sockets: 1
