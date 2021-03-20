@@ -114,7 +114,10 @@ def get_logger(name, config, debug, log=None):
         except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             path = '/opt/himlarcli/'
         mylog = setup_logger(name, debug, path)
-        caller = inspect.stack()[1][1].replace(os.environ.get('VIRTUAL_ENV'), '')
+        if not os.environ.get('VIRTUAL_ENV'):
+            caller = inspect.stack()[1][1].replace('/opt/himlarcli', '')
+        else:
+            caller = inspect.stack()[1][1].replace(os.environ.get('VIRTUAL_ENV'), '')
         mylog.debug('=> logger startet from %s at %s', caller, datetime.now())
         mylog.debug('=> logger config loaded from logging.yaml')
     return mylog
@@ -262,7 +265,12 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None,
             return None
     if checksum_type and checksum_url:
         checksum = checksum_file(target, checksum_type)
-        response = urllib2.urlopen(checksum_url)
+        try:
+            response = urllib2.urlopen(checksum_url)
+        except urllib2.HTTPError as exc:
+            logger.debug('=> {}'.format(exc))
+            logger.debug('=> unable to download checksum {}'.format(checksum_url))
+            return None
         checksum_all = response.read()
         if checksum not in checksum_all:
             logger.debug("=> checksum failed: %s" % checksum)
