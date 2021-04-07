@@ -17,7 +17,7 @@ opt_args:
     'type':     int
     'dest':     'limit'
     'metavar':  '<int>'
-    'help':     'number of instances to migrate before exit'
+    'help':     'number of instances to consider for migration before exit'
   '--sleep':
     'sub':      ['migrate', 'evacuate']
     'dest':     'sleep'
