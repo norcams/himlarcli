@@ -45,6 +45,8 @@ def action_show():
     for region in regions:
         nova = utils.get_client(Nova, options, logger, region)
         aggregate = nova.get_aggregate(options.aggregate)
+        if not aggregate:
+            continue
 
         printer.output_dict({'header': 'Host aggregate in {}'.format(region)})
         printer.output_dict(aggregate.to_dict())
