@@ -62,7 +62,8 @@ def action_aggregate():
         #neutron = utils.get_client(Neutron, options, logger)
         #network = neutron.list_networks()
         instances = nova.get_instances(options.aggregate)
-
+        if not instances:
+            continue
         for i in instances:
             email = None
             project = kc.get_by_id('project', i.tenant_id)
