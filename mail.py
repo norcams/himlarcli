@@ -87,8 +87,11 @@ def action_aggregate():
             users[email].append(instance_data)
 
         # Add metadata to aggregate
-        metadata = {'maintenance': options.date + ' (updated {})'.
-                                   format(utils.get_current_date())}
+        if options.date:
+            meta_msg = options.date + ' (updated {})'.format(utils.get_current_date())
+        else:
+            meta_msg = 'unknown (updated {})'.format(utils.get_current_date())
+        metadata = {'maintenance': meta_msg}
         nova.update_aggregate(options.aggregate, metadata=metadata)
 
     mailer = utils.get_client(Mail, options, logger)
@@ -98,6 +101,7 @@ def action_aggregate():
         subject = options.subject
     sent_mail_counter = 0
     message = None
+    fromaddr = options.from_addr
     for user, instances in users.iteritems():
         columns = ['project', 'region']
         mapping = dict(region=options.region,
@@ -107,7 +111,7 @@ def action_aggregate():
         body_content = utils.load_template(inputfile=options.template,
                                            mapping=mapping,
                                            log=logger)
-        message = mailer.get_mime_text(subject, body_content, fromaddr='noreply@uh-iaas.no')
+        message = mailer.get_mime_text(subject, body_content, fromaddr=fromaddr)
         mailer.send_mail(user, message)
         sent_mail_counter += 1
 
