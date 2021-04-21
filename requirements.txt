@@ -20,7 +20,8 @@ backports.functools_lru_cache
 configparser
 tweepy
 # needed for python-foreman
+dulwich==0.19.16
 setuptools==44.1.1
-autosemver==0.5.5
+autosemver==0.5.4
 python-foreman==0.4.20
 tabulate
