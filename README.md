@@ -20,7 +20,7 @@ Use virtualenv:
 
 ```bash
 cd himlarcli
-virtualenv .
+virtualenv . -p /path/to/python2
 source bin/activate
 pip install setuptools==44.1.1
 python setup.py develop
