@@ -165,6 +165,14 @@ def action_grant():
 
             mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
 
+def action_revoke():
+    project = ksclient.get_project_by_name(project_name=options.project)
+    for user in options.users:
+        if not ksclient.is_valid_user(email=user, domain=options.domain):
+            himutils.sys_error('User %s not found as a valid user.' % user)
+        role = ksclient.revoke_role(project_name=options.project, email=user)
+    printer.output_dict({'Revoked access for': user})
+
 def action_delete():
     question = 'Delete project %s and all resources' % options.project
     if not options.force and not himutils.confirm_action(question):

@@ -10,15 +10,15 @@ actions:
   'delete':       'Delete project and all resources'
   'instances':    'List of all instances in project'
   'extend':       'Change or set the endate for a project'
+  'revoke':       'Revoke access to a shared project'
 #  'update': 'TODO'
-#  'revoke': 'TODO'
 opt_args:
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   'project':
-   'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'delete', 'instances', 'extend']
+   'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'revoke', 'delete', 'instances', 'extend']
    'metavar':   'project'
   '--region':
     'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota']
@@ -56,7 +56,7 @@ opt_args:
     'help':     'quota class'
     'choices':  ['small', 'medium', 'large']
   '-u':
-    'sub':      ['grant']
+    'sub':      ['grant', 'revoke']
     'dest':     'users'
     'help':     'email of a valid openstack user (can be used multiple times)'
     'action':   'append'

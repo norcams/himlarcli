@@ -474,6 +474,17 @@ class Keystone(Client):
                                     project=project,
                                     group=group)
 
+    def revoke_role(self, email, project_name, role_name='user'):
+        if action == 'revoke':
+                  #action_func = 'remove_user_role'
+                  #action_func = 'remove_user_role'
+            role = self.__get_role(role_name)
+            group = self.get_group_by_email(email=email)
+            project = self.get_project_by_name(project_name=project_name)
+            roles = self.client.roles.list(project=project, group=group)
+            self.client.roles.revoke(role=role, project=project, group=group)
+
+
     def list_roles(self, project_name, domain=None):
         """ List all roles for a project based on project name.
             version: 2 """
