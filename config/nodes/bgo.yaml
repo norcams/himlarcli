@@ -7,7 +7,7 @@ nodes:
     compute_resource: controller-06
   builder-01:
     compute_profile: medium
-    compute_resource: controller-04
+    compute_resource: controller-08
     compute_attributes:
       volumes_attributes:
         '1':
@@ -244,7 +244,7 @@ nodes:
     compute_resource: controller-06
   dashboard-mgmt-01:
     compute_profile: small
-    compute_resource: controller-04
+    compute_resource: controller-08
   db-global-01:
     compute_profile: small
     compute_resource: controller-06
@@ -281,7 +281,7 @@ nodes:
     compute_resource: controller-07
   logger-01:
     compute_profile: xlarge
-    compute_resource: controller-04
+    compute_resource: controller-08
     compute_attributes:
       volumes_attributes:
         '1':
@@ -304,7 +304,7 @@ nodes:
           format_type:  'qcow2'
   monitor-01:
     compute_profile: large
-    compute_resource: controller-04
+    compute_resource: controller-08
     compute_attributes:
       volumes_attributes:
         '1':
@@ -365,7 +365,7 @@ nodes:
     hostgroup: 7
   proxy-01:
     compute_profile: small
-    compute_resource: controller-04
+    compute_resource: controller-08
     compute_attributes:
       volumes_attributes:
         '1':
@@ -384,7 +384,7 @@ nodes:
     compute_resource: controller-07
   resolver-02:
     compute_profile: small
-    compute_resource: controller-04
+    compute_resource: controller-08
   rgw-01:
     compute_profile: medium
     compute_resource: controller-05
