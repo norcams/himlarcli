@@ -405,8 +405,8 @@ class Nova(Client):
         return usage
 
 
-    def get_stats(self):
-        instances = self.__get_all_instances()
+    def get_stats(self, limit=2000):
+        instances = self.__get_all_instances(limit=limit)
         stats = dict()
         stats['count'] = len(instances)
         stats['error'] = 0
@@ -630,12 +630,13 @@ class Nova(Client):
                                              search_opts=search_opts)
         return instances
 
-    def __get_all_instances(self, search_opts=None):
+    def __get_all_instances(self, search_opts=None, limit=1000):
         if not search_opts:
             search_opts = dict(all_tenants=1)
         try:
             instances = self.client.servers.list(detailed=True,
-                                                 search_opts=search_opts)
+                                                 search_opts=search_opts,
+                                                 limit=limit)
         except novaclient.exceptions.ClientException as e:
             self.log_error(e)
             return list()
