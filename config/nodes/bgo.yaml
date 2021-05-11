@@ -27,6 +27,16 @@ nodes:
   cephmon-03:
     compute_profile: xlarge
     compute_resource: controller-07
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '30G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   cephmon-object-01:
     compute_profile: large
     compute_resource: controller-05
@@ -388,6 +398,9 @@ nodes:
   rgw-01:
     compute_profile: medium
     compute_resource: controller-05
+  sec-01:
+    compute_profile: small
+    compute_resource: controller-08
   status-01:
     compute_profile: small
     compute_resource: controller-06
