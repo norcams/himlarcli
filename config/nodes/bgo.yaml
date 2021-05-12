@@ -19,18 +19,21 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   cephmon-01:
-    compute_profile: 2xlarge
-    compute_resource: controller-05
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'masstorage'
-          capacity:     '30G'
-          format_type:  'qcow2'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+    hostgroup: 1
+    mac: ec:f4:bb:cc:ce:f4
+#  cephmon-01:
+#    compute_profile: 2xlarge
+#    compute_resource: controller-05
+#    compute_attributes:
+#      volumes_attributes:
+#        '1':
+#          allocation:   '0G'
+#          pool_name:    'masstorage'
+#          capacity:     '30G'
+#          format_type:  'qcow2'
+#    host_parameters_attributes:
+#      - name:           'installdevice'
+#        value:          'vda'
   cephmon-02:
     compute_profile: 2xlarge
     compute_resource: controller-06
