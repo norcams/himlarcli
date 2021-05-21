@@ -1,0 +1,5 @@
+---
+# gpu.mi100 flavor available in BGO only
+public: false
+properties: {}
+gpu.mi100: {}
