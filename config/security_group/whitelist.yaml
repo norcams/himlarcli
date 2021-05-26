@@ -1,0 +1,11 @@
+---
+direction:
+  - egress
+remote_ip_prefix: None
+protocol:
+  - ipv6-icmp
+  - icmp
+port:
+  - 22
+  - 80
+  - 443

@@ -26,6 +26,15 @@ def get_client(name, options, logger, region=None):
     client.set_dry_run(options.dry_run)
     return client
 
+def get_regions(options, keystoneclient):
+    # Region
+    if hasattr(options, 'region'):
+        regions = keystoneclient.find_regions(region_name=options.region)
+    else:
+        regions = keystoneclient.find_regions()
+    keystoneclient.debug_log('regions used {}'.format(','.join(regions)))
+    return regions
+
 def sys_error(text, code=1):
     sys.stderr.write("%s\n" % text)
     if code > 0:

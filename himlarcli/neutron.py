@@ -44,6 +44,22 @@ class Neutron(Client):
             }
         })
 
+    def get_security_group(self, secgroup_id):
+        """
+            Get security group from id and return 'security_group' part of the dict
+            Version: 2021-5
+            :rtype: Dict
+        """
+        sec_group = None
+        try:
+            sec_group = self.client.show_security_group(secgroup_id)
+        except (exceptions.NotFound, exceptions.Conflict) as e:
+            self.log_error(e)
+        if sec_group:
+            return sec_group['security_group']
+        else:
+            return None
+
     def delete_security_group(self, secgroup_id):
         self.debug_log('delete secgroup %s' % secgroup_id)
         try:
@@ -70,6 +86,32 @@ class Neutron(Client):
             return
         for sg in sec_groups['security_groups']:
             self.delete_security_group(sg['id'])
+
+# ==================================== RULES =================================
+
+    def get_security_group_rules(self, per_page=1000):
+        """
+            Get a list of all security group rules
+            Version: 2021-5
+            :rtype: List
+        """
+        try:
+            marker = None
+            rules = list()
+            while True:
+                r = self.client.list_security_group_rules(marker=marker,
+                                                          limit=per_page)
+                rules += r['security_group_rules']
+                if len(r) >= per_page:
+                    marker = r[-1].id # marker is the last element
+                else:
+                    break # end of loop
+            self.debug_log('found {} security group rules for {}'
+                           .format(len(rules), self.region))
+        except exceptions.ServiceUnavailable:
+            self.log_error('Neutron: Service Unavailable')
+            rules = None
+        return rules
 
 # =================================== NETWORK ================================
 
@@ -105,18 +147,21 @@ class Neutron(Client):
 
 # ==================================== QUOTA ==================================
     def get_quota_class(self, class_name='default'):
+        # pylint: disable=W0613
         """ Quota class are not used by neutron. This function only follow the
             structure in functions for nova and cinder. """
         self.log_error('quota_class not defined for neutron', 0)
         return dict()
 
     def update_quota_class(self, class_name='default', updates=None):
+        # pylint: disable=W0613
         """ Quota class are not used by neutron. This function only follow the
             structure in functions for nova and cinder. """
         self.log_error('quota_class not defined for neutron', 0)
         return dict()
 
     def get_quota(self, project_id, usage=False):
+        # pylint: disable=W0613
         result = self.client.show_quota(project_id=project_id)
         if 'quota' in result:
             return result['quota']
@@ -139,6 +184,7 @@ class Neutron(Client):
 
     @staticmethod
     def get_network_ip(addresses, networks, version=4):
+        # pylint: disable=W0613,W0612
         ip_list = list()
         for name, ips in addresses.iteritems():
             for ip in ips:

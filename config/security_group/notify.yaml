@@ -1,0 +1,3 @@
+---
+remote_ip_prefix:
+  - 0.0.0.0/0

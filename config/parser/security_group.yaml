@@ -1,0 +1,14 @@
+---
+desc:   'Management of security groups'
+actions:
+  'list':     'List all none whitelisted security group rules'
+
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+    'weight':   100
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
