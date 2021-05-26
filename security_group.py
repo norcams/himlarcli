@@ -87,8 +87,6 @@ def is_whitelist(rule, whitelist):
         # whitelist match
         elif rule[k] in v:
             return True
-
-    print rule
     return False
 
 
