@@ -3,6 +3,7 @@
 from himlarcli import tests as tests
 tests.is_virtual_env()
 
+import re
 from himlarcli.keystone import Keystone
 from himlarcli.neutron import Neutron
 from himlarcli.nova import Nova
@@ -68,18 +69,26 @@ def is_blacklist(rule, blacklist):
     return False
 
 def is_whitelist(rule, whitelist):
+    #valid_none_check = ['remote_ip_prefix']
     for k, v in whitelist.iteritems():
-        # whitelist empty property
-        if 'None' in v:
-            if not rule[k]:
-                return True
+        # whitelist none empty property
+        if "!None" in v and rule[k]:
+            return True
         # port match: both port_range_min and port_range_max need to match
-        elif k == 'port':
+        if k == 'port':
             if rule['port_range_min'] in v and rule['port_range_max'] in v:
                 return True
+        # regex remote ip
+        elif k == 'remote_ip_prefix_regex':
+            for regex in v:
+                pattern = re.compile("^{}$".format(regex))
+                if pattern.search(rule['remote_ip_prefix']):
+                    return True
         # whitelist match
         elif rule[k] in v:
             return True
+
+    print rule
     return False
 
 
