@@ -1,7 +1,10 @@
 ---
 direction:
   - egress
-remote_ip_prefix: None
+remote_ip_prefix:
+  - None
+  - 129.177.0.0/16
+  - 129.240.0.0/16
 protocol:
   - ipv6-icmp
   - icmp

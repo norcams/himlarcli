@@ -70,7 +70,7 @@ def is_blacklist(rule, blacklist):
 def is_whitelist(rule, whitelist):
     for k, v in whitelist.iteritems():
         # whitelist empty property
-        if v == 'None':
+        if 'None' in v:
             if not rule[k]:
                 return True
         # port match: both port_range_min and port_range_max need to match
