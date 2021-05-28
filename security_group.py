@@ -23,12 +23,18 @@ regions = utils.get_regions(options, kc)
 
 def action_list():
     # pylint: disable=W0612
+
     blacklist, whitelist, notify = load_config()
     for region in regions:
         nova = utils.get_client(Nova, options, logger, region)
         neutron = utils.get_client(Neutron, options, logger, region)
-        rules = neutron.get_security_group_rules(5)
-        printer.output_dict({'header': 'Rules in {} (id, port, ip)'.format(region)})
+        rules = neutron.get_security_group_rules(1000)
+        question = ("Are you sure you will check {} security group rules in {}?"
+                    .format(len(rules), region))
+        if not options.assume_yes and not utils.confirm_action(question):
+            return
+        printer.output_dict({'header': 'Rules in {} (project, port, ip)'
+                                       .format(region)})
         for rule in rules:
             if is_whitelist(rule, whitelist):
                 continue
@@ -37,10 +43,14 @@ def action_list():
             sec_group = neutron.get_security_group(rule['security_group_id'])
             if not rule_in_use(sec_group, nova):
                 continue
-            # printer.output_msg("\nNew rule:\n-----------------------")
-
+            # check if project exists
+            project = kc.get_by_id('project', rule['project_id'])
+            if not project:
+                kc.debug_log('could not find project {}'.
+                             format(rule['project_id']))
+                continue
             output = {
-                '0': rule['project_id'],
+                '0': project.name,
                 '1': "{}-{}".format(rule['port_range_min'], rule['port_range_max']),
                 '2': rule['remote_ip_prefix']
             }

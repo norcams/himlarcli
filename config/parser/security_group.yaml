@@ -12,3 +12,10 @@ opt_args:
   '--region':
     'dest':     'region'
     'help':     'only use this region'
+  '-y':
+    'sub':      ['list']
+    'dest':     'assume_yes'
+    'help':     'Automatic yes to prompts; assume "yes" as answer to all prompts'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
