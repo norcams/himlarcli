@@ -35,6 +35,18 @@ else:
 if not regions:
     himutils.sys_error('no regions found with this name!')
 
+# Function to validate an email address
+def validate_email(email):
+    # Regexp for validating an email
+    regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+
+    # Do the email check
+    if(re.search(regex, email)):
+        return True
+    else:
+        return False
+
+
 def action_create():
     if not ksclient.is_valid_user(options.admin, options.domain) and options.type == 'personal':
         himutils.sys_error('not valid user', 1)
@@ -49,11 +61,23 @@ def action_create():
         if not enddate:
             himutils.sys_error('HPC projects must have an enddate', 1)
     createdate = datetime.today()
+
+    # Parse the "contact" option, setting to None if not used
+    # Exit with error if contact is not a valid email address
+    contact = None
+    if options.contact is not None:
+        contact = options.contact.lower()
+        if not validate_email(contact):
+            errmsg = "%s is not a valid email address." % contact
+            himutils.sys_error(errmsg, 1)
+
     if not options.force:
-        print 'Project name: %s\nDescription: %s\nAdmin: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
+        print 'Project name: %s\nDescription: %s\nAdmin: %s\nContact: %s\nOrganization: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
                 % (options.project,
                    ksclient.convert_ascii(options.desc),
                    options.admin.lower(),
+                   contact,
+                   options.org,
                    options.type,
                    str(enddate),
                    options.quota,
@@ -62,6 +86,8 @@ def action_create():
             himutils.sys_error('Aborted', 1)
     project = ksclient.create_project(project_name=options.project,
                                       admin=options.admin.lower(),
+                                      contact=contact,
+                                      org=options.org,
                                       test=test,
                                       type=options.type,
                                       description=options.desc,

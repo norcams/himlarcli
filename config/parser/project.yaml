@@ -50,6 +50,16 @@ opt_args:
     'dest':     'desc'
     'metavar':  'description'
     'help':     'project project description'
+  '-o':
+    'sub':      ['create']
+    'dest':     'org'
+    'help':     'Associated organization'
+    'choices':  ['nrec', 'uio', 'uib', 'uit', 'ntnu', 'nmbu', 'vetinst']
+    'required': true
+  '--contact':
+    'sub':      ['create']
+    'dest':     'contact'
+    'help':     'Contact email (mailing list)'
   '-q':
     'sub':      ['create']
     'dest':     'quota'
