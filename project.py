@@ -55,7 +55,7 @@ def action_create():
     contact = None
     if options.contact is not None:
         contact = options.contact.lower()
-        if not ksclient.__validate_email(contact):
+        if not ksclient._Keystone__validate_email(contact):
             errmsg = "%s is not a valid email address." % contact
             himutils.sys_error(errmsg, 1)
 
