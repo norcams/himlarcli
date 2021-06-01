@@ -35,18 +35,6 @@ else:
 if not regions:
     himutils.sys_error('no regions found with this name!')
 
-# Function to validate an email address
-def validate_email(email):
-    # Regexp for validating an email
-    regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
-
-    # Do the email check
-    if(re.search(regex, email)):
-        return True
-    else:
-        return False
-
-
 def action_create():
     if not ksclient.is_valid_user(options.admin, options.domain) and options.type == 'personal':
         himutils.sys_error('not valid user', 1)
@@ -67,7 +55,7 @@ def action_create():
     contact = None
     if options.contact is not None:
         contact = options.contact.lower()
-        if not validate_email(contact):
+        if not ksclient.__validate_email(contact):
             errmsg = "%s is not a valid email address." % contact
             himutils.sys_error(errmsg, 1)
 
