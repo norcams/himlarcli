@@ -3,6 +3,7 @@ from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.cinder import Cinder
 from himlarcli.neutron import Neutron
+from himlarcli.glance import Glance
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.mail import Mail
@@ -27,6 +28,10 @@ ksclient.set_dry_run(options.dry_run)
 ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 #novaclient = Nova(options.config, debug=options.debug, log=logger)
+
+# Glance client object
+glance_client = himutils.get_client(Glance, options, logger)
+
 if hasattr(options, 'region'):
     regions = ksclient.find_regions(region_name=options.region)
 else:
@@ -107,6 +112,20 @@ def action_create():
             novaclient.update_quota(project_id=project_id, updates=quota['nova'])
         if quota and 'neutron' in quota and project:
             neutronclient.update_quota(project_id=project_id, updates=quota['neutron'])
+
+    # Grant UiO Managed images if uio project
+    if options.org == 'uio':
+        tags = [ 'uio' ]
+        filters = {
+            'status':     'active',
+            'tag':        tags,
+            'visibility': 'shared'
+        }
+        images = glance_client.get_images(filters=filters)
+        for image in images:
+            glance_client.set_image_access(image_id=image.id, project_id=project.id, action=image_action)
+            printer.output_msg('{} access to image {} for project {}'.
+                               format(image_action.capitalize(), image.name, project.name))
 
     if options.mail:
         mail = Mail(options.config, debug=options.debug)
