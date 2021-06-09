@@ -29,9 +29,6 @@ ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 #novaclient = Nova(options.config, debug=options.debug, log=logger)
 
-# Glance client object
-glance_client = himutils.get_client(Glance, options, logger)
-
 if hasattr(options, 'region'):
     regions = ksclient.find_regions(region_name=options.region)
 else:
@@ -97,15 +94,18 @@ def action_create():
         output['header'] = "Show information for %s" % options.project
         printer.output_dict(output)
 
-    # Quotas
+    # Do stuff for regions
     for region in regions:
-        novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
-        cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
-        neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
-        cinderclient.set_dry_run(options.dry_run)
-        novaclient.set_dry_run(options.dry_run)
-        neutronclient.set_dry_run(options.dry_run)
+        # Get objects
+        novaclient = himutils.get_client(Nova, options, logger, region)
+        cinderclient = himutils.get_client(Cinder, options, logger, region)
+        neutronclient = himutils.get_client(Neutron, options, logger, region)
+        glanceclient = himutils.get_client(Glance, options, logger, region)
+
+        # Find the project ID
         project_id = Keystone.get_attr(project, 'id')
+
+        # Update quotas for Cinder, Nova, Neutron
         if quota and 'cinder' in quota and project:
             cinderclient.update_quota(project_id=project_id, updates=quota['cinder'])
         if quota and 'nova' in quota and project:
@@ -113,19 +113,19 @@ def action_create():
         if quota and 'neutron' in quota and project:
             neutronclient.update_quota(project_id=project_id, updates=quota['neutron'])
 
-    # Grant UiO Managed images if shared UiO project
-    if options.org == 'uio' and options.type not in [ 'personal', 'demo' ]:
-        tags = [ 'uio' ]
-        filters = {
-            'status':     'active',
-            'tag':        tags,
-            'visibility': 'shared'
-        }
-        images = glance_client.get_images(filters=filters)
-        for image in images:
-            glance_client.set_image_access(image_id=image.id, project_id=project.id, action='grant')
-            printer.output_msg('GRANT access to image {} for project {}'.
-                               format(image.name, project.name))
+        # Grant UiO Managed images if shared UiO project
+        if options.org == 'uio' and options.type not in [ 'personal', 'demo' ]:
+            tags = [ 'uio' ]
+            filters = {
+                'status':     'active',
+                'tag':        tags,
+                'visibility': 'shared'
+            }
+            images = glanceclient.get_images(filters=filters)
+            for image in images:
+                glanceclient.set_image_access(image_id=image.id, project_id=project.id, action='grant')
+                printer.output_msg('GRANT access to image {} for project {}'.
+                                   format(image.name, project.name))
 
     if options.mail:
         mail = Mail(options.config, debug=options.debug)
@@ -202,27 +202,6 @@ def action_delete():
     question = 'Delete project %s and all resources' % options.project
     if not options.force and not himutils.confirm_action(question):
         return
-
-    # Obtain a project object
-    project = ksclient.get_project_by_name(project_name=options.project)
-    if not project:
-        himutils.sys_error('No project found with name "%s"' % options.project)
-
-    # Find all shared images
-    filters = {
-        'member_status': 'accepted',
-        'visibility':    'shared'
-    }
-    images = glance_client.get_images(filters=filters)
-
-    # Remove image member status for images shared to this project
-    for image in images:
-        members = glance_client.get_image_access(image_id=image.id)
-        for member in members:
-            if member.member_id == project.id:
-                glance_client.set_image_access(image_id=image.id, project_id=project.id, action='revoke')
-                printer.output_msg('REVOKE access to image {} for project {}'.
-                                   format(image.name, project.name))
 
     # Delete the project
     ksclient.delete_project(options.project)
