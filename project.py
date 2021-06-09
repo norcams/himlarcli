@@ -3,6 +3,7 @@ from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.cinder import Cinder
 from himlarcli.neutron import Neutron
+from himlarcli.glance import Glance
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.mail import Mail
@@ -27,6 +28,7 @@ ksclient.set_dry_run(options.dry_run)
 ksclient.set_domain(options.domain)
 logger = ksclient.get_logger()
 #novaclient = Nova(options.config, debug=options.debug, log=logger)
+
 if hasattr(options, 'region'):
     regions = ksclient.find_regions(region_name=options.region)
 else:
@@ -49,11 +51,23 @@ def action_create():
         if not enddate:
             himutils.sys_error('HPC projects must have an enddate', 1)
     createdate = datetime.today()
+
+    # Parse the "contact" option, setting to None if not used
+    # Exit with error if contact is not a valid email address
+    contact = None
+    if options.contact is not None:
+        contact = options.contact.lower()
+        if not ksclient._Keystone__validate_email(contact):
+            errmsg = "%s is not a valid email address." % contact
+            himutils.sys_error(errmsg, 1)
+
     if not options.force:
-        print 'Project name: %s\nDescription: %s\nAdmin: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
+        print 'Project name: %s\nDescription: %s\nAdmin: %s\nContact: %s\nOrganization: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
                 % (options.project,
                    ksclient.convert_ascii(options.desc),
                    options.admin.lower(),
+                   contact,
+                   options.org,
                    options.type,
                    str(enddate),
                    options.quota,
@@ -62,6 +76,8 @@ def action_create():
             himutils.sys_error('Aborted', 1)
     project = ksclient.create_project(project_name=options.project,
                                       admin=options.admin.lower(),
+                                      contact=contact,
+                                      org=options.org,
                                       test=test,
                                       type=options.type,
                                       description=options.desc,
@@ -78,21 +94,38 @@ def action_create():
         output['header'] = "Show information for %s" % options.project
         printer.output_dict(output)
 
-    # Quotas
+    # Do stuff for regions
     for region in regions:
-        novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
-        cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
-        neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
-        cinderclient.set_dry_run(options.dry_run)
-        novaclient.set_dry_run(options.dry_run)
-        neutronclient.set_dry_run(options.dry_run)
+        # Get objects
+        novaclient = himutils.get_client(Nova, options, logger, region)
+        cinderclient = himutils.get_client(Cinder, options, logger, region)
+        neutronclient = himutils.get_client(Neutron, options, logger, region)
+        glanceclient = himutils.get_client(Glance, options, logger, region)
+
+        # Find the project ID
         project_id = Keystone.get_attr(project, 'id')
+
+        # Update quotas for Cinder, Nova, Neutron
         if quota and 'cinder' in quota and project:
             cinderclient.update_quota(project_id=project_id, updates=quota['cinder'])
         if quota and 'nova' in quota and project:
             novaclient.update_quota(project_id=project_id, updates=quota['nova'])
         if quota and 'neutron' in quota and project:
             neutronclient.update_quota(project_id=project_id, updates=quota['neutron'])
+
+        # Grant UiO Managed images if shared UiO project
+        if options.org == 'uio' and options.type not in [ 'personal', 'demo' ]:
+            tags = [ 'uio' ]
+            filters = {
+                'status':     'active',
+                'tag':        tags,
+                'visibility': 'shared'
+            }
+            images = glanceclient.get_images(filters=filters)
+            for image in images:
+                glanceclient.set_image_access(image_id=image.id, project_id=project.id, action='grant')
+                printer.output_msg('GRANT access to image {} for project {}'.
+                                   format(image.name, project.name))
 
     if options.mail:
         mail = Mail(options.config, debug=options.debug)
@@ -105,7 +138,7 @@ def action_create():
                            admin=options.admin.lower(),
                            quota=options.quota,
                            end_date=str(enddate))
-            subject = 'UH-IaaS: Project %s has been created' % options.project
+            subject = 'NREC: Project %s has been created' % options.project
             body_content = himutils.load_template(inputfile=project_msg,
                                                   mapping=mapping)
         if not body_content:
@@ -149,7 +182,7 @@ def action_grant():
             himutils.sys_error('--rt parameter is missing.')
         else:
             rt_mapping = dict(users='\n'.join(options.users))
-            rt_subject = 'UH-IaaS: Access granted to users in %s' % options.project
+            rt_subject = 'NREC: Access granted to users in %s' % options.project
             rt_body_content = himutils.load_template(inputfile=access_msg_file,
                                                      mapping=rt_mapping)
 
@@ -161,7 +194,7 @@ def action_grant():
             body_content = himutils.load_template(inputfile=access_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
-            msg['subject'] = 'UH-IaaS: You have been given access to project %s' % options.project
+            msg['subject'] = 'NREC: You have been given access to project %s' % options.project
 
             mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
 
@@ -169,7 +202,10 @@ def action_delete():
     question = 'Delete project %s and all resources' % options.project
     if not options.force and not himutils.confirm_action(question):
         return
+
+    # Delete the project
     ksclient.delete_project(options.project)
+    printer.output_msg('DELETED project: {}'. format(options.project))
 
 def action_list():
     search_filter = dict()

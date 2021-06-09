@@ -272,12 +272,15 @@ class Keystone(Client):
             region = self.find_regions()
         # Delete instances
         self.__delete_instances(project, region)
+        # Revoke shared image memberships
+        self.__revoke_image_shares(project, region)
         # Delete images
         self.__delete_images(project, region)
         # Delete security groups
         self.__delete_security_groups(project, region)
         # Delete volume
         self.__delete_volumes(project, region)
+        # FIXME: Add zone deletion
 
         self.debug_log('delete project %s' % project_name)
         if not self.dry_run:
@@ -813,6 +816,30 @@ class Keystone(Client):
         for region in regions:
             nc = self._get_client(Nova, region)
             nc.delete_project_instances(project, self.dry_run)
+
+    def __revoke_image_shares(self, project, region):
+        """ Use glanceclient to revoke membership for any shared images that
+            are shared to this project, for all regions
+            version: 2021-06 """
+        regions = [region] if not isinstance(region, list) else region
+        for region in regions:
+            gc = self._get_client(Glance, region)
+
+            # Find all shared images
+            filters = {
+                'member_status': 'accepted',
+                'visibility':    'shared'
+            }
+            images = gc.get_images(filters=filters)
+
+            # Remove image member status for images shared to this project
+            for image in images:
+                members = gc.get_image_access(image_id=image.id)
+                for member in members:
+                    if member.member_id == project.id:
+                        gc.set_image_access(image_id=image.id, project_id=project.id, action='revoke')
+                        self.debug_log('REVOKE access to image {} for project {}'.
+                                       format(image.name, project.name))
 
     def __delete_images(self, project, region):
         """ Use glanceclient to delete all private images for a project in
