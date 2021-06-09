@@ -113,8 +113,8 @@ def action_create():
         if quota and 'neutron' in quota and project:
             neutronclient.update_quota(project_id=project_id, updates=quota['neutron'])
 
-    # Grant UiO Managed images if uio project
-    if options.org == 'uio':
+    # Grant UiO Managed images if shared UiO project
+    if options.org == 'uio' and options.type not in [ 'personal', 'demo' ]:
         tags = [ 'uio' ]
         filters = {
             'status':     'active',
@@ -123,9 +123,9 @@ def action_create():
         }
         images = glance_client.get_images(filters=filters)
         for image in images:
-            glance_client.set_image_access(image_id=image.id, project_id=project.id, action=image_action)
-            printer.output_msg('{} access to image {} for project {}'.
-                               format(image_action.capitalize(), image.name, project.name))
+            glance_client.set_image_access(image_id=image.id, project_id=project.id, action='grant')
+            printer.output_msg('GRANT access to image {} for project {}'.
+                               format(image.name, project.name))
 
     if options.mail:
         mail = Mail(options.config, debug=options.debug)
@@ -138,7 +138,7 @@ def action_create():
                            admin=options.admin.lower(),
                            quota=options.quota,
                            end_date=str(enddate))
-            subject = 'UH-IaaS: Project %s has been created' % options.project
+            subject = 'NREC: Project %s has been created' % options.project
             body_content = himutils.load_template(inputfile=project_msg,
                                                   mapping=mapping)
         if not body_content:
@@ -182,7 +182,7 @@ def action_grant():
             himutils.sys_error('--rt parameter is missing.')
         else:
             rt_mapping = dict(users='\n'.join(options.users))
-            rt_subject = 'UH-IaaS: Access granted to users in %s' % options.project
+            rt_subject = 'NREC: Access granted to users in %s' % options.project
             rt_body_content = himutils.load_template(inputfile=access_msg_file,
                                                      mapping=rt_mapping)
 
@@ -194,7 +194,7 @@ def action_grant():
             body_content = himutils.load_template(inputfile=access_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
-            msg['subject'] = 'UH-IaaS: You have been given access to project %s' % options.project
+            msg['subject'] = 'NREC: You have been given access to project %s' % options.project
 
             mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
 
@@ -202,7 +202,29 @@ def action_delete():
     question = 'Delete project %s and all resources' % options.project
     if not options.force and not himutils.confirm_action(question):
         return
+
+    # Obtain a project object
+    project = ksclient.get_project_by_name(project_name=options.project)
+
+    # Find all shared images
+    filters = {
+        'member_status': 'accepted',
+        'visibility':    'shared'
+    }
+    images = glance_client.get_images(filters=filters)
+
+    # Remove image member status for images shared to this project
+    for image in images:
+        members = glance_client.get_image_access(image_id=image.id)
+        for member in members:
+            if member.member_id == project.id:
+                glance_client.set_image_access(image_id=image.id, project_id=project.id, action='revoke')
+                printer.output_msg('REVOKE access to image {} for project {}'.
+                                   format(image.name, project.name))
+
+    # Delete the project
     ksclient.delete_project(options.project)
+    printer.output_msg('DELETED project: {} ({})'. format(project.name, project.id))
 
 def action_list():
     search_filter = dict()
