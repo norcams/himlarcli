@@ -205,6 +205,8 @@ def action_delete():
 
     # Obtain a project object
     project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.sys_error('No project found with name "%s"' % options.project)
 
     # Find all shared images
     filters = {
