@@ -205,7 +205,7 @@ def action_delete():
 
     # Delete the project
     ksclient.delete_project(options.project)
-    printer.output_msg('DELETED project: {} ({})'. format(project.name, project.id))
+    printer.output_msg('DELETED project: {}'. format(options.project))
 
 def action_list():
     search_filter = dict()
