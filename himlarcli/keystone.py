@@ -3,6 +3,7 @@ from himlarcli.cinder import Cinder
 from himlarcli.nova import Nova
 from himlarcli.neutron import Neutron
 from himlarcli.glance import Glance
+from himlarcli.designate import Designate
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as exceptions
 import random
@@ -270,6 +271,8 @@ class Keystone(Client):
             return None
         if not region:
             region = self.find_regions()
+        # Delete DNS zones
+        self.__delete_zones(project)
         # Delete instances
         self.__delete_instances(project, region)
         # Revoke shared image memberships
@@ -280,7 +283,6 @@ class Keystone(Client):
         self.__delete_security_groups(project, region)
         # Delete volume
         self.__delete_volumes(project, region)
-        # FIXME: Add zone deletion
 
         self.debug_log('delete project %s' % project_name)
         if not self.dry_run:
@@ -816,6 +818,14 @@ class Keystone(Client):
         for region in regions:
             nc = self._get_client(Nova, region)
             nc.delete_project_instances(project, self.dry_run)
+
+    def __delete_zones(self, project):
+        """ Use designateclient to delete all zones belonging to a project
+            version: 2021-06 """
+        dc = self._get_client(Designate)
+        zones = dc.list_project_zones(project.id)
+        for zone in zones:
+            dc.delete_zone(zone['id'])
 
     def __revoke_image_shares(self, project, region):
         """ Use glanceclient to revoke membership for any shared images that
