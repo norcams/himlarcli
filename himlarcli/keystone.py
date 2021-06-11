@@ -840,7 +840,7 @@ class Keystone(Client):
         for zone in zones:
             if not self.dry_run:
                 dc.delete_zone(zone['id'])
-            self.debug_log('DELETED zone: {}'. format(zone))
+            self.debug_log('DELETED zone: {}'. format(zone['name']))
             deleted_zones.append(zone['name'])
 
         # Return a list of deleted zone names
@@ -869,7 +869,7 @@ class Keystone(Client):
                     if member.member_id == project.id:
                         if not self.dry_run:
                             gc.set_image_access(image_id=image.id, project_id=project.id, action='revoke')
-                        self.debug_log('REVOKED access to image: {} ({})'. format(image, region))
+                        self.debug_log('REVOKED access to image: {} ({})'. format(image.name, region))
                         revoked_images.append("%s (%s)" % (image.name, region))
 
             # Return a list of revoked images
