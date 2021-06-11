@@ -72,3 +72,23 @@ class Designate(Client):
     def get_tld(self, name):
         res = self.client.tlds.get(tld=name)
         return res
+
+    #-------------------------------------------------------------------
+    # Zone functions
+    #-------------------------------------------------------------------
+    def list_all_zones(self):
+        self.client.session.all_projects = 1
+        res = self.client.zones.list()
+        return res
+
+    def list_project_zones(self, project_id):
+        self.client.session.sudo_project_id = project_id
+        res = self.client.zones.list()
+        self.client.session.sudo_project_id = None
+        return res
+
+    def delete_project_zone(self, zone_id, project_id):
+        self.client.session.sudo_project_id = project_id
+        res = self.client.zones.delete(zone_id)
+        self.client.session.sudo_project_id = None
+        return res
