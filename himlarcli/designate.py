@@ -84,6 +84,7 @@ class Designate(Client):
     def list_project_zones(self, project_id):
         self.client.session.sudo_project_id = project_id
         res = self.client.zones.list()
+        self.client.session.sudo_project_id = None
         return res
 
     def delete_zone(self, zone_id):
