@@ -839,7 +839,7 @@ class Keystone(Client):
         deleted_zones = []
         for zone in zones:
             if not self.dry_run:
-                dc.delete_zone(zone['id'])
+                dc.delete_project_zone(zone['id'], project.id)
             self.debug_log('DELETED zone: {}'. format(zone['name']))
             deleted_zones.append(zone['name'])
 
