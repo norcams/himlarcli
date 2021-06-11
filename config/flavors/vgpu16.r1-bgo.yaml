@@ -1,0 +1,14 @@
+---
+# vgpu m1 flavor for all regions
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 's== vgpu16'
+  resources:VGPU: '1'
+vgpu.m1:
+  'vgpu16.r1.8xlarge':
+    vcpus: 32
+    ram: 262144
+    disk: 20
