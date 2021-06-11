@@ -274,16 +274,12 @@ class Keystone(Client):
 
         # Delete DNS zones
         deleted_zones = self.__delete_zones(project)
-        for zone in deleted_zones:
-            self.debug_log('DELETED zone: {}'. format(zone))
 
         # Delete instances
         self.__delete_instances(project, region)
 
         # Revoke shared image memberships
         revoked_images = self.__revoke_image_shares(project, region)
-        for image in revoked_images:
-            self.debug_log('REVOKED access to image: {} ({})'. format(image, region))
 
         # Delete images
         self.__delete_images(project, region)
@@ -844,6 +840,7 @@ class Keystone(Client):
         for zone in zones:
             if not self.dry_run:
                 dc.delete_zone(zone['id'])
+            self.debug_log('DELETED zone: {}'. format(zone))
             deleted_zones.append(zone['name'])
 
         # Return a list of deleted zone names
@@ -872,6 +869,7 @@ class Keystone(Client):
                     if member.member_id == project.id:
                         if not self.dry_run:
                             gc.set_image_access(image_id=image.id, project_id=project.id, action='revoke')
+                        self.debug_log('REVOKED access to image: {} ({})'. format(image, region))
                         revoked_images.append("%s (%s)" % (image.name, region))
 
             # Return a list of revoked images
