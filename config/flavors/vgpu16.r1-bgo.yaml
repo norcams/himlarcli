@@ -1,5 +1,5 @@
 ---
-# vgpu r1 flavor for all regions
+# vgpu r1 flavor for bgo region
 public: false
 properties:
   hw_rng:allowed: 'True'
@@ -7,7 +7,7 @@ properties:
   hw_rng:rate_period: 60
   aggregate_instance_extra_specs:type: 's== vgpu16'
   resources:VGPU: '1'
-vgpu.r1:
+vgpu16.r1:
   'vgpu16.r1.8xlarge':
     vcpus: 32
     ram: 262144
