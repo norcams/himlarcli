@@ -1,0 +1,14 @@
+---
+# Flavor for dual AMD Instinct MI100 GPU devices
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 's== gpu'
+  pci_passthrough:alias: 'amd_mi100:2'
+gpu.mi100x2:
+  'gpu.mi100x2.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 20
