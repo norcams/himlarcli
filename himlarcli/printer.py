@@ -305,9 +305,10 @@ class Printer(object):
         # Print Instances table
         if instances_total > 0:
             table_instances = PrettyTable()
-            table_instances.field_names = ['id', 'name', 'IPv4', 'IPv6',  'region', 'flavor', 'image [status]']
+            table_instances.field_names = ['id', 'name', 'status', 'IPv4', 'IPv6',  'region', 'flavor', 'image [status]']
             table_instances.align['id'] = 'l'
             table_instances.align['name'] = 'l'
+            table_instances.align['status'] = 'l'
             table_instances.align['IPv4'] = 'l'
             table_instances.align['IPv6'] = 'l'
             table_instances.align['region'] = 'l'
@@ -342,6 +343,7 @@ class Printer(object):
                     row = []
                     row.append(i.id)
                     row.append(i.name)
+                    row.append(i.status)
                     row.append(ipv4_addresses)
                     row.append(ipv6_addresses)
                     row.append(region)
