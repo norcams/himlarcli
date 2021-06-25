@@ -123,16 +123,16 @@ class Printer(object):
 
     @staticmethod
     def prettyprint_project_metadata(project, options, logger, regions):
-        ksclient = Keystone(options.config, debug=options.debug)
-        ksclient.set_dry_run(options.dry_run)
-        ksclient.set_domain(options.domain)
+        kc = Keystone(options.config, debug=options.debug)
+        kc.set_dry_run(options.dry_run)
+        kc.set_domain(options.domain)
 
         project_type = project.type if hasattr(project, 'type') else '(unknown)'
         project_admin = project.admin if hasattr(project, 'admin') else '(unknown)'
         project_created = project.createdate if hasattr(project, 'createdate') else '(unknown)'
         project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
         project_contact = project.contact if hasattr(project, 'contact') else 'None'
-        project_roles = ksclient.list_roles(project_name=project.name)
+        project_roles = kc.list_roles(project_name=project.name)
 
         # Make project create date readable
         project_created = re.sub(r'T\d\d:\d\d:\d\d.\d\d\d\d\d\d', '', project_created)
@@ -299,14 +299,14 @@ class Printer(object):
 
             # Get a list of instances in project
             instances[region] = nc.get_project_instances(project_id=project.id)
-            for i in instances[region]:
+            for instance in instances[region]:
                 instances_total += 1
 
         # Print Instances table
         if instances_total > 0:
-            ksclient = Keystone(options.config, debug=options.debug)
-            ksclient.set_dry_run(options.dry_run)
-            ksclient.set_domain(options.domain)
+            kc = Keystone(options.config, debug=options.debug)
+            kc.set_dry_run(options.dry_run)
+            kc.set_domain(options.domain)
 
             table_instances = PrettyTable()
             table_instances.field_names = ['id', 'name', 'status', 'owner', 'IPv4', 'IPv6',  'region', 'flavor', 'image [status]']
@@ -322,22 +322,22 @@ class Printer(object):
             for region in regions:
                 # Initiate Glance object
                 gc = utils.get_client(Glance, options, logger, region)
-                for i in instances[region]:
-                    network = i.addresses.keys()[0] if len(i.addresses.keys()) > 0 else 'unknown'
+                for instance in instances[region]:
+                    network = instance.addresses.keys()[0] if len(instance.addresses.keys()) > 0 else 'unknown'
                     ipv4_list = []
                     ipv6_list = []
-                    for interface in i.addresses[network]:
+                    for interface in instance.addresses[network]:
                         if interface['version'] == 4:
                             ipv4_list.append(interface['addr'])
                         if interface['version'] == 6:
                             ipv6_list.append(interface['addr'])
                     ipv4_addresses = ", ".join(ipv4_list)
                     ipv6_addresses = ", ".join(ipv6_list)
-                    if 'id' not in i.image:
+                    if 'id' not in instance.image:
                         image_name = 'UNKNOWN'
                         image_status = 'N/A'
                     else:
-                        filters = {'id': i.image['id']}
+                        filters = {'id': instance.image['id']}
                         image = gc.find_image(filters=filters, limit=1)
                         if len(image) == 1:
                             image_name = image[0]['name']
@@ -345,16 +345,17 @@ class Printer(object):
                         else:
                             image_name = 'UNKNOWN'
                             image_status = 'N/A'
-                    user = ksclient.get_by_id('user', i.user_id)
+                    user = kc.get_by_id('user', instance.user_id)
+                    owner = user.name if user else '(deleted-user)'
                     row = []
-                    row.append(i.id)
-                    row.append(i.name)
-                    row.append(i.status)
-                    row.append(user.name)
+                    row.append(instance.id)
+                    row.append(instance.name)
+                    row.append(instance.status)
+                    row.append(owner)
                     row.append(ipv4_addresses)
                     row.append(ipv6_addresses)
                     row.append(region)
-                    row.append(i.flavor["original_name"])
+                    row.append(instance.flavor["original_name"])
                     row.append("%s [%s]" % (image_name, image_status))
                     table_instances.add_row(row)
             print "\n  Instances (%d): " % instances_total
