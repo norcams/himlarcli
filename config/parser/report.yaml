@@ -1,0 +1,38 @@
+---
+desc:   'Reports for NREC'
+actions:
+  'list':         'List projects. Use -f to filter result by project type'
+  'show':         'Show a single project'
+  'user':         'Show projects for user'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+  '-f':
+    'sub':      ['list']
+    'dest':     'filter'
+    'help':     'filter by project type'
+    'default':  'test'
+    'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'vgpu', 'test', 'hpc']
+  '--detail':
+    'sub':      ['list','show','user']
+    'dest':     'detail'
+    'help':     'show details about project resource consumtion'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--admin':
+    'sub':      ['user']
+    'dest':     'admin'
+    'help':     'Display only projects where user is admin'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  'project':
+   'sub':       ['show']
+   'metavar':   'project'
+  'user':
+   'sub':       ['user']
+   'metavar':   'user'
+
