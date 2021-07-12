@@ -2,7 +2,7 @@ import os
 import sys
 import ConfigParser
 import unicodedata
-from keystoneclient.auth.identity import v3
+from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from himlarcli import utils
 from abc import ABCMeta, abstractmethod
