@@ -1,6 +1,6 @@
 from himlarcli.client import Client
 from designateclient.v2 import client as designateclient
-
+from designateclient.v2 import base
 
 class Designate(Client):
 
@@ -78,12 +78,20 @@ class Designate(Client):
     #-------------------------------------------------------------------
     def list_all_zones(self):
         self.client.session.all_projects = 1
-        res = self.client.zones.list()
+        try:
+            res = self.client.zones.list()
+        except designateclient.exceptions.Unknown:
+            self.log_error('Unknown response from designate API.', 0)
+            res = base.DesignateList()
         return res
 
     def list_project_zones(self, project_id):
         self.client.session.sudo_project_id = project_id
-        res = self.client.zones.list()
+        try:
+            res = self.client.zones.list()
+        except designateclient.exceptions.Unknown:
+            self.log_error('Unknown response from designate API.', 0)
+            res = base.DesignateList()
         self.client.session.sudo_project_id = None
         return res
 

@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import pika
 import himlarcli.utils as utils
