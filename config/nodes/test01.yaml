@@ -45,7 +45,7 @@ nodes:
     mac: f4:e9:d4:ad:38:e0
     # mac: 74:86:7a:d1:64:d6
   compute-03:
-    hostgroup: 3
+    hostgroup: 6
     mac: f4:e9:d4:ad:60:d0
     # mac: f8:bc:12:52:d8:48
   console-01:
