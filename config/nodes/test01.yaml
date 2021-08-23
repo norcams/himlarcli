@@ -84,9 +84,11 @@ nodes:
     compute_profile: medium
     compute_resource: controller-02
   image-01:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-01
   image-02:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-02
   logger-01:
@@ -115,12 +117,15 @@ nodes:
     compute_profile: small
     compute_resource: controller-03
   network-01:
+    hostgroup: 5
     compute_profile: large
     compute_resource: controller-01
   network-02:
+    hostgroup: 5
     compute_profile: large
     compute_resource: controller-02
   network-03:
+    hostgroup: 5
     compute_profile: large
     compute_resource: controller-03
   novactrl-01:
@@ -173,9 +178,11 @@ nodes:
     compute_profile: xlarge
     compute_resource: controller-03
   volume-01:
+    hostgroup: 5
     compute_profile: large
     compute_resource: controller-01
   volume-02:
+    hostgroup: 5
     compute_profile: large
     compute_resource: controller-02
   workflow-01:
