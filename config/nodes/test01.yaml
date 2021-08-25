@@ -63,6 +63,7 @@ nodes:
     mac: 00:0e:1e:8b:df:50
     # mac: f8:bc:12:52:d8:68
   dashboard-01:
+    hostgroup: 5
     compute_profile: large
     compute_resource: controller-02
   dashboard-mgmt-01:
@@ -78,9 +79,11 @@ nodes:
     compute_profile: small
     compute_resource: controller-02
   identity-01:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-01
   identity-02:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-02
   image-01:
@@ -129,9 +132,11 @@ nodes:
     compute_profile: large
     compute_resource: controller-03
   novactrl-01:
+    hostgroup: 5
     compute_profile: large
     compute_resource: controller-01
   novactrl-02:
+    hostgroup: 5
     compute_profile: large
     compute_resource: controller-02
   ns-01:
