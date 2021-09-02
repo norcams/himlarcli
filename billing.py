@@ -99,7 +99,7 @@ def action_resources():
             metrics = dict()
             metrics['vcpu'] = gc.get_client().metric.get('vcpus', i.id)
             metrics['ram'] = gc.get_client().metric.get('memory', i.id)
-            for key, value in metrics.iteritems():
+            for key, value in metrics.items():
                 measurement = gc.get_client().metric.get_measures(metric=value['id'],
                                                                   aggregation='max',
                                                                   start=start,

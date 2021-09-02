@@ -120,7 +120,7 @@ def action_expired():
                     kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days))
                     mail.send_mail(project.admin, msg, fromaddr)
                     utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name, active_days)
-                    print('Mail sendt to {}'.format(project.admin))
+                    print(('Mail sendt to {}'.format(project.admin)))
 
 # Delete demo instances older than 90 days
 def action_delete():

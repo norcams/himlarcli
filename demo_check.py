@@ -40,7 +40,7 @@ def action_count():
                             printer.output_dict({'instance name': i.name, 'instance id': i.id, 'notify?': 'yes'})
 			f.close()
                 else:
-                    print created_at
+                    print(created_at)
     printer.output_dict({'header': 'count', 'all': count_all, '>60': count_60})
     #print count
 

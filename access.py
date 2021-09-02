@@ -50,7 +50,7 @@ def action_pop():
     channel = mqclient.get_channel('access')
     channel.basic_consume(process_action, queue='access')
 
-    print' [*] Waiting for messages. To exit press CTRL+C'
+    print(' [*] Waiting for messages. To exit press CTRL+C')
 
     try:
         channel.start_consuming()

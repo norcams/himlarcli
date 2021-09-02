@@ -103,7 +103,7 @@ def action_aggregate():
     sent_mail_counter = 0
     message = None
     fromaddr = options.from_addr
-    for user, instances in users.iteritems():
+    for user, instances in users.items():
         columns = ['project', 'region']
         mapping = dict(region=options.region,
                        date=options.date,
@@ -117,9 +117,9 @@ def action_aggregate():
         sent_mail_counter += 1
 
     if options.dry_run and message:
-        print "\nExample mail sendt from this run:"
-        print "----------------------------------"
-        print message
+        print("\nExample mail sendt from this run:")
+        print("----------------------------------")
+        print(message)
     mailer.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 

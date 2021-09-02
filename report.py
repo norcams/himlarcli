@@ -65,7 +65,7 @@ def action_list():
             sys.stdout.write(Printer.prettyprint_project_instances(project, options, logger, regions))
 
         # Print some vertical space and increase project counter
-        print "\n\n"
+        print("\n\n")
         count += 1
 
     # Finally print out number of projects
@@ -73,7 +73,7 @@ def action_list():
 
 def action_user():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
-        print "%s is not a valid user. Please check your spelling or case." % options.user
+        print("%s is not a valid user. Please check your spelling or case." % options.user)
         sys.exit(1)
     user = ksclient.get_user_objects(email=options.user, domain=options.domain)
 
@@ -91,7 +91,7 @@ def action_user():
             sys.stdout.write(Printer.prettyprint_project_instances(project, options, logger, regions))
 
         # Print some vertical space and increase project counter
-        print "\n\n"
+        print("\n\n")
         count += 1
 
     # Finally print out number of projects
