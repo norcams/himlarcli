@@ -76,6 +76,7 @@ nodes:
     compute_profile: large
     compute_resource: controller-01
   dns-01:
+    hostgroup: 5
     compute_profile: small
     compute_resource: controller-02
   identity-01:
@@ -114,6 +115,7 @@ nodes:
     compute_profile: medium
     compute_resource: controller-01
   mq-01:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-01
   nat-linux-01:
@@ -156,9 +158,11 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   resolver-01:
+    hostgroup: 5
     compute_profile: small
     compute_resource: controller-02
   resolver-02:
+    hostgroup: 5
     compute_profile: small
     compute_resource: controller-03
   status-01:
