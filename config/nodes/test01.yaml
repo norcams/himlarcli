@@ -19,12 +19,15 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   cephmds-01:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-01
   cephmds-02:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-02
   cephmds-03:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-03
   cephmon-01:
