@@ -118,7 +118,8 @@ nodes:
     hostgroup: 5
     compute_profile: medium
     compute_resource: controller-01
-  nat-linux-01:
+  nat-01:
+    hostgroup: 5
     compute_profile: small
     compute_resource: controller-03
   network-01:
