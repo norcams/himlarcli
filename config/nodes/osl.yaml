@@ -47,10 +47,10 @@ nodes:
     hostgroup: 3
   compute-07:
     mac: 00:0a:f7:b6:b6:88
-    hostgroup: 6
+    hostgroup: 18
   compute-08:
     mac: 00:0a:f7:b6:aa:5e
-    hostgroup: 6
+    hostgroup: 18
   compute-09:
     mac: e4:43:4b:46:5b:72
     hostgroup: 3
