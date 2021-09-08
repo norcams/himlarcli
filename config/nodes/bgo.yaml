@@ -19,7 +19,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   cephmon-01:
-    hostgroup: 1
+    hostgroup: 16
     mac: ec:f4:bb:cc:ce:f4
 #  cephmon-01:
 #    compute_profile: 2xlarge
