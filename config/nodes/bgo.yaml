@@ -18,6 +18,18 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  cephmds-01:
+    hostgroup: 15
+    compute_profile: medium
+    compute_resource: controller-05
+  cephmds-02:
+    hostgroup: 15
+    compute_profile: medium
+    compute_resource: controller-06
+  cephmds-03:
+    hostgroup: 15
+    compute_profile: medium
+    compute_resource: controller-07
   cephmon-01:
     hostgroup: 16
     mac: ec:f4:bb:cc:ce:f4
