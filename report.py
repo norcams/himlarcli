@@ -126,9 +126,12 @@ def vendorapi_list():
             # Get a list of instances in project
             instances[region] = nc.get_project_instances(project_id=project.id)
             for instance in instances[region]:
-                data[instance.id] = { "region": region,
-                                      "project_name": project.name,
-                                      "project_admin": project.admin }
+                data[instance.id] = {
+                    "region": region,
+                    "project_name": project.name,
+                    "project_admin": project.admin,
+                    "project_contact": project.contact
+                }
 
     return data
 
