@@ -274,3 +274,6 @@ nodes:
   workflow-01:
     compute_profile: small
     compute_resource: controller-03
+  vendorapi-01:
+    compute_profile: small
+    compute_resource: controller-03
