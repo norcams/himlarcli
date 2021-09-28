@@ -15,8 +15,8 @@ dcache.tape:
   'dcache.tape.2xlarge':
     vcpus: 8
     ram: 30718
-    disk: 9000
+    disk: 12000
   'dcache.tape.4xlarge':
     vcpus: 16
     ram: 61440
-    disk: 9000
+    disk: 12000
