@@ -277,3 +277,4 @@ nodes:
   vendorapi-01:
     compute_profile: small
     compute_resource: controller-03
+    hostgroup: 6
