@@ -321,6 +321,17 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  login-02:
+    hostgroup: 15
+    compute_profile: small
+    compute_resource: controller-08
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '40G'
+          format_type:  'qcow2'
   metric-01:
     compute_profile: xlarge
     compute_resource: controller-05
