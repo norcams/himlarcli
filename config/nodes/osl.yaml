@@ -152,16 +152,16 @@ nodes:
     hostgroup: 11
   compute-vgpu-17:
     mac: 34:48:ed:f9:88:d2
-    hostgroup: 13
+    hostgroup: 17
   compute-robin-18:
     mac: f4:02:70:c4:76:d8
     hostgroup: 3
   compute-vgpu-19:
     mac: 34:48:ed:f9:69:f6
-    hostgroup: 13
+    hostgroup: 17
   compute-vgpu-20:
     mac: 34:48:ed:f9:79:8e
-    hostgroup: 13
+    hostgroup: 17
   compute-43:
     mac: 1c:20:db:ec:60:a8
     hostgroup: 15
