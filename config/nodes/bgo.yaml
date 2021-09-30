@@ -108,7 +108,7 @@ nodes:
     hostgroup: 17
   compute-alice-14:
     mac: 20:04:0f:eb:e1:42
-    hostgroup: 10
+    hostgroup: 17
   compute-alice-15:
     mac: 20:04:0f:eb:e2:7e
     hostgroup: 10
