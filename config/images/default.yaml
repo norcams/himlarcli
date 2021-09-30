@@ -71,6 +71,49 @@ images:
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
       'os_require_quiesce':  'yes'
+  'centosstream8':
+    'name':             'GOLD CentOS Stream 8'
+    'depricated':       'Outdated (CentOS Stream 8)'
+    'url':              'http://builder/'
+    'latest':           'centosstream8-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
+      'os_require_quiesce':     'yes'
+  'almalinux8':
+    'name':             'GOLD Alma Linux 8'
+    'depricated':       'Outdated (Alma Linux 8)'
+    'url':              'http://builder/'
+    'latest':           'almalinux8-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
+      'hw_firmware_type':       'uefi'
+      'os_require_quiesce':     'yes'
+  'rockylinux8':
+    'name':             'GOLD Rocky Linux 8'
+    'depricated':       'Outdated (Rocky Linux 8)'
+    'url':              'http://builder/'
+    'latest':           'rockylinux8-latest.qcow2'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
+      'os_require_quiesce':     'yes'
   'debian9':
     'name':             'GOLD Debian 9'
     'depricated':       'Outdated (Debian 9)'
@@ -99,6 +142,21 @@ images:
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
       'os_require_quiesce':  'yes'
+  'debian11':
+    'name':             'GOLD Debian 11'
+    'depricated':       'Outdated (Debian 11)'
+    'url':              'http://builder/'
+    'latest':           'debian11-latest.qcow2'
+    'min_ram':          768
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':            'scsi'
+      'hw_scsi_model':          'virtio-scsi'
+      'hw_qemu_guest_agent':    'yes'
+      'hw_machine_type':        'q35'
+      'hw_firmware_type':       'uefi'
+      'os_require_quiesce':     'yes'
   'fedora_34':
     'name':             'GOLD Fedora 34'
     'depricated':       'Outdated (Fedora 34)'
