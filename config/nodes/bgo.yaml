@@ -12,7 +12,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '50G'
           format_type:  'qcow2'
     host_parameters_attributes:
@@ -40,7 +40,7 @@ nodes:
 #      volumes_attributes:
 #        '1':
 #          allocation:   '0G'
-#          pool_name:    'masstorage'
+#          pool_name:    'dirpool'
 #          capacity:     '30G'
 #          format_type:  'qcow2'
 #    host_parameters_attributes:
@@ -284,7 +284,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '10G'
           format_type:  'qcow2'
   dns-01:
@@ -315,7 +315,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '250G'
           format_type:  'qcow2'
     host_parameters_attributes:
@@ -329,7 +329,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '40G'
           format_type:  'qcow2'
   metric-01:
@@ -339,7 +339,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '20G'
           format_type:  'qcow2'
   monitor-01:
@@ -349,7 +349,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '20G'
           format_type:  'qcow2'
     host_parameters_attributes:
@@ -410,7 +410,7 @@ nodes:
       volumes_attributes:
         '1':
           allocation:   '0G'
-          pool_name:    'masstorage'
+          pool_name:    'dirpool'
           capacity:     '50G'
           format_type:  'raw'
     host_parameters_attributes:
