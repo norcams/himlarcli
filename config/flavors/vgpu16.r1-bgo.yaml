@@ -1,5 +1,5 @@
 ---
-# vgpu r1 flavor for bgo region
+# special vgpu r1 flavor for bgo region (used only by infomedia)
 public: false
 properties:
   hw_rng:allowed: 'True'
@@ -11,4 +11,4 @@ vgpu16.r1:
   'vgpu16.r1.8xlarge':
     vcpus: 32
     ram: 262144
-    disk: 20
+    disk: 200
