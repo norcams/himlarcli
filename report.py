@@ -6,6 +6,7 @@ from himlarcli import utils
 from prettytable import PrettyTable
 import re
 import sys
+import json
 
 utils.is_virtual_env()
 
@@ -92,10 +93,48 @@ def action_user():
     # Finally print out number of projects
     printer.output_dict({'header': 'Project list count', 'count': count})
 
+def action_vendorapi():
+    data = vendorapi_list()
+    if options.outfile:
+        with open(options.outfile, "w") as outfile:
+            json.dump(data, outfile)
+    else:
+        json_object = json.dumps(data, indent = 4)
+        print json_object
+
+
+
 #---------------------------------------------------------------------
 # Helper functions
 #---------------------------------------------------------------------
 
+def vendorapi_list():
+    from himlarcli.nova import Nova
+
+    data = dict()
+
+    projects = ksclient.get_projects()
+
+    # Loop through projects
+    for project in projects:
+        # Get Instances
+        for region in regions:
+            instances = dict()
+            # Initiate Nova object
+            nc = utils.get_client(Nova, options, logger, region)
+
+            # Get a list of instances in project
+            instances[region] = nc.get_project_instances(project_id=project.id)
+            for instance in instances[region]:
+                contact = project.contact if hasattr(project, 'contact') else None
+                data[instance.id] = {
+                    "region": region,
+                    "project_name": project.name,
+                    "project_admin": project.admin,
+                    "project_contact": contact
+                }
+
+    return data
 
 #=====================================================================
 # Main program
