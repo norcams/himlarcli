@@ -171,7 +171,7 @@ nodes:
     hostgroup: 10
   compute-vgpu-35:
     mac: b0:26:28:f0:b4:58
-    hostgroup: 14
+    hostgroup: 16
   compute-clarino-36:
     mac: f4:02:70:d0:04:ee
     hostgroup: 14
@@ -225,7 +225,7 @@ nodes:
     hostgroup: 14
   compute-vgpu-53:
     mac: 34:48:ed:f9:59:c2
-    hostgroup: 14
+    hostgroup: 16
   compute-gpu1-54:
     mac: 34:48:ed:f9:5a:de
     hostgroup: 14
