@@ -198,28 +198,28 @@ nodes:
     hostgroup: 14
   compute-epyc-44:
     mac: f4:02:70:d9:6b:da
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-45:
     mac: f4:02:70:d3:42:02
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-46:
     mac: f4:02:70:d7:8c:ea
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-47:
     mac: f4:02:70:d3:42:70
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-48:
     mac: f4:02:70:d3:42:0c
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-49:
     mac: f4:02:70:cd:da:de
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-50:
     mac: f4:02:70:cd:de:86
     hostgroup: 14
   compute-epyc-51:
     mac: f4:02:70:d0:04:e0
-    hostgroup: 14
+    hostgroup: 16
   compute-vgpu-52:
     mac: f0:d4:e2:e6:ae:d2
     hostgroup: 14
@@ -231,13 +231,13 @@ nodes:
     hostgroup: 14
   compute-epyc-55:
     mac: 70:b5:e8:d0:b0:a8
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-56:
     mac: 70:b5:e8:d0:b3:00
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-57:
     mac: 70:b5:e8:d0:ab:e8
-    hostgroup: 14
+    hostgroup: 16
   compute-58:
     mac: 34:48:ed:f9:6c:02
     hostgroup: 14
