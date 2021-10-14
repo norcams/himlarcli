@@ -1,0 +1,6 @@
+---
+type: 'vgpu'
+images:
+  'centos7':
+    'name':             'vGPU CentOS 7'
+    'depricated':       'Outdated vGPU (CentOS 7)'
