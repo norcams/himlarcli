@@ -31,12 +31,15 @@ nodes:
     compute_profile: medium
     compute_resource: controller-03
   cephmon-01:
+    hostgroup: 16
     compute_profile: xlarge
     compute_resource: controller-01
   cephmon-02:
+    hostgroup: 16
     compute_profile: xlarge
     compute_resource: controller-02
   cephmon-03:
+    hostgroup: 16
     compute_profile: xlarge
     compute_resource: controller-03
   compute-01:
