@@ -34,14 +34,44 @@ nodes:
     hostgroup: 16
     compute_profile: xlarge
     compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   cephmon-02:
     hostgroup: 16
     compute_profile: xlarge
     compute_resource: controller-02
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   cephmon-03:
     hostgroup: 16
     compute_profile: xlarge
     compute_resource: controller-03
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   compute-01:
     mac: ec:f4:bb:ce:20:0c
     hostgroup: 3
