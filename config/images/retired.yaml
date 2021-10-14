@@ -4,6 +4,9 @@ images:
   'centos6':
     'name':             'GOLD CentOS 6'
     'depricated':       'Outdated (CentOS 6)'
+  'centos8':
+    'name':             'GOLD CentOS 8'
+    'depricated':       'Outdated (CentOS 8)'
   'fedora_27':
     'name':             'GOLD Fedora 27'
     'depricated':       'Outdated (Fedora)'
