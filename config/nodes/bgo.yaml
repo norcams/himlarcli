@@ -222,7 +222,7 @@ nodes:
     hostgroup: 16
   compute-vgpu-52:
     mac: f0:d4:e2:e6:ae:d2
-    hostgroup: 14
+    hostgroup: 16
   compute-vgpu-53:
     mac: 34:48:ed:f9:59:c2
     hostgroup: 16
