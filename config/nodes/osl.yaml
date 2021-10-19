@@ -414,43 +414,43 @@ nodes:
     hostgroup: 10
   storage-v2h-13:
     mac: 48:dc:2d:10:92:8e
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-14:
     mac: 48:dc:2d:10:92:db
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-15:
     mac: 48:dc:2d:10:92:f0
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-16:
     mac: 48:dc:2d:10:92:aa
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-17:
     mac: 48:dc:2d:0f:8d:b3
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-18:
     mac: 48:dc:2d:10:92:9c
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-19:
     mac: 48:dc:2d:10:93:3a
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-20:
     mac: 48:dc:2d:10:93:2c
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-21:
     mac: 48:dc:2d:10:93:41
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-22:
     mac: 48:dc:2d:10:92:d4
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-23:
     mac: 48:dc:2d:10:92:64
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-24:
     mac: 48:dc:2d:10:92:72
-    hostgroup: 14
+    hostgroup: 21
   storage-v2h-25:
     mac: 48:dc:2d:10:92:fe
-    hostgroup: 14
+    hostgroup: 21
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
