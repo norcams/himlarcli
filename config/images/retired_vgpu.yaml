@@ -4,3 +4,6 @@ images:
   'centos7':
     'name':             'vGPU CentOS 7'
     'depricated':       'Outdated vGPU (CentOS 7)'
+  'centos8':
+    'name':             'vGPU CentOS 8'
+    'depricated':       'Outdated vGPU (CentOS 8)'
