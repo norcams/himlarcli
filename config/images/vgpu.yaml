@@ -15,11 +15,11 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
-  'centos8':
-    'name':             'vGPU CentOS 8'
-    'depricated':       'Outdated vGPU (CentOS 8)'
+  'almalinux8':
+    'name':             'vGPU Alma Linux 8'
+    'depricated':       'Outdated vGPU (Alma Linux 8)'
     'url':              'http://builder/'
-    'latest':           'centos8_nv_vgpu-latest.qcow2'
+    'latest':           'almalinux8_nv_vgpu-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'shared'
@@ -29,3 +29,5 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'hw_firmware_type':       'uefi'
+      'os_require_quiesce':     'yes'
