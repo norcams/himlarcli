@@ -332,6 +332,9 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '40G'
           format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   metric-01:
     compute_profile: xlarge
     compute_resource: controller-05
