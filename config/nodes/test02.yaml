@@ -48,6 +48,7 @@ nodes:
   console-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 6
   controller-02:
     mac: b8:ac:6f:91:8c:ab
   controller-03:
@@ -55,9 +56,11 @@ nodes:
   dashboard-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 6
   dashboard-mgmt-01:
     compute_profile: small
     compute_resource: controller-03
+    hostgroup: 6
   db-global-01:
     compute_profile: small
     compute_resource: controller-02
@@ -70,15 +73,19 @@ nodes:
   identity-01:
     compute_profile: small
     compute_resource: controller-01
+    hostgroup: 6
   identity-02:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 6
   image-01:
     compute_profile: medium
     compute_resource: controller-01
+    hostgroup: 6
   image-02:
     compute_profile: medium
     compute_resource: controller-02
+    hostgroup: 6
   logger-01:
     compute_profile: medium
     compute_resource: controller-03
@@ -101,6 +108,7 @@ nodes:
   mq-01:
     compute_profile: medium
     compute_resource: controller-01
+    hostgroup: 6
   nat-01:
     compute_profile: small
     hostgroup: 4
@@ -108,18 +116,23 @@ nodes:
   network-01:
     compute_profile: small
     compute_resource: controller-01
+    hostgroup: 6
   network-02:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 6
   network-03:
     compute_profile: small
     compute_resource: controller-03
+    hostgroup: 6
   novactrl-01:
     compute_profile: medium
     compute_resource: controller-01
+    hostgroup: 6
   novactrl-02:
     compute_profile: medium
     compute_resource: controller-02
+    hostgroup: 6
   nfs-01:
     compute_profile: small
     compute_resource: controller-03
@@ -129,6 +142,7 @@ nodes:
   rgw-01:
     compute_profile: medium
     compute_resource: controller-03
+    hostgroup: 6
   object-ceph-01:
     compute_profile: small
     compute_resource: controller-01
@@ -271,9 +285,11 @@ nodes:
   volume-01:
     compute_profile: small
     compute_resource: controller-01
+    hostgroup: 6
   volume-02:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 6
   workflow-01:
     compute_profile: small
     compute_resource: controller-03
