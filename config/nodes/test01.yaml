@@ -193,6 +193,7 @@ nodes:
   ts-01:
     compute_profile: small
     compute_resource: controller-03
+    hostgroup: 5
     compute_attributes:
       volumes_attributes:
         '1':
