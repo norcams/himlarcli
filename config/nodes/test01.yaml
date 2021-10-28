@@ -190,6 +190,19 @@ nodes:
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
+  ts-01:
+    compute_profile: small
+    compute_resource: controller-03
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   volume-01:
     hostgroup: 5
     compute_profile: large
