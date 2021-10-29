@@ -30,10 +30,10 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
-  '--outfile':
+  '--outdir':
     'sub':      ['vendorapi']
-    'dest':     'outfile'
-    'help':     'File to store the JSON output'
+    'dest':     'outdir'
+    'help':     'Directory in which to create JSON output files'
   'project':
    'sub':       ['show']
    'metavar':   'project'
