@@ -172,6 +172,10 @@ nodes:
   status-01:
     compute_profile: medium
     compute_resource: controller-03
+  sflow-01:
+    hostgroup: 5
+    compute_profile: small
+    compute_resource: controller-03
   storage-01:
     hostgroup: 4
     mac: 18:66:da:51:60:64
