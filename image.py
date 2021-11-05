@@ -176,7 +176,6 @@ def action_retire():
         return
 
     # Find image(s)
-    tags = get_tags(names=True)
     filters = {'status': 'active', 'tag': tags}
     kc.debug_log('filter: {}'.format(filters))
     images = gc.get_images(filters=filters, limit=1)
