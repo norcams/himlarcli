@@ -150,13 +150,19 @@ def action_purge():
 
 def action_retire():
     tags = get_tags(names=True)
-    tag_str = 'all tags' if not tags else '[' + ', '.join(tags) + ']'
 
     # Load config file
     config_filename = 'config/images/{}'.format(options.image_config)
     if not utils.file_exists(config_filename, logger):
         utils.sys_error('Could not find config file {}'.format(config_filename))
     image_config = utils.load_config('config/images/{}'.format(options.image_config))
+
+    # make sure we have image type set
+    if not 'type' in image_config:
+        utils.sys_error('Type missing in retire file {}'.format(config_filename))
+    tags.append(image_config['type'])
+    tag_str = 'all tags' if not tags else '[' + ', '.join(tags) + ']'
+
     if 'images' not in image_config or 'type' not in image_config:
         utils.sys_error('Images hash not found in config file {}'.format(config_filename))
 
