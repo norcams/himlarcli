@@ -3,6 +3,8 @@ import ConfigParser
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 
 class Mail(Client):
 
@@ -59,6 +61,35 @@ class Mail(Client):
         msg['Subject'] = subject
         msg['From'] = fromaddr
         msg['Reply-To'] = fromaddr #'support@uh-iaas.no'
+        if cc:
+            msg['CC'] = cc
+        return msg
+
+    @staticmethod
+    def create_mail_with_attachment(subject, body, attachment_payload, attachment_name, fromaddr, cc=None):
+        """
+        Construct an email with attachment.
+
+        :param subject: The mail subject
+        :param body: The mail body
+        :param attachment_payload: Contents of the attachment
+        :param attachment_name: Name of the attachment
+        :param fromaddr: Address used as From and Reply-To
+        :param cc: Optional CC address
+        :return: returns the mail message
+        """
+        msg = MIMEMultipart('mixed')
+        msg.attach(MIMEText(body, 'plain'))
+
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(attachment_payload)
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', 'attachment; filename=%s' % attachment_name)
+        msg.attach(part)
+
+        msg['Subject'] = subject
+        msg['From'] = fromaddr
+        msg['Reply-To'] = fromaddr
         if cc:
             msg['CC'] = cc
         return msg

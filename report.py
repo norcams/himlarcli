@@ -2,6 +2,7 @@
 from himlarcli.keystone import Keystone
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
+from himlarcli.mail import Mail
 from himlarcli import utils
 from prettytable import PrettyTable
 import re
@@ -36,12 +37,12 @@ def action_show():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
         utils.sys_error('No project found with name %s' % options.project)
-    Printer.prettyprint_project_metadata(project, options, logger, regions)
+    sys.stdout.write(Printer.prettyprint_project_metadata(project, options, logger, regions))
     if options.detail:
-        Printer.prettyprint_project_zones(project, options, logger)
-        Printer.prettyprint_project_volumes(project, options, logger, regions)
-        Printer.prettyprint_project_images(project, options, logger, regions)
-        Printer.prettyprint_project_instances(project, options, logger, regions)
+        sys.stdout.write(Printer.prettyprint_project_zones(project, options, logger))
+        sys.stdout.write(Printer.prettyprint_project_volumes(project, options, logger, regions))
+        sys.stdout.write(Printer.prettyprint_project_images(project, options, logger, regions))
+        sys.stdout.write(Printer.prettyprint_project_instances(project, options, logger, regions))
 
 def action_list():
     search_filter = dict()
@@ -54,12 +55,12 @@ def action_list():
 
     # Loop through projects
     for project in projects:
-        Printer.prettyprint_project_metadata(project, options, logger, regions)
+        sys.stdout.write(Printer.prettyprint_project_metadata(project, options, logger, regions))
         if options.detail:
-            Printer.prettyprint_project_zones(project, options, logger)
-            Printer.prettyprint_project_volumes(project, options, logger, regions)
-            Printer.prettyprint_project_images(project, options, logger, regions)
-            Printer.prettyprint_project_instances(project, options, logger, regions)
+            sys.stdout.write(Printer.prettyprint_project_zones(project, options, logger))
+            sys.stdout.write(Printer.prettyprint_project_volumes(project, options, logger, regions))
+            sys.stdout.write(Printer.prettyprint_project_images(project, options, logger, regions))
+            sys.stdout.write(Printer.prettyprint_project_instances(project, options, logger, regions))
 
         # Print some vertical space and increase project counter
         print "\n\n"
@@ -80,12 +81,12 @@ def action_user():
     for project in user['projects']:
         if options.admin and project.admin != options.user:
             continue
-        Printer.prettyprint_project_metadata(project, options, logger, regions)
+        sys.stdout.write(Printer.prettyprint_project_metadata(project, options, logger, regions, options.user))
         if options.detail:
-            Printer.prettyprint_project_zones(project, options, logger)
-            Printer.prettyprint_project_volumes(project, options, logger, regions)
-            Printer.prettyprint_project_images(project, options, logger, regions)
-            Printer.prettyprint_project_instances(project, options, logger, regions)
+            sys.stdout.write(Printer.prettyprint_project_zones(project, options, logger))
+            sys.stdout.write(Printer.prettyprint_project_volumes(project, options, logger, regions))
+            sys.stdout.write(Printer.prettyprint_project_images(project, options, logger, regions))
+            sys.stdout.write(Printer.prettyprint_project_instances(project, options, logger, regions))
 
         # Print some vertical space and increase project counter
         print "\n\n"
@@ -117,6 +118,96 @@ def action_vendorapi():
         print '-----------------------------------------------------------------------------'
         print instances_object
 
+def action_mail():
+    if options.mail_user:
+        if not ksclient.is_valid_user(email=options.mail_user, domain=options.domain):
+            print "%s is not a valid user. Please check your spelling or case." % options.mail_user
+            sys.exit(1)
+        users = [options.mail_user]
+    else:
+        users = ksclient.list_users(domain=options.domain)
+
+    # We want details
+    options.detail = True
+
+    # Attachment dict
+    attachment = dict()
+
+    # Admin/member dict
+    admin = dict()
+    member = dict()
+
+    # Project counter
+    project_counter = 0
+
+    # Loop through projects
+    for user in users:
+        # Ignore system users
+        if not '@' in user:
+            continue
+
+        # Get user object
+        this_user = ksclient.get_user_objects(email=user, domain=options.domain)
+        if not this_user:
+            continue
+
+        # Ignore users who only have a DEMO project, i.e. number of
+        # projects is equal or less than 1
+        if len(this_user['projects']) <= 1:
+            continue
+
+        # Loop through projects collecting info
+        attachment[user] = ''
+        admin_counter = 0
+        member_counter = 0
+        for project in this_user['projects']:
+            attachment[user] += Printer.prettyprint_project_metadata(project, options, logger, regions, user)
+            attachment[user] += Printer.prettyprint_project_zones(project, options, logger)
+            attachment[user] += Printer.prettyprint_project_volumes(project, options, logger, regions)
+            attachment[user] += Printer.prettyprint_project_images(project, options, logger, regions)
+            attachment[user] += Printer.prettyprint_project_instances(project, options, logger, regions)
+
+            # Add some vertical space
+            attachment[user] += "\n\n"
+
+            # Increase counters
+            if project.admin == user:
+                admin_counter += 1
+            else:
+                member_counter += 1
+
+        # Store number of admin and member roles
+        admin[user] = admin_counter
+        member[user] = member_counter
+
+    # Ask for confirmation
+    if not options.force and not options.dry_run:
+        if not utils.confirm_action('Send mail to %d users?' % len(attachment)):
+            return
+
+    # Send mail to users
+    mail = utils.get_client(Mail, options, logger)
+    mail = Mail(options.config, debug=options.debug)
+    mail.set_dry_run(options.dry_run)
+    if options.fromaddr:
+        fromaddr = options.fromaddr
+    else:
+        fromaddr = 'support@uh-iaas.no'
+    for user in attachment:
+        body_content = utils.load_template(inputfile=options.template,
+                                           mapping={'admin_count': admin[user],
+                                                    'member_count': member[user]},
+                                           log=logger)
+        msg = mail.create_mail_with_attachment(options.subject,
+                                               body_content,
+                                               attachment[user],
+                                               'resources.txt',
+                                               fromaddr)
+        mail.send_mail(user, msg, fromaddr)
+        if options.dry_run:
+            print "Did NOT send spam to %s" % user
+        else:
+            print "Spam sent to %s" % user
 
 
 #---------------------------------------------------------------------

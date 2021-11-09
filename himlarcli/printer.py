@@ -122,7 +122,8 @@ class Printer(object):
             sys.exit(code)
 
     @staticmethod
-    def prettyprint_project_metadata(project, options, logger, regions):
+    def prettyprint_project_metadata(project, options, logger, regions, user=None):
+        out_str = ''
         kc = Keystone(options.config, debug=options.debug)
         kc.set_dry_run(options.dry_run)
         kc.set_domain(options.domain)
@@ -141,12 +142,11 @@ class Printer(object):
         status = "*** DISABLED *** " if not project.enabled else ''
         
         # Print header for project
-        if hasattr(options, 'user') and not options.admin:
-            prole = 'admin' if options.user == project.admin else 'member'
-            print "%sPROJECT: %s (%s)" % (status, project.name, prole)
-        else:
-            print "%sPROJECT: %s" % (status, project.name)
-        print '=' * 80
+        out_str += "%sPROJECT: %s" % (status, project.name)
+        if user is not None and not options.admin:
+            prole = 'admin' if user == project.admin else 'member'
+            out_str += " (%s)" % prole
+        out_str += "\n" + '=' * 80 + "\n"
 
         # Print project metadata
         table_metadata = PrettyTable()
@@ -192,10 +192,14 @@ class Printer(object):
             table_metadata.add_row(['Volumes:', ', '.join(volume_list)])
             table_metadata.add_row(['Images:', ', '.join(image_list)])
             table_metadata.add_row(['Instances:', ', '.join(instance_list)])
-        print(table_metadata)
+
+        out_str += table_metadata.get_string() + "\n"
+        return out_str
 
     @staticmethod
     def prettyprint_project_zones(project, options, logger):
+        out_str = ''
+
         # Initiate Designate object
         dc = utils.get_client(Designate, options, logger)
 
@@ -210,11 +214,14 @@ class Printer(object):
             table_zones.align['name'] = 'l'
             for zone in zones:
                 table_zones.add_row([zone['id'], zone['name']])
-            print "\n  Zones (%d): " % len(zones)
-            print(table_zones)
+            out_str += "\n  Zones (%d): \n" % len(zones)
+            out_str += table_zones.get_string() + "\n"
+
+        return out_str
 
     @staticmethod
     def prettyprint_project_images(project, options, logger, regions):
+        out_str = ''
         images_total = 0
         images = dict()
 
@@ -254,11 +261,14 @@ class Printer(object):
                                           image_owner,
                                           image.status,
                                           region])
-            print "\n  Images (%d): " % images_total
-            print(table_images)
+            out_str += "\n  Images (%d): \n" % images_total
+            out_str += table_images.get_string() + "\n"
+
+        return out_str
 
     @staticmethod
     def prettyprint_project_volumes(project, options, logger, regions):
+        out_str = ''
         volumes_total = 0
         volumes = dict()
 
@@ -284,11 +294,14 @@ class Printer(object):
             for region in regions:
                 for volume in volumes[region]:
                     table_volumes.add_row([volume.id, "%d GiB" % volume.size, volume.volume_type, volume.status, region])
-            print "\n  Volumes (%d): " % volumes_total
-            print(table_volumes)
+            out_str += "\n  Volumes (%d): \n" % volumes_total
+            out_str += table_volumes.get_string() + "\n"
+
+        return out_str
 
     @staticmethod
     def prettyprint_project_instances(project, options, logger, regions):
+        out_str = ''
         instances_total = 0
         instances = dict()
 
@@ -358,8 +371,10 @@ class Printer(object):
                     row.append(instance.flavor["original_name"])
                     row.append("%s [%s]" % (image_name, image_status))
                     table_instances.add_row(row)
-            print "\n  Instances (%d): " % instances_total
-            print(table_instances)
+            out_str += "\n  Instances (%d): \n" % instances_total
+            out_str += table_instances.get_string() + "\n"
+
+        return out_str
 
     @staticmethod
     def _count_project_zones(project, options, logger):
