@@ -9,6 +9,7 @@ from himlarcli.printer import Printer
 from himlarcli.mail import Mail
 from himlarcli import utils as himutils
 from datetime import datetime
+from datetime import timedelta
 from email.mime.text import MIMEText
 import re
 
@@ -147,6 +148,34 @@ def action_create():
 
         mime = mail.rt_mail(options.rt, subject, body_content)
         mail.send_mail('support@uh-iaas.no', mime)
+
+def action_create_private():
+    # Set default options
+    options.type    = 'personal'
+    options.project = 'PRIVATE-' + options.user.replace('@', '.')
+    options.admin   = options.user
+    options.desc    = 'Personal project for %s' % options.user
+    options.contact = None
+
+    # Guess organization
+    m = re.search(r'\@(.+?\.)?(?P<org>uio|uib|ntnu|nmbu|uit|vetinst)\.no', options.user)
+    if m:
+        options.org = m.group('org')
+    else:
+        himutils.sys_error('Can not guess organization. Run create manually', 1)
+
+    # Set quota to small if not provided
+    if not options.quota:
+        options.quota = 'small'
+
+    # Set enddate to 2 years from today if not provided
+    if not options.enddate:
+        max_enddate = datetime.today()
+        max_enddate += timedelta(days=730)
+        options.enddate = max_enddate.strftime('%d.%m.%Y')
+
+    # Call main create function
+    action_create()
 
 def action_extend():
     project = ksclient.get_project_by_name(options.project)
