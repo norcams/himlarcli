@@ -5,26 +5,27 @@ actions:
   'show':         'Show a single project'
   'user':         'Show projects for user'
   'vendorapi':    'Create data for Nova vendor API'
+  'mail':         'Send email to users'
 opt_args:
   '--domain':
     'dest':     'domain'
-    'help':     'openstack domain to use'
+    'help':     'Openstack domain to use'
     'default':  'Dataporten'
   '-f':
     'sub':      ['list']
     'dest':     'filter'
-    'help':     'filter by project type'
+    'help':     'Filter by project type'
     'default':  'test'
     'choices':  ['all', 'admin', 'demo', 'personal', 'research', 'education', 'vgpu', 'test', 'hpc']
   '--detail':
-    'sub':      ['list','show','user']
+    'sub':      ['list','show','user','mail']
     'dest':     'detail'
-    'help':     'show details about project resource consumtion'
+    'help':     'Show details about project resource consumption'
     'action':   'store_const'
     'const':    true
     'default':  false
   '--admin':
-    'sub':      ['user']
+    'sub':      ['user','mail']
     'dest':     'admin'
     'help':     'Display only projects where user is admin'
     'action':   'store_const'
@@ -34,6 +35,31 @@ opt_args:
     'sub':      ['vendorapi']
     'dest':     'outdir'
     'help':     'Directory in which to create JSON output files'
+  '--template':
+    'sub':      ['mail']
+    'dest':     'template'
+    'required': true
+    'help':     'Path to email template'
+  '--subject':
+    'sub':      ['mail']
+    'dest':     'subject'
+    'required': true
+    'help':     'Mail subject'
+  '--from':
+    'sub':      ['mail']
+    'dest':     'fromaddr'
+    'help':     'Address for From and Reply-To (default: support@uh-iaas.no)'
+  '--user':
+    'sub':      ['mail']
+    'dest':     'mail_user'
+    'help':     'Send to only this user'
+  '--force':
+    'sub':      ['mail']
+    'dest':     'force'
+    'help':     'Skip interactive confirmation'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   'project':
    'sub':       ['show']
    'metavar':   'project'
