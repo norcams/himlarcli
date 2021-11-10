@@ -29,11 +29,11 @@ images:
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
       'os_require_quiesce':  'yes'
-  'ubuntu_2104':
-    'name':             'GOLD Ubuntu 21.04'
-    'depricated':       'Outdated (Ubuntu 21.04)'
+  'ubuntu_2110':
+    'name':             'GOLD Ubuntu 21.10'
+    'depricated':       'Outdated (Ubuntu 21.10)'
     'url':              'http://builder/'
-    'latest':           'ubuntu_2104-latest.qcow2'
+    'latest':           'ubuntu_2110-latest.qcow2'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
@@ -71,6 +71,20 @@ images:
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
       'os_require_quiesce':     'yes'
+#  'centosstream9':
+#    'name':             'GOLD CentOS Stream 9'
+#    'depricated':       'Outdated (CentOS Stream 9)'
+#    'url':              'http://builder/'
+#    'latest':           'centosstream9-latest.qcow2'
+#    'min_ram':          1024
+#    'min_disk':         8
+#    'visibility':       'public'
+#    'properties':
+#      'hw_disk_bus':            'scsi'
+#      'hw_scsi_model':          'virtio-scsi'
+#      'hw_qemu_guest_agent':    'yes'
+#      'hw_machine_type':        'q35'
+#      'os_require_quiesce':     'yes'
   'almalinux8':
     'name':             'GOLD Alma Linux 8'
     'depricated':       'Outdated (Alma Linux 8)'
@@ -143,11 +157,11 @@ images:
       'hw_machine_type':        'q35'
       'hw_firmware_type':       'uefi'
       'os_require_quiesce':     'yes'
-  'fedora_34':
-    'name':             'GOLD Fedora 34'
-    'depricated':       'Outdated (Fedora 34)'
+  'fedora_35':
+    'name':             'GOLD Fedora 35'
+    'depricated':       'Outdated (Fedora 35)'
     'url':              'http://builder/'
-    'latest':           'fedora_34-latest.qcow2'
+    'latest':           'fedora_35-latest.qcow2'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
