@@ -156,6 +156,10 @@ def action_mail():
         if len(this_user['projects']) <= 1:
             continue
 
+        # dry-run output
+        if options.dry_run:
+            print "Processing user: %s" % user
+
         # Loop through projects collecting info
         attachment[user] = ''
         admin_counter = 0

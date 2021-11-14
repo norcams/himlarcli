@@ -194,7 +194,7 @@ class Printer(object):
             table_metadata.add_row(['Instances:', ', '.join(instance_list)])
 
         out_str += table_metadata.get_string() + "\n"
-        return out_str
+        return out_str.encode('utf-8')
 
     @staticmethod
     def prettyprint_project_zones(project, options, logger):
@@ -217,7 +217,7 @@ class Printer(object):
             out_str += "\n  Zones (%d): \n" % len(zones)
             out_str += table_zones.get_string() + "\n"
 
-        return out_str
+        return out_str.encode('utf-8')
 
     @staticmethod
     def prettyprint_project_images(project, options, logger, regions):
@@ -264,7 +264,7 @@ class Printer(object):
             out_str += "\n  Images (%d): \n" % images_total
             out_str += table_images.get_string() + "\n"
 
-        return out_str
+        return out_str.encode('utf-8')
 
     @staticmethod
     def prettyprint_project_volumes(project, options, logger, regions):
@@ -297,7 +297,7 @@ class Printer(object):
             out_str += "\n  Volumes (%d): \n" % volumes_total
             out_str += table_volumes.get_string() + "\n"
 
-        return out_str
+        return out_str.encode('utf-8')
 
     @staticmethod
     def prettyprint_project_instances(project, options, logger, regions):
@@ -336,16 +336,20 @@ class Printer(object):
                 # Initiate Glance object
                 gc = utils.get_client(Glance, options, logger, region)
                 for instance in instances[region]:
-                    network = instance.addresses.keys()[0] if len(instance.addresses.keys()) > 0 else 'unknown'
-                    ipv4_list = []
-                    ipv6_list = []
-                    for interface in instance.addresses[network]:
-                        if interface['version'] == 4:
-                            ipv4_list.append(interface['addr'])
-                        if interface['version'] == 6:
-                            ipv6_list.append(interface['addr'])
-                    ipv4_addresses = ", ".join(ipv4_list)
-                    ipv6_addresses = ", ".join(ipv6_list)
+                    if len(instance.addresses.keys()) > 0:
+                        network = instance.addresses.keys()[0]
+                        ipv4_list = []
+                        ipv6_list = []
+                        for interface in instance.addresses[network]:
+                            if interface['version'] == 4:
+                                ipv4_list.append(interface['addr'])
+                            if interface['version'] == 6:
+                                ipv6_list.append(interface['addr'])
+                        ipv4_addresses = ", ".join(ipv4_list)
+                        ipv6_addresses = ", ".join(ipv6_list)
+                    else:
+                        ipv4_addresses = 'None'
+                        ipv6_addresses = 'None'
                     if 'id' not in instance.image:
                         image_name = 'UNKNOWN'
                         image_status = 'N/A'
@@ -374,7 +378,7 @@ class Printer(object):
             out_str += "\n  Instances (%d): \n" % instances_total
             out_str += table_instances.get_string() + "\n"
 
-        return out_str
+        return out_str.encode('utf-8')
 
     @staticmethod
     def _count_project_zones(project, options, logger):
