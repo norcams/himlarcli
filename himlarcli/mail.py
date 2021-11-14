@@ -66,7 +66,7 @@ class Mail(Client):
         return msg
 
     @staticmethod
-    def create_mail_with_attachment(subject, body, attachment_payload, attachment_name, fromaddr, cc=None):
+    def create_mail_with_txt_attachment(subject, body, attachment_payload, attachment_name, fromaddr, cc=None):
         """
         Construct an email with attachment.
 
@@ -79,13 +79,11 @@ class Mail(Client):
         :return: returns the mail message
         """
         msg = MIMEMultipart('mixed')
-        msg.attach(MIMEText(body, 'plain'))
+        msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
-        part = MIMEBase('application', 'octet-stream')
-        part.set_payload(attachment_payload)
-        encoders.encode_base64(part)
-        part.add_header('Content-Disposition', 'attachment; filename=%s' % attachment_name)
-        msg.attach(part)
+        attachment = MIMEText(attachment_payload, 'plain', 'utf-8')
+        attachment.add_header('Content-Disposition', 'attachment', filename=attachment_name)
+        msg.attach(attachment)
 
         msg['Subject'] = subject
         msg['From'] = fromaddr

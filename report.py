@@ -202,11 +202,11 @@ def action_mail():
                                            mapping={'admin_count': admin[user],
                                                     'member_count': member[user]},
                                            log=logger)
-        msg = mail.create_mail_with_attachment(options.subject,
-                                               body_content,
-                                               attachment[user],
-                                               'resources.txt',
-                                               fromaddr)
+        msg = mail.create_mail_with_txt_attachment(options.subject,
+                                                   body_content,
+                                                   attachment[user],
+                                                   'resources.txt',
+                                                   fromaddr)
         mail.send_mail(user, msg, fromaddr)
         if options.dry_run:
             print "Did NOT send spam to %s" % user
