@@ -204,6 +204,7 @@ def action_mail():
         mail.send_mail(user, msg, fromaddr)
         if options.dry_run:
             print "Did NOT send spam to %s" % user
+            print "    --> admin for %d projects, member of %d projects" % (admin_counter, member_counter)
         else:
             print "Spam sent to %s" % user
 
