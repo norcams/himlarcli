@@ -140,6 +140,11 @@ def action_mail():
     # Project counter
     project_counter = 0
 
+    # Ask for confirmation
+    if not options.force and not options.dry_run:
+        if not utils.confirm_action('Send mail to (potentially) %d users?' % len(users)):
+            return
+
     # Loop through projects
     for user in users:
         # Ignore system users
@@ -156,23 +161,28 @@ def action_mail():
         if len(this_user['projects']) <= 1:
             continue
 
-        # dry-run output
-        if options.dry_run:
-            print "Processing user: %s" % user
+        # Set common mail parameters
+        mail = utils.get_client(Mail, options, logger)
+        mail = Mail(options.config, debug=options.debug)
+        mail.set_dry_run(options.dry_run)
+        if options.fromaddr:
+            fromaddr = options.fromaddr
+        else:
+            fromaddr = 'support@uh-iaas.no'
 
         # Loop through projects collecting info
-        attachment[user] = ''
+        attachment_payload = ''
         admin_counter = 0
         member_counter = 0
         for project in this_user['projects']:
-            attachment[user] += Printer.prettyprint_project_metadata(project, options, logger, regions, user)
-            attachment[user] += Printer.prettyprint_project_zones(project, options, logger)
-            attachment[user] += Printer.prettyprint_project_volumes(project, options, logger, regions)
-            attachment[user] += Printer.prettyprint_project_images(project, options, logger, regions)
-            attachment[user] += Printer.prettyprint_project_instances(project, options, logger, regions)
+            attachment_payload += Printer.prettyprint_project_metadata(project, options, logger, regions, user)
+            attachment_payload += Printer.prettyprint_project_zones(project, options, logger)
+            attachment_payload += Printer.prettyprint_project_volumes(project, options, logger, regions)
+            attachment_payload += Printer.prettyprint_project_images(project, options, logger, regions)
+            attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
 
             # Add some vertical space
-            attachment[user] += "\n\n"
+            attachment_payload += "\n\n"
 
             # Increase counters
             if project.admin == user:
@@ -180,38 +190,23 @@ def action_mail():
             else:
                 member_counter += 1
 
-        # Store number of admin and member roles
-        admin[user] = admin_counter
-        member[user] = member_counter
-
-    # Ask for confirmation
-    if not options.force and not options.dry_run:
-        if not utils.confirm_action('Send mail to %d users?' % len(attachment)):
-            return
-
-    # Send mail to users
-    mail = utils.get_client(Mail, options, logger)
-    mail = Mail(options.config, debug=options.debug)
-    mail.set_dry_run(options.dry_run)
-    if options.fromaddr:
-        fromaddr = options.fromaddr
-    else:
-        fromaddr = 'support@uh-iaas.no'
-    for user in attachment:
+        # Construct mail content
         body_content = utils.load_template(inputfile=options.template,
-                                           mapping={'admin_count': admin[user],
-                                                    'member_count': member[user]},
+                                           mapping={'admin_count': admin_counter,
+                                                    'member_count': member_counter},
                                            log=logger)
         msg = mail.create_mail_with_txt_attachment(options.subject,
                                                    body_content,
-                                                   attachment[user],
+                                                   attachment_payload,
                                                    'resources.txt',
                                                    fromaddr)
+        # Send mail to user
         mail.send_mail(user, msg, fromaddr)
         if options.dry_run:
             print "Did NOT send spam to %s" % user
         else:
             print "Spam sent to %s" % user
+
 
 
 #---------------------------------------------------------------------
