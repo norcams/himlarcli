@@ -1,22 +1,28 @@
 Dear NREC user,
 
+  NOTICE: This is the first time this message is sent. After this
+  initial message, new reminders will be sent in the beginning of
+  every month, starting in December 2021.
+
 This is a monthly reminder about resources (such as virtual machines,
-volumes etc.) you are currently using in NREC. The attached overview
-contains projects for which you are the administrator and projects
-where you are a member.
+volumes etc.) you are currently using in NREC. The attached file
+contains details for projects for which you are the administrator, and
+projects where you are a member.
 
-* You are currently the administrator for $admin_count projects
-* You are currently a member of $member_count projects
+* You are the administrator for $admin_count projects
+* You are a member of $member_count projects
 
-Please review the projects and the resources used. If some of the
-resources are no longer needed, or there are adjustments needed for
-any of your projects, please consider the following:
+The purpose of this reminder is to ensure that resources such as
+virtual machines are not forgotten. Please review the projects and the
+resources used. If some of the resources are no longer needed, or
+there are adjustments needed for any of your projects, please consider
+the following:
 
 * Delete resources that are no longer needed
 * Contact support@uh-iaas.no to delete a project
 * Contact support@uh-iaas.no for project membership changes
 
-An overview of your NREC resources is attached to this email.
+A detailed overview of your NREC resources is attached to this email.
 
 For more details about NREC and contact information, please visit:
 https://docs.nrec.no/
