@@ -1,7 +1,7 @@
 Dear NREC user,
 
   NOTICE: This is the first time this message is sent. After this
-  initial message, new reminders will be sent in the beginning of
+  initial message, new reminders will be sent at the beginning of
   every month, starting in December 2021.
 
 This is a monthly reminder about resources (such as virtual machines,
