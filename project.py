@@ -235,7 +235,7 @@ def action_revoke():
         if not project:
             himutils.sys_error('No project found with name "%s"' % options.project)
         role = ksclient.revoke_role(project_name=options.project,
-                                    email=user)
+                                    emails=[user])
         if role:
             output = role.to_dict() if not isinstance(role, dict) else role
             output['header'] = "Roles for %s" % options.project
