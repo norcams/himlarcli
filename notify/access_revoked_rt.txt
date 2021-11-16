@@ -1,0 +1,9 @@
+Hi,
+
+Access has been revoked for the following users:
+
+$users
+
+Best Regards,
+-- 
+The NREC team

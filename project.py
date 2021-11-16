@@ -21,8 +21,10 @@ options = parser.parse_args()
 printer = Printer(options.format)
 project_msg_file = 'notify/project_created.txt'
 project_hpc_msg_file = 'notify/project_created_hpc.txt'
-access_msg_file = 'notify/access_granted_rt.txt'
-access_user_msg_file = 'notify/access_granted_user.txt'
+access_granted_msg_file = 'notify/access_granted_rt.txt'
+access_granted_user_msg_file = 'notify/access_granted_user.txt'
+access_revoked_msg_file = 'notify/access_revoked_rt.txt'
+access_revoked_user_msg_file = 'notify/access_revoked_user.txt'
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
@@ -212,7 +214,7 @@ def action_grant():
         else:
             rt_mapping = dict(users='\n'.join(options.users))
             rt_subject = 'NREC: Access granted to users in %s' % options.project
-            rt_body_content = himutils.load_template(inputfile=access_msg_file,
+            rt_body_content = himutils.load_template(inputfile=access_granted_msg_file,
                                                      mapping=rt_mapping)
 
         rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
@@ -220,7 +222,7 @@ def action_grant():
 
         for user in options.users:
             mapping = dict(project_name=options.project, admin=project.admin)
-            body_content = himutils.load_template(inputfile=access_user_msg_file,
+            body_content = himutils.load_template(inputfile=access_granted_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
             msg['subject'] = 'NREC: You have been given access to project %s' % options.project
@@ -250,7 +252,7 @@ def action_revoke():
         else:
             rt_mapping = dict(users='\n'.join(options.users))
             rt_subject = 'NREC: Access revoked for users in %s' % options.project
-            rt_body_content = himutils.load_template(inputfile=access_msg_file,
+            rt_body_content = himutils.load_template(inputfile=access_revoked_msg_file,
                                                      mapping=rt_mapping)
 
         rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
@@ -258,7 +260,7 @@ def action_revoke():
 
         for user in options.users:
             mapping = dict(project_name=options.project, admin=project.admin)
-            body_content = himutils.load_template(inputfile=access_user_msg_file,
+            body_content = himutils.load_template(inputfile=access_revoked_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
             msg['subject'] = 'NREC: Your access to project %s is revoked' % options.project
