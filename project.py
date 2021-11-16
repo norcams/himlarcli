@@ -227,6 +227,44 @@ def action_grant():
 
             mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
 
+def action_revoke():
+    for user in options.users:
+        if not ksclient.is_valid_user(email=user, domain=options.domain):
+            himutils.sys_error('User %s not found as a valid user.' % user)
+        project = ksclient.get_project_by_name(project_name=options.project)
+        if not project:
+            himutils.sys_error('No project found with name "%s"' % options.project)
+        role = ksclient.revoke_role(project_name=options.project,
+                                    email=user)
+        if role:
+            output = role.to_dict() if not isinstance(role, dict) else role
+            output['header'] = "Roles for %s" % options.project
+            printer.output_dict(output)
+
+    if options.mail:
+        mail = Mail(options.config, debug=options.debug)
+        mail.set_dry_run(options.dry_run)
+
+        if options.rt is None:
+            himutils.sys_error('--rt parameter is missing.')
+        else:
+            rt_mapping = dict(users='\n'.join(options.users))
+            rt_subject = 'NREC: Access revoked for users in %s' % options.project
+            rt_body_content = himutils.load_template(inputfile=access_msg_file,
+                                                     mapping=rt_mapping)
+
+        rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
+        mail.send_mail('support@uh-iaas.no', rt_mime)
+
+        for user in options.users:
+            mapping = dict(project_name=options.project, admin=project.admin)
+            body_content = himutils.load_template(inputfile=access_user_msg_file,
+                                                  mapping=mapping)
+            msg = MIMEText(body_content, 'plain')
+            msg['subject'] = 'NREC: Your access to project %s is revoked' % options.project
+
+            mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
+
 def action_delete():
     question = 'Delete project %s and all resources' % options.project
     if not options.force and not himutils.confirm_action(question):
