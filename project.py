@@ -21,8 +21,10 @@ options = parser.parse_args()
 printer = Printer(options.format)
 project_msg_file = 'notify/project_created.txt'
 project_hpc_msg_file = 'notify/project_created_hpc.txt'
-access_msg_file = 'notify/access_granted_rt.txt'
-access_user_msg_file = 'notify/access_granted_user.txt'
+access_granted_msg_file = 'notify/access_granted_rt.txt'
+access_granted_user_msg_file = 'notify/access_granted_user.txt'
+access_revoked_msg_file = 'notify/access_revoked_rt.txt'
+access_revoked_user_msg_file = 'notify/access_revoked_user.txt'
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
@@ -212,7 +214,7 @@ def action_grant():
         else:
             rt_mapping = dict(users='\n'.join(options.users))
             rt_subject = 'NREC: Access granted to users in %s' % options.project
-            rt_body_content = himutils.load_template(inputfile=access_msg_file,
+            rt_body_content = himutils.load_template(inputfile=access_granted_msg_file,
                                                      mapping=rt_mapping)
 
         rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
@@ -220,10 +222,48 @@ def action_grant():
 
         for user in options.users:
             mapping = dict(project_name=options.project, admin=project.admin)
-            body_content = himutils.load_template(inputfile=access_user_msg_file,
+            body_content = himutils.load_template(inputfile=access_granted_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
             msg['subject'] = 'NREC: You have been given access to project %s' % options.project
+
+            mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
+
+def action_revoke():
+    for user in options.users:
+        if not ksclient.is_valid_user(email=user, domain=options.domain):
+            himutils.sys_error('User %s not found as a valid user.' % user)
+        project = ksclient.get_project_by_name(project_name=options.project)
+        if not project:
+            himutils.sys_error('No project found with name "%s"' % options.project)
+        role = ksclient.revoke_role(project_name=options.project,
+                                    emails=[user])
+        if role:
+            output = role.to_dict() if not isinstance(role, dict) else role
+            output['header'] = "Roles for %s" % options.project
+            printer.output_dict(output)
+
+    if options.mail:
+        mail = Mail(options.config, debug=options.debug)
+        mail.set_dry_run(options.dry_run)
+
+        if options.rt is None:
+            himutils.sys_error('--rt parameter is missing.')
+        else:
+            rt_mapping = dict(users='\n'.join(options.users))
+            rt_subject = 'NREC: Access revoked for users in %s' % options.project
+            rt_body_content = himutils.load_template(inputfile=access_revoked_msg_file,
+                                                     mapping=rt_mapping)
+
+        rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
+        mail.send_mail('support@uh-iaas.no', rt_mime)
+
+        for user in options.users:
+            mapping = dict(project_name=options.project, admin=project.admin)
+            body_content = himutils.load_template(inputfile=access_revoked_user_msg_file,
+                                                  mapping=mapping)
+            msg = MIMEText(body_content, 'plain')
+            msg['subject'] = 'NREC: Your access to project %s is revoked' % options.project
 
             mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
 

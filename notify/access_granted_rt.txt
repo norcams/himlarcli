@@ -4,7 +4,6 @@ Access has been granted to the following users:
 
 $users
 
-Best regards,
-
+Best Regards,
+-- 
 The NREC team
-

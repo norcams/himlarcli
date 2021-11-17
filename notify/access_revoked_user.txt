@@ -1,0 +1,11 @@
+Hi,
+
+Your access to the NREC project $project_name has been
+revoked by $admin
+
+If you have any questions, or if you think you've
+received this email by mistake, please let us know.
+
+Best Regards,
+-- 
+The NREC team
