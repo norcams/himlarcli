@@ -290,6 +290,8 @@ def action_list():
         project_org = project.org if hasattr(project, 'org') else 'None'
         if options.list_org != 'all' and options.list_org != project_org:
             continue
+        if options.list_type != 'all' and options.list_type != project_type:
+            continue
         output_project = {
             'id': project.id,
             'name': project.name,

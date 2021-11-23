@@ -107,3 +107,8 @@ opt_args:
     'dest':     'list_org'
     'help':     'List projects with this organization (all)'
     'default':  'all'
+  '--list-type':
+    'sub':      [ 'list' ]
+    'dest':     'list_type'
+    'help':     'List projects with this type (all)'
+    'default':  'all'
