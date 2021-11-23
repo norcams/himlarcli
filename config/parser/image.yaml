@@ -68,7 +68,7 @@ opt_args:
   '--project-by-id':
     'sub':      ['revoke']
     'dest':     'project_by_id'
-    'help':     'Project with "-p" specified by ID, bypasses project check'
+    'help':     'Option "-p" specifies project ID, bypasses project check'
     'action':   'store_const'
     'const':    true
     'default':  false
