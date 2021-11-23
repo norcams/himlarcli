@@ -64,8 +64,12 @@ def action_list_access():
         members = gc.get_image_access(image.id)
         printer.output_dict({'header': 'Members of {}'.format(image.name)})
         for member in members:
+            try:
+                project_name = kc.get_by_id('project', member.member_id).name,
+            except:
+                project_name = '__DELETED__%s' % member.member_id
             member_out = {
-                'project': kc.get_by_id('project', member.member_id).name,
+                'project': project_name,
                 'status': member.status
             }
             printer.output_dict(member_out, one_line=True)
