@@ -102,3 +102,8 @@ opt_args:
     'help':     'openstack service type'
     'choices':  ['all', 'nova', 'cinder', 'neutron']
     'default':  'all'
+  '--list-org':
+    'sub':      [ 'list' ]
+    'dest':     'list_org'
+    'help':     'List projects with this organization (all)'
+    'default':  'all'
