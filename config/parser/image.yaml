@@ -69,3 +69,10 @@ opt_args:
     'sub':      ['purge']
     'dest':     'limit'
     'help':     'limit number of deleted images'
+  '--force':
+    'sub':      ['grant', 'revoke', 'purge', 'retire']
+    'dest':     'force'
+    'help':     'skip interactive confirmation'
+    'action':   'store_const'
+    'const':    true
+    'default':  false

@@ -42,8 +42,8 @@ def set_access(image_action):
     # Grant based on tags, name or type
     tags = get_tags(names=True)
     tag_str = 'all tags' if not tags else '[' + ', '.join(tags) + ']'
-    if not utils.confirm_action('{} access to shared images matching {}'
-                                .format(image_action.capitalize(), tag_str)):
+    if not options.force and not utils.confirm_action('{} access to shared images matching {}'
+                                                      .format(image_action.capitalize(), tag_str)):
         return
     filters = {'status': 'active', 'tag': tags, 'visibility': 'shared'}
     kc.debug_log('filter: {}'.format(filters))
@@ -127,8 +127,8 @@ def action_usage():
 def action_purge():
     tags = get_tags(names=True)
     tag_str = 'all tags' if not tags else '[' + ', '.join(tags) + ']'
-    if not utils.confirm_action('Purge unused {} deactive images matching {}'
-                                .format(options.visibility, tag_str)):
+    if not options.force and not utils.confirm_action('Purge unused {} deactive images matching {}'
+                                                      .format(options.visibility, tag_str)):
         return
     images = get_image_usage()
     count = 0
@@ -175,8 +175,8 @@ def action_retire():
                         .format(options.name, options.image_config))
 
     # Point of no return
-    if not utils.confirm_action('Retire active images matching {}'
-                                .format(tag_str)):
+    if not options.force and not utils.confirm_action('Retire active images matching {}'
+                                                      .format(tag_str)):
         return
 
     # Find image(s)
