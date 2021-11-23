@@ -282,15 +282,21 @@ def action_list():
         search_filter['type'] = options.filter
     projects = ksclient.get_projects(**search_filter)
     count = 0
-    printer.output_dict({'header': 'Project list (admin, enddate, id, name, type)'})
+    printer.output_dict({'header': 'Project list (admin, enddate, id, name, org, type)'})
     for project in projects:
         project_type = project.type if hasattr(project, 'type') else 'None'
         project_admin = project.admin if hasattr(project, 'admin') else 'None'
         project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
+        project_org = project.org if hasattr(project, 'org') else 'None'
+        if options.list_org != 'all' and options.list_org != project_org:
+            continue
+        if options.list_type != 'all' and options.list_type != project_type:
+            continue
         output_project = {
             'id': project.id,
             'name': project.name,
             'type': project_type,
+            'org': project_org,
             'admin': project_admin,
             'enddate': project_enddate,
         }
