@@ -36,9 +36,13 @@ def action_revoke():
     set_access('revoke')
 
 def set_access(image_action):
-    project = kc.get_project_by_name(options.project)
-    if not project:
-        utils.sys_error('Unknown project {}'.format(options.project))
+    if options.project_by_id:
+        project_id = options.project
+    else:
+        project = kc.get_project_by_name(options.project)
+        if not project:
+            utils.sys_error('Unknown project {}'.format(options.project))
+        project_id = project.id
     # Grant based on tags, name or type
     tags = get_tags(names=True)
     tag_str = 'all tags' if not tags else '[' + ', '.join(tags) + ']'
@@ -49,7 +53,7 @@ def set_access(image_action):
     kc.debug_log('filter: {}'.format(filters))
     images = gc.get_images(filters=filters)
     for image in images:
-        gc.set_image_access(image_id=image.id, project_id=project.id, action=image_action)
+        gc.set_image_access(image_id=image.id, project_id=project_id, action=image_action)
         printer.output_msg('{} access to image {} for project {}'.
                            format(image_action.capitalize(), image.name, options.project))
 

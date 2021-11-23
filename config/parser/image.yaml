@@ -65,6 +65,13 @@ opt_args:
     'dest':     'project'
     'help':     'project name to grant image access'
     'required': true
+  '--project-by-id':
+    'sub':      ['revoke']
+    'dest':     'project_by_id'
+    'help':     'Option "-p" specifies project ID, bypasses project check'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   '--limit':
     'sub':      ['purge']
     'dest':     'limit'
