@@ -36,7 +36,7 @@ def action_revoke():
     set_access('revoke')
 
 def set_access(image_action):
-    if options.project_by_id:
+    if image_action == 'revoke' and options.project_by_id:
         project_id = options.project
     else:
         project = kc.get_project_by_name(options.project)
