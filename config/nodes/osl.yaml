@@ -393,10 +393,10 @@ nodes:
     hostgroup: 20
   storage-06:
     mac: d0:94:66:33:2d:b2
-    hostgroup: 8
+    hostgroup: 22
   storage-07:
     mac: d0:94:66:33:06:b0
-    hostgroup: 8
+    hostgroup: 22
   storage-arccache-08:
     mac: 4c:d9:8f:68:39:dd
     hostgroup: 10
