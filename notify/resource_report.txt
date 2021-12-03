@@ -19,6 +19,8 @@ the following:
 * Contact support@uh-iaas.no for project membership changes
 
 A detailed overview of your NREC resources is attached to this email.
+Note that the overview contains your DEMO project, which you will keep
+as long as you have an NREC account.
 
 For more details about NREC and contact information, please visit:
 https://docs.nrec.no/
