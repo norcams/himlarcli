@@ -275,6 +275,7 @@ nodes:
   dashboard-mgmt-01:
     compute_profile: small
     compute_resource: controller-08
+    hostgroup: 15
   db-global-01:
     compute_profile: small
     compute_resource: controller-06
