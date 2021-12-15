@@ -248,6 +248,7 @@ nodes:
   dashboard-01:
     compute_profile: xlarge
     compute_resource: controller-02
+    hostgroup: 16
   dashboard-mgmt-01:
     compute_profile: small
     compute_resource: controller-04
@@ -267,24 +268,31 @@ nodes:
   dns-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 16
   identity-01:
     compute_profile: medium
     compute_resource: controller-01
+    hostgroup: 16
   identity-02:
     compute_profile: medium
     compute_resource: controller-02
+    hostgroup: 16
   identity-03:
     compute_profile: medium
     compute_resource: controller-03
+    hostgroup: 16
   image-01:
     compute_profile: medium
     compute_resource: controller-01
+    hostgroup: 16
   image-02:
     compute_profile: medium
     compute_resource: controller-02
+    hostgroup: 16
   image-03:
     compute_profile: medium
     compute_resource: controller-03
+    hostgroup: 16
   logger-01:
     compute_profile: xlarge
     compute_resource: controller-04
@@ -324,30 +332,39 @@ nodes:
   mq-01:
     compute_profile: xlarge
     compute_resource: controller-01
+    hostgroup: 16
   nat-linux-01:
     compute_profile: small
     compute_resource: controller-01
+    hostgroup: 16
   nat-linux-02:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 16
   network-01:
     compute_profile: large
     compute_resource: controller-01
+    hostgroup: 16
   network-02:
     compute_profile: large
     compute_resource: controller-02
+    hostgroup: 16
   network-03:
     compute_profile: large
     compute_resource: controller-03
+    hostgroup: 16
   novactrl-01:
     compute_profile: large
     compute_resource: controller-01
+    hostgroup: 16
   novactrl-02:
     compute_profile: large
     compute_resource: controller-02
+    hostgroup: 16
   novactrl-03:
     compute_profile: large
     compute_resource: controller-03
+    hostgroup: 16
   ns-01:
     compute_profile: small
     compute_resource: controller-02
@@ -370,9 +387,11 @@ nodes:
   resolver-01:
     compute_profile: small
     compute_resource: controller-03
+    hostgroup: 16
   resolver-02:
     compute_profile: small
     compute_resource: controller-04
+    hostgroup: 16
   status-01:
     compute_profile: small
     compute_resource: controller-02
@@ -457,6 +476,8 @@ nodes:
   volume-01:
     compute_profile: large
     compute_resource: controller-01
+    hostgroup: 16
   volume-02:
     compute_profile: large
     compute_resource: controller-02
+    hostgroup: 16
