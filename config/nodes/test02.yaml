@@ -70,6 +70,7 @@ nodes:
   dns-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 6
   identity-01:
     compute_profile: small
     compute_resource: controller-01
@@ -258,9 +259,11 @@ nodes:
   resolver-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 6
   resolver-02:
     compute_profile: small
     compute_resource: controller-03
+    hostgroup: 6
   status-01:
     compute_profile: small
     compute_resource: controller-02
