@@ -334,11 +334,11 @@ nodes:
     compute_profile: xlarge
     compute_resource: controller-01
     hostgroup: 16
-  nat-linux-01:
+  nat-01:
     compute_profile: small
     compute_resource: controller-01
     hostgroup: 16
-  nat-linux-02:
+  nat-02:
     compute_profile: small
     compute_resource: controller-02
     hostgroup: 16
