@@ -24,6 +24,7 @@ virtualenv . -p /path/to/python2
 source bin/activate
 pip install setuptools==44.1.1
 python setup.py develop
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
