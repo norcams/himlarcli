@@ -123,6 +123,47 @@ def action_aggregate():
     mailer.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 
+# Send mail to the instances listed in the "email_file"
+def action_mailto_instances():
+    q = 'Send mail template {} to the instances in the {}'.format(options.template,
+                                                           options.email_file)
+    if not utils.confirm_action(q):
+        return
+    user_counter = 0
+    sent_mail_counter = 0
+    mail = Mail(options.config, debug=options.debug)
+    mail.set_dry_run(options.dry_run)
+    body_content = utils.load_template(inputfile=options.template, mapping={}, log=logger)
+    instances_file = utils.load_file(inputfile=options.email_file, log=logger)
+    if options.template:
+        email_content = open(options.template, 'r')
+        instances = open(options.email_file, 'r')
+        body_content = email_content.readlines()
+        instances_file = instances.readlines()
+        if options.dry_run:
+            printer.output_dict({'header': 'Sending mail to', 'Email content': body_content, 'Instance(s)': instances_file})
+        else:
+            with open(content, 'r') as email_content:
+                body_content = email_content.read()
+            for instance in instances_file:
+                for region in regions:
+                    novaclient = Nova(options.config, options.debug, logger, region)
+                    instances = novaclient.get_instances()
+                    user_counter += 1
+                    mail = Mail(options.config, debug=options.debug)
+                    try:
+                        logger.debug('=> Sending email ...')
+                        mail.set_keystone_client(kc)
+                        users = mail.mail_instance_owner(instances=instances,
+                                                             body=body_content,
+                                                             subject=options.subject,
+                                                             admin=True)
+                        sent_mail_counter += 1
+                    except ValueError:
+                            himutils.sys_error('Not able to send the email.')
+                print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
+            mail.close()
+
 # Send mail to all running instances
 # def action_instance():
 #     user_counter = 0
