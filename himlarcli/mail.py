@@ -155,7 +155,9 @@ class Mail(Client):
     def __get_project_email(project):
         if not project:
             return None
-        if hasattr(project, 'admin'):
+        if hasattr(project, 'contact'):
+            return project.contact.lower()
+        elif hasattr(project, 'admin'):
             return project.admin.lower()
         if hasattr(project, 'type') and project.type == 'personal':
             if hasattr(project, 'name') and "@" in project.name:

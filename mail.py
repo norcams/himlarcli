@@ -143,7 +143,7 @@ def action_mailto_instances():
         if options.dry_run:
             printer.output_dict({'header': 'Sending mail to', 'Email content': body_content, 'Instance(s)': instances_file})
         else:
-            with open(content, 'r') as email_content:
+            with open(options.template, 'r') as email_content:
                 body_content = email_content.read()
             for instance in instances_file:
                 for region in regions:
