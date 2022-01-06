@@ -129,40 +129,73 @@ def action_mailto_instances():
                                                            options.email_file)
     if not utils.confirm_action(q):
         return
-    user_counter = 0
-    sent_mail_counter = 0
-    mail = Mail(options.config, debug=options.debug)
-    mail.set_dry_run(options.dry_run)
-    body_content = utils.load_template(inputfile=options.template, mapping={}, log=logger)
+    users = dict()
+    #file with instances' id
     instances_file = utils.load_file(inputfile=options.email_file, log=logger)
-    if options.template:
-        email_content = open(options.template, 'r')
-        instances = open(options.email_file, 'r')
-        body_content = email_content.readlines()
-        instances_file = instances.readlines()
-        if options.dry_run:
-            printer.output_dict({'header': 'Sending mail to', 'Email content': body_content, 'Instance(s)': instances_file})
-        else:
-            with open(options.template, 'r') as email_content:
-                body_content = email_content.read()
-            for instance in instances_file:
-                for region in regions:
-                    novaclient = Nova(options.config, options.debug, logger, region)
-                    instances = novaclient.get_instances()
-                    user_counter += 1
-                    mail = Mail(options.config, debug=options.debug)
-                    try:
-                        logger.debug('=> Sending email ...')
-                        mail.set_keystone_client(kc)
-                        users = mail.mail_instance_owner(instances=instances,
-                                                             body=body_content,
-                                                             subject=options.subject,
-                                                             admin=True)
-                        sent_mail_counter += 1
-                    except ValueError:
-                            himutils.sys_error('Not able to send the email.')
-                print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
-            mail.close()
+    with open(options.email_file) as f:
+        intances_in_file = f.read().splitlines()
+    for region in regions:
+            for i in intances_in_file:
+                email = None
+                ksclient = Keystone(options.config, debug=options.debug)
+                novaclient = utils.get_client(Nova, options, logger, region)
+                instance = novaclient.get_by_id('server', i)
+                project = ksclient.get_by_id('project', instance.tenant_id)
+                if hasattr(project, 'contact'):
+                    email = project.contact
+                elif hasattr(project,'admin'):
+                    email = project.admin
+                else:
+                    kc.debug_log('could not find admin for project {}'.
+                                 format(project.name))
+                    continue
+                instance_data = {
+                    'name': instance.name,
+                    'region': region,
+                    #'status': i.status,
+                    #'created': i.created,
+                    #'flavor': i.flavor['original_name'],
+                    #'ip': next(iter(neutron.get_network_ip(i.addresses, network)), None),
+                    'project': project.name
+                }
+                if email not in users:
+                    users[email] = list()
+                users[email].append(instance_data)
+
+    mailer = utils.get_client(Mail, options, logger)
+    if '[NREC]' not in options.subject:
+        subject = '[NREC] ' + options.subject
+    else:
+        subject = options.subject
+    sent_mail_counter = 0
+    message = None
+    fromaddr = options.from_addr
+    template = options.template
+    if not utils.file_exists(template, logger):
+        utils.sys_error('Could not find template file {}'.format(template))
+    if not options.template:
+        utils.sys_error('Specify a template file. E.g. -t notify/mailto_list_of_instances.txt')
+
+    for user, instance in users.iteritems():
+        columns = ['project', 'region']
+        mapping = dict(region=region,
+                       date=options.date,
+                       instances=utils.get_instance_table(instance, columns),
+                       project=project.name,
+                       admin=user)
+        body_content = utils.load_template(inputfile=template,
+                                           mapping=mapping,
+                                           log=logger)
+        message = mailer.get_mime_text(subject, body_content, fromaddr=fromaddr)
+        mailer.send_mail(user, message)
+        sent_mail_counter += 1
+
+    if options.dry_run and message:
+        print "\nExample mail sendt from this run:"
+        print "----------------------------------"
+        print message
+    mailer.close()
+    printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 
 # Send mail to all running instances
 # def action_instance():
