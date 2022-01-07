@@ -135,32 +135,32 @@ def action_mailto_instances():
     with open(options.email_file) as f:
         intances_in_file = f.read().splitlines()
     for region in regions:
-            for i in intances_in_file:
-                email = None
-                ksclient = Keystone(options.config, debug=options.debug)
-                novaclient = utils.get_client(Nova, options, logger, region)
-                instance = novaclient.get_by_id('server', i)
-                project = ksclient.get_by_id('project', instance.tenant_id)
-                if hasattr(project, 'contact'):
-                    email = project.contact
-                elif hasattr(project,'admin'):
-                    email = project.admin
-                else:
-                    kc.debug_log('could not find admin for project {}'.
-                                 format(project.name))
-                    continue
-                instance_data = {
-                    'name': instance.name,
-                    'region': region,
-                    #'status': i.status,
-                    #'created': i.created,
-                    #'flavor': i.flavor['original_name'],
-                    #'ip': next(iter(neutron.get_network_ip(i.addresses, network)), None),
-                    'project': project.name
-                }
-                if email not in users:
-                    users[email] = list()
-                users[email].append(instance_data)
+        for i in intances_in_file:
+            email = None
+            ksclient = Keystone(options.config, debug=options.debug)
+            novaclient = utils.get_client(Nova, options, logger, region)
+            instance = novaclient.get_by_id('server', i)
+            project = ksclient.get_by_id('project', instance.tenant_id)
+            if hasattr(project, 'contact'):
+                email = project.contact
+            elif hasattr(project,'admin'):
+                email = project.admin
+            else:
+                kc.debug_log('could not find admin for project {}'.
+                             format(project.name))
+                continue
+            instance_data = {
+                'name': instance.name,
+                'region': region,
+                #'status': i.status,
+                #'created': i.created,
+                #'flavor': i.flavor['original_name'],
+                #'ip': next(iter(neutron.get_network_ip(i.addresses, network)), None),
+                'project': project.name
+            }
+            if email not in users:
+                users[email] = list()
+            users[email].append(instance_data)
 
     mailer = utils.get_client(Mail, options, logger)
     if '[NREC]' not in options.subject:
