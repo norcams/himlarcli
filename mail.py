@@ -124,7 +124,7 @@ def action_aggregate():
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 
 # Send mail to the instances listed in the "email_file"
-def action_mailto_instances():
+def action_instances():
     q = 'Send mail template {} to the instances in the {}'.format(options.template,
                                                            options.email_file)
     if not utils.confirm_action(q):
