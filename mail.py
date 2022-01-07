@@ -130,8 +130,6 @@ def action_instances():
     if not utils.confirm_action(q):
         return
     users = dict()
-    #file with instances' id
-    instances_file = utils.load_file(inputfile=options.email_file, log=logger)
     with open(options.email_file) as f:
         intances_in_file = f.read().splitlines()
     for region in regions:
