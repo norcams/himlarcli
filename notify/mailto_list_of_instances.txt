@@ -5,13 +5,13 @@ You are receiving this e-mail because you are running a CentOS 8 instance in NRE
 Instance:
 $instances
 
-CentOS 8 is in its final days and has End-Of-Life on January 31th 2022. Those running an instance based on a CentOS 8 image (like one of our previous GOLD offerings) MUST migrate to a supported distribution before the cut-off date! This requirement is set to ensure a supported instance that continues to receive all relevant important security fixes, etc.
+CentOS 8 is in its final days and has End-Of-Life on January 31, 2022. Those running an instance based on a CentOS 8 image (like one of our previous GOLD offerings) MUST migrate to a supported distribution before the cut-off date! This requirement is set to ensure a supported instance that continues to receive all relevant important security fixes, etc.
 
 Please consider the following alternatives:
 1) Delete your CentOS 8 instance and replace it with any of the upstream or downstream alternatives, or simply delete it if it is no longer needed. This is the preferred solution.
 2) Migrate your CentOS instance to a supported version. Here is a list of possible migration strategies: https://docs.nrec.no/centos8-migrate.html
 
-If you consider the second alternative, please send us an e-mail to support@uh-iaas.no within January 24th 2022. Otherwise, the instance will be stopped, and after 30 days will be deleted.
+If you consider the second alternative, please send us an e-mail to support@uh-iaas.no within January 31, 2022. Otherwise, the instance will be stopped, and after 30 days will be deleted.
 
 --
 NREC team
