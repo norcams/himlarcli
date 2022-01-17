@@ -138,6 +138,8 @@ def action_instances():
             ksclient = Keystone(options.config, debug=options.debug)
             novaclient = utils.get_client(Nova, options, logger, region)
             instance = novaclient.get_by_id('server', i)
+	    if not instance:
+	        continue
             project = ksclient.get_by_id('project', instance.tenant_id)
             if hasattr(project, 'contact'):
                 email = project.contact
