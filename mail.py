@@ -123,6 +123,78 @@ def action_aggregate():
     mailer.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 
+# Send mail to the instances listed in the "email_file"
+def action_instances():
+    q = 'Send mail template {} to the instances in the {}'.format(options.template,
+                                                           options.email_file)
+    if not utils.confirm_action(q):
+        return
+    users = dict()
+    with open(options.email_file) as f:
+        intances_in_file = f.read().splitlines()
+    for region in regions:
+        for i in intances_in_file:
+            email = None
+            ksclient = Keystone(options.config, debug=options.debug)
+            novaclient = utils.get_client(Nova, options, logger, region)
+            instance = novaclient.get_by_id('server', i)
+            project = ksclient.get_by_id('project', instance.tenant_id)
+            if hasattr(project, 'contact'):
+                email = project.contact
+            elif hasattr(project,'admin'):
+                email = project.admin
+            else:
+                kc.debug_log('could not find admin for project {}'.
+                             format(project.name))
+                continue
+            instance_data = {
+                'name': instance.name,
+                'region': region,
+                #'status': i.status,
+                #'created': i.created,
+                #'flavor': i.flavor['original_name'],
+                #'ip': next(iter(neutron.get_network_ip(i.addresses, network)), None),
+                'project': project.name
+            }
+            if email not in users:
+                users[email] = list()
+            users[email].append(instance_data)
+
+    mailer = utils.get_client(Mail, options, logger)
+    if '[NREC]' not in options.subject:
+        subject = '[NREC] ' + options.subject
+    else:
+        subject = options.subject
+    sent_mail_counter = 0
+    message = None
+    fromaddr = options.from_addr
+    template = options.template
+    if not utils.file_exists(template, logger):
+        utils.sys_error('Could not find template file {}'.format(template))
+    if not options.template:
+        utils.sys_error('Specify a template file. E.g. -t notify/mailto_list_of_instances.txt')
+
+    for user, instance in users.iteritems():
+        columns = ['project', 'region']
+        mapping = dict(region=region,
+                       date=options.date,
+                       instances=utils.get_instance_table(instance, columns),
+                       project=project.name,
+                       admin=user)
+        body_content = utils.load_template(inputfile=template,
+                                           mapping=mapping,
+                                           log=logger)
+        message = mailer.get_mime_text(subject, body_content, fromaddr=fromaddr)
+        mailer.send_mail(user, message)
+        sent_mail_counter += 1
+
+    if options.dry_run and message:
+        print "\nExample mail sendt from this run:"
+        print "----------------------------------"
+        print message
+    mailer.close()
+    printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
+
 # Send mail to all running instances
 # def action_instance():
 #     user_counter = 0

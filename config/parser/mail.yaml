@@ -3,6 +3,7 @@ desc:           'Send mail to users'
 actions:
   'file':       'Send mail to all the users listed in a file'
   'aggregate':  'Send mail to all users with instances in this aggregate. Defaults to all regions with this aggregate'
+  'instances': 'Send mail to the instances in a file'
 #  'instance':   'Get admins from instances'
 #  'project':    'Get admins from projects'
 #  'flavor':     'Send mail to a specific flavor'
@@ -27,7 +28,7 @@ opt_args:
     'help':     'mail subject'
     'required': True
   '-f':
-    'sub':      ['file']
+    'sub':      ['file', 'instances']
     'dest':     'email_file'
     'metavar':  '/path/to/emails'
     'required': True

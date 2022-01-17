@@ -1,0 +1,14 @@
+Dear user,
+
+You are receiving this email because you have a running instance
+in NREC.
+
+Instance:
+$instances
+
+
+For more details about NREC and contact information, please visit:
+https://docs.nrec.no
+
+--
+NREC team
