@@ -42,13 +42,13 @@ class Mail(Client):
     @staticmethod
     def rt_mail(ticket, subject, msg):
         mail = MIMEMultipart('alternative')
-        mail['References'] = 'RT-Ticket-%s@uninett.no' % ticket
-        mail['Subject'] = '[uninett.no #%s] %s' % (ticket, subject)
-        mail['From'] = 'NREC support <support@uh-iaas.no>'
-        mail['Reply-To'] = 'support@uh-iaas.no'
-        mail['X-RT-Owner'] = 'Nobody'
-        mail['X-RT-Queue'] = 'UH-IaaS'
-        mail['X-RT-Ticket'] = 'uninett.no #%s' % ticket
+        mail['References'] = 'RT-Ticket-%s@uio.no' % ticket
+        mail['Subject'] = '[rt.uio.no #%s] %s' % (ticket, subject)
+        mail['From'] = 'NREC support <support@nrec.no>'
+        mail['Reply-To'] = 'support@nrec.no'
+        mail['RT-Owner'] = 'Nobody'
+        mail['X-RT-Queue'] = 'usit-nrec-support'
+        mail['X-RT-Ticket'] = 'rt.uio.no #%s' % ticket
         mail.attach(MIMEText(msg, 'plain'))
         return mail
 
