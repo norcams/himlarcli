@@ -149,7 +149,7 @@ def action_create():
                                %s' % options.msg)
 
         mime = mail.rt_mail(options.rt, subject, body_content)
-        mail.send_mail('support@uh-iaas.no', mime)
+        mail.send_mail('support@nrec.no', mime)
 
 def action_create_private():
     # Set default options
@@ -218,7 +218,7 @@ def action_grant():
                                                      mapping=rt_mapping)
 
         rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
-        mail.send_mail('support@uh-iaas.no', rt_mime)
+        mail.send_mail('support@nrec.no', rt_mime)
 
         for user in options.users:
             mapping = dict(project_name=options.project, admin=project.admin)
@@ -227,7 +227,7 @@ def action_grant():
             msg = MIMEText(body_content, 'plain')
             msg['subject'] = 'NREC: You have been given access to project %s' % options.project
 
-            mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
+            mail.send_mail(user, msg, fromaddr='noreply@nrec.no')
 
 def action_revoke():
     for user in options.users:
@@ -256,7 +256,7 @@ def action_revoke():
                                                      mapping=rt_mapping)
 
         rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
-        mail.send_mail('support@uh-iaas.no', rt_mime)
+        mail.send_mail('support@nrec.no', rt_mime)
 
         for user in options.users:
             mapping = dict(project_name=options.project, admin=project.admin)
@@ -265,7 +265,7 @@ def action_revoke():
             msg = MIMEText(body_content, 'plain')
             msg['subject'] = 'NREC: Your access to project %s is revoked' % options.project
 
-            mail.send_mail(user, msg, fromaddr='no-reply@uh-iaas.no')
+            mail.send_mail(user, msg, fromaddr='noreply@nrec.no')
 
 def action_delete():
     question = 'Delete project %s and all resources' % options.project
