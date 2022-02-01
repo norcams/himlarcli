@@ -64,9 +64,11 @@ nodes:
   db-global-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 6
   db-regional-01:
     compute_profile: medium
     compute_resource: controller-01
+    hostgroup: 6
   dns-01:
     compute_profile: small
     compute_resource: controller-02
