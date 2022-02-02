@@ -186,7 +186,7 @@ nodes:
     hostgroup: 14
   compute-40:
     mac: dc:f4:01:e8:1f:92
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-41:
     mac: f4:02:70:d7:8b:3c
     hostgroup: 14
@@ -240,13 +240,13 @@ nodes:
     hostgroup: 16
   compute-58:
     mac: 34:48:ed:f9:6c:02
-    hostgroup: 14
+    hostgroup: 16
   compute-59:
     mac: 34:48:ed:f9:61:8a
     hostgroup: 14
   compute-60:
     mac: 34:48:ed:f9:87:da
-    hostgroup: 14
+    hostgroup: 16
   console-01:
     compute_profile: medium
     compute_resource: controller-05
