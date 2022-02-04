@@ -243,7 +243,7 @@ nodes:
     hostgroup: 16
   compute-59:
     mac: 34:48:ed:f9:61:8a
-    hostgroup: 14
+    hostgroup: 16
   compute-60:
     mac: 34:48:ed:f9:87:da
     hostgroup: 16
