@@ -183,7 +183,7 @@ nodes:
     hostgroup: 14
   compute-39:
     mac: dc:f4:01:e7:e9:f6
-    hostgroup: 14
+    hostgroup: 16
   compute-40:
     mac: dc:f4:01:e8:1f:92
     hostgroup: 16
