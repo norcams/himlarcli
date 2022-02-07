@@ -71,13 +71,13 @@ nodes:
     hostgroup: 18
     mac: ec:f4:bb:ce:21:84
   compute-02:
-    hostgroup: 3
+    hostgroup: 18
     mac: ec:f4:bb:cd:a0:94
   compute-03:
     hostgroup: 18
     mac: ec:f4:bb:cd:a0:2c
   compute-04:
-    hostgroup: 3
+    hostgroup: 18
     mac: 18:66:da:82:7e:a8
   compute-05:
     hostgroup: 3
