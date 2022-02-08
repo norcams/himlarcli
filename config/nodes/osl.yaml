@@ -92,7 +92,7 @@ nodes:
     hostgroup: 3
   compute-07:
     mac: 00:0a:f7:b6:b6:88
-    hostgroup: 18
+    hostgroup: 24
   compute-08:
     mac: 00:0a:f7:b6:aa:5e
     hostgroup: 18
