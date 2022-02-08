@@ -86,7 +86,7 @@ nodes:
     hostgroup: 18
     mac: 18:66:da:82:be:7a
   compute-07:
-    hostgroup: 3
+    hostgroup: 18
     mac: 00:0a:f7:79:c5:df
   compute-08:
     hostgroup: 3
@@ -95,7 +95,7 @@ nodes:
     hostgroup: 3
     mac: 00:0a:f7:82:54:23
   compute-10:
-    hostgroup: 3
+    hostgroup: 18
     mac: 00:0a:f7:79:c5:f3
   compute-alice-11:
     mac: 20:04:0f:ed:9a:7a
