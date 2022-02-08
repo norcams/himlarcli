@@ -80,10 +80,10 @@ nodes:
     hostgroup: 18
     mac: 18:66:da:82:7e:a8
   compute-05:
-    hostgroup: 3
+    hostgroup: 18
     mac: 18:66:da:82:b5:49
   compute-06:
-    hostgroup: 3
+    hostgroup: 18
     mac: 18:66:da:82:be:7a
   compute-07:
     hostgroup: 3
