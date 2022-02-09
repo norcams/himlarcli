@@ -1,0 +1,14 @@
+---
+# nova quota for one vgpu instance, multiply the quota per vgpu
+# cinder quota is more than default and small
+nova:
+  instances:                    1
+  cores:                        8
+  ram:                          32770
+cinder:
+  gigabytes:                    200
+  snapshots:                    20
+  volumes:                      10
+neutron:
+  security_group:               10
+  security_group_rule:          100
