@@ -48,7 +48,7 @@ opt_args:
     'sub':      ['create']
     'dest':     'type'
     'help':     'project type'
-    'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc']
+    'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc','vgpu']
     'required': true
   '--desc':
     'sub':      ['create']
@@ -69,7 +69,7 @@ opt_args:
     'sub':      ['create', 'create-private']
     'dest':     'quota'
     'help':     'quota class'
-    'choices':  ['small', 'medium', 'large']
+    'choices':  ['small', 'medium', 'large','vgpu']
   '-u':
     'sub':      ['grant','revoke']
     'dest':     'users'
