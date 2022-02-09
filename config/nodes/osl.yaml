@@ -95,10 +95,10 @@ nodes:
     hostgroup: 24
   compute-08:
     mac: 00:0a:f7:b6:aa:5e
-    hostgroup: 18
+    hostgroup: 24
   compute-09:
     mac: e4:43:4b:46:5b:72
-    hostgroup: 3
+    hostgroup: 19
   compute-10:
     mac: e4:43:4b:46:84:86
     hostgroup: 3
