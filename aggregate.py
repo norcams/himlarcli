@@ -51,11 +51,43 @@ def action_show():
         printer.output_dict({'header': 'Host aggregate in {}'.format(region)})
         printer.output_dict(aggregate.to_dict())
 
+def action_orphan_instances():
+    for region in regions:
+        nova = utils.get_client(Nova, options, logger, region)
+        aggregate = nova.get_aggregate(options.aggregate)
+        if not aggregate:
+            printer.output_msg('no aggregate {} found in {}'.format(options.aggregate, region))
+            continue
+        instances = nova.get_instances(options.aggregate)
+        printer.output_dict({'header': 'Instance list (id, host, status, flavor)'})
+        status = dict({'total': 0})
+        for i in instances:
+            project = kc.get_by_id('project', i.tenant_id)
+            if project:
+                continue
+            output = {
+                '1': i.id,
+                '2': nova.get_compute_host(i),
+                #'3': i.name,
+                '4': i.status,
+                #'2': i.updated,
+                #'6'': getattr(i, 'OS-EXT-SRV-ATTR:instance_name'),
+                '5': i.flavor['original_name']
+            }
+            printer.output_dict(output, sort=True, one_line=True)
+            status['total'] += 1
+            status[str(i.status).lower()] = status.get(str(i.status).lower(), 0) + 1
+        printer.output_dict({'header': 'Counts'})
+        printer.output_dict(status)
+
 def action_instances():
     for region in regions:
         nova = utils.get_client(Nova, options, logger, region)
         #neutron = utils.get_client(Neutron, options, logger)
         #network = neutron.list_networks()
+        if not aggregate:
+            printer.output_msg('no aggregate {} found in {}'.format(options.aggregate, region))
+            continue
         instances = nova.get_instances(options.aggregate)
         printer.output_dict({'header': 'Instance list (id, host, status, flavor)'})
         status = dict({'total': 0})
