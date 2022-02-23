@@ -85,6 +85,7 @@ def action_instances():
         nova = utils.get_client(Nova, options, logger, region)
         #neutron = utils.get_client(Neutron, options, logger)
         #network = neutron.list_networks()
+        aggregate = nova.get_aggregate(options.aggregate)
         if not aggregate:
             printer.output_msg('no aggregate {} found in {}'.format(options.aggregate, region))
             continue
