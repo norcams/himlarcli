@@ -18,7 +18,7 @@ opt_args:
     'dest':     'region'
     'help':     'only use this region'
   'aggregate':
-    'sub':      ['show', 'instances', 'stop-instance', 'start-instance']
+    'sub':      ['show', 'instances', 'stop-instance', 'start-instance', 'orphan-instances']
     'metavar':  'aggregate'
   '--no-purge':
     'sub':      ['stop-instance']
