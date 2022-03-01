@@ -39,4 +39,4 @@ fi
 
 # Run monthly reminder
 source /opt/himlarcli/bin/activate
-/opt/himlarcli/report.py mail --template /opt/himlarcli/notify/resource_report.txt --subject 'Your NREC Resources (Monthly Reminder)'
+/opt/himlarcli/report.py mail --force --template /opt/himlarcli/notify/resource_report.txt --subject 'Your NREC Resources (Monthly Reminder)'
