@@ -168,7 +168,7 @@ def action_mail():
         if options.fromaddr:
             fromaddr = options.fromaddr
         else:
-            fromaddr = 'support@uh-iaas.no'
+            fromaddr = 'support@nrec.no'
 
         # Loop through projects collecting info
         attachment_payload = ''

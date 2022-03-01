@@ -15,8 +15,8 @@ there are adjustments needed for any of your projects, please consider
 the following:
 
 * Delete resources that are no longer needed
-* Contact support@uh-iaas.no to delete a project
-* Contact support@uh-iaas.no for project membership changes
+* Contact support@nrec.no to delete a project
+* Contact support@nrec.no for project membership changes
 
 A detailed overview of your NREC resources is attached to this email.
 Note that the overview contains your DEMO project, which you will keep
@@ -25,8 +25,8 @@ as long as you have an NREC account.
 For more details about NREC and contact information, please visit:
 https://docs.nrec.no/
 
-Don't hesitate to contact support@uh-iaas.no if you have questions!
+Don't hesitate to contact support@nrec.no if you have questions!
 
 Best Regards,
 -- 
-NREC Team <support@uh-iaas.no>
+NREC Team <support@nrec.no>
