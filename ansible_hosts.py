@@ -37,7 +37,7 @@ for host in hosts['results']:
     if var:
         var_group = group = "%s-%s-%s" % (loc, role, var)
         if not var_group in hostlist:
-           hostlist[var_group] = []
+            hostlist[var_group] = []
         hostlist[var_group].append(hostname)
 
 children = "%s:children" % loc

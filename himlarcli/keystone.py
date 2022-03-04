@@ -750,7 +750,7 @@ class Keystone(Client):
             self.log_error(e)
             return
         if password:
-            print "New password: %s" % password
+            print("New password: %s" % password)
 
     def provision_dataporten(self, email, password):
         """

@@ -197,7 +197,7 @@ class Parser(object):
 
         for name, arg in sorted_opts:
             if not 'dest' in arg and '-' in name:
-                print 'missing dest in opt_args %s' % name
+                print('missing dest in opt_args %s' % name)
                 continue
             if 'type' in arg:
                 # Use locate to find buildt-in types
@@ -225,7 +225,7 @@ class Parser(object):
     @staticmethod
     def __add_argument(parser, name, **kwargs):
         if 'dest' not in kwargs and '-' in name:
-            print 'missing dest in opt_args %s' % name
+            print('missing dest in opt_args %s' % name)
             sys.exit(1)
         elif 'dest' not in kwargs:
             dest = ''
@@ -238,4 +238,4 @@ class Parser(object):
         try:
             parser.add_argument(name, **kwargs)
         except TypeError as e:
-            print e
+            print(e)

@@ -133,7 +133,7 @@ def get_logger(name, config, debug, log=None):
 
 def is_virtual_env():
     if not hasattr(sys, 'real_prefix'):
-        print "Remember to source bin/activate!"
+        print("Remember to source bin/activate!")
         sys.exit(1)
 
 def setup_logger(name, debug, log_path='/opt/himlarcli/', configfile='logging.yaml'):
@@ -143,7 +143,7 @@ def setup_logger(name, debug, log_path='/opt/himlarcli/', configfile='logging.ya
         try:
             config = yaml.full_load(stream)
         except yaml.YAMLError as exc:
-            print exc
+            print(exc)
 
     # Always use absolute paths
     if not os.path.isabs(config['handlers']['file']['filename']):
@@ -153,8 +153,8 @@ def setup_logger(name, debug, log_path='/opt/himlarcli/', configfile='logging.ya
         try:
             logging.config.dictConfig(config)
         except ValueError as e:
-            print e
-            print "Please check your log section in config.ini and logging.yaml"
+            print(e)
+            print("Please check your log section in config.ini and logging.yaml")
             sys.exit(1)
     logger = logging.getLogger(name)
     logging.captureWarnings(True)

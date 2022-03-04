@@ -32,7 +32,7 @@ class Printer(object):
         elif self.format == 'json':
             self.__list_dicts_to_json(lists=lists, sort=sort)
         elif self.format == csv:
-            print 'not implemented'
+            print('not implemented')
 
     def output_dict(self, objects, sort=True, one_line=False):
         if not isinstance(objects, dict):
@@ -47,17 +47,17 @@ class Printer(object):
 
     def output_msg(self, msg):
         if self.format == 'text':
-            print "\n{}\n".format(msg)
+            print("\n{}\n".format(msg))
         elif self.format == 'json':
             self.__dict_to_json(objects={'message': msg})
         elif self.format == 'csv':
-            print "{};".format(msg)
+            print("{};".format(msg))
 
     def __dict_to_json(self, objects, sort=True):
         if 'header' in objects:
             del objects['header']
         if objects:
-            print json.dumps(objects, sort_keys=sort, indent=self.INDENT)
+            print(json.dumps(objects, sort_keys=sort, indent=self.INDENT))
 
     def __list_dicts_to_text(self, lists, sort=True, one_line=False):
         for obj in lists:
@@ -74,17 +74,17 @@ class Printer(object):
         else:
             sorted_objects = objects.items()
         if 'header' in objects:
-            print "".ljust(80, "=")
-            print "  %s" % objects['header'].ljust(76)
-            print "".ljust(80, "=")
+            print("".ljust(80, "="))
+            print("  %s" % objects['header'].ljust(76))
+            print("".ljust(80, "="))
         out_line = str()
         for k, v in sorted_objects:
             if k == 'header':
                 continue
             elif isinstance(v, list):
-                print '%s =' % k
+                print('%s =' % k)
                 for i in v:
-                    print "  %s" % i
+                    print("  %s" % i)
             elif one_line:
                 out_line += '%s ' % v
             else:
@@ -92,9 +92,9 @@ class Printer(object):
                     value = '{:n}'.format(v)
                 else:
                     value = v
-                print "%s = %s" % (k, value)
+                print("%s = %s" % (k, value))
         if out_line:
-            print out_line.strip()
+            print(out_line.strip())
 
     @staticmethod
     def __dict_to_csv(objects, order_by=0, sort=True):

@@ -113,7 +113,7 @@ def action_expired():
                 created = utils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                 active_days = (date.today() - created).days
                 kc.debug_log('{} running for {} days'.format(instance.id, active_days))
-                if (int(active_days) == int(inputday)):
+                if int(active_days) == int(inputday):
                     mapping = dict(project=project.name, enddate=int((max_days)-int(inputday)), activity=int(active_days), region=region.upper(), instance=instance.name)
                     body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
                     msg = mail.get_mime_text(subject, body_content, fromaddr, cc)

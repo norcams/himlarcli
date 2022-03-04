@@ -42,7 +42,7 @@ def process_action(ch, method, properties, body): #callback
         if data['action'] == 'provision':
             #"Provision action "
             provision = ksclient.provision_dataporten(email=data['email'], password=data['password'])
-        elif data['action'] =='reset_password':
+        elif data['action'] == 'reset_password':
             #"Provisioning is required! "
             pass
 
