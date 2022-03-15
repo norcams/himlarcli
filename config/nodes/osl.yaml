@@ -74,7 +74,7 @@ nodes:
         value:          'vda'
   compute-01:
     mac: ec:f4:bb:ce:20:0c
-    hostgroup: 3
+    hostgroup: 19
   compute-02:
     mac: ec:f4:bb:ce:27:24
     hostgroup: 3
@@ -95,7 +95,7 @@ nodes:
     hostgroup: 24
   compute-08:
     mac: 00:0a:f7:b6:aa:5e
-    hostgroup: 24
+    hostgroup: 25
   compute-09:
     mac: e4:43:4b:46:5b:72
     hostgroup: 19
@@ -200,7 +200,7 @@ nodes:
     hostgroup: 23
   compute-44:
     mac: 1c:20:db:ec:0a:dd
-    hostgroup: 15
+    hostgroup: 23
   compute-45:
     mac: 1c:20:db:eb:fe:8b
     hostgroup: 15
