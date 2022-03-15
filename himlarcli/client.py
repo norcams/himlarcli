@@ -1,6 +1,6 @@
 import os
 import sys
-import ConfigParser
+import configparser
 import unicodedata
 from keystoneauth1.identity import v3
 from keystoneauth1 import session

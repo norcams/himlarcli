@@ -2,7 +2,7 @@ import sys
 import os
 from datetime import datetime
 from datetime import date
-import ConfigParser
+import configparser
 import logging
 import logging.config
 import inspect
@@ -12,7 +12,6 @@ import hashlib
 import functools
 #import mimetypes
 import urllib
-import urllib2
 from string import Template
 import socket
 from tabulate import tabulate
@@ -49,7 +48,7 @@ def check_port(address, port, timeout=60, log=None):
             log.debug("=> Connected to %s on port %s" % (address, port))
         sock.close()
         return True
-    except socket.error, e:
+    except(socket.error, e):
         if log:
             log.debug("=> Connection to %s on port %s failed: %s" % (address, port, e))
         return False
@@ -71,11 +70,9 @@ def append_to_file(filename, text):
 def append_to_logfile(filename, date, region, text1, text2, text3):
     filename = get_abs_path(filename)
     try:
-        f = open(filename, 'a+')
-        try:
+	with open(filename) as f:
             f.write("%s, %s, %s, %s, %s\n" % (date, region, text1, text2, text3))
-	finally:
-            f.close()
+	    f.close()
     except IOError as exc:
         logger.warn('=> ERROR: could not append to logfile %s' % exc)
 
@@ -83,7 +80,7 @@ def get_config(config_path):
     if not os.path.isfile(config_path):
         logging.critical("Could not find config file: %s", config_path)
         sys.exit(1)
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(config_path)
     return config
 
@@ -120,7 +117,7 @@ def get_logger(name, config, debug, log=None):
     else:
         try:
             path = config.get('log', 'path')
-        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+        except (configparser.NoOptionError, ConfigParser.NoSectionError):
             path = '/opt/himlarcli/'
         mylog = setup_logger(name, debug, path)
         if not os.environ.get('VIRTUAL_ENV'):
