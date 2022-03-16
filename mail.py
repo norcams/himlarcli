@@ -176,7 +176,7 @@ def action_instances():
     if not options.template:
         utils.sys_error('Specify a template file. E.g. -t notify/mailto_list_of_instances.txt')
 
-    for user, instance in users.iteritems():
+    for user, instance in users.items():
         columns = ['project', 'region']
         mapping = dict(region=region,
                        date=options.date,

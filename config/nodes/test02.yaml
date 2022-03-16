@@ -275,6 +275,7 @@ nodes:
   proxy-02:
     compute_profile: small
     compute_resource: controller-03
+    hostgroup: 6
     compute_attributes:
       volumes_attributes:
         '1':

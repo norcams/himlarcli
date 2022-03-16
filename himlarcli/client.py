@@ -58,7 +58,7 @@ class Client(object):
     def get_config_section(self, section):
         try:
             openstack = self.config.items(section)
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.logger.exception('missing [%s]' % section)
             self.logger.critical('Could not find section [%s] in %s', section, self.config_path)
             sys.exit(1)
@@ -68,10 +68,10 @@ class Client(object):
         try:
             value = self.config.get(section, option)
             return value
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.logger.debug('=> config file section [%s] missing option %s'
                               % (section, option))
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.logger.debug('=> config file missing section %s' % section)
         return default
 
