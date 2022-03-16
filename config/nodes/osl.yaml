@@ -80,7 +80,7 @@ nodes:
     hostgroup: 19
   compute-03:
     mac: ec:f4:bb:ce:28:24
-    hostgroup: 3
+    hostgroup: 19
   compute-04:
     mac: 24:6e:96:32:2d:34
     hostgroup: 3
@@ -215,7 +215,7 @@ nodes:
     hostgroup: 23
   compute-49:
     mac: 1c:20:db:eb:fe:4c
-    hostgroup: 15
+    hostgroup: 23
   compute-50:
     mac: 1c:20:db:ec:60:93
     hostgroup: 15
