@@ -83,7 +83,7 @@ nodes:
     hostgroup: 19
   compute-04:
     mac: 24:6e:96:32:2d:34
-    hostgroup: 3
+    hostgroup: 19
   compute-05:
     mac: 24:6e:96:32:1e:2c
     hostgroup: 3
@@ -218,7 +218,7 @@ nodes:
     hostgroup: 23
   compute-50:
     mac: 1c:20:db:ec:60:93
-    hostgroup: 15
+    hostgroup: 23
   console-01:
     compute_profile: medium
     compute_resource: controller-03
