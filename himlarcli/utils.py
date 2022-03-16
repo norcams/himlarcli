@@ -55,7 +55,7 @@ def check_port(address, port, timeout=60, log=None):
 
 def confirm_action(question):
     question = "%s (yes|no)? " % question
-    answer = raw_input(question)
+    answer = input(question)
     if answer.lower() == 'yes':
         return True
     sys.stderr.write('Action aborted by user.\n')
