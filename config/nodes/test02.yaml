@@ -258,6 +258,20 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  proxy-02:
+    compute_profile: small
+    compute_resource: controller-03
+    hostgroup: 6
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'masstorage'
+          capacity:     '50G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   resolver-01:
     compute_profile: small
     compute_resource: controller-02
