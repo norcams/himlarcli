@@ -438,6 +438,20 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  proxy-02:
+    compute_profile: small
+    compute_resource: controller-08
+    hostgroup: 16
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '50G'
+          format_type:  'raw'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   report-01:
     compute_profile: small
     compute_resource: controller-05
