@@ -89,7 +89,7 @@ nodes:
     hostgroup: 19
   compute-06:
     mac: 24:6e:96:32:28:ec
-    hostgroup: 3
+    hostgroup: 19
   compute-07:
     mac: 00:0a:f7:b6:b6:88
     hostgroup: 24
@@ -101,7 +101,7 @@ nodes:
     hostgroup: 19
   compute-10:
     mac: e4:43:4b:46:84:86
-    hostgroup: 3
+    hostgroup: 19
   compute-atlas-11:
     mac: b0:26:28:1e:86:b2
     hostgroup: 3
