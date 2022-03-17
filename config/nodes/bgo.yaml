@@ -441,7 +441,7 @@ nodes:
   proxy-02:
     compute_profile: small
     compute_resource: controller-08
-    hostgroup: 16
+    hostgroup: 15
     compute_attributes:
       volumes_attributes:
         '1':
