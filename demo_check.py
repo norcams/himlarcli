@@ -42,7 +42,6 @@ def action_count():
                 else:
                     print(created_at)
     printer.output_dict({'header': 'count', 'all': count_all, '>60': count_60})
-    #print count
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))

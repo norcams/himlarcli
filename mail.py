@@ -191,9 +191,9 @@ def action_instances():
         sent_mail_counter += 1
 
     if options.dry_run and message:
-        print "\nExample mail sendt from this run:"
-        print "----------------------------------"
-        print message
+        print("\nExample mail sendt from this run:")
+        print("----------------------------------")
+        print(message)
     mailer.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 
@@ -206,7 +206,7 @@ def action_instances():
 #         email_content = open(content, 'r')
 #         body_content = email_content.read()
 #         if options.dry_run:
-#             print body_content
+#             print(body_content)
 #         else:
 #             with open(content, 'r') as email_content:
 #                 body_content = email_content.read()
@@ -225,7 +225,7 @@ def action_instances():
 #                     sent_mail_counter += 1
 #                 except ValueError:
 #                         himutils.sys_error('Not able to send the email.')
-#             print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
+#             print('\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter))
 #     mail.close()
 
 # Send mail to a specific type of project
@@ -241,7 +241,7 @@ def action_instances():
 #         email_content = open(content, 'r')
 #         body_content = email_content.read()
 #         if options.dry_run:
-#             print body_content
+#             print(body_content)
 #         else:
 #             with open(content, 'r') as email_content:
 #                 body_content = email_content.read()
@@ -265,7 +265,7 @@ def action_instances():
 #                         sent_mail_counter += 1
 #                     except ValueError:
 #                         himutils.sys_error('Not able to send the email.')
-#             print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
+#             print('\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter))
 #     mail.close()
 
 # Send mail to all the users
@@ -281,7 +281,7 @@ def action_instances():
 #         email_content = open(content, 'r')
 #         body_content = email_content.read()
 #         # if options.dry_run:
-#         #     print body_content
+#         #     print(body_content)
 #         # else:
 #         with open(content, 'r') as email_content:
 #             body_content = email_content.read()
@@ -299,7 +299,7 @@ def action_instances():
 #                     himutils.sys_error('Not able to send the email.')
 #             if not options.dry_run:
 #                 himutils.append_to_file(logfile, toaddr)
-#         print '\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter)
+#         print('\nSent %s mail(s) to %s user(s)' % (sent_mail_counter, user_counter))
 #     mail.close()
 
 # Run local function with the same name as the action (Note: - => _)

@@ -112,13 +112,13 @@ def action_vendorapi():
     else:
         projects_object  = json.dumps(data_project, indent = 4)
         instances_object = json.dumps(data_instance, indent = 4)
-        print 'PROJECTS'
-        print '-----------------------------------------------------------------------------'
-        print projects_object
-        print
-        print 'INSTANCES'
-        print '-----------------------------------------------------------------------------'
-        print instances_object
+        print('PROJECTS')
+        print('-----------------------------------------------------------------------------')
+        print(projects_object)
+        print()
+        print('INSTANCES')
+        print('-----------------------------------------------------------------------------')
+        print(instances_object)
 
 def action_mail():
     if not options.template:
@@ -127,7 +127,7 @@ def action_mail():
 
     if options.mail_user:
         if not ksclient.is_valid_user(email=options.mail_user, domain=options.domain):
-            print "%s is not a valid user. Please check your spelling or case." % options.mail_user
+            print("%s is not a valid user. Please check your spelling or case." % options.mail_user)
             sys.exit(1)
         users = [options.mail_user]
     else:
@@ -209,10 +209,10 @@ def action_mail():
         # Send mail to user
         mail.send_mail(user, msg, fromaddr)
         if options.dry_run:
-            print "Did NOT send spam to %s" % user
-            print "    --> admin for %d projects, member of %d projects" % (admin_counter, member_counter)
+            print("Did NOT send spam to %s" % user)
+            print("    --> admin for %d projects, member of %d projects" % (admin_counter, member_counter))
         else:
-            print "Spam sent to %s" % user
+            print("Spam sent to %s" % user)
 
 def action_enddate():
     if not options.list and not options.template:
