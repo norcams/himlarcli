@@ -1,6 +1,6 @@
 from himlarcli.client import Client
 import sys
-import ConfigParser
+import configparser
 from foreman.client import Foreman
 from himlarcli import utils
 
@@ -28,17 +28,17 @@ class ForemanClient(Client):
         try:
             value = self.config.get(section, option)
             return value
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.logger.debug('=> config file section [%s] missing option %s'
                               % (section, option))
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.logger.debug('=> config file missing section %s' % section)
         return None
 
     def get_config_section(self, section):
         try:
             openstack = self.config.items(section)
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.logger.debug('missing [%s]' % section)
             self.logger.debug('Could not find section [%s] in %s', section, self.config_path)
             sys.exit(1)
