@@ -1,0 +1,21 @@
+Dear NREC user,
+
+The following project reached its end date ($enddate) $ago days ago,
+and has been placed in quarantine:
+
+  $project
+
+This is a reminder that this project will be deleted, along with all
+its resources, in $days days.
+
+If you believe that this is a mistake, please contact us as soon as
+possible at support@nrec.no, e.g. by replying to this email.
+
+For more details about the end date policy for NREC projects, visit:
+FIXME: URL
+
+Don't hesitate to contact support@nrec.no if you have questions!
+
+Best Regards,
+-- 
+NREC Team <support@nrec.no>

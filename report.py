@@ -5,6 +5,8 @@ from himlarcli.printer import Printer
 from himlarcli.mail import Mail
 from himlarcli import utils
 from prettytable import PrettyTable
+from datetime import datetime
+from datetime import timedelta
 import re
 import sys
 import json
@@ -119,6 +121,10 @@ def action_vendorapi():
         print instances_object
 
 def action_mail():
+    if not options.template:
+        utils.sys_error("Option '--template' is required when sending mail")
+        sys.exit(1)
+
     if options.mail_user:
         if not ksclient.is_valid_user(email=options.mail_user, domain=options.domain):
             print "%s is not a valid user. Please check your spelling or case." % options.mail_user
@@ -208,6 +214,144 @@ def action_mail():
         else:
             print "Spam sent to %s" % user
 
+def action_enddate():
+    if not options.list and not options.template:
+        utils.sys_error("Option '--template' is required when sending mail")
+        sys.exit(1)
+
+    if not options.list and not options.days:
+        utils.sys_error("Option '--days' is required")
+        sys.exit(1)
+
+    search_filter = dict()
+    projects = ksclient.get_projects(**search_filter)
+
+    today = datetime.today()
+
+    options.detail = True # we want details
+
+    if options.list and not options.days:
+        project_list = dict()
+        for project in projects:
+            project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
+            project_type = project.type if hasattr(project, 'type') else 'None'
+
+            # Ignore DEMO projects
+            if project_type == 'demo':
+                continue
+
+            # Ignore already quarantined projects
+            if ksclient.check_project_tag(project.id, 'quarantine_active'):
+                continue
+
+            # Ignore projects without an enddate
+            if project_enddate == 'None':
+                continue
+
+            # Get current enddate
+            enddate = datetime.strptime(project.enddate, '%Y-%m-%d')
+
+            # store data
+            project_list[project.name] = (enddate - today).days
+
+        #PY3: for project in dict(sorted(project_list.items(), key=lambda item: item[1])):
+        for project in project_list:
+            print "%-4s %s" % (project_list[project], project)
+        return
+
+    for project in projects:
+        project_type = project.type if hasattr(project, 'type') else 'None'
+        project_admin = project.admin if hasattr(project, 'admin') else 'None'
+        project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
+        project_org = project.org if hasattr(project, 'org') else 'None'
+        project_contact = project.contact if hasattr(project, 'contact') else 'None'
+
+        # Ignore DEMO projects
+        if project_type == 'demo':
+            continue
+
+        # Ignore already quarantined projects
+        if ksclient.check_project_tag(project.id, 'quarantine_active'):
+            continue
+
+        # Ignore projects without an enddate
+        if project_enddate == 'None':
+            continue
+
+        # Get current enddate
+        enddate = datetime.strptime(project.enddate, '%Y-%m-%d')
+
+        # Set common mail parameters
+        mail = utils.get_client(Mail, options, logger)
+        mail = Mail(options.config, debug=options.debug)
+        mail.set_dry_run(options.dry_run)
+        if options.fromaddr:
+            fromaddr = options.fromaddr
+        else:
+            fromaddr = 'support@nrec.no'
+        if project_contact != 'None':
+            ccaddr = project_contact
+        else:
+            ccaddr = None
+
+        for days in options.days:
+            days = int(days)
+            if (enddate - today).days == days:
+
+                if options.list:
+                    print "%-4s %s" % (days, project.name)
+                else:
+                    options.admin = project_admin  # for prettyprint_project_metadata()
+
+                    attachment_payload = ''
+                    attachment_payload += Printer.prettyprint_project_metadata(project, options, logger, regions, project_admin)
+                    attachment_payload += Printer.prettyprint_project_zones(project, options, logger)
+                    attachment_payload += Printer.prettyprint_project_volumes(project, options, logger, regions)
+                    attachment_payload += Printer.prettyprint_project_images(project, options, logger, regions)
+                    attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
+
+                    # Construct mail content
+                    if days > 0:
+                        subject = 'NREC: End date in %d days for project "%s"' % (days, project.name)
+                        body_content = utils.load_template(inputfile=options.template,
+                                                           mapping={'project': project.name,
+                                                                    'enddate': project_enddate,
+                                                                    'days': days},
+                                                           log=logger)
+                        msg = mail.create_mail_with_txt_attachment(subject,
+                                                                   body_content,
+                                                                   attachment_payload,
+                                                                   'resources.txt',
+                                                                   fromaddr,
+                                                                   ccaddr)
+                    else:
+                        subject = 'NREC: Project "%s" will be deleted in %d days' % (project.name, 90 + days)
+                        body_content = utils.load_template(inputfile=options.template,
+                                                           mapping={'project': project.name,
+                                                                    'enddate': project_enddate,
+                                                                    'ago': -days,
+                                                                    'days': 90 + days},
+                                                           log=logger)
+                        msg = mail.create_mail_with_txt_attachment(subject,
+                                                                   body_content,
+                                                                   attachment_payload,
+                                                                   'resources.txt',
+                                                                   fromaddr,
+                                                                   ccaddr)
+
+                    # Send mail to user
+                    mail.send_mail(project_admin, msg, fromaddr)
+                    if options.dry_run:
+                        print "Did NOT send spam to %s;" % project_admin
+                        print "Subject: %s" % subject
+                        print "To: %s" % project_admin
+                        if ccaddr:
+                            print "Cc: %s" % ccaddr
+                        print "From: %s" % fromaddr
+                        print '---'
+                        print body_content
+                    else:
+                        print "Spam sent to %s" % project_admin
 
 
 #---------------------------------------------------------------------

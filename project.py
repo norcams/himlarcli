@@ -12,6 +12,7 @@ from datetime import datetime
 from datetime import timedelta
 from email.mime.text import MIMEText
 import re
+import time
 
 himutils.is_virtual_env()
 
@@ -48,7 +49,24 @@ def action_create():
         himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
     test = 1 if options.type == 'test' else 0
     project_msg = project_msg_file
-    enddate = himutils.get_date(options.enddate, None, '%d.%m.%Y')
+
+    today = datetime.today()
+    if options.enddate == 'max':
+        datetime_enddate = today + timedelta(days=730)
+    elif re.match(r'^(\d\d\d\d-\d\d-\d\d)$', options.enddate):
+        try:
+            datetime_enddate = datetime.strptime(options.enddate, '%Y-%m-%d')
+        except:
+            himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+    elif re.match(r'^(\d\d\.\d\d\.\d\d\d\d)$', options.enddate):
+        try:
+            datetime_enddate = datetime.strptime(options.enddate, '%d.%m.%Y')
+        except:
+            himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+    else:
+        himutils.sys_error('ERROR: Invalid date: %s' % options.enddate)
+    enddate = datetime_enddate.strftime('%Y-%m-%d')
+
     if options.type == 'hpc':
         project_msg = project_hpc_msg_file
         if not enddate:
@@ -170,24 +188,49 @@ def action_create_private():
     if not options.quota:
         options.quota = 'small'
 
-    # Set enddate to 2 years from today if not provided
-    if not options.enddate:
-        max_enddate = datetime.today()
-        max_enddate += timedelta(days=730)
-        options.enddate = max_enddate.strftime('%d.%m.%Y')
-
     # Call main create function
     action_create()
 
 def action_extend():
     project = ksclient.get_project_by_name(options.project)
     if not project:
-        msg = 'Could not find any project named {}'.format(options.project)
-        himutils.sys_error(msg)
+        himutils.sys_error('No project found with name %s' % options.project)
 
-    enddate = himutils.get_date(options.enddate, None, '%d.%m.%Y')
+    today = datetime.today()
+    current = project.enddate if hasattr(project, 'enddate') else 'None'
+
+    if options.enddate == 'max':
+        datetime_enddate = today + timedelta(days=730)
+    elif re.match(r'^\+(\d+)([y|m|d])$', options.enddate):
+        if current == 'None':
+            himutils.sys_error("Project does not have an existing enddate")
+        else:
+            datetime_current = datetime.strptime(project.enddate, '%Y-%m-%d')
+
+        m = re.match(r'^\+(\d+)([y|m|d])$', options.enddate)
+        if m.group(2) == 'y':
+            datetime_enddate = datetime_current + timedelta(days=(365 * int(m.group(1))))
+        elif m.group(2) == 'm':
+            datetime_enddate = datetime_current + timedelta(days=(30 * int(m.group(1))))
+        elif m.group(2) == 'd':
+            datetime_enddate = datetime_current + timedelta(days=(int(m.group(1))))
+    elif re.match(r'^(\d\d\d\d-\d\d-\d\d)$', options.enddate):
+        try:
+            datetime_enddate = datetime.strptime(options.enddate, '%Y-%m-%d')
+        except:
+            himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+    elif re.match(r'^(\d\d\.\d\d\.\d\d\d\d)$', options.enddate):
+        try:
+            datetime_enddate = datetime.strptime(options.enddate, '%d.%m.%Y')
+        except:
+            himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+    else:
+        himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+
+    enddate = datetime_enddate.strftime('%Y-%m-%d')
     ksclient.update_project(project_id=project.id, enddate=str(enddate),
                             disabled='', notified='', enabled=True)
+    print "New end date for %s: %s" % (project.name, enddate)
 
 def action_grant():
     for user in options.users:
@@ -282,24 +325,82 @@ def action_list():
         search_filter['type'] = options.filter
     projects = ksclient.get_projects(**search_filter)
     count = 0
-    printer.output_dict({'header': 'Project list (admin, enddate, id, name, org, type)'})
+    if options.quarantined:
+        printer.output_dict({'header': 'Quarantined project list (Q-date, Q-reason, admin, enddate, id, name)'})
+    else:
+        printer.output_dict({'header': 'Project list (admin, enddate, id, name, org, type)'})
     for project in projects:
         project_type = project.type if hasattr(project, 'type') else 'None'
         project_admin = project.admin if hasattr(project, 'admin') else 'None'
         project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
         project_org = project.org if hasattr(project, 'org') else 'None'
+
+        # If we want to list by org or project type
         if options.list_org != 'all' and options.list_org != project_org:
             continue
         if options.list_type != 'all' and options.list_type != project_type:
             continue
-        output_project = {
-            'id': project.id,
-            'name': project.name,
-            'type': project_type,
-            'org': project_org,
-            'admin': project_admin,
-            'enddate': project_enddate,
-        }
+
+        # If we want to list quarantined projects
+        if options.quarantined:
+            if not ksclient.check_project_tag(project.id, 'quarantine_active'):
+                continue
+            tags = ksclient.list_project_tags(project.id)
+            r_date = re.compile('^quarantine date: .+$')
+            r_type = re.compile('^quarantine type: .+$')
+            date_tags = list(filter(r_date.match, tags))
+            type_tags = list(filter(r_type.match, tags))
+            if len(date_tags) > 1:
+                himutils.sys_error('Too many quarantine dates for project %s' % project.name)
+                continue
+            elif len(date_tags) < 1:
+                himutils.sys_error('No quarantine date for project %s' % project.name)
+                continue
+            if len(type_tags) > 1:
+                himutils.sys_error('Too many quarantine reasons for project %s' % project.name)
+                continue
+            elif len(type_tags) < 1:
+                himutils.sys_error('No quarantine reason for project %s' % project.name)
+                continue
+            m_date = re.match(r'^quarantine date: (\d\d\d\d-\d\d-\d\d)$', date_tags[0])
+            m_type = re.match(r'^quarantine type: (.+)$', type_tags[0])
+            quarantine_date_iso = m_date.group(1)
+            quarantine_reason = m_type.group(1)
+
+            if options.quarantined_reason != 'all' and options.quarantined_reason != quarantine_reason:
+                continue
+
+            if options.quarantined_before or options.quarantined_after:
+                quarantine_date = time.strptime(quarantine_date_iso, "%Y-%m-%d")
+                if options.quarantined_before:
+                    before_date = time.strptime(options.quarantined_before, "%Y-%m-%d")
+                    if quarantine_date > before_date:
+                        continue
+                elif options.quarantined_after:
+                    after_date = time.strptime(options.quarantined_after, "%Y-%m-%d")
+                    if quarantine_date < after_date:
+                        continue
+
+        # Slightly different output if we are listing quarantined projects
+        if options.quarantined:
+            output_project = {
+                'id': project.id,
+                'name': project.name,
+                'admin': project_admin,
+                'enddate': project_enddate,
+                'Q-date:': quarantine_date_iso,
+                'Q-reason': quarantine_reason,
+            }
+        else:
+            output_project = {
+                'id': project.id,
+                'name': project.name,
+                'type': project_type,
+                'org': project_org,
+                'admin': project_admin,
+                'enddate': project_enddate,
+            }
+
         count += 1
         printer.output_dict(output_project, sort=True, one_line=True)
     printer.output_dict({'header': 'Project list count', 'count': count})
@@ -364,6 +465,84 @@ def action_instances():
             count += 1
             printer.output_dict(output, sort=True, one_line=True)
         printer.output_dict({'header': 'Total instances in this project', 'count': count})
+
+def action_quarantine():
+    project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.sys_error('No project found with name %s' % options.project)
+
+    # Add or remove quarantine
+    if options.unset_quarantine:
+        ksclient.project_quarantine_unset(options.project)
+        printer.output_msg('Quarantine unset for project: {}'. format(options.project))
+    else:
+        if not options.reason:
+            himutils.sys_error("Option '--reason' is required")
+            return
+
+        if options.date:
+            date = himutils.get_date(options.date, None, '%Y-%m-%d')
+        else:
+            date = datetime.now().strftime("%Y-%m-%d")
+
+        if options.mail and options.reason == 'enddate':
+            project_contact = project.contact if hasattr(project, 'contact') else 'None'
+            project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
+            project_admin = project.admin if hasattr(project, 'admin') else 'None'
+
+            if not options.template:
+                himutils.sys_error("Option '--template' is required when sending mail")
+                return
+
+            # Set common mail parameters
+            mail = himutils.get_client(Mail, options, logger)
+            mail = Mail(options.config, debug=options.debug)
+            mail.set_dry_run(options.dry_run)
+            fromaddr = 'support@nrec.no'
+            if project_contact != 'None':
+                ccaddr = project_contact
+            else:
+                ccaddr = None
+
+            options.detail = True # we want details
+            options.admin = project_admin  # for prettyprint_project_metadata()
+
+            attachment_payload = ''
+            attachment_payload += Printer.prettyprint_project_metadata(project, options, logger, regions, project_admin)
+            attachment_payload += Printer.prettyprint_project_zones(project, options, logger)
+            attachment_payload += Printer.prettyprint_project_volumes(project, options, logger, regions)
+            attachment_payload += Printer.prettyprint_project_images(project, options, logger, regions)
+            attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
+
+            # Construct mail content
+            subject = 'NREC: Project "%s" is scheduled for deletion' % project.name
+            body_content = himutils.load_template(inputfile=options.template,
+                                                  mapping={'project': project.name,
+                                                           'enddate': project_enddate},
+                                                  log=logger)
+            msg = mail.create_mail_with_txt_attachment(subject,
+                                                       body_content,
+                                                       attachment_payload,
+                                                       'resources.txt',
+                                                       fromaddr,
+                                                       ccaddr)
+            # Send mail to user
+            mail.send_mail(project_admin, msg, fromaddr)
+            if options.dry_run:
+                print "Did NOT send spam to %s;" % project_admin
+                print "Subject: %s" % subject
+                print "To: %s" % project_admin
+                if ccaddr:
+                    print "Cc: %s" % ccaddr
+                print "From: %s" % fromaddr
+                print '---'
+                print body_content
+            else:
+                print "Spam sent to %s" % project_admin
+
+        ksclient.project_quarantine_set(options.project, options.reason, date)
+        printer.output_msg('Quarantine set for project: {}'. format(options.project))
+
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
