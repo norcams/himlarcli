@@ -308,6 +308,28 @@ class Nova(Client):
         if instance.status == 'SHUTOFF':
             self.debug_log('start instance {}'.format(instance.id))
 
+    def stop_project_instances(self, project, dry_run=False):
+        """
+            Stop all instances in a project
+            Version: 2022-03
+        """
+        search_opts = dict(tenant_id=project.id, all_tenants=1)
+        instances = self.__get_all_instances(search_opts=search_opts)
+        if not instances:
+            self.logger.debug('=> no instances found for project %s' % project.name)
+            return
+        for i in instances:
+            if not dry_run:
+                if i.status == 'ACTIVE' and not self.dry_run:
+                    try:
+                        i.stop()
+                    except novaclient.exceptions.Conflict as e:
+                        self.log_error(e)
+                if i.status == 'ACTIVE':
+                    self.debug_log('stop instance {}'.format(i.id))
+            else:
+                self.logger.debug('=> DRY-RUN: stop instance %s (%s)' % (i.name, project.name))
+
     def delete_project_instances(self, project, dry_run=False):
         """ Delete all instances for a project """
         search_opts = dict(tenant_id=project.id, all_tenants=1)

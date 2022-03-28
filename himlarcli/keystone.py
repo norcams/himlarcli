@@ -255,6 +255,62 @@ class Keystone(Client):
         compute = self.__list_compute_quota(project)
         return dict({'compute':compute})
 
+    def project_quarantine_set(self, project_name, reason, date):
+        """
+            Set quarantine on project
+            Version: 2022-03
+            :param project_name: name of project
+            :param reason: why quarantine
+        """
+        project = self.get_project_by_name(project_name=project_name)
+        if not project:
+            self.logger.debug('=> could not set quarantine for project %s: not found',
+                              project_name)
+            return None
+
+        region = self.find_regions()
+
+        # Delete instances
+        self.__shutoff_instances(project, region)
+
+        # Set quarantine tags
+        self.add_project_tag(project.id, 'quarantine_active')
+        self.add_project_tag(project.id, 'quarantine type: %s' % reason)
+        self.add_project_tag(project.id, 'quarantine date: %s' % date)
+
+        # Disable project
+        self.disable_project(project.id)
+
+        return None
+
+    def project_quarantine_unset(self, project_name):
+        """
+            Unset quarantine on project
+            Version: 2022-03
+            :param project_name: name of project
+        """
+        project = self.get_project_by_name(project_name=project_name)
+        if not project:
+            self.logger.debug('=> could not unset quarantine for project %s: not found',
+                              project_name)
+            return None
+
+        region = self.find_regions()
+
+        # Delete instances
+        self.__shutoff_instances(project, region)
+
+        # Delete quarantine tags
+        tags = self.list_project_tags(project.id)
+        r = re.compile('^quarantine.*')
+        for tag in list(filter(r.match, tags)):
+            self.delete_project_tag(project.id, tag)
+
+        # Enable project
+        self.enable_project(project.id)
+
+        return None
+
 ############################# DELETE FUNCTIONS ################################
 
     def delete_project(self, project_name, region=None):
@@ -519,6 +575,78 @@ class Keystone(Client):
         except exceptions.http.BadRequest as e:
             self.log_error(e)
             self.log_error('Project %s not updated' % project_id)
+
+    def set_project_properties(self, project_id, properties):
+        if self.dry_run:
+            self.log_dry_run('set_project_properties', **properties)
+            return
+        try:
+            project = self.client.projects.update(project=project_id,
+                                                  **properties)
+            self.logger.debug('=> updated project %s' % project.name)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('Project %s not updated' % project_id)
+
+    def add_project_tag(self, project_id, tag):
+        if self.dry_run:
+            self.log_dry_run('add_project_tag: %s' % tag)
+            return
+        try:
+            project = self.client.projects.add_tag(project=project_id, tag=tag)
+            self.logger.debug('=> add_tag %s for project %s' % (tag, project_id))
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('Project %s not tagged' % project_id)
+
+    def delete_project_tag(self, project_id, tag):
+        if self.dry_run:
+            self.log_dry_run('delete_project_tag: %s' % tag)
+            return
+        try:
+            if self.client.projects.check_tag(project=project_id, tag=tag):
+                project = self.client.projects.delete_tag(project=project_id, tag=tag)
+                self.logger.debug('=> delete_tag %s for project %s' % (tag, project_id))
+            else:
+                self.logger.debug('=> tag %s not found for project %s' % (tag, project_id))
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('Project %s not untagged' % project_id)
+
+    def check_project_tag(self, project_id, tag):
+        return self.client.projects.check_tag(project=project_id, tag=tag)
+
+    def list_project_tags(self, project_id):
+        tags = ()
+        try:
+            tags = self.client.projects.list_tags(project=project_id)
+            self.logger.debug('=> list_tags for project %s' % project_id)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('Request for project %s failed' % project_id)
+        return tags
+
+    def enable_project(self, project_id):
+        if self.dry_run:
+            self.log_dry_run('enable_project %s' % project_id)
+            return
+        try:
+            project = self.client.projects.update(project=project_id, enabled=True)
+            self.logger.debug('=> enable project %s' % project.name)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('Project %s not enabled' % project_id)
+
+    def disable_project(self, project_id):
+        if self.dry_run:
+            self.log_dry_run('disable_project %s' % project_id)
+            return
+        try:
+            project = self.client.projects.update(project=project_id, enabled=False)
+            self.logger.debug('=> disable project %s' % project.name)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('Project %s not disabled' % project_id)
 
     def create_project(self, project_name, admin=None, description=None, **kwargs):
         """
@@ -914,6 +1042,15 @@ class Keystone(Client):
                                log=self.logger,
                                region=self.region)
         return self.novaclient.set_quota(project.id, quota)
+
+    def __shutoff_instances(self, project, region):
+        """ Use novaclient to shut off all instances for a project in
+            one or more regions
+            version: 2022-03 """
+        regions = [region] if not isinstance(region, list) else region
+        for region in regions:
+            nc = self._get_client(Nova, region)
+            nc.stop_project_instances(project, self.dry_run)
 
     @staticmethod
     def get_user_org(email):

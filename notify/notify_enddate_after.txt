@@ -1,0 +1,21 @@
+Dear NREC user,
+
+The following project has reached its end date $enddate:
+
+  $project
+
+All instances in the project has been shut off, the project is
+quarantined and is no longer visible to you. After 90 days of
+quarantine, the project will be deleted along with all its resources.
+
+If you believe that this is a mistake, please contact us as soon as
+possible at support@nrec.no, e.g. by replying to this email.
+
+For more details about the end date policy for NREC projects, visit:
+FIXME: URL
+
+Don't hesitate to contact support@nrec.no if you have questions!
+
+Best Regards,
+-- 
+NREC Team <support@nrec.no>
