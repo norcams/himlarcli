@@ -194,7 +194,7 @@ class Printer(object):
             table_metadata.add_row(['Instances:', ', '.join(instance_list)])
 
         out_str += table_metadata.get_string() + "\n"
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def prettyprint_project_zones(project, options, logger):
@@ -217,7 +217,7 @@ class Printer(object):
             out_str += "\n  Zones (%d): \n" % len(zones)
             out_str += table_zones.get_string() + "\n"
 
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def prettyprint_project_images(project, options, logger, regions):
@@ -264,7 +264,7 @@ class Printer(object):
             out_str += "\n  Images (%d): \n" % images_total
             out_str += table_images.get_string() + "\n"
 
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def prettyprint_project_volumes(project, options, logger, regions):
@@ -297,7 +297,7 @@ class Printer(object):
             out_str += "\n  Volumes (%d): \n" % volumes_total
             out_str += table_volumes.get_string() + "\n"
 
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def prettyprint_project_instances(project, options, logger, regions):
@@ -378,7 +378,7 @@ class Printer(object):
             out_str += "\n  Instances (%d): \n" % instances_total
             out_str += table_instances.get_string() + "\n"
 
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def _count_project_zones(project, options, logger):
