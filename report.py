@@ -254,8 +254,7 @@ def action_enddate():
             # store data
             project_list[project.name] = (enddate - today).days
 
-        #PY3: for project in dict(sorted(project_list.items(), key=lambda item: item[1])):
-        for project in project_list:
+        for project in dict(sorted(project_list.items(), key=lambda item: item[1])):
             print("%-4s %s" % (project_list[project], project))
         return
 
