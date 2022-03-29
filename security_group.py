@@ -80,7 +80,7 @@ def is_blacklist(rule, blacklist):
 
 def is_whitelist(rule, whitelist):
     #valid_none_check = ['remote_ip_prefix']
-    for k, v in whitelist.iteritems():
+    for k, v in whitelist.items():
         # whitelist none empty property
         if "!None" in v and rule[k]:
             return True
@@ -106,10 +106,10 @@ def load_config():
         'whitelist': 'config/security_group/whitelist.yaml',
         'notify': 'config/security_group/notify.yaml'}
     config = dict()
-    for file_type, config_file in config_files.iteritems():
+    for file_type, config_file in config_files.items():
         config[file_type] = utils.load_config(config_file)
         kc.debug_log('{}: {}'.format(file_type, config[file_type]))
-    return [(v) for v in config.itervalues()]
+    return [(v) for v in config.values()]
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))

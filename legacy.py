@@ -51,13 +51,13 @@ else:
 
 def action_show():
     aggregate = novaclient.get_aggregate(options.aggregate)
-    print '\nMETADATA:'
-    for key, value in aggregate.metadata.iteritems():
-        print "%s = %s" % (key, value)
-    print '\nHOSTS:'
+    print('\nMETADATA:')
+    for key, value in aggregate.metadata.items():
+        print("%s = %s" % (key, value))
+    print('\nHOSTS:')
     for h in aggregate.hosts:
         services = novaclient.get_service(h)
-        print '%s (%s)' % (h, services[0].status)
+        print('%s (%s)' % (h, services[0].status))
 
 def action_list():
     filters = dict()
@@ -83,15 +83,15 @@ def action_instances():
         else:
             stats[i.status] = 1
         network = next(iter(i.addresses))
-        print '%s %s (status=%s, network=%s)' % (i.id, unicode(i.name), i.status, network)
-    print "\nSTATUS:"
-    print "======="
+        print('%s %s (status=%s, network=%s)' % (i.id, str(i.name), i.status, network))
+    print("\nSTATUS:")
+    print("=======")
     pp.pprint(stats)
 
 def action_users():
     users = novaclient.get_users(options.aggregate, simple=True)
     for user in users:
-        print user
+        print(user)
 
 def action_activate():
     aggregates = novaclient.get_aggregates()
@@ -100,12 +100,12 @@ def action_activate():
         # do not use on central1 or placeholder1
         if aggregate not in legacy_aggregate:
             continue
-        print '=============== %s ================' % aggregate
+        print('=============== %s ================' % aggregate)
         metadata = novaclient.get_aggregate(aggregate)
         # Enable this aggregate
         if aggregate == options.aggregate:
             for h in metadata.hosts:
-                print '%sEnable %s' % (dry_run_txt, h)
+                print('%sEnable %s' % (dry_run_txt, h))
                 novaclient.enable_host(h)
             tags = {'enabled': datetime.today(), 'disabled': None, 'mail': None}
             if not options.dry_run:
@@ -114,7 +114,7 @@ def action_activate():
             for h in metadata.hosts:
                 services = novaclient.get_service(h)
                 if services[0].status == 'enabled':
-                    print '%sDisable %s' % (dry_run_txt, h)
+                    print('%sDisable %s' % (dry_run_txt, h))
                     novaclient.disable_host(h)
             tags = {'disabled': datetime.today(), 'enabled': None}
             if not options.dry_run:
@@ -144,9 +144,9 @@ def action_migrate():
     for instance in instances:
         count += 1
         if options.dry_run:
-            logger.debug('=> DRY-RUN: migrate instance %s' % unicode(instance.name))
+            logger.debug('=> DRY-RUN: migrate instance %s' % str(instance.name))
         else:
-            logger.debug('=> migrate instance %s' % unicode(instance.name))
+            logger.debug('=> migrate instance %s' % str(instance.name))
             try:
                 instance.migrate(host=target_host.hypervisor_hostname)
                 time.sleep(2)
@@ -216,9 +216,9 @@ def action_terminate():
     if users:
         mail = Mail(options.config, debug=options.debug)
     # Email each users
-    for user, instances in users.iteritems():
+    for user, instances in users.items():
         user_instances = ""
-        for server, info in instances.iteritems():
+        for server, info in instances.items():
             user_instances += "%s (snapshot: %s)\n" % (server, info['snapshot'])
         #action_date = himutils.get_date(options.date, date.today(), '%Y-%m-%d')
         mapping = dict(region=ksclient.region.upper(),
@@ -229,8 +229,8 @@ def action_terminate():
                                               mapping=mapping,
                                               log=ksclient.get_logger())
         if not body_content:
-            print 'ERROR! Could not find and parse mail body in \
-                  %s' % options.msg
+            print('ERROR! Could not find and parse mail body in \
+                  %s' % options.msg)
             sys.exit(1)
 
         msg = MIMEText(body_content, 'plain', 'utf-8')
@@ -239,12 +239,12 @@ def action_terminate():
 
         if not options.dry_run:
             mail.send_mail(user, msg)
-            print "Sending email to user %s" % user
+            print("Sending email to user %s" % user)
         else:
-            print "Dry-run: Mail would be sendt to user %s" % user
+            print("Dry-run: Mail would be sendt to user %s" % user)
     pp = pprint.PrettyPrinter(indent=1)
-    print "\nComplete list of users and instances:"
-    print "====================================="
+    print("\nComplete list of users and instances:")
+    print("=====================================")
     pp.pprint(users)
 
 
@@ -277,9 +277,9 @@ def action_notify():
     if users:
         mail = Mail(options.config, debug=options.debug)
     # Email each users
-    for user, instances in users.iteritems():
+    for user, instances in users.items():
         user_instances = ""
-        for server, info in instances.iteritems():
+        for server, info in instances.items():
             user_instances += "%s (current status %s)\n" % (server, info['status'])
         action_date = himutils.get_date(options.date, date.today(), '%Y-%m-%d')
         mapping = dict(region=ksclient.region.upper(),
@@ -290,8 +290,8 @@ def action_notify():
                                               mapping=mapping,
                                               log=ksclient.get_logger())
         if not body_content:
-            print 'ERROR! Could not find and parse mail body in \
-                  %s' % options.msg
+            print('ERROR! Could not find and parse mail body in \
+                  %s' % options.msg)
             sys.exit(1)
 
         msg = MIMEText(body_content, 'plain', 'utf-8')
@@ -300,12 +300,12 @@ def action_notify():
 
         if not options.dry_run:
             mail.send_mail(user, msg)
-            print "Sending email to user %s" % user
+            print("Sending email to user %s" % user)
         else:
-            print "Dry-run: Mail would be sendt to user %s" % user
+            print("Dry-run: Mail would be sendt to user %s" % user)
     pp = pprint.PrettyPrinter(indent=1)
-    print "\nComplete list of users and instances:"
-    print "====================================="
+    print("\nComplete list of users and instances:")
+    print("=====================================")
     pp.pprint(users)
 
 # Run local function with the same name as the action

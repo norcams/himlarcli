@@ -45,7 +45,7 @@ class Owner(Base):
     instance_id = Column(String(63))
 
     def update(self, attributes):
-        for k,v in attributes.iteritems():
+        for k,v in attributes.items():
             setattr(self, k, v)
 
 def action_sync():

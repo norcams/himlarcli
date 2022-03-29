@@ -50,7 +50,7 @@ def action_compute():
                                                 stats[a_name].get(metric, 0))
     statsd.gauge_dict('compute', stats)
     if not options.quiet:
-        for name, stat in stats.iteritems():
+        for name, stat in stats.items():
             printer.output_dict({'header': name})
             printer.output_dict(stat)
 
@@ -86,17 +86,17 @@ def action_legacy():
         stats['instances']['total']['count'] += novastats['count']
         stats['instances']['total']['error'] += novastats['error']
 
-    for t, s in stats.iteritems():
-        for r, d in s.iteritems():
+    for t, s in stats.items():
+        for r, d in s.items():
             name = '%s.%s' % (r, t)
             count = d['count']
             if not options.quiet:
-                print '%s = %s' % (name, count)
+                print('%s = %s' % (name, count))
             statsd.gauge(name, count)
             if 'error' in d:
                 name = '%s.instance_errors' % (r)
                 if not options.quiet:
-                    print '%s = %s' % (name, d['error'])
+                    print('%s = %s' % (name, d['error']))
                 statsd.gauge(name, d['error'])
 
 # Run local function with the same name as the action (Note: - => _)

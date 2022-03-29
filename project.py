@@ -83,7 +83,7 @@ def action_create():
             himutils.sys_error(errmsg, 1)
 
     if not options.force:
-        print 'Project name: %s\nDescription: %s\nAdmin: %s\nContact: %s\nOrganization: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
+        print('Project name: %s\nDescription: %s\nAdmin: %s\nContact: %s\nOrganization: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
                 % (options.project,
                    ksclient.convert_ascii(options.desc),
                    options.admin.lower(),
@@ -92,7 +92,7 @@ def action_create():
                    options.type,
                    str(enddate),
                    options.quota,
-                   options.rt)
+                   options.rt))
         if not himutils.confirm_action('Are you sure you want to create this project?'):
             himutils.sys_error('Aborted', 1)
     project = ksclient.create_project(project_name=options.project,
@@ -423,7 +423,7 @@ def action_show_quota():
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
         neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
         components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
-        for comp, client in components.iteritems():
+        for comp, client in components.items():
             if options.service != 'all' and comp != options.service:
                 continue
             quota = dict()

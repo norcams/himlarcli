@@ -87,7 +87,7 @@ def action_compare():
                 quotas['region'] = region
                 q = state.get_first(Quota, project_id=project.id, region=region)
                 if q is None:
-                    print 'could not find saved quota for %s' % project.name
+                    print('could not find saved quota for %s' % project.name)
                     continue
                 miss_match = q.compare(quotas)
                 if miss_match:
@@ -116,7 +116,7 @@ def action_compare():
                     printer.output_dict(output, one_line=True)
 
 def action_replace():
-    print 'not implemented'
+    print('not implemented')
 
 def action_purge():
     state.purge(options.resource)

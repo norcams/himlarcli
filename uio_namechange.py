@@ -40,12 +40,12 @@ def action_rename():
         if u.name not in mapping:
             utils.sys_error('could not find mapping for %s' % u.name, 0)
             continue
-        print 'rename %s' % u.name
+        print('rename %s' % u.name)
         changes = kc.rename_user(mapping[u.name], u.name)
         changes_txt = "\nThe following change has been made to your username:\n"
         changes_txt += "%s => %s\n" % (u.name, mapping[u.name])
         changes_txt += "\nThe following change has been made to your project name:\n"
-        for old_p, new_p in changes['projects'].iteritems():
+        for old_p, new_p in changes['projects'].items():
             changes_txt += "%s => %s\n" % (old_p, new_p)
         body_content = utils.load_template(inputfile=template_file,
                                            mapping={'changes': changes_txt},
@@ -54,7 +54,7 @@ def action_rename():
         mail.send_mail(u.name, msg, fromaddr)
         if not options.dry_run:
             utils.append_to_file(logfile, u.name)
-        print 'mail sent to %s' % u.name
+        print('mail sent to %s' % u.name)
     mail.close()
 
 def action_check():
@@ -94,7 +94,7 @@ def action_notify():
     for u in users:
         if not re.search(r"^[a-z0-9]+[\.'\-a-z0-9_]*[a-z0-9]+@[\.'\-a-z0-9_]*uio\.no$", u.name):
             if 'uio' in u.name:
-                print "User %s not matched as uio-user. Please check" % u.name
+                print("User %s not matched as uio-user. Please check" % u.name)
             continue
         body_content = utils.load_template(inputfile=options.template,
                                            mapping={},
@@ -103,7 +103,7 @@ def action_notify():
         mail.send_mail(u.name, msg, fromaddr)
         if not options.dry_run:
             utils.append_to_file(logfile, u.name)
-        print 'mail sent to %s' % u.name
+        print('mail sent to %s' % u.name)
     mail.close()
 
 def load_uio_users(inputfile):

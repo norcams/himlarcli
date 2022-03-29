@@ -38,11 +38,10 @@ def action_count():
                     with open('/opt/himlarcli/logs/dryrun-logs/dryrun-logs.log') as f:
                         if i.id in f.read():
                             printer.output_dict({'instance name': i.name, 'instance id': i.id, 'notify?': 'yes'})
-			f.close()
+                    f.close()
                 else:
-                    print created_at
+                    print(created_at)
     printer.output_dict({'header': 'count', 'all': count_all, '>60': count_60})
-    #print count
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))

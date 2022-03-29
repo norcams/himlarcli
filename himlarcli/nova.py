@@ -5,7 +5,7 @@ import novaclient.exceptions as exceptions
 from keystoneclient.v3 import client as keystoneclient
 import keystoneauth1.exceptions as keyexc
 from datetime import date, datetime, timedelta
-import urllib2
+import urllib
 import time
 
 # pylint: disable=R0904

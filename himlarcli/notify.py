@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 import smtplib
 import sys
 from email.mime.text import MIMEText
@@ -43,10 +43,10 @@ class Notify(object):
         try:
             value = self.config.get(section, option)
             return value
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.logger.debug('=> config file section [%s] missing option %s'
                               % (section, option))
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.logger.debug('=> config file missing section %s' % section)
         return None
 
