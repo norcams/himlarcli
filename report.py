@@ -256,7 +256,7 @@ def action_enddate():
 
         #PY3: for project in dict(sorted(project_list.items(), key=lambda item: item[1])):
         for project in project_list:
-            print "%-4s %s" % (project_list[project], project)
+            print("%-4s %s" % (project_list[project], project))
         return
 
     for project in projects:
@@ -299,7 +299,7 @@ def action_enddate():
             if (enddate - today).days == days:
 
                 if options.list:
-                    print "%-4s %s" % (days, project.name)
+                    print("%-4s %s" % (days, project.name))
                 else:
                     options.admin = project_admin  # for prettyprint_project_metadata()
 
@@ -342,16 +342,16 @@ def action_enddate():
                     # Send mail to user
                     mail.send_mail(project_admin, msg, fromaddr)
                     if options.dry_run:
-                        print "Did NOT send spam to %s;" % project_admin
-                        print "Subject: %s" % subject
-                        print "To: %s" % project_admin
+                        print("Did NOT send spam to %s;" % project_admin)
+                        print("Subject: %s" % subject)
+                        print("To: %s" % project_admin)
                         if ccaddr:
-                            print "Cc: %s" % ccaddr
-                        print "From: %s" % fromaddr
-                        print '---'
-                        print body_content
+                            print("Cc: %s" % ccaddr)
+                        print("From: %s" % fromaddr)
+                        print('---')
+                        print(body_content)
                     else:
-                        print "Spam sent to %s" % project_admin
+                        print("Spam sent to %s" % project_admin)
 
 
 #---------------------------------------------------------------------

@@ -230,7 +230,7 @@ def action_extend():
     enddate = datetime_enddate.strftime('%Y-%m-%d')
     ksclient.update_project(project_id=project.id, enddate=str(enddate),
                             disabled='', notified='', enabled=True)
-    print "New end date for %s: %s" % (project.name, enddate)
+    print("New end date for %s: %s" % (project.name, enddate))
 
 def action_grant():
     for user in options.users:
@@ -529,16 +529,16 @@ def action_quarantine():
             # Send mail to user
             mail.send_mail(project_admin, msg, fromaddr)
             if options.dry_run:
-                print "Did NOT send spam to %s;" % project_admin
-                print "Subject: %s" % subject
-                print "To: %s" % project_admin
+                print("Did NOT send spam to %s;" % project_admin)
+                print("Subject: %s" % subject)
+                print("To: %s" % project_admin)
                 if ccaddr:
-                    print "Cc: %s" % ccaddr
-                print "From: %s" % fromaddr
-                print '---'
-                print body_content
+                    print("Cc: %s" % ccaddr)
+                print("From: %s" % fromaddr)
+                print('---')
+                print(body_content)
             else:
-                print "Spam sent to %s" % project_admin
+                print("Spam sent to %s" % project_admin)
 
         ksclient.project_quarantine_set(options.project, options.reason, date)
         printer.output_msg('Quarantine set for project: {}'. format(options.project))
