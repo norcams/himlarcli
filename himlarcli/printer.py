@@ -337,7 +337,7 @@ class Printer(object):
                 gc = utils.get_client(Glance, options, logger, region)
                 for instance in instances[region]:
                     if len(instance.addresses.keys()) > 0:
-                        network = instance.addresses.keys()[0]
+                        network = next(iter(instance.addresses))
                         ipv4_list = []
                         ipv6_list = []
                         for interface in instance.addresses[network]:
