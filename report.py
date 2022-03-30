@@ -407,7 +407,7 @@ def action_quarantine():
         if quarantine_reason != 'enddate':
             continue
 
-        quarantine_date = time.strptime(quarantine_date_iso, "%Y-%m-%d")
+        quarantine_date = datetime.strptime(quarantine_date_iso, "%Y-%m-%d")
         if options.list and not options.days:
             print("%-4s %s" % ((today - quarantine_date).days, project.name))
         else:
@@ -426,12 +426,12 @@ def action_quarantine():
                         attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
 
                         # Construct mail content
-                        subject = 'NREC: Project "%s" will be deleted in %d days' % (project.name, 90 + days)
+                        subject = 'NREC: Project "%s" will be deleted in %d days' % (project.name, 90 - days)
                         body_content = utils.load_template(inputfile=options.template,
                                                            mapping={'project': project.name,
                                                                     'enddate': project_enddate,
-                                                                    'ago': -days,
-                                                                    'days': 90 + days},
+                                                                    'ago': days,
+                                                                    'days': 90 - days},
                                                            log=logger)
                         msg = mail.create_mail_with_txt_attachment(subject,
                                                                    body_content,

@@ -1,7 +1,7 @@
 Dear NREC user,
 
-The following project reached its end date ($enddate) $ago days ago,
-and has been placed in quarantine:
+The following project is past its end date $enddate, is scheduled for
+deletion and was put in quarantine $ago days ago:
 
   $project
 
