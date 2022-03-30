@@ -368,6 +368,15 @@ def action_quarantine():
 
     options.detail = True # we want details
 
+    # Set common mail parameters
+    mail = utils.get_client(Mail, options, logger)
+    mail = Mail(options.config, debug=options.debug)
+    mail.set_dry_run(options.dry_run)
+    if options.fromaddr:
+        fromaddr = options.fromaddr
+    else:
+        fromaddr = 'support@nrec.no'
+
     for project in projects:
         project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
         project_type = project.type if hasattr(project, 'type') else 'None'
@@ -417,6 +426,12 @@ def action_quarantine():
                     if options.list:
                         print("%-4s %s" % (days, project.name))
                     else:
+                        project_contact = project.contact if hasattr(project, 'contact') else 'None'
+                        if project_contact != 'None':
+                            ccaddr = project_contact
+                        else:
+                            ccaddr = None
+
                         project_admin = project.admin if hasattr(project, 'admin') else 'None'
                         options.admin = project_admin  # for prettyprint_project_metadata()
                         attachment_payload = ''

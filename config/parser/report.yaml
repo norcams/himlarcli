@@ -47,7 +47,7 @@ opt_args:
     'required': true
     'help':     'Mail subject'
   '--from':
-    'sub':      ['mail','enddate']
+    'sub':      ['mail','enddate','quarantine']
     'dest':     'fromaddr'
     'help':     'Address for From and Reply-To (default: support@nrec.no)'
   '--user':
