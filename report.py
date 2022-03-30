@@ -310,33 +310,18 @@ def action_enddate():
                     attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
 
                     # Construct mail content
-                    if days > 0:
-                        subject = 'NREC: End date in %d days for project "%s"' % (days, project.name)
-                        body_content = utils.load_template(inputfile=options.template,
-                                                           mapping={'project': project.name,
-                                                                    'enddate': project_enddate,
-                                                                    'days': days},
-                                                           log=logger)
-                        msg = mail.create_mail_with_txt_attachment(subject,
-                                                                   body_content,
-                                                                   attachment_payload,
-                                                                   'resources.txt',
-                                                                   fromaddr,
-                                                                   ccaddr)
-                    else:
-                        subject = 'NREC: Project "%s" will be deleted in %d days' % (project.name, 90 + days)
-                        body_content = utils.load_template(inputfile=options.template,
-                                                           mapping={'project': project.name,
-                                                                    'enddate': project_enddate,
-                                                                    'ago': -days,
-                                                                    'days': 90 + days},
-                                                           log=logger)
-                        msg = mail.create_mail_with_txt_attachment(subject,
-                                                                   body_content,
-                                                                   attachment_payload,
-                                                                   'resources.txt',
-                                                                   fromaddr,
-                                                                   ccaddr)
+                    subject = 'NREC: End date in %d days for project "%s"' % (days, project.name)
+                    body_content = utils.load_template(inputfile=options.template,
+                                                       mapping={'project': project.name,
+                                                                'enddate': project_enddate,
+                                                                'days': days},
+                                                       log=logger)
+                    msg = mail.create_mail_with_txt_attachment(subject,
+                                                               body_content,
+                                                               attachment_payload,
+                                                               'resources.txt',
+                                                               fromaddr,
+                                                               ccaddr)
 
                     # Send mail to user
                     mail.send_mail(project_admin, msg, fromaddr)
@@ -351,6 +336,7 @@ def action_enddate():
                         print(body_content)
                     else:
                         print("Spam sent to %s" % project_admin)
+
 
 def action_quarantine():
     if not options.list and not options.template:
