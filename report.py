@@ -417,6 +417,7 @@ def action_quarantine():
                     if options.list:
                         print("%-4s %s" % (days, project.name))
                     else:
+                        project_admin = project.admin if hasattr(project, 'admin') else 'None'
                         options.admin = project_admin  # for prettyprint_project_metadata()
                         attachment_payload = ''
                         attachment_payload += Printer.prettyprint_project_metadata(project, options, logger, regions, project_admin)
