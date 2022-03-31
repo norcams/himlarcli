@@ -85,7 +85,7 @@ def action_create():
     if not options.force:
         print('Project name: %s\nDescription: %s\nAdmin: %s\nContact: %s\nOrganization: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
                 % (options.project,
-                   ksclient.convert_ascii(options.desc),
+                   options.desc,
                    options.admin.lower(),
                    contact,
                    options.org,
