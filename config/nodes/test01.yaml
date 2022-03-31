@@ -55,6 +55,7 @@ nodes:
     mac: f4:e9:d4:ad:60:d0
     # mac: f8:bc:12:52:d8:48
   console-01:
+    hostgroup: 5
     compute_profile: medium
     compute_resource: controller-03
   controller-01:
