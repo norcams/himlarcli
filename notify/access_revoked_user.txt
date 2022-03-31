@@ -6,6 +6,6 @@ revoked by $admin
 If you have any questions, or if you think you've
 received this email by mistake, please let us know.
 
-Best Regards,
+Best regards,
 -- 
-The NREC team
+NREC team <support@nrec.no>

@@ -4,6 +4,6 @@ Access has been revoked for the following users:
 
 $users
 
-Best Regards,
+Best regards,
 -- 
-The NREC team
+NREC team <support@nrec.no>

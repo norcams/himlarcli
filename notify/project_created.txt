@@ -9,5 +9,5 @@ you start using the service.
 If you have any questions or problems using the service, please let us know.
 
 Best regards,
-
-The NREC team
+-- 
+NREC team <support@nrec.no>
