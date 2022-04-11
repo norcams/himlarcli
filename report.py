@@ -382,16 +382,16 @@ def action_quarantine():
         date_tags = list(filter(r_date.match, tags))
         type_tags = list(filter(r_type.match, tags))
         if len(date_tags) > 1:
-            himutils.sys_error('Too many quarantine dates for project %s' % project.name)
+            utils.sys_error('Too many quarantine dates for project %s' % project.name)
             continue
         elif len(date_tags) < 1:
-            himutils.sys_error('No quarantine date for project %s' % project.name)
+            utils.sys_error('No quarantine date for project %s' % project.name)
             continue
         if len(type_tags) > 1:
-            himutils.sys_error('Too many quarantine reasons for project %s' % project.name)
+            utils.sys_error('Too many quarantine reasons for project %s' % project.name)
             continue
         elif len(type_tags) < 1:
-            himutils.sys_error('No quarantine reason for project %s' % project.name)
+            utils.sys_error('No quarantine reason for project %s' % project.name)
             continue
         m_date = re.match(r'^quarantine date: (\d\d\d\d-\d\d-\d\d)$', date_tags[0])
         m_type = re.match(r'^quarantine type: (.+)$', type_tags[0])
