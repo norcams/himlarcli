@@ -3,15 +3,15 @@
 
 import sys
 import os
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import pprint
 from datetime import datetime
 import utils
 from himlarcli import utils as himutils
 from himlarcli.glance import Glance
 
-print "Depricated! Use image.py"
+print("Depricated! Use image.py")
 sys.exit(0)
 
 options = utils.get_options('Create and update golden images',
@@ -23,7 +23,7 @@ if glclient.region in golden_images:
     images = golden_images[glclient.region]
 else:
     if not 'default' in golden_images:
-        print "Missing default in config/golden_images.yaml"
+        print("Missing default in config/golden_images.yaml")
         sys.exit(1)
     images = golden_images['default']
 
@@ -32,14 +32,14 @@ def download_and_check(image):
     url = '%s%s' % (image['url'], image['latest'])
     # Do not redownload
     if not os.path.isfile(source):
-        (filename, headers) = urllib.urlretrieve(url, source)
+        (filename, headers) = urllib.request.urlretrieve(url, source)
         if int(headers['content-length']) < 1000:
             logger.debug("=> file is too small: %s" % url)
             os.remove(source)
             return None
     checksum = himutils.checksum_file(source, image['checksum'])
     checksum_url = "%s%s" % (image['url'], image['checksum_file'])
-    response = urllib2.urlopen(checksum_url)
+    response = urllib.request.urlopen(checksum_url)
     checksum_all = response.read()
     if checksum in checksum_all:
         logger.debug("=> checksum ok: %s" % checksum)
@@ -58,11 +58,11 @@ def create_image(glclient, source_path, image):
                                     min_ram=image['min_ram'],
                                     container_format='bare',
                                     region=region)
-        print "New image created:"
+        print("New image created:")
         pp = pprint.PrettyPrinter(indent=1)
         pp.pprint(res)
 
-for name, image_data in images.iteritems():
+for name, image_data in images.items():
     region = glclient.get_config('openstack', 'region')
     image = glclient.get_image(image_data['name'])
     if image and (image['region'] == region):

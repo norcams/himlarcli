@@ -30,6 +30,6 @@ For more information, please read our terms of service:
 
 http://docs.nrec.no/en/latest/terms-of-service.html
 
-Kind regards,
-
-The NREC team
+Best regards,
+-- 
+NREC team <support@nrec.no>

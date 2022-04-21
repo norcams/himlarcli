@@ -127,7 +127,7 @@ found_profiles = foreman.get_compute_profiles()
 verified_profiles = list()
 
 if found_profiles:
-    for found_profile in found_profiles.keys():
+    for found_profile in list(found_profiles.keys()):
         if found_profile not in profiles:
             # We only want profiles defined in config/compute_profiles.yaml
             logger.debug("=> deleting profile %s" % found_profile)
@@ -135,7 +135,7 @@ if found_profiles:
         else:
             verified_profiles.append(found_profile)
 
-for profile_name in profiles.keys():
+for profile_name in list(profiles.keys()):
     if profile_name not in verified_profiles:
         profile_result = client.create_computeprofiles({'name': profile_name})
         logger.debug("=> create profile result %s" % profile_result)

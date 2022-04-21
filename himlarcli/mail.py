@@ -1,5 +1,5 @@
 from himlarcli.client import Client
-import ConfigParser
+import configparser
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart

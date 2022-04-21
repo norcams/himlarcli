@@ -27,7 +27,7 @@ printer = Printer(options.format)
 
 def action_show():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
-        print "%s is not a valid user. Please check your spelling or case." % options.user
+        print("%s is not a valid user. Please check your spelling or case." % options.user)
         sys.exit(1)
     obj = ksclient.get_user_objects(email=options.user, domain=options.domain)
     obj_type = options.obj_type
@@ -68,24 +68,24 @@ def action_rename():
     personal = ksclient.get_project_name(options.new, prefix='PRIVATE')
     new_demo_project = ksclient.get_project_name(options.new)
     old_demo_project = ksclient.get_project_name(options.old)
-    print "\nYou are about to rename user with email %s to %s" % (options.old, options.new)
-    print "\nWhen a user changes affilation we need to change the following:"
+    print("\nYou are about to rename user with email %s to %s" % (options.old, options.new))
+    print("\nWhen a user changes affilation we need to change the following:")
     # new
-    print " * Delete %s-group if it exists" % options.new
-    print " * Delete %s api user if it exists" % options.new.lower()
-    print " * Delete %s dataporten user if it exists" % options.new.lower()
-    print " * Delete %s demo project and instances if exists" % new_demo_project
-    print " * Delete %s personal project and instances if exist" % personal
+    print(" * Delete %s-group if it exists" % options.new)
+    print(" * Delete %s api user if it exists" % options.new.lower())
+    print(" * Delete %s dataporten user if it exists" % options.new.lower())
+    print(" * Delete %s demo project and instances if exists" % new_demo_project)
+    print(" * Delete %s personal project and instances if exist" % personal)
     # old
-    print " * Rename group from %s-group to %s-group" % (options.old, options.new)
-    print " * Rename api user from %s to %s" % (options.old.lower(), options.new.lower())
-    print " * Rename demo project from %s to %s" % (old_demo_project, new_demo_project)
-    print " * Delete old dataporten user %s" % (options.old)
+    print(" * Rename group from %s-group to %s-group" % (options.old, options.new))
+    print(" * Rename api user from %s to %s" % (options.old.lower(), options.new.lower()))
+    print(" * Rename demo project from %s to %s" % (old_demo_project, new_demo_project))
+    print(" * Delete old dataporten user %s" % (options.old))
 
     question = "\nAre you sure you will continue"
     if not himutils.confirm_action(question):
         return
-    print 'Please wait...'
+    print('Please wait...')
     ksclient.user_cleanup(email=options.new)
     ksclient.rename_user(new_email=options.new,
                          old_email=options.old)
@@ -147,7 +147,7 @@ def action_enable():
         himutils.sys_error('User %s not found as a valid user.' % options.user)
     user = ksclient.get_user_by_email(options.user, 'api')
     ksclient.update_user(user_id=user.id, enabled=True, disabled='None')
-    print "User %s enabled" % user.name
+    print("User %s enabled" % user.name)
 
 def action_disable():
     if not ksclient.is_valid_user(email=options.user):
@@ -155,7 +155,7 @@ def action_disable():
     user = ksclient.get_user_by_email(options.user, 'api')
     date = datetime.today().strftime('%Y-%m-%d')
     ksclient.update_user(user_id=user.id, enabled=False, disabled=date)
-    print "User %s disabled" % user.name
+    print("User %s disabled" % user.name)
     # TODO: check to see if we can disable dataporten user as well
     # 2019-09 We can disable the user, but we appear that we still can login
     #user = ksclient.get_user_by_email(options.user, 'dp')
@@ -226,12 +226,12 @@ def action_purge():
 
     for user in disabled:
         ksclient.user_cleanup(email=user.name)
-        print "%s deleted" % user.name
+        print("%s deleted" % user.name)
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
         himutils.sys_error("%s is not a valid user." % options.user, 1)
-    print ksclient.reset_password(email=options.user)
+    print(ksclient.reset_password(email=options.user))
 
 def action_create():
     if not ksclient.is_valid_user(email=options.admin, domain=options.domain):
@@ -257,10 +257,10 @@ def action_delete():
     if not options.force:
         if not himutils.confirm_action('Delete user and all instances for %s' % options.user):
             return
-    print "We are now deleting user, group, project and instances for %s" % options.user
-    print 'Please wait...'
+    print("We are now deleting user, group, project and instances for %s" % options.user)
+    print('Please wait...')
     ksclient.user_cleanup(email=options.user)
-    print 'Delete successful'
+    print('Delete successful')
 
 def mail_user(email, template, subject):
     body_content = himutils.load_template(inputfile=template,
@@ -275,7 +275,7 @@ def get_valid_users(organization=None):
     whitelist = himutils.load_file('whitelist_users.txt', logger)
     if not whitelist:
         himutils.sys_error('Could not find whitelist_users.txt!')
-    orgs = himutils.load_config('config/ldap.yaml', logger).keys()
+    orgs = list(himutils.load_config('config/ldap.yaml', logger).keys())
     if organization and organization not in orgs:
         himutils.sys_error('Unknown org used: %s' % organization)
     ldap = dict()
@@ -316,7 +316,7 @@ def get_valid_users(organization=None):
                 if org not in unknown:
                     unknown.append(org)
     total = 0
-    for k, v in active.iteritems():
+    for k, v in active.items():
         total += v
     active['total'] = total
     return (active, deactive, unknown)

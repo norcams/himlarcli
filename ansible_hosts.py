@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import utils
-import ConfigParser
+import configparser
 from himlarcli.foremanclient import ForemanClient
 from himlarcli import utils as himutils
 
@@ -37,7 +37,7 @@ for host in hosts['results']:
     if var:
         var_group = group = "%s-%s-%s" % (loc, role, var)
         if not var_group in hostlist:
-           hostlist[var_group] = []
+            hostlist[var_group] = []
         hostlist[var_group].append(hostname)
 
 children = "%s:children" % loc
@@ -45,11 +45,11 @@ filename = "hostfile.%s" % loc
 nodes = "%s-nodes:children" % loc
 exclude_nodes = {'storage', 'object', 'compute', 'controller', 'leaf', 'torack', 'spine', 'login', 'mgmt'}
 
-parser = ConfigParser.ConfigParser(allow_no_value=True)
+parser = configparser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
 parser.add_section(nodes)
 
-for section, hosts in sorted(hostlist.iteritems()):
+for section, hosts in sorted(hostlist.items()):
     parser.set(children, section)
     parser.add_section(section)
     check = section.count('-')

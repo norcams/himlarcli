@@ -656,8 +656,6 @@ class Keystone(Client):
 
         :return: dictionary with project data
         """
-        if description:
-            description = self.convert_ascii(description)
         parent_id = self.domain_id
         project_found = self.get_project_by_name(project_name=project_name)
         grant_role = True if admin and self.is_valid_user(admin, parent_id) else False
@@ -750,7 +748,7 @@ class Keystone(Client):
             self.log_error(e)
             return
         if password:
-            print "New password: %s" % password
+            print("New password: %s" % password)
 
     def provision_dataporten(self, email, password):
         """

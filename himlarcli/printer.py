@@ -32,7 +32,7 @@ class Printer(object):
         elif self.format == 'json':
             self.__list_dicts_to_json(lists=lists, sort=sort)
         elif self.format == csv:
-            print 'not implemented'
+            print('not implemented')
 
     def output_dict(self, objects, sort=True, one_line=False):
         if not isinstance(objects, dict):
@@ -47,17 +47,17 @@ class Printer(object):
 
     def output_msg(self, msg):
         if self.format == 'text':
-            print "\n{}\n".format(msg)
+            print("\n{}\n".format(msg))
         elif self.format == 'json':
             self.__dict_to_json(objects={'message': msg})
         elif self.format == 'csv':
-            print "{};".format(msg)
+            print("{};".format(msg))
 
     def __dict_to_json(self, objects, sort=True):
         if 'header' in objects:
             del objects['header']
         if objects:
-            print json.dumps(objects, sort_keys=sort, indent=self.INDENT)
+            print(json.dumps(objects, sort_keys=sort, indent=self.INDENT))
 
     def __list_dicts_to_text(self, lists, sort=True, one_line=False):
         for obj in lists:
@@ -74,17 +74,17 @@ class Printer(object):
         else:
             sorted_objects = objects.items()
         if 'header' in objects:
-            print "".ljust(80, "=")
-            print "  %s" % objects['header'].ljust(76)
-            print "".ljust(80, "=")
+            print("".ljust(80, "="))
+            print("  %s" % objects['header'].ljust(76))
+            print("".ljust(80, "="))
         out_line = str()
         for k, v in sorted_objects:
             if k == 'header':
                 continue
             elif isinstance(v, list):
-                print '%s =' % k
+                print('%s =' % k)
                 for i in v:
-                    print "  %s" % i
+                    print("  %s" % i)
             elif one_line:
                 out_line += '%s ' % v
             else:
@@ -92,9 +92,9 @@ class Printer(object):
                     value = '{:n}'.format(v)
                 else:
                     value = v
-                print "%s = %s" % (k, value)
+                print("%s = %s" % (k, value))
         if out_line:
-            print out_line.strip()
+            print(out_line.strip())
 
     @staticmethod
     def __dict_to_csv(objects, order_by=0, sort=True):
@@ -194,7 +194,7 @@ class Printer(object):
             table_metadata.add_row(['Instances:', ', '.join(instance_list)])
 
         out_str += table_metadata.get_string() + "\n"
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def prettyprint_project_zones(project, options, logger):
@@ -217,7 +217,7 @@ class Printer(object):
             out_str += "\n  Zones (%d): \n" % len(zones)
             out_str += table_zones.get_string() + "\n"
 
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def prettyprint_project_images(project, options, logger, regions):
@@ -264,7 +264,7 @@ class Printer(object):
             out_str += "\n  Images (%d): \n" % images_total
             out_str += table_images.get_string() + "\n"
 
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def prettyprint_project_volumes(project, options, logger, regions):
@@ -297,7 +297,7 @@ class Printer(object):
             out_str += "\n  Volumes (%d): \n" % volumes_total
             out_str += table_volumes.get_string() + "\n"
 
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def prettyprint_project_instances(project, options, logger, regions):
@@ -337,7 +337,7 @@ class Printer(object):
                 gc = utils.get_client(Glance, options, logger, region)
                 for instance in instances[region]:
                     if len(instance.addresses.keys()) > 0:
-                        network = instance.addresses.keys()[0]
+                        network = next(iter(instance.addresses))
                         ipv4_list = []
                         ipv6_list = []
                         for interface in instance.addresses[network]:
@@ -378,7 +378,7 @@ class Printer(object):
             out_str += "\n  Instances (%d): \n" % instances_total
             out_str += table_instances.get_string() + "\n"
 
-        return out_str.encode('utf-8')
+        return out_str
 
     @staticmethod
     def _count_project_zones(project, options, logger):

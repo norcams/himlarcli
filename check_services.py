@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import utils
-import httplib
+import http.client
 import statsd
 from himlarcli import utils as himutils
 import socket
@@ -22,15 +22,15 @@ statsd = statsd.StatsClient(statsd_server, statsd_port, prefix=prefix)
 # Services to check
 services = himutils.load_region_config('config/checks', region=region, log=logger)
 
-for name, check in sorted(services['checks'].iteritems()):
+for name, check in sorted(services['checks'].items()):
     if 'timeout' in check:
         timeout = check['timeout']
     else:
         timeout = 10
     if check['ssl']:
-        c = httplib.HTTPSConnection(check['host'], timeout=timeout)
+        c = http.client.HTTPSConnection(check['host'], timeout=timeout)
     else:
-        c = httplib.HTTPConnection(check['host'], timeout=timeout)
+        c = http.client.HTTPConnection(check['host'], timeout=timeout)
     try:
         c.request("HEAD", check['url'])
         response = c.getresponse()
@@ -41,8 +41,8 @@ for name, check in sorted(services['checks'].iteritems()):
     statsd.gauge(name, status)
     if status in check['code']:
         statsd.gauge(name, 1)
-        print '%s -> ok' % check['host']
+        print('%s -> ok' % check['host'])
     else:
         statsd.gauge(name, 0)
         logger.debug('=> %s = %s' % (name, status))
-        print '%s -> failed' % check['host']
+        print('%s -> failed' % check['host'])

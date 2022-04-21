@@ -59,7 +59,7 @@ def action_disable():
                                            log=logger)
         msg = mail.get_mime_text(subject, body_content, fromaddr)
         mail.send_mail(project.admin, msg, fromaddr)
-        print "mail sendt to {}".format(project.admin)
+        print("mail sendt to {}".format(project.admin))
         if not options.dry_run:
             utils.append_to_file(logfile, project.admin)
         # Add metadata to project for the time of project disable
@@ -86,7 +86,7 @@ def action_notify():
                                            log=logger)
         msg = mail.get_mime_text(subject, body_content, fromaddr)
         mail.send_mail(project.admin, msg, fromaddr)
-        print "mail sendt to {}".format(project.admin)
+        print("mail sendt to {}".format(project.admin))
         if not options.dry_run:
             utils.append_to_file(logfile, project.admin)
         # Add metadata to project for the time of notification

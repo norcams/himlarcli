@@ -9,6 +9,6 @@ documentation at https://docs.nrec.no/
 If you have any questions or problems using the service, or if you
 think you've received this email by mistake, please let us know.
 
-Best Regards,
+Best regards,
 -- 
-The NREC team
+NREC team <support@nrec.no>

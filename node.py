@@ -33,17 +33,17 @@ def action_show():
 
 def action_list():
     count = dict()
-    print "These nodes can be intalled:"
-    for name, node in sorted(nodes.iteritems()):
+    print("These nodes can be intalled:")
+    for name, node in sorted(nodes.items()):
         if 'compute_resource' in node:
-            print "node: %s (%s)" % (name, node['compute_resource'])
+            print("node: %s (%s)" % (name, node['compute_resource']))
             if not node['compute_resource'] in count:
                 count[node['compute_resource']] = 0
             count[node['compute_resource']] += 1
         else:
-            print "node: %s (%s)" % (name, node['mac'])
-    print "Stats:"
-    print count
+            print("node: %s (%s)" % (name, node['mac']))
+    print("Stats:")
+    print(count)
 
 def action_install():
     node_name = '%s-%s' % (region, options.node)
@@ -92,7 +92,7 @@ def action_reinstall():
         sys.exit(1)
 
 def action_full():
-    for name, node_data in sorted(nodes.iteritems()):
+    for name, node_data in sorted(nodes.items()):
         node_name = '%s-%s' % (region, name)
         client.create_node(name=node_name,
                            node_data=node_data,

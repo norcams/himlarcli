@@ -8,6 +8,6 @@ Images and volumes for your project will not be affected.
 
 Support and contact information can be found at http://docs.nrec.no
 
---
-NREC team
-http://www.nrec.no
+Best regards,
+-- 
+NREC team <support@nrec.no>

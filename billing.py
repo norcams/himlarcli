@@ -18,7 +18,7 @@ parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
 
-kc= Keystone(options.config, debug=options.debug)
+kc = Keystone(options.config, debug=options.debug)
 kc.set_domain(options.domain)
 kc.set_dry_run(options.dry_run)
 logger = kc.get_logger()
@@ -43,7 +43,7 @@ def action_whales():
         for usage in project_usage:
             project = kc.get_by_id(obj_type='project', obj_id=usage.tenant_id)
             if not project:
-                logger.debug('=> project with id %s not found',usage.tenant_id)
+                logger.debug('=> project with id %s not found', usage.tenant_id)
                 continue
             if len(usage.server_usages) < options.threshold:
                 continue
@@ -51,7 +51,7 @@ def action_whales():
             admin = project.admin if hasattr(project, 'admin') else 'unknown!'
             output = OrderedDict()
             output['instances'] = len(usage.server_usages)
-            output['volume_gb'] =  cinderusage['gigabytes']['in_use']
+            output['volume_gb'] = cinderusage['gigabytes']['in_use']
             output['name'] = project.name
             output['admin'] = admin
             if print_header:
@@ -99,7 +99,7 @@ def action_resources():
             metrics = dict()
             metrics['vcpu'] = gc.get_client().metric.get('vcpus', i.id)
             metrics['ram'] = gc.get_client().metric.get('memory', i.id)
-            for key, value in metrics.iteritems():
+            for key, value in metrics.items():
                 measurement = gc.get_client().metric.get_measures(metric=value['id'],
                                                                   aggregation='max',
                                                                   start=start,

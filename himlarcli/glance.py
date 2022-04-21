@@ -204,7 +204,7 @@ class Glance(Client):
                 self.client.images.upload(image.id, open(source_path, 'rb'))
             self.debug_log('upload new image %s' % source_path)
         except BaseException as e:
-            print e
+            print(e)
             self.log_error('Upload of {} failed'.format(image.name), 1)
 
     @staticmethod

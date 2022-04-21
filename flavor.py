@@ -83,11 +83,11 @@ def action_update():
 
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
-        for name, spec in sorted(flavors[options.flavor].iteritems()):
+        for name, spec in sorted(flavors[options.flavor].items()):
             # Hack to override properties per flavor
             flavor_properties = properties.copy()
             if 'properties' in spec:
-                for p_name, prop in spec['properties'].iteritems():
+                for p_name, prop in spec['properties'].items():
                     flavor_properties[p_name] = prop
                 del spec['properties']
             nc.update_flavor(name=name, spec=spec,
@@ -95,7 +95,7 @@ def action_update():
         # Update access
         access = nc.get_flavor_access(filters=options.flavor)
         all_projects = set()
-        for name, projects in access.iteritems():
+        for name, projects in access.items():
             for project_id in projects:
                 all_projects.add(project_id.tenant_id)
         for project in all_projects:
@@ -154,7 +154,7 @@ def action_list_access():
         header = 'access to %s flavor in %s' % (options.flavor, region)
         printer.output_dict({'header': header})
         output = dict()
-        for name, projects in access.iteritems():
+        for name, projects in access.items():
             output[name] = list()
             for project_id in projects:
                 project = kc.get_by_id('project', project_id.tenant_id)
@@ -171,7 +171,7 @@ def action_available_flavors():
     for file in files:
         f = open(file, 'r')
         print(file)
-        print(f.readlines()[1])
+        print((f.readlines()[1]))
         f.close()
 
 def get_flavor_config(region):

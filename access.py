@@ -42,7 +42,7 @@ def process_action(ch, method, properties, body): #callback
         if data['action'] == 'provision':
             #"Provision action "
             provision = ksclient.provision_dataporten(email=data['email'], password=data['password'])
-        elif data['action'] =='reset_password':
+        elif data['action'] == 'reset_password':
             #"Provisioning is required! "
             pass
 
@@ -50,7 +50,7 @@ def action_pop():
     channel = mqclient.get_channel('access')
     channel.basic_consume(process_action, queue='access')
 
-    print' [*] Waiting for messages. To exit press CTRL+C'
+    print(' [*] Waiting for messages. To exit press CTRL+C')
 
     try:
         channel.start_consuming()

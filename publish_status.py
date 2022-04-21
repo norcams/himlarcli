@@ -18,7 +18,7 @@ twitter = Twitter(options.config, debug=options.debug)
 status = Status(options.config, debug=options.debug)
 
 def confirm_publish(final_msg):
-    print('The following message will be published: %s' % final_msg)
+    print(('The following message will be published: %s' % final_msg))
     if not himutils.confirm_action('Are you sure you want to publish?'):
         sys.exit(1)
 

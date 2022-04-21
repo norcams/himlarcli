@@ -13,7 +13,7 @@ keystone = Keystone(options.config, debug=options.debug)
 mail = Mail(options.config, debug=options.debug)
 region = keystone.region
 
-print "Remove these lines if you want to run this and send mail to all!"
+print("Remove these lines if you want to run this and send mail to all!")
 sys.exit(0)
 
 # Edit this to send new email to all users
@@ -29,6 +29,6 @@ for project in projects:
     msg['Subject'] = subject
     if not options.dry_run:
         mail.send_mail(project, msg)
-    print '\nProject: %s' % project
+    print('\nProject: %s' % project)
 
 mail.close()
