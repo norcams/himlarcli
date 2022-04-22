@@ -72,6 +72,18 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  cephmon-object-01:
+    compute_profile: large
+    compute_resource: controller-01
+    hostgroup: 16
+  cephmon-object-02:
+    compute_profile: large
+    compute_resource: controller-02
+    hostgroup: 16
+  cephmon-object-03:
+    compute_profile: large
+    compute_resource: controller-03
+    hostgroup: 16
   compute-01:
     mac: ec:f4:bb:ce:20:0c
     hostgroup: 19
@@ -370,6 +382,21 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-02
+  object-ceph-01:
+    mac: 4c:d9:8f:68:39:dd
+    hostgroup: 19
+  object-ceph-02:
+    mac: 4c:d9:8f:68:34:6c
+    hostgroup: 19
+  object-ceph-03:
+    mac: 4c:d9:8f:68:34:0c
+    hostgroup: 19
+  object-ceph-04:
+    mac: 4c:d9:8f:68:3a:e5
+    hostgroup: 19
+  object-ceph-05:
+    mac: 4c:d9:8f:68:3a:0d
+    hostgroup: 19
   proxy-01:
     compute_profile: small
     compute_resource: controller-04
@@ -432,21 +459,6 @@ nodes:
   storage-07:
     mac: d0:94:66:33:06:b0
     hostgroup: 19
-  storage-arccache-08:
-    mac: 4c:d9:8f:68:39:dd
-    hostgroup: 10
-  storage-arccache-09:
-    mac: 4c:d9:8f:68:34:6c
-    hostgroup: 10
-  storage-arccache-10:
-    mac: 4c:d9:8f:68:34:0c
-    hostgroup: 10
-  storage-arccache-11:
-    mac: 4c:d9:8f:68:3a:e5
-    hostgroup: 10
-  storage-arccache-12:
-    mac: 4c:d9:8f:68:3a:0d
-    hostgroup: 10
   storage-v2h-13:
     mac: 48:dc:2d:10:92:8e
     hostgroup: 21
