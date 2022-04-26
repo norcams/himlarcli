@@ -435,6 +435,10 @@ nodes:
     compute_profile: small
     compute_resource: controller-04
     hostgroup: 16
+  rgw-01:
+    compute_profile: medium
+    compute_resource: controller-01
+    hostgroup: 16
   status-01:
     compute_profile: small
     compute_resource: controller-02
