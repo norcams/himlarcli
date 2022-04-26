@@ -9,6 +9,7 @@ from himlarcli.mail import Mail
 from himlarcli import utils as himutils
 from datetime import datetime, date, timedelta
 import time
+import re
 
 # OPS! It might need some updates. We use class Mail instead of Notify now.
 
@@ -92,6 +93,10 @@ def action_rename():
 
 # pylint: disable=E1101
 def action_deactivate():
+    # disabled (trondham, 2022-04-21)
+    print("This action is not in use")
+    return
+
     if options.org == 'all':
         active, deactive, unknown = get_valid_users()
     else:
@@ -143,23 +148,137 @@ def action_deactivate():
     printer.output_dict(output)
 
 def action_enable():
+    """ Enable a user. The following happens when a user is enabled:
+          * Projects for which the user is admin is removed from quarantine
+          * API user is enabled
+          * Dataporten user is enabled
+        Version: 2022-04
+    """
     if not ksclient.is_valid_user(email=options.user):
-        himutils.sys_error('User %s not found as a valid user.' % options.user)
-    user = ksclient.get_user_by_email(options.user, 'api')
-    ksclient.update_user(user_id=user.id, enabled=True, disabled='None')
-    print("User %s enabled" % user.name)
+        himutils.sys_error('User %s not found as a valid user.' % options.user, 1)
+
+    # get the user objects
+    user = ksclient.get_user_objects(email=options.user, domain='api')
+
+    # enable the user in API and Dataporten
+    ksclient.enable_user(user['api'].id)
+    ksclient.enable_user(user['dataporten'].id)
+
+    # prefix prints with dry-run if that option is used
+    if options.dry_run:
+        print_prefix = "(dry-run) "
+    else:
+        print_prefix = ""
+
+    # rename the user group
+    group = ksclient.get_group_by_email(options.user)
+    if group and group.name == "%s-disabled" % options.user:
+        new_group_name = "%s-group" % options.user
+        ksclient.update_group(group.id, name=new_group_name)
+        print("%sGroup rename: %s-disabled -> %s-group" % (print_prefix, options.user, options.user))
+    else:
+        himutils.sys_error('WARNING: Could not find disabled group for user %s!' % options.user, 0)
+
+    # remove quarantine from projects
+    for project in user['projects']:
+        if not hasattr(project, 'admin'):
+            continue
+        if project.admin != user['api'].name:
+            continue
+        ksclient.project_quarantine_unset(project.name)
+        print('%sQuarantine unset for project: %s' % (print_prefix, project.name))
+
+    # Print our success
+    print("%sUser %s enabled (API)" % (print_prefix, user['api'].name))
+    print("%sUser %s enabled (Dataporten)" % (print_prefix, user['dataporten'].name))
 
 def action_disable():
+    """ Disable a user. The following happens when a user is disabled:
+          * Projects for which the user is admin is put into quarantine
+          * API user is disabled
+          * Dataporten user is disabled
+        Version: 2022-04
+    """
     if not ksclient.is_valid_user(email=options.user):
-        himutils.sys_error('User %s not found as a valid user.' % options.user)
-    user = ksclient.get_user_by_email(options.user, 'api')
-    date = datetime.today().strftime('%Y-%m-%d')
-    ksclient.update_user(user_id=user.id, enabled=False, disabled=date)
-    print("User %s disabled" % user.name)
-    # TODO: check to see if we can disable dataporten user as well
-    # 2019-09 We can disable the user, but we appear that we still can login
-    #user = ksclient.get_user_by_email(options.user, 'dp')
-    #ksclient.update_user(user_id=user.id, enabled=False, disabled=date)
+        himutils.sys_error('User %s not found as a valid user.' % options.user, 1)
+
+    # prefix prints with dry-run if that option is used
+    if options.dry_run:
+        print_prefix = "(dry-run) "
+    else:
+        print_prefix = ""
+
+    # ask for confirmation
+    if not options.force:
+        if not himutils.confirm_action('Disable user %s' % options.user):
+            return
+
+    if options.date:
+        date = himutils.get_date(options.date, None, '%Y-%m-%d')
+    else:
+        date = datetime.now().strftime("%Y-%m-%d")
+
+    # get the user objects
+    user = ksclient.get_user_objects(email=options.user, domain='api')
+
+    # loop through project list, and determine if the project can be
+    # put into quarantine. Only put projects into quarantine if:
+    #   - they are personal/demo projects
+    #   - they are shared projects with only one member, and the
+    #     member is same as admin
+    problematic_projects = list()  # projects that are problematic
+    quarantine_projects = list()   # projects to put in quarantine
+    for project in user['projects']:
+        if not hasattr(project, 'admin'):
+            continue
+        if project.admin != options.user:
+            continue
+        if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
+            quarantine_projects.append(project.name)
+            continue
+        project_roles = ksclient.list_roles(project_name=project.name)
+        if len(project_roles) > 1:
+            problematic_projects.append(project.name)
+            continue
+        if len(project_roles) == 1 and project_roles[0]['group'].replace('-group', '') != options.user:
+            problematic_projects.append(project.name)
+            continue
+        quarantine_projects.append(project.name)
+
+    # exit with error if we found problematic projects
+    if len(problematic_projects) > 0:
+        error_msg = "ERROR: User %s is admin for %d shared projects with multiple users:\n\n" % (options.user, len(problematic_projects))
+        for pname in problematic_projects:
+            error_msg += "  - %s\n" % pname
+        error_msg += "\nFix these before attemting a new user disable\n"
+        error_msg += "FAILED! Can't disable user %s\n" % options.user
+        himutils.sys_error(error_msg, 1)
+
+    # put projects into quarantine
+    quarantine_reason = {
+        'deleted': 'deleted-user',
+        'teppe':   'teppe'
+    }
+    for pname in quarantine_projects:
+        ksclient.project_quarantine_set(pname, quarantine_reason[options.reason], date)
+        print('%sQuarantine set for project: %s' % (print_prefix, pname))
+
+    # disable the user in API and Dataporten
+    ksclient.disable_user(user['api'].id, options.reason, date)
+    ksclient.disable_user(user['dataporten'].id, options.reason, date)
+
+    # rename the user group
+    group = ksclient.get_group_by_email(options.user)
+    if group and group.name == "%s-group" % options.user:
+        new_group_name = "%s-disabled" % options.user
+        ksclient.update_group(group.id, name=new_group_name)
+        print("%sGroup rename: %s-group -> %s-disabled" % (print_prefix, options.user, options.user))
+    else:
+        himutils.sys_error('WARNING: Could not find group for user %s!' % options.user, 0)
+
+    # Print our success
+    print("%sUser %s disabled (API)" % (print_prefix, user['api'].name))
+    print("%sUser %s disabled (Dataporten)" % (print_prefix, user['dataporten'].name))
 
 def action_validate():
     if options.org == 'all':
@@ -181,7 +300,7 @@ def action_validate():
 
 def action_list_disabled():
     users = ksclient.get_users(domain=options.domain, enabled=False)
-    printer.output_dict({'header': 'Disabled user list (name, date)'})
+    printer.output_dict({'header': 'Disabled user list (name, date reason)'})
     count = 0
     for user in users:
         if options.org != 'all':
@@ -197,36 +316,92 @@ def action_list_disabled():
     printer.output_dict({'header': 'Count', 'disabled_users': count})
 
 def action_purge():
-    active = ksclient.get_users(domain=options.domain, enabled=True)
-    users = ksclient.get_users(domain=options.domain, enabled=False)
-    count = 0
-    disabled = list()
-    for user in users:
+    disabled_users = ksclient.get_users(domain=options.domain, enabled=False)
+    purge_users = list()
+    user_days = dict()
+    today = date.today()
+    for user in disabled_users:
         if not hasattr(user, 'disabled'):
-            himutils.sys_error("user %s is disabled but missing disabled date" % user.name)
+            himutils.sys_error("WARNING: User %s is disabled without date and reason. IGNORING" % user.name, 0)
             continue
-        # Allow 30 days gracetime before we delete
-        disabled_date = himutils.get_date(user.disabled, None, '%Y-%m-%d')
-        gracetime = timedelta(30)
-        if date.today() - disabled_date < gracetime:
+
+        # get the disable date and reason
+        m = re.fullmatch(r'(\d\d\d\d-\d\d-\d\d) (\w+)', user.disabled)
+        if m == None:
+            himutils.sys_error("WARNING: User %s has garbled disabled string '%s'. IGNORING" % (user.name, user.disabled), 0)
             continue
+        reason = m.group(2)
+        disabled_date = himutils.get_date(m.group(1), None, '%Y-%m-%d')
+
+        # only delete users with the given reason
+        if reason != options.reason:
+            continue
+
+        # allow gracetime before we delete
+        gracetime = timedelta(options.days)
+        if today - disabled_date < gracetime:
+            continue
+
+        # only delete users with the given org
         if options.org != 'all':
             org = ksclient.get_user_org(user.name)
             if org and org != options.org:
                 continue
-        if options.limit and count >= int(options.limit):
-            break
-        count += 1
-        disabled.append(user)
 
-    q = 'This will delete %s disabled users (total active users %s)' \
-        % (len(disabled), len(active))
-    if not himutils.confirm_action(q):
+        # ignore user if they are admin for other projects than demo, private
+        user_has_projects = False
+        this_user = ksclient.get_user_objects(email=user.name, domain='api')
+        for project in this_user['projects']:
+            if not hasattr(project, 'admin'):
+                continue
+            if not hasattr(project, 'type'):
+                continue
+            if project.type == 'demo' or project.type == 'personal':
+                continue
+            if project.admin == this_user['api'].name:
+                user_has_projects = True
+                break
+        if user_has_projects:
+            himutils.sys_error("WARNING: User %s is admin for shared projects. IGNORING" % user.name, 0)
+            continue
+
+        # limit how many are deleted at once
+        if options.limit and len(purge_users) >= int(options.limit):
+            break
+
+        # store user and days disabled in dictionary
+        purge_users.append(user)
+        user_days[user.id] = (today - disabled_date).days
+
+    # stop here if there are no users to delete
+    if len(purge_users) == 0:
+        print("Nothing to do. Zero users to delete")
         return
 
-    for user in disabled:
+    # formulate question
+    question = "Found %d disabled users that match the criteria:\n\n" % len(purge_users)
+    for user in purge_users:
+        question += "  %-4s  %s\n" % (str(user_days[user.id]), user.name)
+    question += "\nDelete these users?"
+
+    # ask for confirmation if not forced
+    if not himutils.confirm_action(question):
+        return
+
+    # prefix prints with dry-run if that option is used
+    if options.dry_run:
+        print_prefix = "(dry-run) "
+    else:
+        print_prefix = ""
+
+    # actually delete the users
+    for user in purge_users:
+        group = ksclient.get_group_by_email(user.name)
+        if group and group.name == "%s-disabled" % user.name:
+            new_group_name = "%s-group" % user.name
+            ksclient.update_group(group.id, name=new_group_name)
         ksclient.user_cleanup(email=user.name)
-        print("%s deleted" % user.name)
+        print("%sDeleted user: %s" % (print_prefix, user.name))
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):

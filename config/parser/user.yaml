@@ -68,9 +68,9 @@ opt_args:
   '--limit':
     'sub':      ['validate', 'deactivate', 'purge']
     'dest':     'limit'
-    'help':     'limit the number of users'
+    'help':     'Limit the number of users'
   '--force':
-    'sub':      'delete'
+    'sub':      ['delete', 'disable', 'purge']
     'dest':     'force'
     'action':   'store_const'
     'const':    true
@@ -80,3 +80,19 @@ opt_args:
     'dest':     'org'
     'help':     'only do one user organization, e.g. uio'
     'default':  'all'
+  '--reason':
+    'sub':      ['disable', 'purge']
+    'dest':     'reason'
+    'help':     'Reason for disabling user'
+    'choices':   ['deleted', 'teppe']
+    'required': true
+  '--date':
+    'sub':      ['disable']
+    'dest':     'date'
+    'help':     'Set the date for when user was disabled (YYYY-MM-DD). Default = today'
+  '--days':
+    'sub':      ['purge']
+    'dest':     'days'
+    'help':     'Number of days since the user was disabled. Default = 90'
+    'default':  90
+    'type':     int
