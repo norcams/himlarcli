@@ -250,6 +250,7 @@ nodes:
   console-01:
     compute_profile: medium
     compute_resource: controller-05
+    hostgroup: 15
 #  controller-02:
 #    mac: ec:f4:bb:cc:d1:54
 #  controller-03:

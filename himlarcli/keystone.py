@@ -155,14 +155,21 @@ class Keystone(Client):
         email = self.__get_uib_email(email)
         self.logger.debug('=> email used to find group %s' % email)
         group_name = self.__get_group_name(email)
-        try:
-            group = self.client.groups.list(domain=domain_id, name=group_name)
-        except exceptions.http.NotFound:
-            self.logger.debug('=> group %s not found' % group_name)
-            group = dict()
-        if group:
-            return group[0]
-        return None
+        disabled_group_name = self.__get_disabled_group_name(email)
+
+        groups = self.client.groups.list(domain=domain_id, name=group_name)
+        disabled_groups = self.client.groups.list(domain=domain_id, name=disabled_group_name)
+
+        if len(groups) > 0 and len(disabled_groups) == 0:
+            return groups[0]
+        elif len(groups) == 0 and len(disabled_groups) > 0:
+            return disabled_groups[0]
+        elif len(groups) > 0 and len(disabled_groups) > 0:
+            self.logger.debug('=> both group %s and group %s were found' % (group_name, disabled_group_name))
+            return None
+        else:
+            self.logger.debug('=> neither group %s nor group %s were found' % (group_name, disabled_group_name))
+            return None
 
     """
     Return all users, groups and project for this email """
@@ -192,6 +199,15 @@ class Keystone(Client):
         self.debug_log('update user: %s' % kwargs)
         if not self.dry_run:
             self.client.users.update(user=user_id, **kwargs)
+
+    def update_group(self, group_id, **kwargs):
+        """
+            Update a group:
+            Version: 2022-04
+        """
+        self.debug_log('update group: %s' % kwargs)
+        if not self.dry_run:
+            self.client.groups.update(group=group_id, **kwargs)
 
     def get_project_count(self, domain=False):
         projects = self.__get_projects(self.domain_id)
@@ -233,6 +249,14 @@ class Keystone(Client):
         email = self.__get_uib_email(email)
         group = self.get_group_by_email(email)
         return bool(group)
+
+    def is_disabled_user(self, email, domain=None):
+        email = self.__get_uib_email(email)
+        group = self.get_group_by_email(email)
+        if group.name == "%s-disabled" % email:
+            return True
+        else:
+            return False
 
     def list_users(self, domain=False, **kwargs):
         user_list = self.__get_users(domain, **kwargs)
@@ -750,6 +774,39 @@ class Keystone(Client):
         if password:
             print("New password: %s" % password)
 
+    def disable_user(self, user_id, reason, date):
+        """ Disable a user
+            version: 2022-04
+            :param user_id: user ID (string)
+            :param reason: reason for disabling user (string)
+            :param date: date then user was disabled (string)
+        """
+        if self.dry_run:
+            self.log_dry_run('disable_user(%s)' % user_id)
+            return
+        try:
+            date_reason = '%s %s' % (date, reason)
+            self.update_user(user_id=user_id, enabled=False, disabled=date_reason)
+            self.logger.debug('=> disable_user(%s)' % user_id)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('User %s not disabled' % user_id)
+
+    def enable_user(self, user_id):
+        """ Enable a user
+            version: 2022-04
+            :param user_id: user ID (string)
+        """
+        if self.dry_run:
+            self.log_dry_run('enable_user(%s)' % user_id)
+            return
+        try:
+            self.update_user(user_id=user_id, enabled=True, disabled='None')
+            self.logger.debug('=> enable_user(%s)' % user_id)
+        except exceptions.http.BadRequest as e:
+            self.log_error(e)
+            self.log_error('User %s not enabled' % user_id)
+
     def provision_dataporten(self, email, password):
         """
         Create a api user and demo project for a dataporten user.
@@ -1064,6 +1121,12 @@ class Keystone(Client):
         """ Map email for user to group name.
             The groups are created in himlar-dp_prep. """
         return '%s-group' % email
+
+    @staticmethod
+    def __get_disabled_group_name(email):
+        """ Map email for user to group name.
+            The groups are created in himlar-dp_prep. """
+        return '%s-disabled' % email
 
     @staticmethod
     def __get_uib_email(email):

@@ -222,6 +222,7 @@ nodes:
   console-01:
     compute_profile: medium
     compute_resource: controller-03
+    hostgroup: 16
   controller-01:
     mac: ec:f4:bb:c7:fb:cc
   controller-02:
