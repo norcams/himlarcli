@@ -162,7 +162,8 @@ def action_enable():
 
     # enable the user in API and Dataporten
     ksclient.enable_user(user['api'].id)
-    ksclient.enable_user(user['dataporten'].id)
+    if user['dataporten']:
+        ksclient.enable_user(user['dataporten'].id)
 
     # prefix prints with dry-run if that option is used
     if options.dry_run:
@@ -190,7 +191,8 @@ def action_enable():
 
     # Print our success
     print("%sUser %s enabled (API)" % (print_prefix, user['api'].name))
-    print("%sUser %s enabled (Dataporten)" % (print_prefix, user['dataporten'].name))
+    if user['dataporten']:
+        print("%sUser %s enabled (Dataporten)" % (print_prefix, user['dataporten'].name))
 
 def action_disable():
     """ Disable a user. The following happens when a user is disabled:
@@ -265,7 +267,8 @@ def action_disable():
 
     # disable the user in API and Dataporten
     ksclient.disable_user(user['api'].id, options.reason, date)
-    ksclient.disable_user(user['dataporten'].id, options.reason, date)
+    if user['dataporten']:
+        ksclient.disable_user(user['dataporten'].id, options.reason, date)
 
     # rename the user group
     group = ksclient.get_group_by_email(options.user)
@@ -278,7 +281,8 @@ def action_disable():
 
     # Print our success
     print("%sUser %s disabled (API)" % (print_prefix, user['api'].name))
-    print("%sUser %s disabled (Dataporten)" % (print_prefix, user['dataporten'].name))
+    if user['dataporten']:
+        print("%sUser %s disabled (Dataporten)" % (print_prefix, user['dataporten'].name))
 
 def action_validate():
     if options.org == 'all':
