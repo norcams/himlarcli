@@ -172,11 +172,11 @@ def action_enable():
         print_prefix = ""
 
     # rename the user group
-    group = ksclient.get_group_by_email(options.user)
-    if group and group.name == "%s-disabled" % options.user:
-        new_group_name = "%s-group" % options.user
+    group = ksclient.get_group_by_email(user['api'].email)
+    if group and group.name == "%s-disabled" % user['api'].email:
+        new_group_name = "%s-group" % user['api'].email
         ksclient.update_group(group.id, name=new_group_name)
-        print("%sGroup rename: %s-disabled -> %s-group" % (print_prefix, options.user, options.user))
+        print("%sGroup rename: %s-disabled -> %s" % (print_prefix, user['api'].email, new_group_name))
     else:
         himutils.sys_error('WARNING: Could not find disabled group for user %s!' % options.user, 0)
 
@@ -271,11 +271,11 @@ def action_disable():
         ksclient.disable_user(user['dataporten'].id, options.reason, date)
 
     # rename the user group
-    group = ksclient.get_group_by_email(options.user)
-    if group and group.name == "%s-group" % options.user:
-        new_group_name = "%s-disabled" % options.user
+    group = ksclient.get_group_by_email(user['api'].email)
+    if group and group.name == "%s-group" % user['api'].email:
+        new_group_name = "%s-disabled" % user['api'].email
         ksclient.update_group(group.id, name=new_group_name)
-        print("%sGroup rename: %s-group -> %s-disabled" % (print_prefix, options.user, options.user))
+        print("%sGroup rename: %s-group -> %s" % (print_prefix, user['api'].email, new_group_name))
     else:
         himutils.sys_error('WARNING: Could not find group for user %s!' % options.user, 0)
 
@@ -400,9 +400,9 @@ def action_purge():
 
     # actually delete the users
     for user in purge_users:
-        group = ksclient.get_group_by_email(user.name)
-        if group and group.name == "%s-disabled" % user.name:
-            new_group_name = "%s-group" % user.name
+        group = ksclient.get_group_by_email(user.email)
+        if group and group.name == "%s-disabled" % user.email:
+            new_group_name = "%s-group" % user.email
             ksclient.update_group(group.id, name=new_group_name)
         ksclient.user_cleanup(email=user.name)
         print("%sDeleted user: %s" % (print_prefix, user.name))
