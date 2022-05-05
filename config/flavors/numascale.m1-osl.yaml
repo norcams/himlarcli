@@ -10,7 +10,7 @@ properties:
 # Total memory: 1029994 MB (1 TB)
 # Total CPUs: 384
 
-numascale.m1a:
+numascale.m1:
   'numascale.m1.2xlarge':
     vcpus: 8
     ram: 16384
