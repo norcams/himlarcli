@@ -267,6 +267,9 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '10G'
           format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   dns-01:
     compute_profile: small
     compute_resource: controller-02
