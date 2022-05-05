@@ -1,0 +1,37 @@
+---
+# M1 flavor used for Numascale
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  aggregate_instance_extra_specs:type: 's== numascale'
+
+# Total memory: 1029994 MB (1 TB)
+# Total CPUs: 384
+
+numascale.m1a:
+  'numascale.m1.2xlarge':
+    vcpus: 8
+    ram: 16384
+    disk: 20
+  'numascale.m1.4xlarge':
+    vcpus: 16
+    ram: 32768
+    disk: 20
+  'numascale.m1.8xlarge':
+    vcpus: 32
+    ram: 65536
+    disk: 20
+  'numascale.m1.16xlarge':
+    vcpus: 64
+    ram: 131072
+    disk: 20
+  'numascale.m1.32xlarge':
+    vcpus: 128
+    ram: 262144
+    disk: 20
+  'numascale.m1.64xlarge':
+    vcpus: 240
+    ram: 491520
+    disk: 20
