@@ -1,0 +1,5 @@
+---
+# M1 flavor used for Numascale ONLY in OSL
+public: false
+properties: {}
+numascale.m1: {}
