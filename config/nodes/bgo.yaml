@@ -280,9 +280,11 @@ nodes:
   db-global-01:
     compute_profile: small
     compute_resource: controller-06
+    hostgroup: 15
   db-regional-01:
     compute_profile: xlarge
     compute_resource: controller-05
+    hostgroup: 15
     compute_attributes:
       volumes_attributes:
         '1':

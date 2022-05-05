@@ -253,7 +253,7 @@ nodes:
     mac: b0:26:28:f6:18:c2
     hostgroup: 13
   controller-07:
-    mac: b0:26:28:f6:1b:a8 
+    mac: b0:26:28:f6:1b:a8
     hostgroup: 13
   controller-08:
     mac: b0:26:28:f6:1b:aa
@@ -269,9 +269,11 @@ nodes:
   db-global-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 16
   db-regional-01:
     compute_profile: xlarge
     compute_resource: controller-01
+    hostgroup: 16
     compute_attributes:
       volumes_attributes:
         '1':
