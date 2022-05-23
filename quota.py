@@ -26,7 +26,7 @@ def action_show():
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
         components = {'nova': novaclient, 'cinder': cinderclient}
-        for comp, client in components.iteritems():
+        for comp, client in components.items():
             if options.service != 'all' and comp != options.service:
                 continue
             if hasattr(client, 'get_quota_class'):
@@ -48,7 +48,7 @@ def action_update():
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
         components = {'nova': novaclient, 'cinder': cinderclient}
-        for comp, client in components.iteritems():
+        for comp, client in components.items():
             if options.service != 'all' and comp != options.service:
                 continue
             if comp not in defaults:
@@ -62,7 +62,7 @@ def action_update():
             if not isinstance(current, dict):
                 current = current.to_dict()
             updates = dict()
-            for k, v in defaults[comp].iteritems():
+            for k, v in defaults[comp].items():
                 if k in current and current[k] != v:
                     logger.debug("=> %sUpdated %s: from %s to %s in %s" %
                                  (dry_run_txt, k, current[k], v, region))

@@ -2,7 +2,7 @@ import sys
 import os
 from datetime import datetime
 from datetime import date
-import ConfigParser
+import configparser
 import logging
 import logging.config
 import inspect
@@ -12,7 +12,6 @@ import hashlib
 import functools
 #import mimetypes
 import urllib
-import urllib2
 from string import Template
 import socket
 from tabulate import tabulate
@@ -49,14 +48,14 @@ def check_port(address, port, timeout=60, log=None):
             log.debug("=> Connected to %s on port %s" % (address, port))
         sock.close()
         return True
-    except socket.error, e:
+    except(socket.error, e):
         if log:
             log.debug("=> Connection to %s on port %s failed: %s" % (address, port, e))
         return False
 
 def confirm_action(question):
     question = "%s (yes|no)? " % question
-    answer = raw_input(question)
+    answer = input(question)
     if answer.lower() == 'yes':
         return True
     sys.stderr.write('Action aborted by user.\n')
@@ -71,10 +70,8 @@ def append_to_file(filename, text):
 def append_to_logfile(filename, date, region, text1, text2, text3):
     filename = get_abs_path(filename)
     try:
-        f = open(filename, 'a+')
-        try:
+        with open(filename) as f:
             f.write("%s, %s, %s, %s, %s\n" % (date, region, text1, text2, text3))
-	finally:
             f.close()
     except IOError as exc:
         logger.warn('=> ERROR: could not append to logfile %s' % exc)
@@ -83,7 +80,7 @@ def get_config(config_path):
     if not os.path.isfile(config_path):
         logging.critical("Could not find config file: %s", config_path)
         sys.exit(1)
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(config_path)
     return config
 
@@ -120,7 +117,7 @@ def get_logger(name, config, debug, log=None):
     else:
         try:
             path = config.get('log', 'path')
-        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+        except (configparser.NoOptionError, ConfigParser.NoSectionError):
             path = '/opt/himlarcli/'
         mylog = setup_logger(name, debug, path)
         if not os.environ.get('VIRTUAL_ENV'):
@@ -133,7 +130,7 @@ def get_logger(name, config, debug, log=None):
 
 def is_virtual_env():
     if not hasattr(sys, 'real_prefix'):
-        print "Remember to source bin/activate!"
+        print("Remember to source bin/activate!")
         sys.exit(1)
 
 def setup_logger(name, debug, log_path='/opt/himlarcli/', configfile='logging.yaml'):
@@ -143,7 +140,7 @@ def setup_logger(name, debug, log_path='/opt/himlarcli/', configfile='logging.ya
         try:
             config = yaml.full_load(stream)
         except yaml.YAMLError as exc:
-            print exc
+            print(exc)
 
     # Always use absolute paths
     if not os.path.isabs(config['handlers']['file']['filename']):
@@ -153,8 +150,8 @@ def setup_logger(name, debug, log_path='/opt/himlarcli/', configfile='logging.ya
         try:
             logging.config.dictConfig(config)
         except ValueError as e:
-            print e
-            print "Please check your log section in config.ini and logging.yaml"
+            print(e)
+            print("Please check your log section in config.ini and logging.yaml")
             sys.exit(1)
     logger = logging.getLogger(name)
     logging.captureWarnings(True)

@@ -54,7 +54,7 @@ def action_dualstack():
                 if hasattr(project, 'type') and project.type != options.type:
                     status['type'] = options.type
                     continue
-            network = i.addresses.keys()[0] if len(i.addresses.keys()) > 0 else 'unknown'
+            network = list(i.addresses.keys())[0] if len(list(i.addresses.keys())) > 0 else 'unknown'
             if network != 'dualStack':
                 continue
             output = {

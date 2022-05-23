@@ -3,7 +3,7 @@ import sys
 import json
 import pika
 import himlarcli.utils as utils
-import ConfigParser
+import configparser
 
 class MQclient(object):
 
@@ -98,9 +98,9 @@ class MQclient(object):
         try:
             value = self.config.get(section, option)
             return value
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.logger.debug('=> config file section [%s] missing option %s',
                               section, option)
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.logger.debug('=> config file missing section %s', section)
         return None

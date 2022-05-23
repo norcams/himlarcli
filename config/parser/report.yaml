@@ -7,6 +7,7 @@ actions:
   'vendorapi':    'Create data for Nova vendor API'
   'mail':         'Send email to users'
   'enddate':      'List projects and number of days until they reach enddate, or send alerts to admin/contact about pending enddate'
+  'quarantine':   'List projects with quarantine, or send alerts to admin/contact about pending deletion'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -37,7 +38,7 @@ opt_args:
     'dest':     'outdir'
     'help':     'Directory in which to create JSON output files'
   '--template':
-    'sub':      ['mail','enddate']
+    'sub':      ['mail','enddate','quarantine']
     'dest':     'template'
     'help':     'Path to email template'
   '--subject':
@@ -46,7 +47,7 @@ opt_args:
     'required': true
     'help':     'Mail subject'
   '--from':
-    'sub':      ['mail','enddate']
+    'sub':      ['mail','enddate','quarantine']
     'dest':     'fromaddr'
     'help':     'Address for From and Reply-To (default: support@nrec.no)'
   '--user':
@@ -61,17 +62,17 @@ opt_args:
     'const':    true
     'default':  false
   '--days':
-    'sub':      ['enddate']
+    'sub':      ['enddate','quarantine']
     'dest':     'days'
     'action':   'append'
-    'help':     'Number of days until enddate as criterion for alert. Can be used multiple times, and can be a negative number. Use together with "--list" to only list projects'
+    'help':     'Number of days until enddate/quarantine as criterion for alert. Can be used multiple times, and can be a negative number. Use together with "--list" to only list projects'
   '--list':
-    'sub':      ['enddate']
+    'sub':      ['enddate','quarantine']
     'dest':     'list'
     'action':   'store_const'
     'const':    true
     'default':  false
-    'help':     'List projects and days until enddate. Use together with "--days" to only list projects with specific end dates'
+    'help':     'List projects and days until/past enddate/quarantine. Use together with "--days" to only list projects with specific end dates'
   'project':
    'sub':       ['show']
    'metavar':   'project'

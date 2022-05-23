@@ -51,7 +51,7 @@ def action_list():
                 #printer.output_dict(project.to_dict())
                 instances = novaclient.get_project_instances(project.id)
                 for i in instances:
-                    network = i.addresses.keys()[0] if len(i.addresses.keys()) > 0 else 'unknown'
+                    network = list(i.addresses.keys())[0] if len(list(i.addresses.keys())) > 0 else 'unknown'
                     if options.network and options.network != network:
                         continue
                     count += 1
@@ -59,17 +59,17 @@ def action_list():
                     output['_region'] = region
                     output['id'] = i.id
                     output['status'] = i.status
-                    output['name'] = unicode(i.name)
+                    output['name'] = str(i.name)
                     output['project'] = project.name
                     printer.output_dict(objects=output, one_line=True)
                     #print '%s %s %s (%s)' % (i.id, i.status, unicode(i.name), project.name)
-    print "\nTotal number of instances for cleanup: %s" % count
+    print("\nTotal number of instances for cleanup: %s" % count)
 
 def action_delete():
     q = "Delete these instances? (yes|no) "
-    answer = raw_input(q)
+    answer = input(q)
     if answer.lower() != 'yes':
-        print "Abort delete!"
+        print("Abort delete!")
         return
     search_filter = dict()
     if options.type:
@@ -85,7 +85,7 @@ def action_delete():
                 #printer.output_dict(project.to_dict())
                 instances = novaclient.get_project_instances(project.id)
                 for i in instances:
-                    network = i.addresses.keys()[0] if len(i.addresses.keys()) > 0 else 'unknown'
+                    network = list(i.addresses.keys())[0] if len(list(i.addresses.keys())) > 0 else 'unknown'
                     if options.network and options.network != network:
                         continue
                     logger.debug('=> DELETE %s (%s)' % (i.name, project.name))
@@ -93,13 +93,13 @@ def action_delete():
                         i.delete()
                         count += 1
                         time.sleep(2)
-    print "\nTotal number of instances deleted: %s" % count
+    print("\nTotal number of instances deleted: %s" % count)
 
 def action_notify():
     q = "Send mail to all users of these instances about termination? (yes|no) "
-    answer = raw_input(q)
+    answer = input(q)
     if answer.lower() != 'yes':
-        print "Abort sending mail!"
+        print("Abort sending mail!")
         return
 
     search_filter = dict()
@@ -113,7 +113,7 @@ def action_notify():
                 instances = novaclient.get_project_instances(project.id)
                 verified_instances = list()
                 for i in instances:
-                    network = i.addresses.keys()[0] if len(i.addresses.keys()) > 0 else 'unknown'
+                    network = list(i.addresses.keys())[0] if len(list(i.addresses.keys())) > 0 else 'unknown'
                     if options.network and options.network != network:
                         continue
                     verified_instances.append(i)
@@ -129,7 +129,7 @@ def action_notify():
                 users = notify.mail_instance_owner(verified_instances, body_content, subject)
                 notify.close()
                 if users:
-                    print users
+                    print(users)
 
 
 # Run local function with the same name as the action

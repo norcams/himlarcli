@@ -126,9 +126,9 @@ def get_action_options(desc, actions, dry_run=False, config=True, debug=True, op
                             const=True,
                             default=False,
                             help='dry run script')
-    for name, arg in opt_args.iteritems():
+    for name, arg in opt_args.items():
         if not 'dest' in arg:
-            print 'missing dest in opt_args'
+            print('missing dest in opt_args')
             continue
         if not 'default' in arg:
             arg['default'] = False

@@ -32,7 +32,7 @@ def project():
              'test': 0,
              'hpc': 0,
              'total': 0}
-    for name in sorted(regions['regions'].iterkeys()):
+    for name in sorted(regions['regions'].keys()):
         logger.debug('=> count region %s' % name)
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
         instances = novaclient.get_instances()
@@ -49,7 +49,7 @@ def project():
             else:
                 if hasattr(project, 'type'):
                     if project.type not in stats:
-                        print "unknown project type %s for %s" % (project.type, project.name)
+                        print("unknown project type %s for %s" % (project.type, project.name))
                     else:
                         stats[project.type] += 1
                 else:
@@ -68,7 +68,7 @@ def project():
 def users():
     stats = dict()
     stats['total'] = 0
-    for name in sorted(regions['regions'].iterkeys()):
+    for name in sorted(regions['regions'].keys()):
         logger.debug('=> count region %s' % name)
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
         instances = novaclient.get_instances()
@@ -100,7 +100,7 @@ def users():
 def org():
     stats = dict()
     stats['total'] = 0
-    for name in sorted(regions['regions'].iterkeys()):
+    for name in sorted(regions['regions'].keys()):
         logger.debug('=> count region %s' % name)
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
         instances = novaclient.get_instances()
@@ -135,22 +135,22 @@ def org():
 
 def user():
     if not ksclient.is_valid_user(email=options.email):
-        print "%s is not a valid user. Please check your spelling or case." % options.email
+        print("%s is not a valid user. Please check your spelling or case." % options.email)
         sys.exit(1)
     obj = ksclient.get_user_objects(email=options.email, domain='Dataporten')
     projects = obj['projects']
     total = 0
     for project in projects:
         project_type = project.type if hasattr(project, 'type') else 'unknown'
-        print "\n%s (type=%s):" % (project.name, project_type)
-        for name in sorted(regions['regions'].iterkeys()):
+        print("\n%s (type=%s):" % (project.name, project_type))
+        for name in sorted(regions['regions'].keys()):
             logger.debug('=> count region %s' % name)
             novaclient = Nova(options.config, debug=options.debug, log=logger, region=name)
             instances = novaclient.get_project_instances(project.id)
             total += len(instances)
             for i in instances:
-                print "* %s" % i.name
-    print "\nTotal number of instances for %s: %s" % (options.email, total)
+                print("* %s" % i.name)
+    print("\nTotal number of instances for %s: %s" % (options.email, total))
 
 # Run local function with the same name as the action
 action = locals().get(options.action)

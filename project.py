@@ -83,16 +83,16 @@ def action_create():
             himutils.sys_error(errmsg, 1)
 
     if not options.force:
-        print 'Project name: %s\nDescription: %s\nAdmin: %s\nContact: %s\nOrganization: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
+        print('Project name: %s\nDescription: %s\nAdmin: %s\nContact: %s\nOrganization: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
                 % (options.project,
-                   ksclient.convert_ascii(options.desc),
+                   options.desc,
                    options.admin.lower(),
                    contact,
                    options.org,
                    options.type,
                    str(enddate),
                    options.quota,
-                   options.rt)
+                   options.rt))
         if not himutils.confirm_action('Are you sure you want to create this project?'):
             himutils.sys_error('Aborted', 1)
     project = ksclient.create_project(project_name=options.project,
@@ -230,7 +230,7 @@ def action_extend():
     enddate = datetime_enddate.strftime('%Y-%m-%d')
     ksclient.update_project(project_id=project.id, enddate=str(enddate),
                             disabled='', notified='', enabled=True)
-    print "New end date for %s: %s" % (project.name, enddate)
+    print("New end date for %s: %s" % (project.name, enddate))
 
 def action_grant():
     for user in options.users:
@@ -423,7 +423,7 @@ def action_show_quota():
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
         neutronclient = Neutron(options.config, debug=options.debug, log=logger, region=region)
         components = {'nova': novaclient, 'cinder': cinderclient, 'neutron': neutronclient}
-        for comp, client in components.iteritems():
+        for comp, client in components.items():
             if options.service != 'all' and comp != options.service:
                 continue
             quota = dict()
@@ -529,16 +529,16 @@ def action_quarantine():
             # Send mail to user
             mail.send_mail(project_admin, msg, fromaddr)
             if options.dry_run:
-                print "Did NOT send spam to %s;" % project_admin
-                print "Subject: %s" % subject
-                print "To: %s" % project_admin
+                print("Did NOT send spam to %s;" % project_admin)
+                print("Subject: %s" % subject)
+                print("To: %s" % project_admin)
                 if ccaddr:
-                    print "Cc: %s" % ccaddr
-                print "From: %s" % fromaddr
-                print '---'
-                print body_content
+                    print("Cc: %s" % ccaddr)
+                print("From: %s" % fromaddr)
+                print('---')
+                print(body_content)
             else:
-                print "Spam sent to %s" % project_admin
+                print("Spam sent to %s" % project_admin)
 
         ksclient.project_quarantine_set(options.project, options.reason, date)
         printer.output_msg('Quarantine set for project: {}'. format(options.project))

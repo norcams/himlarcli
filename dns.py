@@ -27,14 +27,14 @@ dns = Designate(options.config, debug=options.debug)
 
 if options.action[0] == 'show':
     if options.dry_run:
-        print 'DRY-RUN: show'
+        print('DRY-RUN: show')
     else:
-        print 'show'
+        print('show')
 elif options.action[0] == 'create':
     if options.dry_run:
-        print 'DRY-RUN: create'
+        print('DRY-RUN: create')
     else:
-        print 'create'
+        print('create')
 
 # Description to be used for bulk imports
 BULK_DESC = "BULK IMPORT FROM IANA"
@@ -98,13 +98,13 @@ def action_blacklist_update():
 def action_blacklist_show():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
     res = designateclient.get_blacklist(blacklist_id=options.this_id)
-    print
-    print "  Pattern: ...... %s" % res['pattern']
-    print "  Description: .. %s" % res['description']
-    print "  Created at: ... %s" % res['created_at']
-    print "  Updated at: ... %s" % res['updated_at']
-    print "  ID: ........... %s" % res['id']
-    print
+    print()
+    print("  Pattern: ...... %s" % res['pattern'])
+    print("  Description: .. %s" % res['description'])
+    print("  Created at: ... %s" % res['created_at'])
+    print("  Updated at: ... %s" % res['updated_at'])
+    print("  ID: ........... %s" % res['id'])
+    print()
 
 def action_tld_list():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
@@ -157,13 +157,13 @@ def action_tld_update():
 def action_tld_show():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
     tld = designateclient.get_tld(name=options.name)
-    print
-    print "  Name: ......... %s" % tld['name']
-    print "  Description: .. %s" % tld['description']
-    print "  Created at: ... %s" % tld['created_at']
-    print "  Updated at: ... %s" % tld['updated_at']
-    print "  ID: ........... %s" % tld['id']
-    print
+    print()
+    print("  Name: ......... %s" % tld['name'])
+    print("  Description: .. %s" % tld['description'])
+    print("  Created at: ... %s" % tld['created_at'])
+    print("  Updated at: ... %s" % tld['updated_at'])
+    print("  ID: ........... %s" % tld['id'])
+    print()
 
 def action_tld_import():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
@@ -184,7 +184,7 @@ def action_tld_import():
     iana_tlds = []
     for name in bulkfile:
         name = name.rstrip()
-        name = unicode(name, 'utf-8')
+        name = str(name, 'utf-8')
         name = name.lower()
         if re.match("^#.*", name):
             continue
@@ -197,14 +197,14 @@ def action_tld_import():
     remove_tlds = __diff_arrays(registered_tlds, iana_tlds)
     for name in remove_tlds:
         if options.debug:
-            print "debug: removing tld: %s" % name
+            print("debug: removing tld: %s" % name)
         designateclient.delete_tld(tld=name)
 
     # add any new tlds from the file
     add_tlds = __diff_arrays(iana_tlds, registered_tlds)
     for name in add_tlds:
         if options.debug:
-            print "debug: creating tld: %s" % name
+            print("debug: creating tld: %s" % name)
         designateclient.create_tld(name=name, description=BULK_DESC)
 
 

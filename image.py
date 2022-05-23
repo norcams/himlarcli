@@ -105,7 +105,7 @@ def action_usage():
     tag_count = dict()
     tag_count['header'] = 'Used image tags'
     count = 0
-    for image in output.itervalues():
+    for image in output.values():
         count += 1
         out_image = {
             'name': image['name'],
@@ -117,7 +117,7 @@ def action_usage():
             out_image['tags'] = image['tags']
         one_line = False if options.detailed else True
         printer.output_dict(out_image, sort=True, one_line=one_line)
-        for distro in distros.iterkeys():
+        for distro in distros.keys():
             if distro in image['name'].lower():
                 for tag in image['tags']:
                     tag_count[tag] = tag_count.get(tag, 0) + image['count']
@@ -138,7 +138,7 @@ def action_purge():
     count = 0
     printer.output_dict({'header': 'Images deleted'})
     limit = int(options.limit) if options.limit else options.limit
-    for image in images.itervalues():
+    for image in images.values():
         if image['count'] > 0:
             kc.debug_log('no purge: image {} in use!'.format(image['name']))
             continue
@@ -206,7 +206,7 @@ def action_update():
         utils.sys_error('Images hash not found in config file {}'.format(config_filename))
 
     image_type = image_config['type']
-    for name, image_data in image_config['images'].iteritems():
+    for name, image_data in image_config['images'].items():
         if 'retired' in image_data and image_data['retired'] == 1:
             kc.debug_log('dropped {}: image retired'.format(name))
             continue
@@ -304,7 +304,7 @@ def create_image(name, source_path, image, image_type):
     # Properties hash from yaml
     properties = {}
     if 'properties' in image:
-        for key, value in image['properties'].iteritems():
+        for key, value in image['properties'].items():
             properties[key] = value
     # Create tags and tag all images with type and name
     tags = list()

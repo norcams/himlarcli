@@ -1,6 +1,6 @@
 import os
 import sys
-import ConfigParser
+import configparser
 import unicodedata
 from keystoneauth1.identity import v3
 from keystoneauth1 import session
@@ -58,7 +58,7 @@ class Client(object):
     def get_config_section(self, section):
         try:
             openstack = self.config.items(section)
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.logger.exception('missing [%s]' % section)
             self.logger.critical('Could not find section [%s] in %s', section, self.config_path)
             sys.exit(1)
@@ -68,10 +68,10 @@ class Client(object):
         try:
             value = self.config.get(section, option)
             return value
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.logger.debug('=> config file section [%s] missing option %s'
                               % (section, option))
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.logger.debug('=> config file missing section %s' % section)
         return default
 
@@ -150,17 +150,17 @@ class Client(object):
         else:
             return dict()
 
-    @staticmethod
-    def convert_ascii(text, format='replace'):
-        """ Convert string to acsci.
-            :param: format: replace (with ?) or ignore non-ascii characters
-            version: 2019-10
-        """
-        if not text:
-            return text
-        text_unicode = unicode(text, 'utf-8') if  isinstance(text, str) else text
-        text_normalize = unicodedata.normalize('NFKD', text_unicode)
-        return text_normalize.encode('ascii', format)
+#    @staticmethod
+#    def convert_ascii(text, format='replace'):
+#        """ Convert string to acsci.
+#            :param: format: replace (with ?) or ignore non-ascii characters
+#            version: 2019-10
+#        """
+#        if not text:
+#            return text
+#        text_unicode = unicode(text, 'utf-8') if  isinstance(text, str) else text
+#        text_normalize = unicodedata.normalize('NFKD', text_unicode)
+#        return text_normalize.encode('ascii', format)
 
     @staticmethod
     def log_error(msg, code=0):

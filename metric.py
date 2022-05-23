@@ -34,7 +34,7 @@ def action_instance():
     printer.output_dict(resources)
     printer.output_dict({'header': 'instance metrics'})
     output = defaultdict(int)
-    for k, v in metrics.iteritems():
+    for k, v in metrics.items():
         measurement = gc.get_client().metric.get_measures(metric=v,
                                                           aggregation='max',
                                                           start=start,
