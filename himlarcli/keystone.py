@@ -114,7 +114,7 @@ class Keystone(Client):
             self.logger.debug('=> no projects found for email %s' % email)
         project_list = list()
         for project in projects:
-            for k, v in kwargs.iteritems():
+            for k, v in kwargs.items():
                 if hasattr(project, k) and getattr(project, k) == v:
                     project_list.append(project)
                 elif not hasattr(project, k):
@@ -983,7 +983,7 @@ class Keystone(Client):
             self.logger.debug('=> filter project %s' % kwargs)
             project_list = list()
             for p in projects:
-                for k, v in kwargs.iteritems():
+                for k, v in kwargs.items():
                     if hasattr(p, k) and getattr(p, k) == v:
                         project_list.append(p)
             return project_list
