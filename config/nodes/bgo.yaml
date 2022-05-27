@@ -249,7 +249,7 @@ nodes:
     hostgroup: 16
   compute-alice2-61:
     mac: b0:7b:25:f8:6a:8e
-    hostgroup: 16
+    hostgroup: 17
   console-01:
     compute_profile: medium
     compute_resource: controller-05
