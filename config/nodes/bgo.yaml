@@ -252,7 +252,7 @@ nodes:
     hostgroup: 17
   compute-alice2-62:
     mac: b0:7b:25:f8:6b:54
-    hostgroup: 16
+    hostgroup: 17
   compute-alice2-63:
     mac: b0:7b:25:f8:69:b4
     hostgroup: 16
