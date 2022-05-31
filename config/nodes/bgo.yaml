@@ -250,6 +250,63 @@ nodes:
   compute-alice2-61:
     mac: b0:7b:25:f8:6a:8e
     hostgroup: 17
+  compute-alice2-62:
+    mac: b0:7b:25:f8:6b:54
+    hostgroup: 16
+  compute-alice2-63:
+    mac: b0:7b:25:f8:69:b4
+    hostgroup: 16
+  compute-alice2-64:
+    mac: b0:7b:25:f8:6a:06
+    hostgroup: 16
+  compute-alice2-65:
+    mac: b0:7b:25:f8:6b:46
+    hostgroup: 16
+  compute-alice2-66:
+    mac: b0:7b:25:e9:80:18
+    hostgroup: 16
+  compute-alice2-67:
+    mac: ec:2a:72:0a:4c:e4
+    hostgroup: 16
+  compute-alice2-68:
+    mac: ec:2a:72:0a:4f:48
+    hostgroup: 16
+  compute-alice2-69:
+    mac: ec:2a:72:0a:4f:54
+    hostgroup: 16
+  compute-alice2-70:
+    mac: b0:7b:25:f8:0b:06
+    hostgroup: 16
+  compute-alice2-71:
+    mac: ec:2a:72:10:9f:b2
+    hostgroup: 16
+  compute-alice2-72:
+    mac: ec:2a:72:02:7f:c2
+    hostgroup: 16
+  compute-alice2-73:
+    mac: ec:2a:72:19:48:1e
+    hostgroup: 16
+  compute-alice2-74:
+    mac: ec:2a:72:10:a1:c2
+    hostgroup: 16
+  compute-alice2-75:
+    mac: ec:2a:72:02:84:5a
+    hostgroup: 16
+  compute-alice2-76:
+    mac: ec:2a:72:02:86:96
+    hostgroup: 16
+  compute-alice2-77:
+    mac: ec:2a:72:02:86:7e
+    hostgroup: 16
+  compute-alice2-78:
+    mac: ec:2a:72:02:84:32
+    hostgroup: 16
+  compute-alice2-79:
+    mac: ec:2a:72:19:41:ac
+    hostgroup: 16
+  compute-alice2-80:
+    mac: ec:2a:72:02:86:38
+    hostgroup: 16
   console-01:
     compute_profile: medium
     compute_resource: controller-05
