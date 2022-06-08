@@ -17,6 +17,7 @@ images:
       'hw_machine_type':     'q35'
       'hw_qemu_guest_agent': 'yes'
       'os_require_quiesce':  'yes'
+      'os_type':             'windows'
 #  'winsrv2019core':
 #    'name':             'GOLD Windows Server 2019 Core'
 #    'depricated':       'Outdated Windows Server 2019 Core (Windows)'
