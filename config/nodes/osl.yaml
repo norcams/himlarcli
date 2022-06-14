@@ -182,16 +182,16 @@ nodes:
     hostgroup: 13
   compute-hpc-25:
     mac: 0c:c4:7a:fb:c8:28
-    hostgroup: 13
+    hostgroup: 17
   compute-hpc-26:
     mac: 0c:c4:7a:fb:c8:2a
-    hostgroup: 13
+    hostgroup: 17
   compute-hpc-27:
     mac: 0c:c4:7a:fb:c8:a0
-    hostgroup: 13
+    hostgroup: 17
   compute-hpc-28:
     mac: 0c:c4:7a:fb:c8:2e
-    hostgroup: 13
+    hostgroup: 17
   compute-vgpu-42:
     mac: ac:1f:6b:64:72:84
     hostgroup: 11

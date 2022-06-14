@@ -189,13 +189,13 @@ nodes:
     hostgroup: 16
   compute-epyc-41:
     mac: f4:02:70:d7:8b:3c
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-42:
     mac: f4:02:70:d7:8c:76
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-43:
     mac: f4:02:70:d7:8c:a2
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-44:
     mac: f4:02:70:d9:6b:da
     hostgroup: 16
@@ -216,7 +216,7 @@ nodes:
     hostgroup: 16
   compute-epyc-50:
     mac: f4:02:70:cd:de:86
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-51:
     mac: f4:02:70:d0:04:e0
     hostgroup: 16
