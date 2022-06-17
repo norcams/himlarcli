@@ -228,7 +228,7 @@ nodes:
     hostgroup: 16
   compute-gpu1-54:
     mac: 34:48:ed:f9:5a:de
-    hostgroup: 14
+    hostgroup: 16
   compute-epyc-55:
     mac: 70:b5:e8:d0:b0:a8
     hostgroup: 16
