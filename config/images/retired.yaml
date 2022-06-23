@@ -43,3 +43,6 @@ images:
   'ubuntu_2104':
     'name':             'GOLD Ubuntu 21.04'
     'depricated':       'Outdated (Ubuntu 21.04)'
+  'ubuntu_2110':
+    'name':             'GOLD Ubuntu 21.10'
+    'depricated':       'Outdated (Ubuntu 21.10)'
