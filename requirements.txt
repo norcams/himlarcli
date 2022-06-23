@@ -6,6 +6,7 @@ python-openstackclient
 python-swiftclient
 python-neutronclient
 python-designateclient
+python-glanceclient
 gnocchiclient
 statsd==3.2.1
 pika==0.11.2
