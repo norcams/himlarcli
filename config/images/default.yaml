@@ -33,7 +33,7 @@ images:
     'name':             'GOLD Ubuntu 22.04 LTS'
     'depricated':       'Outdated (Ubuntu 22.04)'
     'url':              'http://builder/'
-    'latest':           'ubuntu_2210-latest.qcow2'
+    'latest':           'ubuntu_2204-latest.qcow2'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
