@@ -668,6 +668,81 @@ nodes:
   storage-v2d-43:
     mac: 34:48:ed:f9:58:b2
     hostgroup: 16
+  bgo-storage-dcache2-44:
+    mac: e4:3d:1a:24:6a:b7
+    hostgroup: 21
+  bgo-storage-dcache2-45:
+    mac: e4:3d:1a:24:82:7b
+    hostgroup: 21
+  bgo-storage-dcache2-46:
+    mac: e4:3d:1a:24:87:87
+    hostgroup: 21
+  bgo-storage-dcache2-47:
+    mac: e4:3d:1a:24:82:77
+    hostgroup: 21
+  bgo-storage-dcache2-48:
+    mac: e4:3d:1a:24:7c:43
+    hostgroup: 21
+  bgo-storage-dcache2-49:
+    mac: e4:3d:1a:24:8c:9b
+    hostgroup: 21
+  bgo-storage-dcache2-50:
+    mac: e4:3d:1a:24:8c:a7
+    hostgroup: 21
+  bgo-storage-dcache2-51:
+    mac: e4:3d:1a:24:76:5b
+    hostgroup: 21
+  bgo-storage-dcache2-52:
+    mac: e4:3d:1a:24:8a:a7
+    hostgroup: 21
+  bgo-storage-dcache2-53:
+    mac: e4:3d:1a:24:8b:a7
+    hostgroup: 21
+  bgo-storage-dcache2-54:
+    mac: e4:3d:1a:24:7c:6f
+    hostgroup: 21
+  bgo-storage-dcache2-55:
+    mac: e4:3d:1a:f8:64:73
+    hostgroup: 21
+  bgo-storage-dcache2-56:
+    mac: e4:3d:1a:f8:5d:af
+    hostgroup: 21
+  bgo-storage-dcache2-57:
+    mac: e4:3d:1a:f8:37:7b
+    hostgroup: 21
+  bgo-storage-dcache2-58:
+    mac: e4:3d:1a:f8:50:5f
+    hostgroup: 21
+  bgo-storage-dcache2-59:
+    mac: e4:3d:1a:f8:4e:ab
+    hostgroup: 21
+  bgo-storage-dcache2-60:
+    mac: e4:3d:1a:f8:72:3b
+    hostgroup: 21
+  bgo-storage-dcache2-61:
+    mac: e4:3d:1a:f8:4d:eb
+    hostgroup: 21
+  bgo-storage-dcache2-62:
+    mac: e4:3d:1a:f8:68:8b
+    hostgroup: 21
+  bgo-storage-dcache2-63:
+    mac: e4:3d:1a:f8:67:b3
+    hostgroup: 21
+  bgo-storage-dcache2-64:
+    mac: e4:3d:1a:f8:39:bf
+    hostgroup: 21
+  bgo-storage-dcache2-65:
+    mac: e4:3d:1a:24:7e:6f
+    hostgroup: 21
+  bgo-storage-dcache2-66:
+    mac: e4:3d:1a:24:74:13
+    hostgroup: 21
+  bgo-storage-dcache2-67:
+    mac: e4:3d:1a:24:8d:2b
+    hostgroup: 21
+  bgo-storage-dcache2-68:
+    mac: e4:3d:1a:24:83:87
+    hostgroup: 21
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-05
