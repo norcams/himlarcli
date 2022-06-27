@@ -11,7 +11,8 @@ import yaml
 import hashlib
 import functools
 #import mimetypes
-import urllib
+import urllib.request
+import urllib.error
 from string import Template
 import socket
 from tabulate import tabulate
@@ -258,7 +259,7 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None,
     target = get_abs_path(target)
     if not os.path.isfile(target):
         try:
-            (filename, headers) = urllib.urlretrieve(source, target)
+            (filename, headers) = urllib.request.urlretrieve(source, target)
         except IOError as exc:
             logger.warn('=> ERROR: could not download %s' % source)
             sys.stderr.write(str(exc)+'\n')
@@ -272,8 +273,8 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None,
     if checksum_type and checksum_url:
         checksum = checksum_file(target, checksum_type)
         try:
-            response = urllib2.urlopen(checksum_url)
-        except urllib2.HTTPError as exc:
+            response = urllib.request.urlopen(checksum_url)
+        except urllib.error.HTTPError as exc:
             logger.debug('=> {}'.format(exc))
             logger.debug('=> unable to download checksum {}'.format(checksum_url))
             return None
