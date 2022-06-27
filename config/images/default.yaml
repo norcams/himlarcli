@@ -6,6 +6,7 @@ images:
     'depricated':       'Outdated (Ubuntu 18.04)'
     'url':              'http://builder/'
     'latest':           'ubuntu_1804-latest.qcow2'
+    'builder_checksum': 'ubuntu_1804-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
@@ -20,6 +21,7 @@ images:
     'depricated':       'Outdated (Ubuntu 20.04)'
     'url':              'http://builder/'
     'latest':           'ubuntu_2004-latest.qcow2'
+    'builder_checksum': 'ubuntu_2004-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
@@ -34,6 +36,7 @@ images:
     'depricated':       'Outdated (Ubuntu 22.04)'
     'url':              'http://builder/'
     'latest':           'ubuntu_2204-latest.qcow2'
+    'builder_checksum': 'ubuntu_2204-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
@@ -49,6 +52,7 @@ images:
     'depricated':       'Outdated (CentOS 7)'
     'url':              'http://builder/'
     'latest':           'centos7-latest.qcow2'
+    'builder_checksum': 'centos7-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
@@ -63,6 +67,7 @@ images:
     'depricated':       'Outdated (CentOS Stream 8)'
     'url':              'http://builder/'
     'latest':           'centosstream8-latest.qcow2'
+    'builder_checksum': 'centosstream8-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
@@ -77,6 +82,7 @@ images:
     'depricated':       'Outdated (CentOS Stream 9)'
     'url':              'http://builder/'
     'latest':           'centosstream9-latest.qcow2'
+    'builder_checksum': 'centosstream9-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
@@ -91,6 +97,7 @@ images:
     'depricated':       'Outdated (Alma Linux 8)'
     'url':              'http://builder/'
     'latest':           'almalinux8-latest.qcow2'
+    'builder_checksum': 'almalinux8-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
@@ -106,6 +113,7 @@ images:
     'depricated':       'Outdated (Rocky Linux 8)'
     'url':              'http://builder/'
     'latest':           'rockylinux8-latest.qcow2'
+    'builder_checksum': 'rockylinux8-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
@@ -120,6 +128,7 @@ images:
     'depricated':       'Outdated (Debian 9)'
     'url':              'http://builder/'
     'latest':           'debian9-latest.qcow2'
+    'builder_checksum': 'debian9-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
@@ -134,6 +143,7 @@ images:
     'depricated':       'Outdated (Debian 10)'
     'url':              'http://builder/'
     'latest':           'debian10-latest.qcow2'
+    'builder_checksum': 'debian10-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
@@ -148,6 +158,7 @@ images:
     'depricated':       'Outdated (Debian 11)'
     'url':              'http://builder/'
     'latest':           'debian11-latest.qcow2'
+    'builder_checksum': 'debian11-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
@@ -163,6 +174,7 @@ images:
     'depricated':       'Outdated (Fedora 35)'
     'url':              'http://builder/'
     'latest':           'fedora_35-latest.qcow2'
+    'builder_checksum': 'fedora_35-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'

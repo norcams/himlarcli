@@ -293,7 +293,7 @@ def compare_checksum(checksum, checksum_url, logger):
         logger.debug('=> {}'.format(exc))
         logger.debug('=> unable to download checksum {}'.format(checksum_url))
         return False
-    checksum_all = response.read()
+    checksum_all = response.read().decode("utf-8")
     if checksum not in checksum_all:
         logger.debug("=> checksum failed: %s" % checksum)
         return False
