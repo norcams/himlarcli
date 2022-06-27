@@ -286,6 +286,20 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None,
             logger.debug("=> checksum ok: %s" % checksum)
     return target
 
+def compare_checksum(checksum, checksum_url, logger):
+    try:
+        response = urllib.request.urlopen(checksum_url)
+    except urllib.error.HTTPError as exc:
+        logger.debug('=> {}'.format(exc))
+        logger.debug('=> unable to download checksum {}'.format(checksum_url))
+        return False
+    checksum_all = response.read()
+    if checksum not in checksum_all:
+        logger.debug("=> checksum failed: %s" % checksum)
+        return False
+    logger.debug("=> checksum ok: %s" % checksum)
+    return True
+
 def checksum_file(file_path, type='sha256', chunk_size=65336):
     # Read the file in small pieces, so as to prevent failures to read particularly large files.
     # Also ensures memory usage is kept to a minimum. Testing shows default is a pretty good size.
