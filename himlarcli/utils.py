@@ -303,9 +303,9 @@ def compare_checksum(checksum, checksum_url, logger):
         logger.debug("=> unable to parse checksum file: {}".format(checksum_url))
         checksum_all = None
     if checksum == checksum_all:
-        logger.debug("=> checksum matched: {}".foramt(checksum))
+        logger.debug("=> checksum matched: {}".format(checksum))
         return True
-    logger.debug("=> checksum mismatch: {} {}".foramt(checksum, checksum_url))
+    logger.debug("=> checksum mismatch: {} {}".format(checksum, checksum_url))
     return False
 
 def checksum_file(file_path, type='sha256', chunk_size=65336):
