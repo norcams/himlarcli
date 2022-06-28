@@ -300,7 +300,7 @@ def compare_checksum(checksum, checksum_url, logger):
     try:
         checksum_all = response.read().decode("utf-8").split()[0]
     except:
-        logger.debug("=> unable to parse checksum file: {}".foramt(checksum_url))
+        logger.debug("=> unable to parse checksum file: {}".format(checksum_url))
         checksum_all = None
     if checksum == checksum_all:
         logger.debug("=> checksum matched: {}".foramt(checksum))
