@@ -169,12 +169,12 @@ images:
       'hw_machine_type':        'q35'
       'hw_firmware_type':       'uefi'
       'os_require_quiesce':     'yes'
-  'fedora_35':
-    'name':             'GOLD Fedora 35'
-    'depricated':       'Outdated (Fedora 35)'
+  'fedora_36':
+    'name':             'GOLD Fedora 36'
+    'depricated':       'Outdated (Fedora 36)'
     'url':              'http://builder/'
-    'latest':           'fedora_35-latest.qcow2'
-    'builder_checksum': 'fedora_35-latest.md5'
+    'latest':           'fedora_36-latest.qcow2'
+    'builder_checksum': 'fedora_36-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
