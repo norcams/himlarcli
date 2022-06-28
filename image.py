@@ -266,13 +266,14 @@ def update_image(name, image_data, image_type):
         kc.debug_log('image {} found'.format(name))
         update_image = False
         if 'builder_checksum' in image_data:
-            update_image = utils.compare_checksum(images[0]['checksum'], image_data['builder_checksum'] ,logger)
-        else:
+            checksum_file = '{}{}'.format(image_data['url'], image_data['builder_checksum'])
+            update_image = not utils.compare_checksum(images[0]['checksum'], checksum_file ,logger)
+        if update_image is None or 'builder_checksum' not in image_data:
             checksum = utils.checksum_file(imagefile, 'md5')
             if checksum != images[0]['checksum']:
                 update_image = True
         if update_image:
-            kc.debug_log('update image: new checksum found {}'.format(checksum))
+            kc.debug_log('update image: new checksum found {}'.format(images[0]['checksum']))
             result = create_image(name, imagefile, image_data, image_type)
             timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
             gc.update_image(image_id=images[0]['id'],

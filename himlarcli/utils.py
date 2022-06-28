@@ -287,18 +287,26 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None,
     return target
 
 def compare_checksum(checksum, checksum_url, logger):
+    """ Compare the checksum input with the checksum in the
+        file. Will return True if the checksum match, False for mismatch or
+        None for checksum file not found.
+    """
     try:
         response = urllib.request.urlopen(checksum_url)
     except urllib.error.HTTPError as exc:
         logger.debug('=> {}'.format(exc))
         logger.debug('=> unable to download checksum {}'.format(checksum_url))
-        return False
-    checksum_all = response.read().decode("utf-8")
-    if checksum not in checksum_all:
-        logger.debug("=> checksum failed: %s" % checksum)
-        return False
-    logger.debug("=> checksum ok: %s" % checksum)
-    return True
+        return None
+    try:
+        checksum_all = response.read().decode("utf-8").split()[0]
+    except:
+        logger.debug("=> unable to parse checksum file: {}".foramt(checksum_url))
+        checksum_all = None
+    if checksum == checksum_all:
+        logger.debug("=> checksum matched: {}".foramt(checksum))
+        return True
+    logger.debug("=> checksum mismatch: {} {}".foramt(checksum, checksum_url))
+    return False
 
 def checksum_file(file_path, type='sha256', chunk_size=65336):
     # Read the file in small pieces, so as to prevent failures to read particularly large files.
