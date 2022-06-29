@@ -6,6 +6,7 @@ images:
     'depricated':       'Outdated (UiO RHEL7)'
     'url':              'http://builder/'
     'latest':           'uio_rhel7-latest.qcow2'
+    'builder_checksum': 'uio_rhel7-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'shared'
@@ -20,6 +21,7 @@ images:
     'depricated':       'Outdated (UiO RHEL8)'
     'url':              'http://builder/'
     'latest':           'uio_rhel8-latest.qcow2'
+    'builder_checksum': 'uio_rhel8-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'shared'
