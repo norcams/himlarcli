@@ -102,12 +102,13 @@ images:
     'min_disk':         8
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':            'scsi'
-      'hw_scsi_model':          'virtio-scsi'
-      'hw_qemu_guest_agent':    'yes'
-      'hw_machine_type':        'q35'
-      'hw_firmware_type':       'uefi'
-      'os_require_quiesce':     'yes'
+      'hw_disk_bus':                'scsi'
+      'hw_scsi_model':              'virtio-scsi'
+      'hw_qemu_guest_agent':        'yes'
+      'hw_machine_type':            'q35'
+      'hw_firmware_type':           'uefi'
+      'hw_vif_multiqueue_enabled':  'yes'
+      'os_require_quiesce':         'yes'
   'rockylinux8':
     'name':             'GOLD Rocky Linux 8'
     'depricated':       'Outdated (Rocky Linux 8)'
@@ -162,6 +163,7 @@ images:
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
+    'disk_format':      'raw'
     'properties':
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
