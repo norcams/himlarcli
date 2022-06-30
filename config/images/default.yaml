@@ -163,7 +163,6 @@ images:
     'min_ram':          768
     'min_disk':         8
     'visibility':       'public'
-    'disk_format':      'raw'
     'properties':
       'hw_disk_bus':            'scsi'
       'hw_scsi_model':          'virtio-scsi'
@@ -186,4 +185,4 @@ images:
       'hw_rng_model':           'virtio'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
-      'os_require_quiesce':  'yes'
+      'os_require_quiesce':     'yes'
