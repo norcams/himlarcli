@@ -269,7 +269,7 @@ def update_image(name, image_data, image_type):
             checksum_file = '{}{}'.format(image_data['url'], image_data['builder_checksum'])
             same_image = utils.compare_checksum(images[0]['checksum'], checksum_file ,logger)
         if same_image is None or 'builder_checksum' not in image_data:
-            kc_debug_log('manual checksum needed - downloading image')
+            kc.debug_log('manual checksum needed - downloading image')
             checksum = utils.checksum_file(imagefile, 'md5')
             if checksum != images[0]['checksum']:
                 kc.debug_log('manual checksum mismatch - update image')
