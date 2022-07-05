@@ -271,8 +271,9 @@ def update_image(name, image_data, image_type):
         if same_image is None or 'builder_checksum' not in image_data:
             checksum = utils.checksum_file(imagefile, 'md5')
             if checksum != images[0]['checksum']:
+                kc.debug_log('manual checksum mismatch - update image')
                 same_image = False
-        if same_image:
+        if not same_image:
             kc.debug_log('update image: new checksum found {}'.format(images[0]['checksum']))
             result = create_image(name, imagefile, image_data, image_type)
             timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
