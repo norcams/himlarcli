@@ -3,40 +3,30 @@
 
 ## Examples
 
-```bash
+``` bash
 cd himlarcli
 source bin/activate
-./host.py -h
+./hypervisor.py -h
 ```
 
 ## Development
 
 You will need to install some OS packages. Example for packages
-needed for CentOS 7 can be found here:
+needed for CentOS 7 and Alma Linux 8 can be found here:
 
-https://github.com/norcams/ansible/blob/master/lib/deploy_himlarcli.yaml
+https://github.com/norcams/ansible/
 
 Use virtualenv:
 
-```bash
+``` bash
 cd himlarcli
-virtualenv . -p /path/to/python2
+virtualenv . -p /path/to/python3
 source bin/activate
-pip install setuptools==44.1.1
-python setup.py develop
 pip install --upgrade pip
+# this is needed to install foreman module
+pip install autosemver
+python setup.py develop
 pip install -r requirements.txt
-```
-
-### Install on CentOS 7
-
-Requirements
-```
-yum install -y python-virtualenv PyYAML openldap-devel openssl-devel gcc
-```
-After virtualenv run
-```
-pip install --upgrade setuptools
 ```
 
 ### Config file
@@ -49,7 +39,7 @@ not set it will look for  `config.ini` in the root of himlarcli and then in
 
 We supply a .pylintrc file that are used for automated tests and code validation.
 To check new or updated python files run:
-```
+``` bash
 pytlint <script>.py
 ```
 or to run the full test travis uses with `test.sh`
