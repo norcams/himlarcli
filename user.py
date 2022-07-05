@@ -175,9 +175,9 @@ def action_enable():
     group_name = None
     group_api = ksclient.get_group_by_email(user['api'].email)
     group_dp  = ksclient.get_group_by_email(user['dataporten'].name)
-    if group_api and group.name == "%s-disabled" % user['api'].email:
+    if group_api and group_api.name == "%s-disabled" % user['api'].email:
         group_name = group_api
-    elif group_dp and group.name == "%s-disabled" % user['dataporten'].name:
+    elif group_dp and group_dp.name == "%s-disabled" % user['dataporten'].name:
         group_name = group_dp
     else:
         himutils.sys_error('WARNING: Could not find disabled group for user %s!' % options.user, 0)
@@ -281,9 +281,9 @@ def action_disable():
     group_name = None
     group_api = ksclient.get_group_by_email(user['api'].email)
     group_dp  = ksclient.get_group_by_email(user['dataporten'].name)
-    if group_api and group.name == "%s-group" % user['api'].email:
+    if group_api and group_api.name == "%s-group" % user['api'].email:
         group_name = group_api
-    elif group_dp and group.name == "%s-group" % user['dataporten'].name:
+    elif group_dp and group_dp.name == "%s-group" % user['dataporten'].name:
         group_name = group_dp
     else:
         himutils.sys_error('WARNING: Could not find group for user %s!' % options.user, 0)
@@ -419,9 +419,9 @@ def action_purge():
         group_name = None
         group_api = ksclient.get_group_by_email(user['api'].email)
         group_dp  = ksclient.get_group_by_email(user['dataporten'].name)
-        if group_api and group.name == "%s-disabled" % user['api'].email:
+        if group_api and group_api.name == "%s-disabled" % user['api'].email:
             group_name = group_api
-        elif group_dp and group.name == "%s-disabled" % user['dataporten'].name:
+        elif group_dp and group_dp.name == "%s-disabled" % user['dataporten'].name:
             group_name = group_dp
         else:
             himutils.sys_error('WARNING: Could not find disabled group for user %s!' % options.user, 0)
