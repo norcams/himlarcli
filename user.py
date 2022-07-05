@@ -191,7 +191,7 @@ def action_enable():
     for project in user['projects']:
         if not hasattr(project, 'admin'):
             continue
-        if project.admin != user['api'].name:
+        if project.admin.lower() != user['api'].name.lower():
             continue
         ksclient.project_quarantine_unset(project.name)
         print('%sQuarantine unset for project: %s' % (print_prefix, project.name))
@@ -240,7 +240,7 @@ def action_disable():
     for project in user['projects']:
         if not hasattr(project, 'admin'):
             continue
-        if project.admin != options.user:
+        if project.admin.lower() != options.user.lower():
             continue
         if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
             quarantine_projects.append(project.name)
@@ -249,7 +249,7 @@ def action_disable():
         if len(project_roles) > 1:
             problematic_projects.append(project.name)
             continue
-        if len(project_roles) == 1 and project_roles[0]['group'].replace('-group', '') != options.user:
+        if len(project_roles) == 1 and project_roles[0]['group'].replace('-group', '').lower() != options.user.lower():
             problematic_projects.append(project.name)
             continue
         quarantine_projects.append(project.name)
