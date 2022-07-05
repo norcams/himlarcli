@@ -257,6 +257,7 @@ def get_instance_table(instances, columns=None, tablefmt='simple'):
 
 def download_file(target, source, logger, checksum_type=None, checksum_url=None, content_length=1000):
     """ Download a file from a source url """
+    logger.debug('=> download file {}'.format(target))
     target = get_abs_path(target)
     if not os.path.isfile(target):
         try:
