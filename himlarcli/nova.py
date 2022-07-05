@@ -467,7 +467,7 @@ class Nova(Client):
         """
         Update flavor with new spec or propertiesself.
         Note: Update require a delete and create with new ID
-        Version: 2018-7
+        Version: 2022-7
         """
         dry_run_txt = ' DRY_RUN:' if self.dry_run else ''
         flavor = self.get_by_name('flavor', name)
@@ -484,7 +484,7 @@ class Nova(Client):
         update = False
         if flavor and getattr(flavor, 'os-flavor-access:is_public') != public:
             update = True
-        for k, v in spec.iteritems():
+        for k, v in spec.items():
             if flavor and v != getattr(flavor, k):
                 update = True
         if update:
@@ -502,7 +502,7 @@ class Nova(Client):
         if not flavor:
             return
         # Unset old properties
-        for k, v in flavor.get_keys().iteritems():
+        for k, v in flavor.get_keys().items():
             if k not in properties:
                 if not self.dry_run:
                     flavor.unset_keys([k])
@@ -512,7 +512,7 @@ class Nova(Client):
         if not properties:
             return
         flavor_keys = flavor.get_keys()
-        for k, v in properties.iteritems():
+        for k, v in properties.items():
             # flavor keys return everything as unicode so we use string match
             if str(v) != flavor_keys.get(k):
                 self.logger.debug('=>%s set flavor properties %s', dry_run_txt, k)
