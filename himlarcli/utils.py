@@ -279,12 +279,12 @@ def download_file(target, source, logger, checksum_type=None, checksum_url=None,
             logger.debug('=> {}'.format(exc))
             logger.debug('=> unable to download checksum {}'.format(checksum_url))
             return None
-        checksum_all = response.read()
+        checksum_all = response.read().decode('utf-8')
         if checksum not in checksum_all:
-            logger.debug("=> checksum failed: %s" % checksum)
+            logger.debug("=> download checksum mismatch: %s" % checksum)
             return None
         else:
-            logger.debug("=> checksum ok: %s" % checksum)
+            logger.debug("=> download checksum match: %s" % checksum)
     return target
 
 def compare_checksum(checksum, checksum_url, logger):
@@ -309,14 +309,7 @@ def compare_checksum(checksum, checksum_url, logger):
     logger.debug("=> checksum mismatch: {} {}".format(checksum, checksum_url))
     return False
 
-def checksum_file(file_path, type='sha256', chunk_size=65336):
-    # Read the file in small pieces, so as to prevent failures to read particularly large files.
-    # Also ensures memory usage is kept to a minimum. Testing shows default is a pretty good size.
-    assert isinstance(chunk_size, int) and chunk_size > 0
-    if type == 'sha256':
-        digest = hashlib.sha256()
-    elif type == 'md5':
-        digest = hashlib.md5()
-    with open(file_path, 'rb') as f:
-        [digest.update(chunk) for chunk in iter(functools.partial(f.read, chunk_size), '')]
+def checksum_file(file_path, checksum_type='sha256'):
+    digest = getattr(hashlib, checksum_type)()
+    digest.update(open(file_path,'rb').read())
     return digest.hexdigest()

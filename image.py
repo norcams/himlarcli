@@ -264,15 +264,15 @@ def update_image(name, image_data, image_type):
     images = gc.find_image(filters=filters, limit=1)
     if images and len(images) == 1:
         kc.debug_log('image {} found'.format(name))
-        update_image = False
+        same_image = True
         if 'builder_checksum' in image_data:
             checksum_file = '{}{}'.format(image_data['url'], image_data['builder_checksum'])
-            update_image = not utils.compare_checksum(images[0]['checksum'], checksum_file ,logger)
-        if update_image is None or 'builder_checksum' not in image_data:
+            same_image = utils.compare_checksum(images[0]['checksum'], checksum_file ,logger)
+        if same_image is None or 'builder_checksum' not in image_data:
             checksum = utils.checksum_file(imagefile, 'md5')
             if checksum != images[0]['checksum']:
-                update_image = True
-        if update_image:
+                same_image = False
+        if same_image:
             kc.debug_log('update image: new checksum found {}'.format(images[0]['checksum']))
             result = create_image(name, imagefile, image_data, image_type)
             timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
