@@ -4,7 +4,7 @@ from himlarcli.nova import Nova
 from himlarcli.neutron import Neutron
 from himlarcli.glance import Glance
 from himlarcli.designate import Designate
-from keystoneclient.v3 import client as keystoneclient
+from keystoneclient import client as keystoneclient
 import keystoneauth1.exceptions as exceptions
 import random
 import string
@@ -18,7 +18,8 @@ class Keystone(Client):
     def __init__(self, config_path, debug=False, log=None):
         super(Keystone, self).__init__(config_path, debug, log)
         self.client = keystoneclient.Client(session=self.sess,
-                                            region_name=self.region)
+                                            region_name=self.region,
+                                            interface='admin')
         self.domain_id = None
 
     def get_client(self):
