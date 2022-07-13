@@ -77,6 +77,24 @@ def append_to_logfile(filename, date, region, text1, text2, text3):
     except IOError as exc:
         logger.warn('=> ERROR: could not append to logfile %s' % exc)
 
+def get_himlarcli_config(config_path):
+    if config_path and not os.path.isfile(config_path):
+        Client.log_error("Could not find config file: {}".format(config_path), 1)
+    elif not config_path:
+        local_config = get_abs_path('config.ini')
+        etc_config = '/etc/himlarcli/config.ini'
+        if os.path.isfile(local_config):
+            found_config_path = local_config
+        else:
+            if os.path.isfile(etc_config):
+                found_config_path = etc_config
+        if not found_config_path:
+            msg = "Config file not found in default locations:\n  {}\n  {}"
+            Client.log_error(msg.format(local_config, etc_config), 1)
+    else:
+        found_config_path = config_path
+    return get_config(found_config_path)
+
 def get_config(config_path):
     if not os.path.isfile(config_path):
         logging.critical("Could not find config file: %s", config_path)

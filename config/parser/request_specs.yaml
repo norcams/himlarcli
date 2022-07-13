@@ -1,0 +1,11 @@
+---
+desc: 'script to update request specs directly in the database'
+actions:
+  'show':             'show request specs for an instance'
+  'clean-hints':      'remove scheduler hints from the intance specs'
+
+opt_args:
+  'instance':
+    'sub':      ['show', 'clean-hints']
+    'help':     'instance uuid'
+    'metavar':  'instance'
