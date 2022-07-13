@@ -144,9 +144,11 @@ def action_create():
             }
             images = glanceclient.get_images(filters=filters)
             for image in images:
-                glanceclient.set_image_access(image_id=image.id, project_id=project.id, action='grant')
+                glanceclient.set_image_access(image_id=image.id,
+                                              project_id=project_id,
+                                              action='grant')
                 printer.output_msg('GRANT access to image {} for project {}'.
-                                   format(image.name, project.name))
+                               format(image.name, options.project))
 
     if options.mail:
         mail = Mail(options.config, debug=options.debug)
