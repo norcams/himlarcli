@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from himlarcli import tests as tests
+from himlarcli import tests
 tests.is_virtual_env()
 
 from himlarcli.parser import Parser
@@ -29,23 +29,24 @@ else:
 
 
 def action_compute():
-    stats = dict()
+    stats = {}
     for region in regions:
-        drop_az = ['iaas-team-only', '%s-legacy-1' % region]
+        drop_az = ['iaas-team-only', f'{region}-legacy-1']
         metrics = ['vcpus', 'vcpus_used', 'running_vms', 'memory_mb_used',
                    'memory_mb', 'local_gb']
         nc = Nova(options.config, debug=options.debug, region=region, log=logger)
         aggregates = nc.get_aggregates(False)
         for a in aggregates:
-            a_name = "%s-%s" % (region, a.name)
-            stats[a_name] = dict()
+            a_name = f'{region}-{a.name}'
+            stats[a_name] = {}
             if a.availability_zone in drop_az:
                 continue
             hosts = nc.get_aggregate_hosts(a.name, True)
             for host in hosts:
                 #print host.to_dict()
                 for metric in metrics:
-                    logger.debug('=> %s %s=%s', host.hypervisor_hostname, metric, getattr(host, metric))
+                    logger.debug('=> %s %s=%s', host.hypervisor_hostname,
+                                 metric, getattr(host, metric))
                     stats[a_name][metric] = int(getattr(host, metric) +
                                                 stats[a_name].get(metric, 0))
     statsd.gauge_dict('compute', stats)
@@ -58,14 +59,14 @@ def action_legacy():
     projects_count = kc.get_project_count('dataporten')
     users_count = kc.get_user_count('dataporten')
 
-    stats = dict()
+    stats = {}
     stats['users'] = {}
     stats['projects'] = {}
     stats['instances'] = {}
     stats['instances']['total'] = {'count': 0, 'error': 0}
 
     for region in regions:
-        logger.debug('=> count region %s' % region)
+        logger.debug(f'=> count region {region}')
 
         # Projects and users (this will be the same for all regions)
         stats['projects'][region] = {}
@@ -78,7 +79,8 @@ def action_legacy():
         stats['users']['total']['count'] = users_count
 
         # Instances
-        novaclient = Nova(options.config, debug=options.debug, region=region, log=logger)
+        novaclient = Nova(options.config, debug=options.debug,
+                          region=region, log=logger)
         novastats = novaclient.get_stats()
         stats['instances'][region] = {}
         stats['instances'][region]['count'] = novastats['count']
@@ -88,19 +90,19 @@ def action_legacy():
 
     for t, s in stats.items():
         for r, d in s.items():
-            name = '%s.%s' % (r, t)
+            name = f'{r}.{t}'
             count = d['count']
             if not options.quiet:
-                print('%s = %s' % (name, count))
+                print(f'{name} = {count}')
             statsd.gauge(name, count)
             if 'error' in d:
-                name = '%s.instance_errors' % (r)
+                name = f'{r}.instance_errors'
                 if not options.quiet:
-                    print('%s = %s' % (name, d['error']))
+                    print(f"{name} = {d['error']}")
                 statsd.gauge(name, d['error'])
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    himutils.sys_error("Function action_%s() not implemented" % options.action)
+    himutils.sys_error(f"Function action_{options.action}() not implemented")
 action()
