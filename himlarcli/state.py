@@ -1,23 +1,24 @@
 import sys
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
-from datetime import datetime
 #from himlarcli import utils
 from himlarcli.client import Client
 
-class Resource(object):
+class Resource():
 
+    """ Resource object """
     def update(self, attributes):
-        for k, v in attributes.iteritems():
+        for k, v in attributes.items():
             setattr(self, k, v)
 
     @classmethod
     def create(cls, data):
-        new_data = dict()
-        for k, v in data.iteritems():
+        new_data = {}
+        for k, v in data.items():
             if k == 'id':
                 continue
             if k in cls.__dict__:
