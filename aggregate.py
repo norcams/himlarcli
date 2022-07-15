@@ -116,11 +116,13 @@ def action_stop_instance():
 
     for region in regions:
         nova = utils.get_client(Nova, options, logger, region)
-        instances = nova.get_instances(options.aggregate)
+        instances = nova.get_instances(options.aggregate,
+                                       nova.get_fqdn_host(options.host))
         for i in instances:
             instance_data = i.to_dict().copy()
             instance_data['region'] = region
             instance_data['aggregate'] = options.aggregate
+            instance_data['host'] = getattr(i, 'OS-EXT-SRV-ATTR:host')
             instance_data['instance_id'] = i.id
             instance_data.pop('created', None) # not instance created, but db
 
@@ -135,13 +137,18 @@ def action_stop_instance():
 
 def action_start_instance():
     state = utils.get_client(State, options, logger)
-
+    pre = state.log_prefix()
     for region in regions:
         nova = utils.get_client(Nova, options, logger, region)
         instances = state.get_all(Instance, region=region,
                                   aggregate=options.aggregate)
 
         for i in instances:
+            if options.host and nova.get_fqdn_host(options.host) != i.host:
+                logger.debug('%s instance host do not match %s', pre, i.host)
+                continue
+            logger.debug('%s instance found %s', pre, i.name)
+            print(i.status)
             if i.status == 'ACTIVE':
                 instance = nova.get_by_id('server', i.instance_id)
                 nova.start_instance(instance)

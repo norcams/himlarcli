@@ -622,6 +622,18 @@ class Nova(Client):
 
 ################################## STATIC #####################################
 
+    def get_fqdn_host(self, host):
+        """ This will return the fqdn of the host """
+        if host:
+            if '.' in host:
+                fqdn = host
+            else:
+                domain = self.get_config('openstack', 'domain')
+                fqdn = host + '.' + domain
+        else:
+            fqdn = None
+        return fqdn
+
     @staticmethod
     def get_compute_host(instance, short=True):
         """ This will return the name of the compte host for an instance """

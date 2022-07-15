@@ -27,3 +27,8 @@ opt_args:
     'help':     'purge state db before adding new state'
     'action':   'store_const'
     'const':    true
+  '--host':
+    'sub':      ['stop-instance', 'start-instance']
+    'dest':     host
+    'default':  false
+    'help':     'only use one host in aggregate'
