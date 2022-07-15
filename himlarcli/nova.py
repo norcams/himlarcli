@@ -212,7 +212,7 @@ class Nova(Client):
         else:
             agg = self.__get_aggregate(aggregate)
             if not agg or not hasattr(agg, 'hosts') or not agg.hosts:
-                self.logger.debug('=> not hosts found in aggregate %s' % aggregate)
+                self.logger.debug('=> no hosts found in aggregate %s' % aggregate)
                 instances = list()
             else:
                 instances = list()
@@ -293,7 +293,7 @@ class Nova(Client):
             except novaclient.exceptions.Conflict as e:
                 self.log_error(e)
         if instance.status == 'ACTIVE':
-            self.debug_log('stop instance {}'.format(instance.id))
+            self.logger.debug('%s stop instance %s', self.log_prefix(), instance.id)
 
     def start_instance(self, instance):
         """
@@ -306,7 +306,7 @@ class Nova(Client):
             except novaclient.exceptions.Conflict as e:
                 self.log_error(e)
         if instance.status == 'SHUTOFF':
-            self.debug_log('start instance {}'.format(instance.id))
+            self.logger.debug('%s start instance %s', self.log_prefix(), instance.id)
 
     def stop_project_instances(self, project, dry_run=False):
         """
