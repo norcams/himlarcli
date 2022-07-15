@@ -108,6 +108,9 @@ class Client(object):
         """
         return self.logger
 
+    def log_prefix(self):
+        return '=> DRY-RUN:' if self.dry_run else '=>'
+
     def debug_log(self, msg):
         prefix = '=> DRY-RUN:' if self.dry_run else '=>'
         self.logger.debug('%s %s', prefix, msg)
