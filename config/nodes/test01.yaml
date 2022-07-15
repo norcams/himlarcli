@@ -14,7 +14,7 @@ nodes:
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '50G'
-          format_type:  'raw'
+          format_type:  'qcow2'
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
@@ -111,7 +111,7 @@ nodes:
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '100G'
-          format_type:  'raw'
+          format_type:  'qcow2'
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
@@ -222,7 +222,7 @@ nodes:
           allocation:   '0G'
           pool_name:    'dirpool'
           capacity:     '20G'
-          format_type:  'raw'
+          format_type:  'qcow2'
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
