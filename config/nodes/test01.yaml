@@ -167,7 +167,7 @@ nodes:
     #     value:          'vda'
   proxy-02:
     compute_profile: small
-    compute_resource: controller-08
+    compute_resource: controller-03
     hostgroup: 5
     compute_attributes:
       volumes_attributes:
