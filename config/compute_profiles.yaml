@@ -12,7 +12,7 @@ default:
   small:
     vm_attrs:
       cpus:   '1'
-      memory: '2147483648'
+      memory: '2254857830' #2.1 GB for el8.6
       nics_attributes:
         '0':
           bridge: br0
