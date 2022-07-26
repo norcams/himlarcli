@@ -60,11 +60,14 @@ nodes:
     compute_resource: controller-03
   controller-01:
     mac: 00:0a:f7:19:4c:c0
+    hostgroup: 8
   controller-02:
     mac: f4:e9:d4:88:c9:c0
+    hostgroup: 8
     # mac: f8:bc:12:40:44:30
   controller-03:
     mac: 00:0e:1e:8b:df:50
+    hostgroup: 8
     # mac: f8:bc:12:52:d8:68
   dashboard-01:
     hostgroup: 5
