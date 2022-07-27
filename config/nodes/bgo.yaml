@@ -445,7 +445,7 @@ nodes:
     compute_profile: small
     compute_resource: controller-06
     hostgroup: 15
-  nat-linux-03:
+  nat-03:
     compute_profile: small
     compute_resource: controller-07
     hostgroup: 15
