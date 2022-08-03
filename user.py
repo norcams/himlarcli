@@ -417,7 +417,8 @@ def action_purge():
 
         # find name of the user group
         group_api = ksclient.get_group_by_email(user['api'].email)
-        group_dp  = ksclient.get_group_by_email(user['dataporten'].name)
+        if user['dataporten']:
+            group_dp  = ksclient.get_group_by_email(user['dataporten'].name)
         if group_api and group_api.name == "%s-disabled" % user['api'].email:
             group = group_api
         elif group_dp and group_dp.name == "%s-disabled" % user['dataporten'].name:
