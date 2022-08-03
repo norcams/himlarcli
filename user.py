@@ -338,15 +338,16 @@ def action_purge():
     purge_users = list()
     user_days = dict()
     today = date.today()
-    for user in disabled_users:
-        if not hasattr(user, 'disabled'):
-            himutils.sys_error("WARNING: User %s is disabled without date and reason. IGNORING" % user.name, 0)
+    for this_user in disabled_users:
+        user = ksclient.get_user_objects(email=this_user.name, domain=False)
+        if not hasattr(user['api'], 'disabled') or not hasattr(user['dataporten'], 'disabled'):
+            himutils.sys_error("WARNING: User %s is disabled without date and reason. IGNORING" % user['api'].name, 0)
             continue
 
         # get the disable date and reason
-        m = re.fullmatch(r'(\d\d\d\d-\d\d-\d\d) (\w+)', user.disabled)
+        m = re.fullmatch(r'(\d\d\d\d-\d\d-\d\d) (\w+)', user['api'].disabled)
         if m == None:
-            himutils.sys_error("WARNING: User %s has garbled disabled string '%s'. IGNORING" % (user.name, user.disabled), 0)
+            himutils.sys_error("WARNING: User %s has garbled disabled string '%s'. IGNORING" % (user['api'].name, user['api'].disabled), 0)
             continue
         reason = m.group(2)
         disabled_date = himutils.get_date(m.group(1), None, '%Y-%m-%d')
@@ -362,25 +363,24 @@ def action_purge():
 
         # only delete users with the given org
         if options.org != 'all':
-            org = ksclient.get_user_org(user.name)
+            org = ksclient.get_user_org(user['api'].name)
             if org and org != options.org:
                 continue
 
         # ignore user if they are admin for other projects than demo, private
         user_has_projects = False
-        this_user = ksclient.get_user_objects(email=user.name, domain='api')
-        for project in this_user['projects']:
+        for project in user['projects']:
             if not hasattr(project, 'admin'):
                 continue
             if not hasattr(project, 'type'):
                 continue
             if project.type == 'demo' or project.type == 'personal':
                 continue
-            if project.admin == this_user['api'].name:
+            if project.admin == user['api'].name:
                 user_has_projects = True
                 break
         if user_has_projects:
-            himutils.sys_error("WARNING: User %s is admin for shared projects. IGNORING" % user.name, 0)
+            himutils.sys_error("WARNING: User %s is admin for shared projects. IGNORING" % user['api'].name, 0)
             continue
 
         # limit how many are deleted at once
@@ -389,7 +389,7 @@ def action_purge():
 
         # store user and days disabled in dictionary
         purge_users.append(user)
-        user_days[user.id] = (today - disabled_date).days
+        user_days[user['api'].name] = (today - disabled_date).days
 
     # stop here if there are no users to delete
     if len(purge_users) == 0:
@@ -399,7 +399,7 @@ def action_purge():
     # formulate question
     question = "Found %d disabled users that match the criteria:\n\n" % len(purge_users)
     for user in purge_users:
-        question += "  %-4s  %s\n" % (str(user_days[user.id]), user.name)
+        question += "  %-4s  %s\n" % (str(user_days[user['api'].name]), user['api'].name)
     question += "\nDelete these users?"
 
     # ask for confirmation if not forced
@@ -423,15 +423,15 @@ def action_purge():
         elif group_dp and group_dp.name == "%s-disabled" % user['dataporten'].name:
             group = group_dp
         else:
-            himutils.sys_error('WARNING: Could not find disabled group for user %s!' % options.user, 0)
+            himutils.sys_error('WARNING: Could not find disabled group for user %s!' % user['api'].name, 0)
 
         # rename the user group
         new_group_name = group.name.replace('-disabled', '-group')
         ksclient.update_group(group.id, name=new_group_name)
 
         # delete...
-        ksclient.user_cleanup(email=user.name)
-        print("%sDeleted user: %s" % (print_prefix, user.name))
+        ksclient.user_cleanup(email=user['api'].name)
+        print("%sDeleted user: %s" % (print_prefix, user['api'].name))
 
 def action_password():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
