@@ -340,7 +340,7 @@ def action_purge():
     today = date.today()
     for this_user in disabled_users:
         user = ksclient.get_user_objects(email=this_user.name, domain=False)
-        if not hasattr(user['api'], 'disabled') or not hasattr(user['dataporten'], 'disabled'):
+        if not hasattr(user['api'], 'disabled'):
             himutils.sys_error("WARNING: User %s is disabled without date and reason. IGNORING" % user['api'].name, 0)
             continue
 
