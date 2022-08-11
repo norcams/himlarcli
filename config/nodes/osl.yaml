@@ -104,7 +104,7 @@ nodes:
     hostgroup: 19
   compute-07:
     mac: 00:0a:f7:b6:b6:88
-    hostgroup: 24
+    hostgroup: 25
   compute-08:
     mac: 00:0a:f7:b6:aa:5e
     hostgroup: 25
