@@ -55,7 +55,7 @@ nodes:
   cephmon-03:
     hostgroup: 16
     mac: ec:f4:bb:cc:d0:9c
-  cephmon-01:
+  cephmon-c2-01:
     hostgroup: 15
     compute_profile: xlarge
     compute_resource: controller-05
@@ -69,7 +69,7 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
-  cephmon-02:
+  cephmon-c2-02:
     hostgroup: 15
     compute_profile: xlarge
     compute_resource: controller-06
@@ -83,7 +83,7 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
-  cephmon-03:
+  cephmon-c2-03:
     hostgroup: 15
     compute_profile: xlarge
     compute_resource: controller-07
