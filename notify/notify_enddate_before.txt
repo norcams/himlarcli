@@ -16,7 +16,8 @@ When the project reaches its end date, the following happens:
    all its resources
 
 For more details about the end date policy for NREC projects, visit:
-FIXME: URL
+
+  https://docs.nrec.no/enddate.html
 
 Don't hesitate to contact support@nrec.no if you have questions!
 

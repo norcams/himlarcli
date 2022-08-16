@@ -12,7 +12,8 @@ If you believe that this is a mistake, please contact us as soon as
 possible at support@nrec.no, e.g. by replying to this email.
 
 For more details about the end date policy for NREC projects, visit:
-FIXME: URL
+
+  https://docs.nrec.no/enddate.html
 
 Don't hesitate to contact support@nrec.no if you have questions!
 
