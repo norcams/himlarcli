@@ -1,6 +1,6 @@
 Dear NREC user,
 
-The following project has reached its end date $enddate:
+The following project has reached its expiration date $enddate:
 
   $project
 
@@ -11,9 +11,9 @@ quarantine, the project will be deleted along with all its resources.
 If you believe that this is a mistake, please contact us as soon as
 possible at support@nrec.no, e.g. by replying to this email.
 
-For more details about the end date policy for NREC projects, visit:
+For more details about the lifecycle policy for NREC projects, visit:
 
-  https://docs.nrec.no/enddate.html
+  https://docs.nrec.no/project-lifecycle.html
 
 Don't hesitate to contact support@nrec.no if you have questions!
 

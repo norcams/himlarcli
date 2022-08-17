@@ -1,7 +1,7 @@
 Dear NREC user,
 
-The following project is past its end date $enddate, is scheduled for
-deletion and was put in quarantine $ago days ago:
+The following project is past its expiration date $enddate, is
+scheduled for deletion and was put in quarantine $ago days ago:
 
   $project
 
@@ -11,9 +11,9 @@ its resources, in $days days.
 If you believe that this is a mistake, please contact us as soon as
 possible at support@nrec.no, e.g. by replying to this email.
 
-For more details about the end date policy for NREC projects, visit:
+For more details about the lifecycle policy for NREC projects, visit:
 
-  https://docs.nrec.no/enddate.html
+  https://docs.nrec.no/project-lifecycle.html
 
 Don't hesitate to contact support@nrec.no if you have questions!
 
