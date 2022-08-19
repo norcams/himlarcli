@@ -1,0 +1,5 @@
+---
+# C1 500GB disk optimized flavor used for sHPC ONLY in OSL
+public: false
+properties: {}
+shpc.c1ad2: {}

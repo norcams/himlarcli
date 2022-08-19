@@ -1,0 +1,5 @@
+---
+# M1 500GB disk optimized flavor used for sHPC ONLY in OSL
+public: false
+properties: {}
+shpc.m1ad2: {}
