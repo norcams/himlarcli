@@ -32,7 +32,7 @@ nodes:
     compute_resource: controller-03
   cephmon-01:
     hostgroup: 16
-    compute_profile: xlarge
+    compute_profile: 2xlarge
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
@@ -46,7 +46,7 @@ nodes:
         value:          'vda'
   cephmon-02:
     hostgroup: 16
-    compute_profile: xlarge
+    compute_profile: 2xlarge
     compute_resource: controller-02
     compute_attributes:
       volumes_attributes:
@@ -60,7 +60,7 @@ nodes:
         value:          'vda'
   cephmon-03:
     hostgroup: 16
-    compute_profile: xlarge
+    compute_profile: 2xlarge
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
