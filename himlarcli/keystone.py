@@ -411,14 +411,15 @@ class Keystone(Client):
             Version: 2018-1
             :param email: user email or username if fake email
         """
+        # Delete personal project
+        self.delete_project(self.get_project_name(email, prefix='PRIVATE'))
+        # Delete demo project
+        self.delete_project(self.get_project_name(email, prefix='DEMO'))
+
+        # Delete user and group
         self.delete_user(email, 'api')
         self.delete_user(email, 'dp')
         self.delete_group(email)
-
-        # Delete demo project
-        self.delete_project(self.get_project_name(email, prefix='DEMO'))
-        # Delete personal project
-        self.delete_project(self.get_project_name(email, prefix='PRIVATE'))
 
     def rename_user(self, new_email, old_email):
         """
