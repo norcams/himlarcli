@@ -1,8 +1,11 @@
 ---
 desc:           'Manage network in openstack'
 actions:
-  'dualstack':  'List instances with public IPv4 addresses'
-  'list':       ''
+  'public-ipv4':  'List instances with public IPv4 addresses'
+  'list':         'List networks'
+  'show-access':  'Show access list for a private network'
+  'grant':        'Grant access to a private network'
+  'revoke':       'Revoke access to a private network'
 opt_args:
   '--domain':
     'dest':     'domain'
@@ -10,9 +13,18 @@ opt_args:
     'default':  'Dataporten'
   '--region':
     'dest':     'region'
-    'help':     'only use this region'
+    'help':     'affected region'
   '-t':
-    'sub':      ['dualstack']
+    'sub':      ['public-ipv4']
     'dest':     'type'
     'help':     'instance project type'
     'choices':  ['admin', 'demo', 'personal', 'research', 'education', 'course', 'test', 'hpc']
+  'network':
+    'sub':       ['show-access' ,'grant', 'revoke']
+    'metavar':   'network'
+    'help':      'network name (e.g. dualStack)'
+  'project':
+    'sub':       ['grant', 'revoke']
+    'metavar':   'project'
+    'help':      'project name (e.g. iaas-team)'
+    'weight':     10
