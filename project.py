@@ -174,7 +174,7 @@ def action_create():
 def action_create_private():
     # Set default options
     options.type    = 'personal'
-    options.project = 'PRIVATE-' + options.user.replace('@', '.')
+    options.project = 'PRIVATE-' + options.user.replace('@', '.').lower()
     options.admin   = options.user
     options.desc    = 'Personal project for %s' % options.user
     options.contact = None
