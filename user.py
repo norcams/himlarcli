@@ -172,8 +172,16 @@ def action_enable():
         print_prefix = ""
 
     # find name of the user group
-    group_api = ksclient.get_group_by_email(user['api'].email)
-    group_dp  = ksclient.get_group_by_email(user['dataporten'].name)
+    try:
+        group_api = ksclient.get_group_by_email(user['api'].email)
+    except AttributeError:
+        group_api = None
+
+    try:
+        group_dp = ksclient.get_group_by_email(user['dataporten'].name)
+    except AttributeError:
+        group_dp = None
+
     if group_api and group_api.name == "%s-disabled" % user['api'].email:
         group = group_api
     elif group_dp and group_dp.name == "%s-disabled" % user['dataporten'].name:
@@ -278,8 +286,16 @@ def action_disable():
         ksclient.disable_user(user['dataporten'].id, options.reason, date)
 
     # find name of the user group
-    group_api = ksclient.get_group_by_email(user['api'].email)
-    group_dp  = ksclient.get_group_by_email(user['dataporten'].name)
+    try:
+        group_api = ksclient.get_group_by_email(user['api'].email)
+    except AttributeError:
+        group_api = None
+
+    try:
+        group_dp = ksclient.get_group_by_email(user['dataporten'].name)
+    except AttributeError:
+        group_dp = None
+
     if group_api and group_api.name == "%s-group" % user['api'].email:
         group = group_api
     elif group_dp and group_dp.name == "%s-group" % user['dataporten'].name:
