@@ -145,6 +145,71 @@ class Neutron(Client):
             pool_size += int(end) - int(start) + 1
         return pool_size
 
+    def get_network_by_name(self, network_name):
+        """ Get a network based on name
+            :version: 2022-09
+            :rtype: Dict with network details
+        """
+        try:
+            network = self.client.find_resource('network', network_name)
+        except exceptions.ServiceUnavailable:
+            self.log_error('Neutron: Service unavailable!')
+            network = None
+        return network
+
+# ================================= RBAC POLICY ==============================
+
+    def get_rbac_policies(self, retrieve_all=True, **kwargs):
+        policies = self.client.list_rbac_policies(retrieve_all=retrieve_all, **kwargs)
+        return policies
+
+    def grant_rbac_policy(self, project_id, object_id, object_type='network'):
+        """ Grant rbac policy for policy type and id for a project
+            :version: 2022-09
+            :rtype: Boolean true if the policy was revoked
+        """
+        policy = self.get_rbac_policies(retrieve_all=True,
+                                        object_type=object_type,
+                                        object_id=object_id,
+                                        target_tenant=project_id)
+        if policy['rbac_policies']:
+            self.debug_log(f'{object_type} rbac policy for {project_id} exists')
+            return False
+        body = { 'rbac_policy': {
+            'target_tenant': project_id,
+            'object_type': object_type,
+            'object_id': object_id,
+            'action': 'access_as_shared' }
+        }
+        self.debug_log(f'create rbac policy for project {body}')
+        if not self.dry_run:
+            try:
+                self.client.create_rbac_policy(body=body)
+            except exceptions.ServiceUnavailable:
+                self.log_error('Neutron: Service unavailable!')
+        return True
+
+    def revoke_rbac_policy(self, project_id, object_id, object_type='network'):
+        """ Revoke rbac policy if policy type and id exists for project
+            :version: 2022-09
+            :rtype: Boolean true if the policy was revoked
+        """
+        policy = self.get_rbac_policies(retrieve_all=True,
+                                        object_type=object_type,
+                                        object_id=object_id,
+                                        target_tenant=project_id)
+        if not len(policy['rbac_policies']) > 0:
+            self.debug_log(f'{object_type} rbac policy for {project_id} do not exists')
+            return False
+        policy_id = policy['rbac_policies'][0]['id']
+        self.debug_log(f'remove rbac policy {policy_id}')
+        if not self.dry_run:
+            try:
+                self.client.delete_rbac_policy(policy_id)
+            except exceptions.ServiceUnavailable:
+                self.log_error('Neutron: Service unavailable!')
+        return True
+
 # ==================================== QUOTA ==================================
     def get_quota_class(self, class_name='default'):
         # pylint: disable=W0613
