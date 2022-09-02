@@ -30,12 +30,14 @@ region = options.region
 def action_list():
     nc = utils.get_client(Neutron, options, logger, region)
     networks = nc.list_networks()
-    printer.output_dict({'header': 'networks (name, shared, IPv4 addresses)'})
+    printer.output_dict({'header': 'networks (owner, name, shared, IPv4 addresses)'})
     for net in networks:
+        project = kc.get_by_id('project',  net['project_id'])
         output = {
-            '0': net['name'],
-            '1': net['shared'],
-            '2': nc.get_allocation_pool_size(network_id=net['id'], ip_version=4)
+            '0': project.name if project else 'unknown',
+            '1': net['name'],
+            '2': 'yes' if net['shared'] else 'no',
+            '3': nc.get_allocation_pool_size(network_id=net['id'], ip_version=4)
         }
         printer.output_dict(output, sort=True, one_line=True)
 
