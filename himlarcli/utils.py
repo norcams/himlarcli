@@ -103,6 +103,17 @@ def get_config(config_path):
     config.read(config_path)
     return config
 
+def get_config_entry(config, section, option, default=None):
+    try:
+        value = config.get(section, option)
+        return value
+    except configparser.NoOptionError:
+        sys_error('=> config file section [%s] missing option %s'
+                          % (section, option))
+    except configparser.NoSectionError:
+        sys_error('=> config file missing section %s' % section)
+    return default
+
 def get_current_date(format='%Y-%m-%dT%H:%M:%S.%f%z'):
     current_date = datetime.now()
     return current_date.strftime(format)
