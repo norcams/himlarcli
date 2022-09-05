@@ -216,10 +216,10 @@ nodes:
     hostgroup: 16
   compute-clarino-36:
     mac: f4:02:70:d0:04:ee
-    hostgroup: 14
+    hostgroup: 16
   compute-clarino-37:
     mac: f4:02:70:cd:de:48
-    hostgroup: 14
+    hostgroup: 16
   compute-38:
     mac: dc:f4:01:e7:ea:2e
     hostgroup: 16
