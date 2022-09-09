@@ -9,7 +9,7 @@ python-designateclient
 python-glanceclient
 gnocchiclient
 statsd==3.2.1
-pika==0.11.2
+pika
 prettytable==0.7.2
 PyMySQL
 SQLAlchemy

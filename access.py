@@ -8,7 +8,7 @@ from himlarcli.keystone import Keystone
 from himlarcli.parser import Parser
 from himlarcli.mqclient import MQclient
 from himlarcli.printer import Printer
-from himlarcli import utils as himutils
+from himlarcli import utils
 
 parser = Parser()
 options = parser.parse_args()
@@ -48,7 +48,7 @@ def process_action(ch, method, properties, body): #callback
 
 def action_pop():
     channel = mqclient.get_channel('access')
-    channel.basic_consume(process_action, queue='access')
+    channel.basic_consume(on_message_callback=process_action, queue='access')
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
 
@@ -64,7 +64,7 @@ def action_push():
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
 if not action:
-    himutils.sys_error("Function action_%s() not implemented" % options.action)
+    utils.sys_error("Function action_%s() not implemented" % options.action)
 action() # pylint: disable=E1102
 
 # receiver

@@ -25,7 +25,7 @@ class MQclient(object):
             retry_delay=30,
             socket_timeout=10,
             blocked_connection_timeout=20,
-            heartbeat_interval=10)
+            heartbeat=10)
         self.connection = pika.BlockingConnection(parameters)
 
     def set_dry_run(self, dry_run):
