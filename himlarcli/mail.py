@@ -17,20 +17,26 @@ class Mail(Client):
         """ Turn on debug mode on smtplib """
         self.server.set_debuglevel(level)
 
-    def send_mail(self, toaddr, mail, fromaddr=None):
+    def send_mail(self, toaddr, mail, fromaddr=None, cc=None, bcc=None):
         if fromaddr is None:
             fromaddr = self.get_config('mail', 'from_addr')
         if not 'From' in mail:
             mail['From'] = fromaddr
-        mail['To'] = toaddr
+        if not 'To' in mail:
+            mail['To'] = toaddr
+        recipients = [toaddr]
+        if cc:
+            recipients = recipients + [cc]
+        if bcc:
+            recipients = recipients + [bcc]
         if not self.dry_run:
             try:
-                self.server.sendmail(fromaddr, toaddr, mail.as_string())
+                self.server.sendmail(fromaddr, recipients, mail.as_string())
             except smtplib.SMTPRecipientsRefused as e:
                 self.log_error(e)
             except smtplib.SMTPServerDisconnected as e:
                 self.log_error(e)
-        self.debug_log('Sending mail to %s' % toaddr)
+        self.debug_log('Sending mail to %s' % recipients)
 
     def close(self):
         self.debug_log('Closing mail server connection...')
@@ -91,8 +97,6 @@ class Mail(Client):
         msg['Reply-To'] = fromaddr
         if cc:
             msg['Cc'] = cc
-        if bcc:
-            msg['Bcc'] = bcc
         return msg
 
     def mail_instance_owner(self, instances, body, subject, admin=False, options=['status']):
