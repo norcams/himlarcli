@@ -66,7 +66,7 @@ class Mail(Client):
         return msg
 
     @staticmethod
-    def create_mail_with_txt_attachment(subject, body, attachment_payload, attachment_name, fromaddr, cc=None):
+    def create_mail_with_txt_attachment(subject, body, attachment_payload, attachment_name, fromaddr, cc=None, bcc=None):
         """
         Construct an email with attachment.
 
@@ -75,7 +75,8 @@ class Mail(Client):
         :param attachment_payload: Contents of the attachment
         :param attachment_name: Name of the attachment
         :param fromaddr: Address used as From and Reply-To
-        :param cc: Optional CC address
+        :param cc: Optional Cc address
+        :param bcc: Optional Bcc address
         :return: returns the mail message
         """
         msg = MIMEMultipart('mixed')
@@ -89,7 +90,9 @@ class Mail(Client):
         msg['From'] = fromaddr
         msg['Reply-To'] = fromaddr
         if cc:
-            msg['CC'] = cc
+            msg['Cc'] = cc
+        if bcc:
+            msg['Bcc'] = bcc
         return msg
 
     def mail_instance_owner(self, instances, body, subject, admin=False, options=['status']):

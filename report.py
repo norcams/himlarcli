@@ -288,6 +288,7 @@ def action_enddate():
         mail = utils.get_client(Mail, options, logger)
         mail = Mail(options.config, debug=options.debug)
         mail.set_dry_run(options.dry_run)
+        bccaddr = 'iaas-logs@usit.uio.no'
         if options.fromaddr:
             fromaddr = options.fromaddr
         else:
@@ -325,7 +326,8 @@ def action_enddate():
                                                                attachment_payload,
                                                                'resources.txt',
                                                                fromaddr,
-                                                               ccaddr)
+                                                               ccaddr,
+                                                               bccaddr)
 
                     # Send mail to user
                     mail.send_mail(project_admin, msg, fromaddr)
@@ -335,6 +337,8 @@ def action_enddate():
                         print("To: %s" % project_admin)
                         if ccaddr:
                             print("Cc: %s" % ccaddr)
+                        if bccaddr:
+                            print("Bcc: %s" % bccaddr)
                         print("From: %s" % fromaddr)
                         print('---')
                         print(body_content)
