@@ -6,6 +6,7 @@ nodes:
     compute_profile: small
     compute_resource: controller-01
   builder-01:
+    hostgroup: 16
     compute_profile: medium
     compute_resource: controller-04
     compute_attributes:
