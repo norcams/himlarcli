@@ -330,7 +330,7 @@ def action_enddate():
                                                                bccaddr)
 
                     # Send mail to user
-                    mail.send_mail(project_admin, msg, fromaddr)
+                    mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr)
                     if options.dry_run:
                         print("Did NOT send spam to %s;" % project_admin)
                         print("Subject: %s" % subject)
