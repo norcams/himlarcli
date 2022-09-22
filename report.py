@@ -315,7 +315,7 @@ def action_enddate():
                     attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
 
                     # Construct mail content
-                    subject = 'NREC: End date in %d days for project "%s"' % (days, project.name)
+                    subject = 'NREC: Project "%s" expires in %d days' % (project.name, days)
                     body_content = utils.load_template(inputfile=options.template,
                                                        mapping={'project': project.name,
                                                                 'enddate': project_enddate,
