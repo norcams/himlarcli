@@ -89,13 +89,6 @@ opt_args:
     'dest':     'rt'
     'help':     'request tracker ticket number or link'
     'metavar':  'request tracker'
-  '--resolve':
-    'sub':      ['extend']
-    'dest':     'resolve'
-    'help':     'Resolve the RT case in addition to replying'
-    'action':   'store_const'
-    'const':    true
-    'default':  false
   '-m':
     'sub':      ['create', 'create-private', 'grant', 'revoke', 'quarantine', 'extend']
     'dest':     'mail'

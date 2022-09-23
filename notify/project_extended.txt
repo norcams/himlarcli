@@ -1,4 +1,4 @@
-${resolve}Hi,
+Hi,
 
 The expiration date for project "$project_name" has been
 changed. The new expiration date is:
