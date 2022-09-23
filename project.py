@@ -26,6 +26,7 @@ access_granted_msg_file = 'notify/access_granted_rt.txt'
 access_granted_user_msg_file = 'notify/access_granted_user.txt'
 access_revoked_msg_file = 'notify/access_revoked_rt.txt'
 access_revoked_user_msg_file = 'notify/access_revoked_user.txt'
+project_extended_msg_file = 'notify/project_extended.txt'
 
 ksclient = Keystone(options.config, debug=options.debug)
 ksclient.set_dry_run(options.dry_run)
@@ -233,6 +234,35 @@ def action_extend():
     ksclient.update_project(project_id=project.id, enddate=str(enddate),
                             disabled='', notified='', enabled=True)
     print("New end date for %s: %s" % (project.name, enddate))
+
+    # Update RT
+    if options.mail:
+        project_msg = project_extended_msg_file
+        mail = Mail(options.config, debug=options.debug)
+        mail.set_dry_run(options.dry_run)
+
+        # Option to resolve the RT case
+        if options.resolve:
+            resolve_string = "Status:resolved\n\n"
+        else:
+            resolve_string = ''
+
+        if options.rt is None:
+            himutils.sys_error('--rt parameter is missing.')
+        else:
+            mapping = dict(project_name=project.name,
+                           resolve=resolve_string,
+                           end_date=str(enddate))
+            subject = 'NREC: New expiration date for project %s' % project.name
+            body_content = himutils.load_template(inputfile=project_msg,
+                                                  mapping=mapping)
+        if not body_content:
+            himutils.sys_error('ERROR! Could not find and parse mail body in \
+                               %s' % options.msg)
+
+        mime = mail.rt_mail(options.rt, subject, body_content)
+        mail.send_mail('support@nrec.no', mime)
+
 
 def action_grant():
     for user in options.users:

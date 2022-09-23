@@ -1,0 +1,14 @@
+${resolve}Hi,
+
+The expiration date for project "$project_name" has been
+changed. The new expiration date is:
+
+  $end_date
+
+For more details about the lifecycle policy for NREC projects, visit:
+
+  https://docs.nrec.no/project-lifecycle.html
+
+Best regards,
+-- 
+NREC team <support@nrec.no>
