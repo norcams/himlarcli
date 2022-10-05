@@ -89,11 +89,16 @@ def action_instances():
 def action_expired():
     max_days = 90
     projects = kc.get_projects(type='demo')
-    subject = '[NREC] Your demo instance is due for deletion'
+
+    # logfile
     logfile = 'logs/demo-logs/expired_instances/demo-notify-expired-instances-{}.log'.format(date.today().isoformat())
+
+    # mail parameters
     mail = utils.get_client(Mail, options, logger)
+    subject = '[NREC] Your demo instance is due for deletion'
     fromaddr = mail.get_config('mail', 'from_addr')
-    cc = 'support@uh-iaas.no'
+    bccaddr = 'iaas-logs@usit.uio.no'
+
     inputday = options.day
     question = 'Send mail to instances that have been running for {} days?'.format(inputday)
     if not options.force and not utils.confirm_action(question):
@@ -114,11 +119,15 @@ def action_expired():
                 active_days = (date.today() - created).days
                 kc.debug_log('{} running for {} days'.format(instance.id, active_days))
                 if int(active_days) == int(inputday):
-                    mapping = dict(project=project.name, enddate=int((max_days)-int(inputday)), activity=int(active_days), region=region.upper(), instance=instance.name)
+                    mapping = dict(project=project.name,
+                                   enddate=int((max_days)-int(inputday)),
+                                   activity=int(active_days),
+                                   region=region.upper(),
+                                   instance=instance.name)
                     body_content = utils.load_template(inputfile=template, mapping=mapping, log=logger)
-                    msg = mail.get_mime_text(subject, body_content, fromaddr, cc)
+                    msg = mail.get_mime_text(subject, body_content, fromaddr)
                     kc.debug_log('Sending mail to {} that has been active for {} days'.format(instance.id, active_days))
-                    mail.send_mail(project.admin, msg, fromaddr)
+                    mail.send_mail(project.admin, msg, fromaddr, None, bccaddr)
                     utils.append_to_logfile(logfile, date.today(), region, project.admin, instance.name, active_days)
                     print(('Mail sendt to {}'.format(project.admin)))
 
