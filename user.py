@@ -441,10 +441,12 @@ def action_purge():
             group = group_dp
         else:
             himutils.sys_error('WARNING: Could not find disabled group for user %s!' % user['api'].name, 0)
+            group = None
 
         # rename the user group
-        new_group_name = group.name.replace('-disabled', '-group')
-        ksclient.update_group(group.id, name=new_group_name)
+        if group:
+            new_group_name = group.name.replace('-disabled', '-group')
+            ksclient.update_group(group.id, name=new_group_name)
 
         # delete...
         ksclient.user_cleanup(email=user['api'].name)
