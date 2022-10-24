@@ -3,6 +3,8 @@ from himlarcli.keystone import Keystone
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.mail import Mail
+from himlarcli.nova import Nova
+from himlarcli.cinder import Cinder
 from himlarcli import utils
 from prettytable import PrettyTable
 from datetime import datetime
@@ -11,6 +13,7 @@ import re
 import sys
 import json
 import os
+import csv
 
 utils.is_virtual_env()
 
@@ -70,6 +73,127 @@ def action_list():
 
     # Finally print out number of projects
     printer.output_dict({'header': 'Project list count', 'count': count})
+
+def action_resources():
+    search_filter = dict()
+    if options.filter and options.filter != 'all':
+        search_filter['type'] = options.filter
+    projects = ksclient.get_projects(**search_filter)
+
+    # Project counter
+    count = 0
+
+    # Loop through projects
+    csv_output = []
+    for project in projects:
+        kc = Keystone(options.config, debug=options.debug)
+        kc.set_dry_run(options.dry_run)
+        kc.set_domain(options.domain)
+
+        project_type = project.type if hasattr(project, 'type') else '(unknown)'
+        project_admin = project.admin if hasattr(project, 'admin') else '(unknown)'
+        project_created = project.createdate if hasattr(project, 'createdate') else '(unknown)'
+        project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
+        project_contact = project.contact if hasattr(project, 'contact') else 'None'
+        project_roles = kc.list_roles(project_name=project.name)
+        project_org = project.org if hasattr(project, 'org') else 'None'
+
+        # Make project create date readable
+        project_created = re.sub(r'T\d\d:\d\d:\d\d.\d\d\d\d\d\d', '', project_created)
+
+        # Count users
+        users = dict()
+        users['user'] = 0
+        users['object'] = 0
+        users['superuser'] = 0
+        if len(project_roles) > 0:
+            for role in project_roles:
+                users[role['role']] += 1
+
+        # Count resources
+        zones     = Printer._count_project_zones(project, options, logger)
+        volumes   = Printer._count_project_volumes(project, options, logger, regions)
+        images    = Printer._count_project_images(project, options, logger, regions)
+        instances = Printer._count_project_instances(project, options, logger, regions)
+
+        # Get resources used by instances and volumes
+        ram   = dict()
+        disk  = dict()
+        vcpus = dict()
+        hdd   = dict()
+        ssd   = dict()
+        for region in regions:
+            # Initiate Nova object
+            nc = utils.get_client(Nova, options, logger, region)
+            # Initiate Cinder object
+            cc = utils.get_client(Cinder, options, logger, region)
+
+            ram[region]   = 0
+            disk[region]  = 0
+            vcpus[region] = 0
+            hdd[region]   = 0
+            ssd[region]   = 0
+
+            for instance in nc.get_project_instances(project_id=project.id):
+                ram[region]   += instance.flavor['ram']
+                disk[region]  += instance.flavor['disk']
+                vcpus[region] += instance.flavor['vcpus']
+
+            for volume in cc.get_volumes(detailed=True, search_opts={'project_id': project.id}):
+                if volume.volume_type is 'mass-storage-ssd':
+                    ssd[region] += volume.size
+                else:
+                    hdd[region] += volume.size
+
+        # Output array
+        output_project = {
+            #'header':              'Project Resources',
+            'project_name':         project.name,
+            'project_id':           project.id,
+            'project_type':         project_type,
+            'project_org':          project_org,
+            'project_admin':        project_admin,
+            'project_contact':      project_contact,
+            'project_enddate':      project_enddate,
+            'project_description':  project.description,
+            'num_users':            users['user'],
+            'num_object_users':     users['object'],
+            'num_zones':            zones,
+            'bgo_num_instances':    instances['bgo'],
+            'osl_num_instances':    instances['osl'],
+            'bgo_num_volumes':      volumes['bgo'],
+            'osl_num_volumes':      volumes['osl'],
+            'bgo_num_images':       images['bgo'],
+            'osl_num_images':       images['osl'],
+            'bgo_instance_ram_mb':  ram['bgo'],
+            'osl_instance_ram_mb':  ram['osl'],
+            'bgo_instance_disk_gb': disk['bgo'],
+            'osl_instance_disk_gb': disk['osl'],
+            'bgo_instance_vcpus':   vcpus['bgo'],
+            'osl_instance_vcpus':   vcpus['osl'],
+            'bgo_volume_hdd_gb':    hdd['bgo'],
+            'osl_volume_hdd_gb':    hdd['osl'],
+            'bgo_volume_ssd_gb':    ssd['bgo'],
+            'osl_volume_ssd_gb':    ssd['osl'],
+        }
+
+        # Store results (CSV) or print (TEXT / JSON)
+        if options.format == 'csv':
+            csv_output.append(output_project)
+        else:
+            printer.output_dict(output_project, sort=True, one_line=True)
+
+        # Increase project counter
+        count += 1
+
+    # Print results (CSV) or number of projects (TEXT / JSON)
+    if options.format == 'csv':
+        writer = csv.DictWriter(sys.stdout, fieldnames=csv_output[0].keys(), dialect='unix')
+        writer.writeheader()
+        for row in csv_output:
+            writer.writerow(row)
+    else:
+        printer.output_dict({'header': 'Project list count', 'count': count})
 
 def action_user():
     if not ksclient.is_valid_user(email=options.user, domain=options.domain):
