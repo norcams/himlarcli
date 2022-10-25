@@ -2,6 +2,7 @@
 desc:   'Reports for NREC'
 actions:
   'list':         'List projects. Use -f to filter result by project type'
+  'resources':    'List projects resources. Use -f to filter result by project type'
   'show':         'Show a single project'
   'user':         'Show projects for user'
   'vendorapi':    'Create data for Nova vendor API'
@@ -14,7 +15,7 @@ opt_args:
     'help':     'Openstack domain to use'
     'default':  'Dataporten'
   '-f':
-    'sub':      ['list']
+    'sub':      ['list','resources']
     'dest':     'filter'
     'help':     'Filter by project type'
     'default':  'test'
