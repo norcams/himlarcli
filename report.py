@@ -140,7 +140,7 @@ def action_resources():
                 vcpus[region] += instance.flavor['vcpus']
 
             for volume in cc.get_volumes(detailed=True, search_opts={'project_id': project.id}):
-                if volume.volume_type is 'mass-storage-ssd':
+                if volume.volume_type == 'mass-storage-ssd':
                     ssd[region] += volume.size
                 else:
                     hdd[region] += volume.size
