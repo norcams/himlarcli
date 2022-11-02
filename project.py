@@ -181,7 +181,7 @@ def action_create_private():
     options.contact = None
 
     # Guess organization
-    m = re.search(r'\@(.+?\.)?(?P<org>uio|uib|ntnu|nmbu|uit|vetinst)\.no', options.user)
+    m = re.search(r'\@(.+?\.)?(?P<org>uio|uib|ntnu|nmbu|uit|vetinst|sikt)\.no', options.user)
     if m:
         options.org = m.group('org')
     else:
