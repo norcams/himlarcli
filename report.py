@@ -7,6 +7,7 @@ from himlarcli.nova import Nova
 from himlarcli.cinder import Cinder
 from himlarcli import utils
 from prettytable import PrettyTable
+from datetime import date
 from datetime import datetime
 from datetime import timedelta
 import re
@@ -354,7 +355,9 @@ def action_enddate():
     search_filter = dict()
     projects = ksclient.get_projects(**search_filter)
 
-    today = datetime.today()
+    # Create datetime object for today at midnight
+    dt = date.today()
+    today = datetime.combine(dt, datetime.min.time())
 
     options.detail = True # we want details
 
