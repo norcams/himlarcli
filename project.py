@@ -524,6 +524,7 @@ def action_quarantine():
             mail = Mail(options.config, debug=options.debug)
             mail.set_dry_run(options.dry_run)
             fromaddr = 'support@nrec.no'
+            bccaddr = 'iaas-logs@usit.uio.no'
             if project_contact != 'None':
                 ccaddr = project_contact
             else:
@@ -552,13 +553,15 @@ def action_quarantine():
                                                        fromaddr,
                                                        ccaddr)
             # Send mail to user
-            mail.send_mail(project_admin, msg, fromaddr)
+            mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr)
             if options.dry_run:
                 print("Did NOT send spam to %s;" % project_admin)
                 print("Subject: %s" % subject)
                 print("To: %s" % project_admin)
                 if ccaddr:
                     print("Cc: %s" % ccaddr)
+                if bccaddr:
+                    print("Bcc: %s" % bccaddr)
                 print("From: %s" % fromaddr)
                 print('---')
                 print(body_content)
