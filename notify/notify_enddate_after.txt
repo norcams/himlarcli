@@ -4,9 +4,10 @@ The following project has reached its expiration date $enddate:
 
   $project
 
-All instances in the project has been shut off, the project is
-quarantined and is no longer visible to you. After 90 days of
-quarantine, the project will be deleted along with all its resources.
+All instances in the project has been shut off. The project has
+entered quarantine state and is no longer visible to you. After 90
+days of quarantine, the project will be deleted along with all its
+resources (virtual machines, volume storage, etc.).
 
 If you believe that this is a mistake, please contact us as soon as
 possible at support@nrec.no, e.g. by replying to this email.
