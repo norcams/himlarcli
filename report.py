@@ -548,6 +548,7 @@ def action_quarantine():
                         print("%-4s %s" % (days, project.name))
                     else:
                         project_contact = project.contact if hasattr(project, 'contact') else 'None'
+                        bccaddr = 'iaas-logs@usit.uio.no'
                         if project_contact != 'None':
                             ccaddr = project_contact
                         else:
@@ -575,16 +576,19 @@ def action_quarantine():
                                                                    attachment_payload,
                                                                    'resources.txt',
                                                                    fromaddr,
-                                                                   ccaddr)
+                                                                   ccaddr,
+                                                                   bccaddr)
 
                         # Send mail to user
-                        mail.send_mail(project_admin, msg, fromaddr)
+                        mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr)
                         if options.dry_run:
                             print("Did NOT send spam to %s;" % project_admin)
                             print("Subject: %s" % subject)
                             print("To: %s" % project_admin)
                             if ccaddr:
                                 print("Cc: %s" % ccaddr)
+                            if bccaddr:
+                                print("Bcc: %s" % bccaddr)
                             print("From: %s" % fromaddr)
                             print('---')
                             print(body_content)
