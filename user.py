@@ -241,6 +241,7 @@ def action_disable():
     # loop through project list, and determine if the project can be
     # put into quarantine. Only put projects into quarantine if:
     #   - they are personal/demo projects
+    #   - they are not already quarantined
     #   - they are shared projects with only one member, and the
     #     member is same as admin
     problematic_projects = list()  # projects that are problematic
@@ -249,6 +250,8 @@ def action_disable():
         if not hasattr(project, 'admin'):
             continue
         if project.admin.lower() != options.user.lower():
+            continue
+        if ksclient.check_project_tag(project.id, 'quarantine_active'):
             continue
         if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
             quarantine_projects.append(project.name)
