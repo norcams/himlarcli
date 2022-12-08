@@ -273,7 +273,7 @@ def get_instance_table(instances, columns=None, tablefmt='simple'):
     tables = list()
     for i in instances:
         instance = [i['name']]
-        for k, v in i.iteritems():
+        for k, v in i.items():
             if k in columns:
                 instance.append(v)
         tables.append(instance)
