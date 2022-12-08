@@ -1,17 +1,17 @@
 Hi,
 
-Due to scheduled maintenance, running HPC instances in NREC will experience
+Due to scheduled maintenance, running vGPU instances in NREC will experience
 downtime on $date.
 
 Contact: $admin
 
 $instances
 
-Instances running on HPC hosts will experience downtime when the compute host
+Instances running on vGPU hosts will experience downtime when the compute host
 is down for maintenance. Please note that, there can be scheduled maintenance
 on the second Tuesday of every month.
 
-If you have unused HPC instances, we would also appreciate if you delete them.
+If you have unused vGPU instances, we would also appreciate if you delete them.
 Resources are limited.
 
 Support and contact information can be found at https://docs.nrec.no
