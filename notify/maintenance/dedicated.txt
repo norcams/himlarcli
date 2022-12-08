@@ -1,8 +1,9 @@
 Hi,
 
 Due to scheduled maintenance, running instances in NREC will experience
-downtime on $date. Affected instance(s) are connected to your email
-$admin
+downtime on $date.
+
+Affected instance(s) connected to your email $admin
 
 $instances
 
