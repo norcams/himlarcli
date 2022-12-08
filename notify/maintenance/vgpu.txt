@@ -3,9 +3,12 @@ Hi,
 Due to scheduled maintenance, running vGPU instances in NREC will experience
 downtime on $date.
 
-Contact: $admin
+Affected instance(s) connected to your email $admin
 
 $instances
+
+After the maintenance window you will need to updated the instance GPU driver.
+More information at https://docs.nrec.no/vgpu.html#upgrading-the-instance-drivers
 
 Instances running on vGPU hosts will experience downtime when the compute host
 is down for maintenance. Please note that, there can be scheduled maintenance
