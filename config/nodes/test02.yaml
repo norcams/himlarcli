@@ -143,6 +143,7 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-01
+    hostgroup: 6
   rgw-01:
     compute_profile: medium
     compute_resource: controller-03
