@@ -154,6 +154,7 @@ nodes:
     compute_profile: large
     compute_resource: controller-02
   ns-01:
+    hostgroup: 5
     compute_profile: small
     compute_resource: controller-01
   proxy-01:
