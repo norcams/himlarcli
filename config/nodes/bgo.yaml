@@ -519,6 +519,7 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-06
+    hostgroup: 15
   object-ceph-01:
     mac: d0:94:66:09:0d:6c
     hostgroup: 16
