@@ -21,6 +21,6 @@ tweepy
 tabulate
 # needed for python-foreman
 dulwich==0.19.16
-setuptools==44.1.1
+setuptools==65.5.1
 autosemver==0.5.4
 python-foreman==0.4.20
