@@ -986,16 +986,16 @@ class Keystone(Client):
         not_tags_any = None
         if kwargs:
             if 'tags' in kwargs:
-                tags = kwargs['tags']
+                tags = ','.join(kwargs['tags'])
                 del kwargs['tags']
             if 'tags_any' in kwargs:
-                tags_any = kwargs['tags_any']
+                tags_any = ','.join(kwargs['tags_any'])
                 del kwargs['tags_any']
             if 'not_tags' in kwargs:
-                not_tags = kwargs['not_tags']
+                not_tags = ','.join(kwargs['not_tags'])
                 del kwargs['not_tags']
             if 'not_tags_any' in kwargs:
-                not_tags_any = kwargs['not_tags_any']
+                not_tags_any = ','.join(kwargs['not_tags_any'])
                 del kwargs['not_tags_any']
 
         # search for projects

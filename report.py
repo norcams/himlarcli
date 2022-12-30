@@ -483,7 +483,7 @@ def action_quarantine():
         sys.exit(1)
 
     search_filter = dict()
-    search_filter['tags'] = 'quarantine_active,quarantine type: enddate'
+    search_filter['tags'] = ['quarantine_active', 'quarantine type: enddate']
     projects = ksclient.get_projects(**search_filter)
 
     today = datetime.today()
