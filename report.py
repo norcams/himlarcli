@@ -479,16 +479,25 @@ def action_quarantine():
         sys.exit(1)
 
     if not options.list and not options.days:
-        utils.sys_error("Option '--days' is required")
+        utils.sys_error("Either option '--days' or '--list' are required")
         sys.exit(1)
 
+    # Create datetime object for today at midnight
+    dt = date.today()
+    today = datetime.combine(dt, datetime.min.time())
+
+    # Search for projects
     search_filter = dict()
     search_filter['tags'] = ['quarantine_active', 'quarantine type: enddate']
+    if options.days:
+        search_filter['tags_any'] = list()
+        for days in options.days:
+            thisdate = (today - timedelta(days=int(days))).strftime('%Y-%m-%d')
+            search_filter['tags_any'].append("quarantine date: %s" % thisdate)
     projects = ksclient.get_projects(**search_filter)
 
-    today = datetime.today()
-
-    options.detail = True # we want details
+    # we want details
+    options.detail = True
 
     # Set common mail parameters
     mail = utils.get_client(Mail, options, logger)
