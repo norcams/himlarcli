@@ -479,7 +479,7 @@ def action_quarantine():
         sys.exit(1)
 
     if not options.list and not options.days:
-        utils.sys_error("Either option '--days' or '--list' are required")
+        utils.sys_error("Option '--days' is required when sending mail")
         sys.exit(1)
 
     # Create datetime object for today at midnight
