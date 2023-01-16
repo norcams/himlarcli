@@ -479,15 +479,25 @@ def action_quarantine():
         sys.exit(1)
 
     if not options.list and not options.days:
-        utils.sys_error("Option '--days' is required")
+        utils.sys_error("Option '--days' is required when sending mail")
         sys.exit(1)
 
+    # Create datetime object for today at midnight
+    dt = date.today()
+    today = datetime.combine(dt, datetime.min.time())
+
+    # Search for projects
     search_filter = dict()
+    search_filter['tags'] = ['quarantine_active', 'quarantine type: enddate']
+    if options.days:
+        search_filter['tags_any'] = list()
+        for days in options.days:
+            thisdate = (today - timedelta(days=int(days))).strftime('%Y-%m-%d')
+            search_filter['tags_any'].append("quarantine date: %s" % thisdate)
     projects = ksclient.get_projects(**search_filter)
 
-    today = datetime.today()
-
-    options.detail = True # we want details
+    # we want details
+    options.detail = True
 
     # Set common mail parameters
     mail = utils.get_client(Mail, options, logger)
@@ -506,36 +516,18 @@ def action_quarantine():
         if project_type == 'demo':
             continue
 
-        # Only include quarantined projects
-        if not ksclient.check_project_tag(project.id, 'quarantine_active'):
-            continue
-
         # Get quarantine info
         tags = ksclient.list_project_tags(project.id)
         r_date = re.compile('^quarantine date: .+$')
-        r_type = re.compile('^quarantine type: .+$')
         date_tags = list(filter(r_date.match, tags))
-        type_tags = list(filter(r_type.match, tags))
         if len(date_tags) > 1:
             utils.sys_error('Too many quarantine dates for project %s' % project.name)
             continue
         elif len(date_tags) < 1:
             utils.sys_error('No quarantine date for project %s' % project.name)
             continue
-        if len(type_tags) > 1:
-            utils.sys_error('Too many quarantine reasons for project %s' % project.name)
-            continue
-        elif len(type_tags) < 1:
-            utils.sys_error('No quarantine reason for project %s' % project.name)
-            continue
         m_date = re.match(r'^quarantine date: (\d\d\d\d-\d\d-\d\d)$', date_tags[0])
-        m_type = re.match(r'^quarantine type: (.+)$', type_tags[0])
         quarantine_date_iso = m_date.group(1)
-        quarantine_reason = m_type.group(1)
-
-        # Ignore if quarantine reason other than enddate
-        if quarantine_reason != 'enddate':
-            continue
 
         quarantine_date = datetime.strptime(quarantine_date_iso, "%Y-%m-%d")
         if options.list and not options.days:
