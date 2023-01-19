@@ -185,6 +185,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   report-01:
+    hostgroup: 5
     compute_profile: small
     compute_resource: controller-03
   resolver-01:
