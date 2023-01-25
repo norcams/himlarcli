@@ -3,7 +3,7 @@ Hi,
 Due to scheduled maintenance, running instances in NREC will experience
 downtime on $date.
 
-Contact: $admin
+Affected instance(s) connected to your email $admin
 
 $instances
 

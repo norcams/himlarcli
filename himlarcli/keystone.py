@@ -978,8 +978,34 @@ class Keystone(Client):
         return domain_obj.id if domain_obj else None
 
     def __get_projects(self, domain_id, **kwargs):
-        projects = self.client.projects.list(domain=domain_id)
+        # Filter by tags, delete from search dictionary if found
+        # https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=#filtering-and-searching-by-tags
+        tags         = None
+        tags_any     = None
+        not_tags     = None
+        not_tags_any = None
+        if kwargs:
+            if 'tags' in kwargs:
+                tags = ','.join(kwargs['tags'])
+                del kwargs['tags']
+            if 'tags_any' in kwargs:
+                tags_any = ','.join(kwargs['tags_any'])
+                del kwargs['tags_any']
+            if 'not_tags' in kwargs:
+                not_tags = ','.join(kwargs['not_tags'])
+                del kwargs['not_tags']
+            if 'not_tags_any' in kwargs:
+                not_tags_any = ','.join(kwargs['not_tags_any'])
+                del kwargs['not_tags_any']
+
+        # search for projects
+        projects = self.client.projects.list(domain=domain_id,
+                                             tags=tags,
+                                             tags_any=tags_any,
+                                             not_tags=not_tags,
+                                             not_tags_any=not_tags_any)
         self.logger.debug('=> get projects (domain=%s)' % (domain_id))
+
         # Filter projects
         if kwargs:
             self.logger.debug('=> filter project %s' % kwargs)

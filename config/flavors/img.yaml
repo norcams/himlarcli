@@ -5,6 +5,6 @@ properties:
   hw_rng:allowed: 'True'
 img:
   'img.zerodisk':
-    ram:    1024
+    ram:    2048
     vcpus:  1
     disk:   0

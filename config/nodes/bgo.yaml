@@ -350,6 +350,9 @@ nodes:
   compute-alice2-80:
     mac: ec:2a:72:02:86:38
     hostgroup: 16
+  compute-81:
+    mac: d0:8e:79:c3:d0:d2
+    hostgroup: 16
   console-01:
     compute_profile: medium
     compute_resource: controller-05
@@ -519,6 +522,7 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-06
+    hostgroup: 15
   object-ceph-01:
     mac: d0:94:66:09:0d:6c
     hostgroup: 16

@@ -4,7 +4,7 @@ import logging
 from himlarcli import utils
 
 # config logger with logging.yaml
-logger = utils.setup_logger(__name__, False, './')
+logger = utils.setup_logger(__name__, False, '/opt/himlarcli/')
 logger.debug('rotating logs')
 
 # rotate file handler

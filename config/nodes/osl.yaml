@@ -400,6 +400,7 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: 16
   object-ceph-01:
     mac: 4c:d9:8f:68:39:dd
     hostgroup: 19

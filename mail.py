@@ -126,7 +126,7 @@ def action_aggregate():
 # Send mail to the instances listed in the "email_file"
 def action_instances():
     q = 'Send mail template {} to the instances in the {}'.format(options.template,
-                                                           options.email_file)
+                                                                  options.email_file)
     if not utils.confirm_action(q):
         return
     users = dict()
@@ -138,12 +138,12 @@ def action_instances():
             ksclient = Keystone(options.config, debug=options.debug)
             novaclient = utils.get_client(Nova, options, logger, region)
             instance = novaclient.get_by_id('server', i)
-	    if not instance:
-	        continue
+            if not instance:
+                continue
             project = ksclient.get_by_id('project', instance.tenant_id)
             if hasattr(project, 'contact'):
                 email = project.contact
-            elif hasattr(project,'admin'):
+            elif hasattr(project, 'admin'):
                 email = project.admin
             else:
                 kc.debug_log('could not find admin for project {}'.
@@ -178,7 +178,7 @@ def action_instances():
 
     for user, instance in users.items():
         columns = ['project', 'region']
-        mapping = dict(region=region,
+        mapping = dict(region=None,
                        date=options.date,
                        instances=utils.get_instance_table(instance, columns),
                        project=project.name,
