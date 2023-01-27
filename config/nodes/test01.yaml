@@ -44,7 +44,7 @@ nodes:
     compute_profile: large
     compute_resource: controller-03
   compute-01:
-    hostgroup: 3
+    hostgroup: 6
     mac: 00:0a:f7:75:2f:80
     # mac: f8:bc:12:3f:97:90
   compute-02:
