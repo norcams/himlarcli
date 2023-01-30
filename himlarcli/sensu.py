@@ -40,10 +40,14 @@ class Sensu(Client):
         else:
             payload.update({'expire_on_resolve': True})
         json_payload = json.dumps(payload)
-        response = self.session.post(url+endpoint,
-                                     headers=self.headers,
-                                     data=json_payload)
-        self.logger.debug('=> HTTP Status: %s' % (response.status_code))
+        try:
+            response = self.session.post(url+endpoint,
+                                         headers=self.headers,
+                                         data=json_payload,
+                                         timeout=5)
+            self.logger.debug('=> HTTP Status: %s' % (response.status_code))
+        except requests.exceptions.ConnectionError:
+            pass
 
     def list_silenced(self):
         url = self.api_url
