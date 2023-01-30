@@ -21,7 +21,7 @@ class Sensu(Client):
         endpoint = '/clients/' + host
         if not self.dry_run:
             try:
-                response = self.session.delete(url+endpoint)
+                response = self.session.delete(url+endpoint, timeout=5)
                 self.logger.debug('=> %s' % response.status_code)
             except requests.exceptions.ConnectionError:
                 pass
