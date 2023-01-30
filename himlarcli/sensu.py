@@ -20,8 +20,11 @@ class Sensu(Client):
         url = self.api_url
         endpoint = '/clients/' + host
         if not self.dry_run:
-            response = self.session.delete(url+endpoint)
-            self.logger.debug('=> %s' % response.status_code)
+            try:
+                response = self.session.delete(url+endpoint)
+                self.logger.debug('=> %s' % response.status_code)
+            except requests.exceptions.ConnectionError:
+                pass
         else:
             self.logger.debug('=> DRY-RUN: deleted %s' % host)
 
