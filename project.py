@@ -762,7 +762,7 @@ def action_access():
         return
 
     # If option is given to only handle tags, return here
-    if option.tags_only:
+    if options.tags_only:
         return
 
     # Determine flavors and shared images
