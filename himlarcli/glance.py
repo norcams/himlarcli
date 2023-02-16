@@ -120,15 +120,17 @@ class Glance(Client):
         return members
 
     def set_image_access(self, image_id, project_id, action='grant'):
+        retval = False
         if action not in ['grant', 'revoke']:
             self.debug_log('unknown image access action: {}'.format(action))
-            return
+            return retval
 
         if action == 'grant':
             if self.__get_project_image_member(image_id, project_id):
-                self.debug_log(('membership exsist: dropping grant for project '
+                self.debug_log(('membership exists: dropping grant for project '
                                 + '{} on image {}').format(project_id, image_id))
-                return
+                retval = True
+                return retval
             if not self.dry_run:
                 try:
                     self.client.image_members.create(image_id, project_id)
@@ -137,6 +139,7 @@ class Glance(Client):
                     self.log_error(e)
             self.debug_log('grant access to project {} for image {}'.
                            format(project_id, image_id))
+            retval = True
         elif action == 'revoke':
             if not self.__get_project_image_member(image_id, project_id):
                 return
@@ -147,7 +150,8 @@ class Glance(Client):
                     self.log_error(e)
             self.debug_log('revoke access to project {} for image {}'.
                            format(project_id, image_id))
-
+            retval = True
+        return retval
 
     def set_access(self, image_id, project_id, action='create'):
         if action not in ['create', 'delete']:

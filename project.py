@@ -11,6 +11,7 @@ from himlarcli import utils as himutils
 from datetime import datetime
 from datetime import timedelta
 from email.mime.text import MIMEText
+from prettytable import PrettyTable
 import re
 import time
 
@@ -570,6 +571,286 @@ def action_quarantine():
 
         ksclient.project_quarantine_set(options.project, options.reason, date)
         printer.output_msg('Quarantine set for project: {}'. format(options.project))
+
+def action_access():
+    #------------------------------+-----------------------------------+---------+
+    #       Text color             |       Background color            |         |
+    #--------------+---------------+----------------+------------------+         |
+    # Base color   |Lighter shade  |  Base color    | Lighter shade    |         |
+    #--------------+---------------+----------------+------------------+         |
+    BLK='\033[30m'; blk='\033[90m'; BBLK='\033[40m'; bblk='\033[100m' #| Black   |
+    RED='\033[31m'; red='\033[91m'; BRED='\033[41m'; bred='\033[101m' #| Red     |
+    GRN='\033[32m'; grn='\033[92m'; BGRN='\033[42m'; bgrn='\033[102m' #| Green   |
+    YLW='\033[33m'; ylw='\033[93m'; BYLW='\033[43m'; bylw='\033[103m' #| Yellow  |
+    BLU='\033[34m'; blu='\033[94m'; BBLU='\033[44m'; bblu='\033[104m' #| Blue    |
+    MGN='\033[35m'; mgn='\033[95m'; BMGN='\033[45m'; bmgn='\033[105m' #| Magenta |
+    CYN='\033[36m'; cyn='\033[96m'; BCYN='\033[46m'; bcyn='\033[106m' #| Cyan    |
+    WHT='\033[37m'; wht='\033[97m'; BWHT='\033[47m'; bwht='\033[107m' #| White   |
+    #------------------------------------------------------------------+---------+
+    # Effects                                                                    |
+    #----------------------------------------------------------------------------+
+    DEF='\033[0m'   #Default color and effects                                   |
+    BLD='\033[1m'   #Bold\brighter                                               |
+    DIM='\033[2m'   #Dim\darker                                                  |
+    CUR='\033[3m'   #Italic font                                                 |
+    UND='\033[4m'   #Underline                                                   |
+    INV='\033[7m'   #Inverted                                                    |
+    COF='\033[?25l' #Cursor Off                                                  |
+    CON='\033[?25h' #Cursor On                                                   |
+    #----------------------------------------------------------------------------+
+
+    project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.fatal('No project found with name %s' % options.project)
+
+    # Correct use of options
+    if options.grant and options.revoke:
+        himutils.fatal("Can't use both --grant and --revoke")
+    elif not options.grant and not options.revoke and not options.access_extend and not options.access_list:
+        himutils.fatal("Either --grant or --revoke is mandatory")
+
+    # Resource availability by region
+    resource_availability = {
+        'vgpu'       : [ 'bgo', 'osl' ],
+        'shpc'       : [ 'bgo', 'osl' ],
+        'shpc_ram'   : [ 'bgo'],
+        'shpc_disk1' : [ 'osl'],
+        'shpc_disk2' : [ 'osl'],
+        'shpc_disk3' : [ 'osl'],
+        'shpc_disk4' : [ 'osl'],
+        'ssd'        : [ 'bgo', 'osl' ],
+    }
+
+    # Today
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    # Determine resource end date when granting access
+    if options.grant or options.access_extend:
+        if not options.until:
+            resource_enddate = 'None'
+        elif options.until == 'None':
+            resource_enddate = 'None'
+        else:
+            if re.match(r'^(\d\d\d\d-\d\d-\d\d)$', options.until):
+                try:
+                    datetime_until = datetime.strptime(options.until, '%Y-%m-%d')
+                except:
+                    himutils.fatal('Invalid date: %s' % options.until)
+            elif re.match(r'^(\d\d\.\d\d\.\d\d\d\d)$', options.until):
+                try:
+                    datetime_until = datetime.strptime(options.until, '%d.%m.%Y')
+                except:
+                    himutils.fatal('Invalid date: %s' % options.until)
+            else:
+                himutils.fatal('Invalid date: %s' % options.until)
+
+            # check that resource enddate doesn't exceed project enddate
+            if hasattr(project, 'enddate'):
+                datetime_project_end = datetime.strptime(project.enddate, '%Y-%m-%d')
+                datetime_today = datetime.strptime(today, '%Y-%m-%d')
+                if datetime_until > datetime_project_end:
+                    himutils.fatal('Resource enddate %s exceeds project enddate %s'
+                                   % (datetime_until.strftime('%Y-%m-%d'), project.enddate))
+                elif datetime_until <= datetime_today:
+                    himutils.fatal('Resource enddate %s is in the past'
+                                   % datetime_until.strftime('%Y-%m-%d'))
+
+            # If we've come this far we have a valid resource enddate
+            resource_enddate = datetime_until.strftime('%Y-%m-%d')
+
+    # Determine access action, type of resource and add or delete tags
+    if options.grant:
+        access_action = 'grant'
+        resource = options.grant
+        if not any(x in regions for x in resource_availability[resource]):
+            himutils.fatal('Resource %s is not available in any of the regions %s'
+                           % (resource, regions))
+        # Set tags
+        if ksclient.check_project_tag(project.id, '%s_access' % resource):
+            himutils.warning('Tag "%s_access" already exists for %s'
+                             % (resource, project.name))
+        else:
+            ksclient.add_project_tag(project.id, '%s_access' % resource)
+            himutils.info('Added project tag: %s_access' % resource)
+            ksclient.add_project_tag(project.id, '%s_start: %s' % (resource, today))
+            himutils.info('Added project tag: %s_start: %s' % (resource, today))
+            ksclient.add_project_tag(project.id, '%s_end: %s' % (resource, resource_enddate))
+            himutils.info('Added project tag: %s_end: %s' % (resource, resource_enddate))
+        for region in regions:
+            if region not in resource_availability[resource]:
+                himutils.warning('Resource %s is not available in region %s, skipping...'
+                                 % (resource, region))
+                continue
+            if ksclient.check_project_tag(project.id, '%s_region_%s' % (resource, region)):
+                himutils.warning('Tag "%s_region_%s" already exists for %s'
+                                 % (resource, region, project.name))
+            else:
+                ksclient.add_project_tag(project.id, '%s_region_%s' % (resource, region))
+                himutils.info('Added project tag: %s_region_%s' % (resource, region))
+    elif options.revoke:
+        access_action = 'revoke'
+        resource = options.revoke
+        for region in regions:
+            if ksclient.check_project_tag(project.id, '%s_region_%s' % (resource, region)):
+                ksclient.delete_project_tag(project.id, '%s_region_%s' % (resource, region))
+                himutils.info('Deleted project tag: %s_region_%s' % (resource, region))
+            else:
+                himutils.warning('Tag "%s_region_%s" does not exist for %s'
+                                 % (resource, region, project.name))
+        tags = ksclient.list_project_tags(project.id)
+        delete_tags = True
+        for tag in tags:
+            if re.match(r'^%s_region_.+$' % resource, tag):
+                delete_tags = False
+        # Remove tags
+        if delete_tags:
+            r = re.compile(r'^%s_(access|(start|end): .+)$' % resource)
+            for tag in list(filter(r.match, tags)):
+                ksclient.delete_project_tag(project.id, tag)
+                himutils.info('Deleted project tag: %s' % tag)
+    elif options.access_extend:
+        resource = options.access_extend
+        tags = ksclient.list_project_tags(project.id)
+        r = re.compile('^%s_end: .*' % resource)
+        for tag in list(filter(r.match, tags)):
+            ksclient.delete_project_tag(project.id, tag)
+            himutils.info('Deleted project tag: %s' % tag)
+        ksclient.add_project_tag(project.id, '%s_end: %s' % (resource, resource_enddate))
+        himutils.info('Added project tag: %s_end: %s' % (resource, resource_enddate))
+        return
+    elif options.access_list:
+        tags = ksclient.list_project_tags(project.id)
+        rdict = dict()
+        for tag in tags:
+            m = re.match(r'^(.+?)_access$', tag)
+            if m:
+                rdict[m.group(1)] = ['unknown','unknown']
+        for tag in tags:
+            for r in rdict.keys():
+                mstart = re.match(r'^%s_start: (.+)$' % r, tag)
+                mend   = re.match(r'^%s_end: (.+)$' % r, tag)
+                if mstart:
+                    rdict[r][0] = mstart.group(1)
+                if mend:
+                    rdict[r][1] = mend.group(1)
+        # print info about resources and return
+        print('%sPROJECT: %s%s' % (blu, project.name, DEF))
+        header = [ '%sRESOURCE%s' % (UND,DEF),
+                   '%sSTART DATE%s' % (UND,DEF),
+                   '%sEND DATE%s' % (UND,DEF)]
+        for region in regions:
+            header.append('%s%s%s' % (UND,region.upper(),DEF))
+        table_resource = PrettyTable()
+        table_resource._max_width = {'value' : 70}
+        table_resource.border = 0
+        table_resource.header = 1
+        table_resource.left_padding_width = 2
+        table_resource.field_names = header
+        table_resource.align[header[0]] = 'l'
+        table_resource.align[header[1]] = 'l'
+        table_resource.align[header[2]] = 'l'
+        for r in rdict.keys():
+            row = [ r, rdict[r][0], rdict[r][1] ]
+            for region in regions:
+                if ksclient.check_project_tag(project.id, '%s_region_%s' % (r, region)):
+                    row.append('%s\u2713%s' % (grn,DEF))
+                else:
+                    row.append('%s-%s' % (red,DEF))
+            table_resource.add_row(row)
+        table_resource.sortby = header[0]
+        print(table_resource)
+        return
+
+    # Determine flavors and shared images
+    access_flavors = list()
+    access_images = list()
+    access_volumetype = list()
+    if resource == 'vgpu':
+        access_flavors.append('vgpu.m1')
+        access_images.append('vgpu')
+    elif resource == 'shpc':
+        access_flavors.append('shpc.m1a')
+        access_flavors.append('shpc.c1a')
+    elif resource == 'shpc_ram':
+        access_flavors.append('shpc.r1a')
+    elif resource == 'shpc_disk1':
+        access_flavors.append('shpc.m1ad1')
+        access_flavors.append('shpc.c1ad1')
+    elif resource == 'shpc_disk2':
+        access_flavors.append('shpc.m1ad2')
+        access_flavors.append('shpc.c1ad2')
+    elif resource == 'shpc_disk3':
+        access_flavors.append('shpc.m1ad3')
+        access_flavors.append('shpc.c1ad3')
+    elif resource == 'shpc_disk4':
+        access_flavors.append('shpc.m1ad4')
+        access_flavors.append('shpc.c1ad4')
+    elif resource == 'ssd':
+        access_volumetype.append('mass-storage-ssd')
+
+    # Loop through regions and grant/revoke access
+    for region in regions:
+
+        # Grant/Revoke access to flavors
+        for flavor in access_flavors:
+            # First look for region version of flavor config, then the default one
+            if himutils.file_exists('config/flavors/%s-%s.yaml' % (flavor, region)):
+                configfile = 'config/flavors/%s-%s.yaml' % (flavor, region)
+            else:
+                configfile = 'config/flavors/%s.yaml' % (flavor)
+
+            flavors = himutils.load_config(configfile)
+            if not flavors:
+                himutils.fatal('Could not find flavor config file config/flavors/%s.yaml' % flavor)
+
+            if flavors[flavor]:
+                novaclient = himutils.get_client(Nova, options, logger, region)
+                result = novaclient.update_flavor_access(class_filter=flavor,
+                                                         project_id=project.id,
+                                                         action=access_action)
+                if result:
+                    himutils.info('%s flavor access to %s for %s in %s'
+                                  % (access_action.upper(), flavor, options.project, region))
+                else:
+                    himutils.error('Failed to %s flavor access to %s for %s in %s'
+                                   % (access_action.upper(), flavor, options.project, region))
+
+        # Grant/Revoke access to shared images
+        if access_images:
+            glanceclient = himutils.get_client(Glance, options, logger, region)
+            filters = {
+                'status':     'active',
+                'tag':        access_images,
+                'visibility': 'shared'
+            }
+            images = glanceclient.get_images(filters=filters)
+            for image in images:
+                result = glanceclient.set_image_access(image_id=image.id,
+                                                       project_id=project.id,
+                                                       action=access_action)
+                if result:
+                    himutils.info('%s access to image %s for project %s in %s'
+                                  % (access_action.upper(), image.name, options.project, region))
+                else:
+                    himutils.error('Failed to %s access to image %s for project %s in %s'
+                                   % (access_action.upper(), image.name, options.project, region))
+
+        # Grant/Revoke access to volume types
+        for volume_type_name in access_volumetype:
+            cinderclient = himutils.get_client(Cinder, options, logger, region)
+            nonpublic_volume_types = cinderclient.get_nonpublic_volume_types()
+            for vtype in nonpublic_volume_types:
+                if vtype.name == volume_type_name:
+                    break
+
+            result = cinderclient.update_volume_type_access(access_action, project.id, vtype)
+            if result:
+                himutils.info("%s volume type access to %s for %s in %s"
+                              % (access_action.upper(), volume_type_name, options.project, region))
+            else:
+                himutils.error("Failed to %s volume type access to %s for %s in %s"
+                               % (access_action.upper(), volume_type_name, options.project, region))
+
 
 
 # Run local function with the same name as the action (Note: - => _)

@@ -40,6 +40,97 @@ def sys_error(text, code=1):
     if code > 0:
         sys.exit(code)
 
+def improved_sys_error(text, msg_type='info', exit_code=0):
+    """
+    This function prints a message with the designated message type or
+    severity level: info, warning, error or fatal. In the case of a
+    fatal message, the function also calls exit() with the given exit
+    code. Takes 3 parameters:
+
+    text      : The message to be shown
+    msg_type  : Message type, on of info / warning / error / fatal
+    exit_code : In case of fatal severity, the code for which to call
+                exit()
+
+    Author: trondham@uio.no
+    Date: 2023-02-16
+    """
+    #------------------------------+-----------------------------------+---------+
+    #       Text color             |       Background color            |         |
+    #--------------+---------------+----------------+------------------+         |
+    # Base color   |Lighter shade  |  Base color    | Lighter shade    |         |
+    #--------------+---------------+----------------+------------------+         |
+    BLK='\033[30m'; blk='\033[90m'; BBLK='\033[40m'; bblk='\033[100m' #| Black   |
+    RED='\033[31m'; red='\033[91m'; BRED='\033[41m'; bred='\033[101m' #| Red     |
+    GRN='\033[32m'; grn='\033[92m'; BGRN='\033[42m'; bgrn='\033[102m' #| Green   |
+    YLW='\033[33m'; ylw='\033[93m'; BYLW='\033[43m'; bylw='\033[103m' #| Yellow  |
+    BLU='\033[34m'; blu='\033[94m'; BBLU='\033[44m'; bblu='\033[104m' #| Blue    |
+    MGN='\033[35m'; mgn='\033[95m'; BMGN='\033[45m'; bmgn='\033[105m' #| Magenta |
+    CYN='\033[36m'; cyn='\033[96m'; BCYN='\033[46m'; bcyn='\033[106m' #| Cyan    |
+    WHT='\033[37m'; wht='\033[97m'; BWHT='\033[47m'; bwht='\033[107m' #| White   |
+    #------------------------------------------------------------------+---------+
+    # Effects                                                                    |
+    #----------------------------------------------------------------------------+
+    DEF='\033[0m'   #Default color and effects                                   |
+    BLD='\033[1m'   #Bold\brighter                                               |
+    DIM='\033[2m'   #Dim\darker                                                  |
+    CUR='\033[3m'   #Italic font                                                 |
+    UND='\033[4m'   #Underline                                                   |
+    INV='\033[7m'   #Inverted                                                    |
+    COF='\033[?25l' #Cursor Off                                                  |
+    CON='\033[?25h' #Cursor On                                                   |
+    #----------------------------------------------------------------------------+
+
+    # Set colors based on message type
+    if msg_type == 'warning':
+        prefix = 'WARNING'
+        color  = YLW
+    elif msg_type == 'error':
+        prefix = 'ERROR'
+        color  = RED
+    elif msg_type == 'fatal':
+        prefix = 'FATAL ERROR'
+        color  = '%s%s' % (RED,BLD)
+    else:
+        prefix = 'INFO'
+        color  = GRN
+
+    # Only set color if we have a TTY
+    if sys.stdout.isatty():
+        COLOR_START = color
+        COLOR_END   = DEF
+    else:
+        COLOR_START = ''
+        COLOR_END   = ''
+
+    # Print out the message
+    if msg_type == 'info' or msg_type == 'warning':
+        sys.stdout.write("[%s%s%s] %s\n" % (COLOR_START,prefix,COLOR_END,text))
+    elif msg_type == 'fatal':
+        sys.stderr.write("%s%s: %s%s\n" % (COLOR_START,prefix,text,COLOR_END))
+    else:
+        sys.stderr.write("[%s%s%s] %s\n" % (COLOR_START,prefix,COLOR_END,text))
+
+    # If message type is "fatal", exit with the given exit_code
+    if msg_type == 'fatal':
+        sys.exit(exit_code)
+
+def info(text):
+    """ Prints an info level message """
+    improved_sys_error(text,'info')
+
+def warning(text):
+    """ Prints a warning level message """
+    improved_sys_error(text,'warning')
+
+def error(text):
+    """ Prints an error level message """
+    improved_sys_error(text,'error')
+
+def fatal(text, exit_code=1):
+    """ Prints a fatal level message and calls exit() with exit_code """
+    improved_sys_error(text,'fatal',exit_code)
+
 def check_port(address, port, timeout=60, log=None):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(timeout)
