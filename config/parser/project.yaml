@@ -186,3 +186,10 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '--tags-only':
+    'sub':      ['access']
+    'dest':     'tags_only'
+    'help':     'Only change tags, do not touch actual resources'
+    'action':   'store_const'
+    'const':    true
+    'default':  false

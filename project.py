@@ -761,6 +761,10 @@ def action_access():
         print(table_resource)
         return
 
+    # If option is given to only handle tags, return here
+    if option.tags_only:
+        return
+
     # Determine flavors and shared images
     access_flavors = list()
     access_images = list()
