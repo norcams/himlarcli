@@ -1,19 +1,20 @@
 ---
 desc:   'Project management for NREC'
 actions:
-  'list':           'List project. Use -f to filter result by project type'
-  'show':           'Show all attributes for a project'
-  'show-access':    'Show roles in project'
-  'show-quota':     'Show quota for project'
-  'create':         'Create a new project and grant admin access if valid user'
-  'grant':          'Grant access to project for user.'
-  'revoke':         'Revoke access to project for user.'
-  'delete':         'Delete project and all resources'
-  'instances':      'List of all instances in project'
-  'extend':         'Change or set the endate for a project'
-  'create-private': 'Create personal project'
-  'quarantine':     'Add or remove quarantine on project'
-  'access':         'Control project resource access'
+  'list':            'List project. Use -f to filter result by project type'
+  'show':            'Show all attributes for a project'
+  'show-access':     'Show roles in project'
+  'show-quota':      'Show quota for project'
+  'create':          'Create a new project and grant admin access if valid user'
+  'grant':           'Grant access to project for user.'
+  'revoke':          'Revoke access to project for user.'
+  'delete':          'Delete project and all resources'
+  'instances':       'List of all instances in project'
+  'extend':          'Change or set the endate for a project'
+  'create-private':  'Create personal project'
+  'quarantine':      'Add or remove quarantine on project'
+  'access':          'Control project resource access'
+  'access_list':     'List access to a specified resource'
 #  'update': 'TODO'
 opt_args:
   '--domain':
@@ -26,6 +27,10 @@ opt_args:
   'user':
    'sub':       ['create-private']
    'metavar':   'user'
+  'resource':
+   'sub':       ['access_list']
+   'metavar':   'resource'
+   'choices':   ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd' ]
   '--region':
     'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota', 'access']
     'dest':     'region'
