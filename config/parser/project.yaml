@@ -13,6 +13,7 @@ actions:
   'extend':         'Change or set the endate for a project'
   'create-private': 'Create personal project'
   'quarantine':     'Add or remove quarantine on project'
+  'access':         'Control project resource access'
 #  'update': 'TODO'
 opt_args:
   '--domain':
@@ -20,13 +21,13 @@ opt_args:
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   'project':
-   'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'revoke', 'delete', 'instances', 'extend', 'quarantine']
+   'sub':       ['show', 'show-access', 'show-quota', 'create', 'grant', 'revoke', 'delete', 'instances', 'extend', 'quarantine', 'access']
    'metavar':   'project'
   'user':
    'sub':       ['create-private']
    'metavar':   'user'
   '--region':
-    'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota']
+    'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota', 'access']
     'dest':     'region'
     'help':     'specify region'
   '--end':
@@ -154,3 +155,29 @@ opt_args:
     'sub':      ['quarantine']
     'dest':     'template'
     'help':     'Path to email template'
+  '--grant':
+    'sub':      ['access']
+    'dest':     'grant'
+    'help':     'Grant access to compute resource'
+    'choices':  ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd' ]
+  '--revoke':
+    'sub':      ['access']
+    'dest':     'revoke'
+    'help':     'Revoke access to compute resource'
+    'choices':  ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd' ]
+  '--extend':
+    'sub':      ['access']
+    'dest':     'access_extend'
+    'help':     'Set new end date for access to resource'
+    'choices':  ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd' ]
+  '--until':
+    'sub':      ['access']
+    'dest':     'until'
+    'help':     'Expiration date for compute resource, when granting access or extending'
+  '--list':
+    'sub':      ['access']
+    'dest':     'access_list'
+    'help':     'List resources access for project or specific resource'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
