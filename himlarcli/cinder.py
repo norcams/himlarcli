@@ -111,3 +111,42 @@ class Cinder(Client):
             self.log_error('Cinder: {}'.format(e))
             return None
         return volumes
+
+    def get_volume_type_access(self, volume_type):
+        try:
+            volume_type_access = self.client.volume_type_access.list(volume_type=volume_type)
+        except exceptions.ClientException as e:
+            self.log_error('Cinder: {}'.format(e))
+            return None
+        return volume_type_access
+
+    def get_nonpublic_volume_types(self):
+        volume_types = self.client.volume_types.list(is_public=False)
+        return volume_types
+
+    def get_volume_type(self, volume_type):
+        volume_type = self.client.volume_types.get(volume_type)
+        return volume_type
+
+    def add_volume_type_access(self, project_id, volume_type):
+        try:
+            result = self.client.volume_type_access.add_project_access(volume_type, project_id)
+        except exceptions.ClientException as e:
+            self.log_error('Cinder: {}'.format(e))
+            return None
+        return result
+
+    def remove_volume_type_access(self, project_id, volume_type):
+        try:
+            result = self.client.volume_type_access.remove_project_access(volume_type, project_id)
+        except exceptions.NotFound as e:
+            self.log_error('Cinder: {}'.format(e))
+            return None
+        return result
+
+    def update_volume_type_access(self, access_action, project_id, volume_type):
+        if access_action == 'grant':
+            return self.add_volume_type_access(project_id, volume_type)
+        elif access_action == 'revoke':
+            return self.remove_volume_type_access(project_id, volume_type)
+        return None
