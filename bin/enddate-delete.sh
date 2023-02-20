@@ -18,5 +18,5 @@ source /opt/himlarcli/bin/activate
 
 # Delete projects
 for project in $(/opt/himlarcli/report.py quarantine --days 90 --list | awk '{print $2}'); do
-    /opt/himlarcli/project.py --force delete $project
+    /opt/himlarcli/project.py delete --force $project
 done
