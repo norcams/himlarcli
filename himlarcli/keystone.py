@@ -295,7 +295,7 @@ class Keystone(Client):
 
         region = self.find_regions()
 
-        # Delete instances
+        # Shut off instances
         self.__shutoff_instances(project, region)
 
         # Set quarantine tags
@@ -321,9 +321,6 @@ class Keystone(Client):
             return None
 
         region = self.find_regions()
-
-        # Delete instances
-        self.__shutoff_instances(project, region)
 
         # Delete quarantine tags
         tags = self.list_project_tags(project.id)

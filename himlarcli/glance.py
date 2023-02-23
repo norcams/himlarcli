@@ -90,8 +90,9 @@ class Glance(Client):
 
     def delete_image(self, image_id):
         if not self.get_image_by_id(image_id):
-            self.debug_log('deletion failed! not fond: {}'.format(image_id))
+            self.debug_log('deletion failed! not found: {}'.format(image_id))
             return
+        self.__unprotect_image(image_id)
         self.debug_log('delete image id {}'.format(image_id))
         try:
             if not self.dry_run:
@@ -99,9 +100,20 @@ class Glance(Client):
         except exc.HTTPServiceUnavailable as e:
             self.log_error(e)
 
+    def __unprotect_image(self, image_id):
+        if not self.get_image_by_id(image_id):
+            self.debug_log(f'image not found: {image_id}')
+            return
+        try:
+            if not self.dry_run:
+                self.client.images.update(image_id=image_id, protected=False)
+            self.debug_log(f'unprotect image: {image_id}')
+        except exc.HTTPServiceUnavailable as e:
+            self.log_error(e)
+
     def update_image(self, name, image_id, **kwargs):
         if not self.get_image_by_id(image_id):
-            self.debug_log('image not fond: {}'.format(name))
+            self.debug_log('image not found: {}'.format(name))
             return
         try:
             if not self.dry_run:
@@ -182,7 +194,7 @@ class Glance(Client):
 
     def deactivate(self, image_id):
         if not self.get_image_by_id(image_id):
-            self.debug_log('deactivation failed! not fond: {}'.format(image_id))
+            self.debug_log('deactivation failed! not found: {}'.format(image_id))
             return
         self.debug_log('deactivate image id {}'.format(image_id))
         try:
@@ -193,7 +205,7 @@ class Glance(Client):
 
     def reactivate(self, image_id):
         if not self.get_image_by_id(image_id):
-            self.debug_log('reactiation failed! not fond: {}'.format(image_id))
+            self.debug_log('reactivation failed! not found: {}'.format(image_id))
             return
         self.debug_log('reactivate image id {}'.format(image_id))
         try:
