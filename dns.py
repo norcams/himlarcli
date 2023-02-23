@@ -184,13 +184,11 @@ def action_tld_import():
     iana_tlds = []
     for name in bulkfile:
         name = name.rstrip()
-        name = str(name, 'utf-8')
         name = name.lower()
         if re.match("^#.*", name):
             continue
         if re.match("^xn--", name):
             continue
-            #name = name.decode('idna')
         iana_tlds.append(name)
 
     # remove any registered "bulk import" tlds that aren't in the file
