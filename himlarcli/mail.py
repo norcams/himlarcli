@@ -11,7 +11,8 @@ class Mail(Client):
     def __init__(self, config_path, debug=False, log=None):
         super(Mail, self).__init__(config_path, debug, log)
         self.server = smtplib.SMTP(self.get_config('mail', 'smtp'), 25)
-        self.server.starttls()
+        if 'uio' in self.get_config('mail', 'smtp'):
+            self.server.starttls()
 
     def enable_mail_debug(self, level=1):
         """ Turn on debug mode on smtplib """
