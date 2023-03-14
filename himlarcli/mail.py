@@ -142,11 +142,11 @@ class Mail(Client):
     def set_keystone_client(self, ksclient):
         self.ksclient = ksclient
 
-    def mail_user(self, body, subject, user):
+    def mail_user(self, body, subject, user, bcc=None):
         msg = MIMEText(body, 'plain', 'utf-8')
         msg['Subject'] = subject
         log_msg = 'sending mail to %s' % user
-        self.send_mail(user, msg)
+        self.send_mail(toaddr=user, mail=msg, bcc=bcc)
 
     @staticmethod
     def __get_user_email(user):
