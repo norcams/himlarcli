@@ -47,10 +47,11 @@ def action_file():
     sent_mail_counter = 0
     mail = Mail(options.config, debug=options.debug)
     mail.set_dry_run(options.dry_run)
+    bccaddr = 'iaas-logs@usit.uio.no'
     body_content = utils.load_template(inputfile=options.template, mapping={}, log=logger)
     emails = utils.load_file(inputfile=options.email_file, log=logger)
     for email in emails:
-        mail.mail_user(body_content, options.subject, email)
+        mail.mail_user(body_content, options.subject, email, bccaddr)
         sent_mail_counter += 1
     mail.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
