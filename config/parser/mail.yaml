@@ -37,7 +37,7 @@ opt_args:
     'help':     'date string to use in template'
   '--fromaddr':
     'dest':     'from_addr'
-    'default':  'support@uh-iaas.no'
+    'default':  'support@nrec.no'
     'metavar':  'email'
     'help':     'replyto address in email'
   'aggregate':
