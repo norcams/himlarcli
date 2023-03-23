@@ -282,26 +282,31 @@ class Nova(Client):
         self.logger.debug('=> found %s instances for project %s' % (len(instances), project_id))
         return instances
 
-    def stop_instance(self, instance):
+    def stop_instance(self, instance, lock=None):
         """
             Wrapper to stop an instance
-            Version: 2020-09
+            Version: 2023-03
         """
         if instance.status == 'ACTIVE' and not self.dry_run:
             try:
                 instance.stop()
+                if lock:
+                    instance.lock(lock)
+                    self.logger.debug(f'=>lock instance {instance.id} with reason {lock}')
             except novaclient.exceptions.Conflict as e:
                 self.log_error(e)
         if instance.status == 'ACTIVE':
             self.logger.debug('%s stop instance %s', self.log_prefix(), instance.id)
 
-    def start_instance(self, instance):
+    def start_instance(self, instance, unlock=False):
         """
             Wrapper to start an instance
-            Version: 2020-09
+            Version: 2023-03
         """
         if instance.status == 'SHUTOFF' and not self.dry_run:
             try:
+                if unlock:
+                    instance.unlock()
                 instance.start()
             except novaclient.exceptions.Conflict as e:
                 self.log_error(e)
