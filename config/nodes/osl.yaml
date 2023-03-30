@@ -244,6 +244,30 @@ nodes:
   osl-compute-epyc-55:
     mac: b0:7b:25:f8:64:a6
     hostgroup: 17
+  osl-compute-epyc-56:
+    mac: xx:xx:xx:xx:xx:xx
+    hostgroup: 17
+  compute-57:
+    mac: b4:45:06:ee:44:cf
+    hostgroup: 23
+  compute-58:
+    mac: b4:45:06:ee:47:7f
+    hostgroup: 23
+  compute-59:
+    mac: b4:45:06:ee:c0:61
+    hostgroup: 23
+  compute-60:
+    mac: b4:45:06:f0:4c:79
+    hostgroup: 23
+  compute-61:
+    mac: b4:45:06:ee:bf:6b
+    hostgroup: 23
+  compute-62:
+    mac: b4:45:06:ee:48:2d
+    hostgroup: 23
+  compute-63:
+    mac: b4:45:06:ee:35:9d
+    hostgroup: 23
   console-01:
     compute_profile: medium
     compute_resource: controller-03
