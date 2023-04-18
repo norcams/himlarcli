@@ -1,3 +1,18 @@
 ---
-remote_ip_prefix:
-  - 0.0.0.0/0
+network_port_limits:
+  limit24:
+    min_mask: 24
+    max_mask: 32
+    max_ports: 65536
+  limit20:
+    min_mask: 20
+    max_mask: 23
+    max_ports: 1000
+  limit16:
+    min_mask: 16
+    max_mask: 19
+    max_ports: 100
+  limit0:
+    min_mask: 0
+    max_mask: 15
+    max_ports: 1
