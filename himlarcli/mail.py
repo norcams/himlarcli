@@ -11,7 +11,8 @@ class Mail(Client):
     def __init__(self, config_path, debug=False, log=None):
         super(Mail, self).__init__(config_path, debug, log)
         self.server = smtplib.SMTP(self.get_config('mail', 'smtp'), 25)
-        self.server.starttls()
+        if 'uio' in self.get_config('mail', 'smtp'):
+            self.server.starttls()
 
     def enable_mail_debug(self, level=1):
         """ Turn on debug mode on smtplib """
@@ -142,11 +143,11 @@ class Mail(Client):
     def set_keystone_client(self, ksclient):
         self.ksclient = ksclient
 
-    def mail_user(self, body, subject, user):
+    def mail_user(self, body, subject, user, bcc=None):
         msg = MIMEText(body, 'plain', 'utf-8')
         msg['Subject'] = subject
         log_msg = 'sending mail to %s' % user
-        self.send_mail(user, msg)
+        self.send_mail(toaddr=user, mail=msg, bcc=bcc)
 
     @staticmethod
     def __get_user_email(user):

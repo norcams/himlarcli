@@ -131,8 +131,7 @@ def action_stop_instance():
                 instance = Instance.create(instance_data) #pylint: disable=E1101
                 state.add(instance)
 
-            nova.stop_instance(i)
-
+            nova.stop_instance(i, 'NREC maintenance in progress')
     state.close()
 
 def action_start_instance():
@@ -148,10 +147,9 @@ def action_start_instance():
                 logger.debug('%s instance host do not match %s', pre, i.host)
                 continue
             logger.debug('%s instance found %s', pre, i.name)
-            print(i.status)
             if i.status == 'ACTIVE':
                 instance = nova.get_by_id('server', i.instance_id)
-                nova.start_instance(instance)
+                nova.start_instance(instance, unlock=True)
     state.close()
 
 

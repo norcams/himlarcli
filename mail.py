@@ -47,10 +47,11 @@ def action_file():
     sent_mail_counter = 0
     mail = Mail(options.config, debug=options.debug)
     mail.set_dry_run(options.dry_run)
+    bccaddr = 'iaas-logs@usit.uio.no'
     body_content = utils.load_template(inputfile=options.template, mapping={}, log=logger)
     emails = utils.load_file(inputfile=options.email_file, log=logger)
     for email in emails:
-        mail.mail_user(body_content, options.subject, email)
+        mail.mail_user(body_content, options.subject, email, bccaddr)
         sent_mail_counter += 1
     mail.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
@@ -103,6 +104,7 @@ def action_aggregate():
     sent_mail_counter = 0
     message = None
     fromaddr = options.from_addr
+    bccaddr = 'iaas-logs@usit.uio.no'
     for user, instances in users.items():
         columns = ['project', 'region']
         mapping = dict(region=options.region,
@@ -113,7 +115,7 @@ def action_aggregate():
                                            mapping=mapping,
                                            log=logger)
         message = mailer.get_mime_text(subject, body_content, fromaddr=fromaddr)
-        mailer.send_mail(user, message)
+        mailer.send_mail(toaddr=user, mail=message, bcc=bccaddr)
         sent_mail_counter += 1
 
     if options.dry_run and message:
@@ -170,6 +172,7 @@ def action_instances():
     sent_mail_counter = 0
     message = None
     fromaddr = options.from_addr
+    bccaddr = 'iaas-logs@usit.uio.no'
     template = options.template
     if not utils.file_exists(template, logger):
         utils.sys_error('Could not find template file {}'.format(template))
@@ -187,7 +190,7 @@ def action_instances():
                                            mapping=mapping,
                                            log=logger)
         message = mailer.get_mime_text(subject, body_content, fromaddr=fromaddr)
-        mailer.send_mail(user, message)
+        mailer.send_mail(toaddr=user, mail=message, bcc=bccaddr)
         sent_mail_counter += 1
 
     if options.dry_run and message:
