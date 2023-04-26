@@ -49,7 +49,7 @@ class Owner(Base):
             setattr(self, k, v)
 
 def action_sync():
-    engine = create_engine(kc.get_config('db', 'database_uri'))
+    engine = create_engine(kc.get_config('report', 'database_uri'))
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
@@ -101,7 +101,7 @@ def action_sync():
     session.close()
 
 def action_purge():
-    engine = create_engine(kc.get_config('db', 'database_uri'))
+    engine = create_engine(kc.get_config('report', 'database_uri'))
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
