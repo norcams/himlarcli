@@ -213,7 +213,7 @@ class Neutron(Client):
     def update_network_access(self, access_action, project_id, network_id):
         if access_action == 'grant':
             return self.grant_rbac_policy(project_id, network_id)
-        elif access_action = 'revoke':
+        elif access_action == 'revoke':
             return self.revoke_rbac_policy(project_id, network_id)
         return None
 
