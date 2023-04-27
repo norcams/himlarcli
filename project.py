@@ -613,12 +613,13 @@ def action_access():
     resource_availability = {
         'vgpu'       : [ 'bgo', 'osl' ],
         'shpc'       : [ 'bgo', 'osl' ],
-        'shpc_ram'   : [ 'bgo'],
-        'shpc_disk1' : [ 'osl'],
-        'shpc_disk2' : [ 'osl'],
-        'shpc_disk3' : [ 'osl'],
-        'shpc_disk4' : [ 'osl'],
+        'shpc_ram'   : [ 'bgo' ],
+        'shpc_disk1' : [ 'osl' ],
+        'shpc_disk2' : [ 'osl' ],
+        'shpc_disk3' : [ 'osl' ],
+        'shpc_disk4' : [ 'osl' ],
         'ssd'        : [ 'bgo', 'osl' ],
+        'net_uib'    : [ 'bgo' ],
     }
 
     # Today
@@ -769,6 +770,7 @@ def action_access():
     access_flavors = list()
     access_images = list()
     access_volumetype = list()
+    access_networks = list()
     if resource == 'vgpu':
         access_flavors.append('vgpu.m1')
         access_images.append('vgpu')
@@ -791,6 +793,8 @@ def action_access():
         access_flavors.append('shpc.c1ad4')
     elif resource == 'ssd':
         access_volumetype.append('mass-storage-ssd')
+    elif resource == 'net_uib':
+        access_networks.append('uib-dualStack')
 
     # Loop through regions and grant/revoke access
     for region in regions:
@@ -854,6 +858,20 @@ def action_access():
             else:
                 himutils.error("Failed to %s volume type access to %s for %s in %s"
                                % (access_action.upper(), volume_type_name, options.project, region))
+
+        # Grant/Revoke access to networks
+        for network_name in access_networks:
+            neutronclient = himutils.get_client(Neutron, options, logger, region)
+            net = neutronclient.get_network_by_name(network_name)
+
+            result = neutronclient.update_network_access(access_action, project.id, net['id'])
+            if result:
+                himutils.info("%s network access to %s for %s in %s"
+                              % (access_action.upper(), network_name, options.project, region))
+            else:
+                himutils.error("Failed to %s network access to %s for %s in %s"
+                               % (access_action.upper(), network_name, options.project, region))
+
 
 def action_access_list():
     #------------------------------+-----------------------------------+---------+
