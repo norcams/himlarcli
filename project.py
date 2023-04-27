@@ -799,6 +799,10 @@ def action_access():
     # Loop through regions and grant/revoke access
     for region in regions:
 
+        # Skip region if resource not available in this region
+        if region not in resource_availability[resource]:
+            continue
+
         # Grant/Revoke access to flavors
         for flavor in access_flavors:
             # First look for region version of flavor config, then the default one
