@@ -43,7 +43,10 @@ def action_migrate():
     target_details = nc.get_host(target)
     if not target_details or target_details.status != 'enabled':
         himutils.sys_error('Could not find enabled target host %s' % options.target)
-    q = 'Migrate all instances from %s to %s' % (source, target)
+    if options.limit:
+        q = 'Try to migrate %s instance(s) from %s to %s' % (options.limit, source, target)
+    else:
+        q = 'Migrate all instances from %s to %s' % (source, target)
     if not himutils.confirm_action(q):
         return
     # Disable source host unless no-disable param is used
