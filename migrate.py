@@ -59,12 +59,12 @@ def action_migrate():
             if i.flavor['ram'] > options.filter_ram:
                 migrate_instance(i, target)
             else:
-                kc.debug_log('drop migrate instance %s: ram %s < %s' % (i.name, i.flavor['ram'], options.filter_ram))
+                kc.debug_log('drop migrate instance %s: ram %s <= %s' % (i.name, i.flavor['ram'], options.filter_ram))
         if options.small:
             if i.flavor['ram'] < options.filter_ram:
                 migrate_instance(i, target)
             else:
-                kc.debug_log('drop migrate instance %s: ram %s > %s' % (i.name, i.flavor['ram'], options.filter_ram))
+                kc.debug_log('drop migrate instance %s: ram %s >= %s' % (i.name, i.flavor['ram'], options.filter_ram))
         else:
             migrate_instance(i, target)
         count += 1
