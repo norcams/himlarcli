@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
-from himlarcli import tests as tests
+from himlarcli import tests
 tests.is_virtual_env()
 
+import time
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
-import time
 
 parser = Parser()
 options = parser.parse_args()
@@ -52,15 +52,19 @@ def action_migrate():
     # Disable source host unless no-disable param is used
     if not options.dry_run and not options.no_disable:
         nc.disable_host(source)
-    dry_run_txt = 'DRY_RUN: ' if options.dry_run else ''
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0
     for i in instances:
         if options.large:
-            if i.flavor['ram'] > options.large_ram:
+            if i.flavor['ram'] > options.filter_ram:
                 migrate_instance(i, target)
             else:
-                kc.debug_log('drop migrate instance %s: ram %s < %s' % (i.name, i.flavor['ram'], options.large_ram))
+                kc.debug_log('drop migrate instance %s: ram %s < %s' % (i.name, i.flavor['ram'], options.filter_ram))
+        if options.small:
+            if i.flavor['ram'] < options.filter_ram:
+                migrate_instance(i, target)
+            else:
+                kc.debug_log('drop migrate instance %s: ram %s > %s' % (i.name, i.flavor['ram'], options.filter_ram))
         else:
             migrate_instance(i, target)
         count += 1

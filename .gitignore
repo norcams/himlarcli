@@ -8,5 +8,6 @@ share/
 *.egg-info
 *.pyc
 *.fuse*
+pyvenv.cfg
 config.ini
 active_instances.txt

@@ -39,12 +39,19 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
-  '--large-ram':
+  '--small':
     'sub':      ['migrate']
-    'dest':     'large_ram'
+    'dest':     'small'
+    'help':     'only migrate small instances'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--ram':
+    'sub':      ['migrate']
+    'dest':     'filter_ram'
     'metavar':  '<int>'
     'type':     int
-    'help':     'large instance defined by this amount of ram (MB)'
+    'help':     'instance ram filter used by --large or --small options'
     'default':  16385
   '--aggregate':
     'sub':      'evacuate'
