@@ -24,7 +24,7 @@ opt_args:
     'metavar':  '<int>'
     'type':     int
     'help':     'number of seconds to sleep between instances'
-    'default':  15
+    'default':  60
   '--no-disable':
     'sub':      ['migrate']
     'dest':     'no_disable'
