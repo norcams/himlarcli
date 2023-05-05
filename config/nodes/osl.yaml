@@ -232,20 +232,20 @@ nodes:
   compute-50:
     mac: 1c:20:db:ec:60:93
     hostgroup: 23
-  osl-compute-epyc-52:
+  compute-epyc-52:
     mac: b0:7b:25:f8:66:92
     hostgroup: 17
-  osl-compute-epyc-53:
+  compute-epyc-53:
     mac: ec:2a:72:0a:9e:5c
     hostgroup: 17
-  osl-compute-epyc-54:
+  compute-epyc-54:
     mac: b0:7b:25:f8:62:66
     hostgroup: 17
-  osl-compute-epyc-55:
+  compute-epyc-55:
     mac: b0:7b:25:f8:64:a6
     hostgroup: 17
-  osl-compute-epyc-56:
-    mac: xx:xx:xx:xx:xx:xx
+  compute-epyc-56:
+    mac: b0:7b:25:f8:0b:c4
     hostgroup: 17
   compute-57:
     mac: b4:45:06:ee:44:cf
