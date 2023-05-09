@@ -68,6 +68,13 @@ def action_aggregate():
         for i in instances:
             email = None
             project = kc.get_by_id('project', i.tenant_id)
+            # drop if not existing or disabled
+            if not project:
+                kc.debug_log(f'project {i.tenant_id} not found!')
+                continue
+            if not project.enabled:
+                kc.debug_log(f'project {project.name} disabled')
+                continue
             if hasattr(project, 'admin'):
                 email = project.admin
             else:
@@ -143,6 +150,13 @@ def action_instances():
             if not instance:
                 continue
             project = ksclient.get_by_id('project', instance.tenant_id)
+            # drop if not existing or disabled
+            if not project:
+                kc.debug_log(f'project {i.tenant_id} not found!')
+                continue
+            if not project.enabled:
+                kc.debug_log(f'project {project.name} disabled')
+                continue
             if hasattr(project, 'contact'):
                 email = project.contact
             elif hasattr(project, 'admin'):
