@@ -179,7 +179,10 @@ def action_flavor():
                 if email not in users:
                     users[email] = list()
                 users[email].append(instance_data)
-
+    q = 'Send mail template {} to {} users'.format(options.template,
+                                                   len(users))
+    if not utils.confirm_action(q):
+       return
     mailer = utils.get_client(Mail, options, logger)
     if '[NREC]' not in options.subject:
         subject = '[NREC] ' + options.subject
