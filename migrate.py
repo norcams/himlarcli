@@ -55,6 +55,9 @@ def action_migrate():
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0
     for i in instances:
+        if options.stopped and getattr(i, 'OS-EXT-STS:vm_state') != 'stopped':
+            kc.debug_log(f'drop migrate:  instance not stopped {i.name}')
+            continue
         if options.large:
             if i.flavor['ram'] > options.filter_ram:
                 migrate_instance(i, target)

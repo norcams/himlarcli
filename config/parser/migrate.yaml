@@ -58,3 +58,11 @@ opt_args:
     'dest':     'aggregate'
     'help':     'host aggregate to evacuate'
     'default':  'central1'
+  '--stopped':
+    'sub':      'migrate'
+    'dest':     'stopped'
+    'help':     'only migrate stopped instances'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+ 
