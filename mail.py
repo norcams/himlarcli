@@ -132,7 +132,93 @@ def action_aggregate():
     mailer.close()
     printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
 
-# Send mail to the instances listed in the "email_file"
+
+""" Send mail to all owners of a flavor class, e.g. c1 or m2 """
+def action_flavor():
+    if options.filter_project_file:
+        project_filter = utils.load_file(inputfile=options.filter_project_file, log=logger)
+    else:
+        project_filter = []
+    for region in regions:
+        nc = utils.get_client(Nova, options, logger, region)
+        flavors = nc.get_flavors(class_filter=options.flavor)
+        users = dict()
+
+        for flavor in flavors:
+            search_opts = dict(all_tenants=1, flavor=flavor.id)
+            instances = nc.get_all_instances(search_opts=search_opts)
+            for i in instances:
+                project = kc.get_by_id('project', i.tenant_id)
+                # drop if not existing or disabled
+                if not project:
+                    kc.debug_log(f'project {i.tenant_id} not found!')
+                    continue
+                if not project.enabled:
+                    kc.debug_log(f'project {project.name} disabled')
+                    continue
+                if project.id in project_filter:
+                    kc.debug_log(f'project found in filter file, drop sending mail')
+                    continue
+                if hasattr(project, 'contact'):
+                    email = project.contact
+                elif hasattr(project, 'admin'):
+                    email = project.admin
+                else:
+                    kc.debug_log('could not find admin for project {}'.
+                                 format(project.name))
+                    continue
+                instance_data = {
+                    'name': i.name,
+                    'region': region,
+                    'status': i.status,
+                    #'created': i.created,
+                    #'flavor': i.flavor['original_name'],
+                    #'ip': next(iter(neutron.get_network_ip(i.addresses, network)), None),
+                    'project': project.name
+                }
+                if email not in users:
+                    users[email] = list()
+                users[email].append(instance_data)
+
+    mailer = utils.get_client(Mail, options, logger)
+    if '[NREC]' not in options.subject:
+        subject = '[NREC] ' + options.subject
+    else:
+        subject = options.subject
+    sent_mail_counter = 0
+    message = None
+    fromaddr = options.from_addr
+    bccaddr = 'iaas-logs@usit.uio.no'
+    template = options.template
+    if not utils.file_exists(template, logger):
+        utils.sys_error('Could not find template file {}'.format(template))
+    if not options.template:
+        utils.sys_error('Specify a template file. E.g. -t notify/mailto_list_of_instances.txt')
+
+    for user, instance in users.items():
+        columns = ['status', 'project', 'region']
+        mapping = dict(region=region,
+                       date=options.date,
+                       instances=utils.get_instance_table(instance, columns),
+                       project=project.name,
+                       admin=user)
+        body_content = utils.load_template(inputfile=template,
+                                           mapping=mapping,
+                                           log=logger)
+        message = mailer.get_mime_text(subject, body_content, fromaddr=fromaddr)
+        mailer.send_mail(toaddr=user, mail=message, bcc=bccaddr)
+        sent_mail_counter += 1
+
+    if options.dry_run and message:
+        print("\nExample mail sendt from this run:")
+        print("----------------------------------")
+        print(message)
+    mailer.close()
+    printer.output_dict({'header': 'Mail counter', 'count': sent_mail_counter})
+
+
+
+""" Send mail to the instances listed in the 'email_file' """
 def action_instances():
     q = 'Send mail template {} to the instances in the {}'.format(options.template,
                                                                   options.email_file)

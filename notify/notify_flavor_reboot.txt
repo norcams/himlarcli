@@ -1,0 +1,19 @@
+Hi,
+
+Due major maintenance on the NREC infrastructure in the OSL region, as all of 
+the physical nodes will be moved to another machine room, these instances in
+the OSL region will be rebooted on $date if they are running.
+
+Affected instance(s) connected to your email $admin
+
+$instances
+
+These instances are running m2 flavor. This flavor will be removed in the
+future due to issues with live migration. Please consider terminating these
+instances and start new using m1 or c1 flavor. We also have larger sHPC 
+flavors. Read more about sHPC at https://docs.nrec.no/shpc.html
+
+Support and contact information can be found at http://docs.nrec.no
+
+--
+NREC team

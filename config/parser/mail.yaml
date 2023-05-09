@@ -6,7 +6,7 @@ actions:
   'instances': 'Send mail to the instances in a file'
 #  'instance':   'Get admins from instances'
 #  'project':    'Get admins from projects'
-#  'flavor':     'Send mail to a specific flavor'
+  'flavor':     'Send mail to all owners of a specific flavor class'
 #  'sendtoall':  'Send to all the users in the system'
 opt_args:
   '--domain':
@@ -44,6 +44,15 @@ opt_args:
     'sub':       ['aggregate']
     'metavar':   'aggregate'
     'help':      'aggregate name'
+  'flavor':
+    'sub':       ['flavor']
+    'metavar':   'flavor'
+    'help':      'flavor class name, e.g. shcp.r1a or c1'
+  '--pf':
+    'sub':       ['flavor']
+    'dest':      'filter_project_file'
+    'metavar':   '/path/to/project_file'
+    'help':      'path to file with project we do not want to notify'
   # '--type':
   #   'sub':      ['project']
   #   'dest':     'type'
