@@ -57,17 +57,19 @@ def action_migrate():
     for i in instances:
         if options.stopped and getattr(i, 'OS-EXT-STS:vm_state') != 'stopped':
             kc.debug_log(f'drop migrate:  instance not stopped {i.name}')
-            continue
+            continue # do not count this instance for limit
         if options.large:
             if i.flavor['ram'] > options.filter_ram:
                 migrate_instance(i, target)
             else:
                 kc.debug_log('drop migrate instance %s: ram %s <= %s' % (i.name, i.flavor['ram'], options.filter_ram))
+                continue # do not count this instance for limit
         elif options.small:
             if i.flavor['ram'] < options.filter_ram:
                 migrate_instance(i, target)
             else:
                 kc.debug_log('drop migrate instance %s: ram %s >= %s' % (i.name, i.flavor['ram'], options.filter_ram))
+                continue # do not count this instance for limit
         else:
             migrate_instance(i, target)
         count += 1
