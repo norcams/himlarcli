@@ -201,7 +201,8 @@ def action_flavor():
                        date=options.date,
                        instances=utils.get_instance_table(instance, columns),
                        project=project.name,
-                       admin=user)
+                       admin=user,
+                       flavor=options.flavor)
         body_content = utils.load_template(inputfile=template,
                                            mapping=mapping,
                                            log=logger)
