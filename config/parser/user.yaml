@@ -21,7 +21,7 @@ opt_args:
     'default':  'Dataporten'
   'user':
     'sub':      ['show', 'password', 'delete', 'create', 'enable', 'disable']
-    'help':     'username should be email addresses'
+    'help':     'username should be email address, or if it`s not personal: system@<projectname>'
     'metavar':  'username'
   '--new':
     'sub':      'rename'
