@@ -4,20 +4,41 @@ images:
   'winsrv2019std':
     'name':             'GOLD Windows Server 2019 Standard'
     'depricated':       'Outdated Windows Server 2019 Standard (Windows)'
-    'url':              'http://genisys.uib.no/images/'
-    'latest':           'win2019-server-standard.qcow2'
-    'checksum_file':    'win2019-server-standard.qcow2.sha256'
-    'checksum':         'sha256'
+    'url':              'http://builder/'
+    'latest':           'winsrv_2019-latest.raw'
+    'checksum_file':    'winsrv_2019-latest.md5'
     'min_ram':          4090
     'min_disk':         39
+    'disk_format':      'raw'
     'visibility':       'public'
     'properties':
-      'hw_disk_bus':         'scsi'
-      'hw_scsi_model':       'virtio-scsi'
-      'hw_machine_type':     'q35'
-      'hw_qemu_guest_agent': 'yes'
-      'os_require_quiesce':  'yes'
-      'os_type':             'windows'
+      'hw_disk_bus':               'scsi'
+      'hw_scsi_model':             'virtio-scsi'
+      'hw_machine_type':           'q35'
+      'hw_qemu_guest_agent':       'yes'
+      'hw_firmware_type':          'uefi'
+      'hw_vif_multiqueue_enabled': 'yes'
+      'os_require_quiesce':        'yes'
+      'os_type':                   'windows'
+  'winsrv2022std':
+    'name':             'GOLD Windows Server 2022 Standard'
+    'depricated':       'Outdated Windows Server 2022 Standard (Windows)'
+    'url':              'http://builder/'
+    'latest':           'winsrv_2022-latest.raw'
+    'checksum_file':    'winsrv_2022-latest.md5'
+    'min_ram':          4090
+    'min_disk':         39
+    'disk_format':      'raw'
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':               'scsi'
+      'hw_scsi_model':             'virtio-scsi'
+      'hw_machine_type':           'q35'
+      'hw_qemu_guest_agent':       'yes'
+      'hw_firmware_type':          'uefi'
+      'hw_vif_multiqueue_enabled': 'yes'
+      'os_require_quiesce':        'yes'
+      'os_type':                   'windows'
 #  'winsrv2019core':
 #    'name':             'GOLD Windows Server 2019 Core'
 #    'depricated':       'Outdated Windows Server 2019 Core (Windows)'
