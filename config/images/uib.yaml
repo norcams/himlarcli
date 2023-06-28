@@ -1,0 +1,20 @@
+---
+type: 'uib'
+images:
+  'rockylinux8_uib_puppet':
+    'name':             'UiB Rocky Linux 8 with Puppet'
+    'depricated':       'Outdated (UiB Rocky Linux 8 with Puppet)'
+    'url':              'http://builder/'
+    'latest':           'rockylinux8_uib_puppet-latest.qcow2'
+    'builder_checksum': 'rockylinux8_uib_puppet-latest.md5'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'shared'
+    'properties':
+      'hw_disk_bus':               'scsi'
+      'hw_scsi_model':             'virtio-scsi'
+      'hw_qemu_guest_agent':       'yes'
+      'hw_machine_type':           'q35'
+      'hw_firmware_type':          'uefi'
+      'os_require_quiesce':        'yes'
+      'os_type':                   'linux'
