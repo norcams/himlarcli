@@ -66,7 +66,7 @@ opt_args:
     'sub':      ['create']
     'dest':     'org'
     'help':     'Associated organization'
-    'choices':  ['nrec', 'uio', 'uib', 'uit', 'ntnu', 'nmbu', 'vetinst']
+    'choices':  ['nrec', 'uio', 'uib', 'uit', 'ntnu', 'nmbu', 'vetinst', 'hvl']
     'required': true
   '--contact':
     'sub':      ['create']
