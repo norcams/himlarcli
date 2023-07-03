@@ -273,10 +273,13 @@ nodes:
     compute_resource: controller-03
     hostgroup: 16
   controller-01:
+    hostgroup: 16
     mac: ec:f4:bb:c7:fb:cc
   controller-02:
+    hostgroup: 16
     mac: ec:f4:bb:c8:cb:fc
   controller-03:
+    hostgroup: 16
     mac: ec:f4:bb:c8:01:cc
   controller-04:
     mac: e0:db:55:09:09:96
