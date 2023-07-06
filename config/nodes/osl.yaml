@@ -1,14 +1,14 @@
 nodes:
   access-01:
     compute_profile: small
-    compute_resource: controller-03
+    compute_resource: controller-07
   api-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-05
   builder-01:
     hostgroup: 16
     compute_profile: medium
-    compute_resource: controller-04
+    compute_resource: controller-08
     compute_attributes:
       volumes_attributes:
         '1':
@@ -22,19 +22,19 @@ nodes:
   cephmds-01:
     hostgroup: 16
     compute_profile: medium
-    compute_resource: controller-01
+    compute_resource: controller-05
   cephmds-02:
     hostgroup: 16
     compute_profile: medium
-    compute_resource: controller-02
+    compute_resource: controller-06
   cephmds-03:
     hostgroup: 16
     compute_profile: medium
-    compute_resource: controller-03
+    compute_resource: controller-07
   cephmon-01:
     hostgroup: 16
     compute_profile: 2xlarge
-    compute_resource: controller-01
+    compute_resource: controller-05
     compute_attributes:
       volumes_attributes:
         '1':
@@ -48,7 +48,7 @@ nodes:
   cephmon-02:
     hostgroup: 16
     compute_profile: 2xlarge
-    compute_resource: controller-02
+    compute_resource: controller-06
     compute_attributes:
       volumes_attributes:
         '1':
@@ -62,7 +62,7 @@ nodes:
   cephmon-03:
     hostgroup: 16
     compute_profile: 2xlarge
-    compute_resource: controller-03
+    compute_resource: controller-07
     compute_attributes:
       volumes_attributes:
         '1':
@@ -75,15 +75,15 @@ nodes:
         value:          'vda'
   cephmon-object-01:
     compute_profile: large
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   cephmon-object-02:
     compute_profile: large
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   cephmon-object-03:
     compute_profile: large
-    compute_resource: controller-03
+    compute_resource: controller-07
     hostgroup: 16
   compute-01:
     mac: ec:f4:bb:ce:20:0c
@@ -270,7 +270,7 @@ nodes:
     hostgroup: 17
   console-01:
     compute_profile: medium
-    compute_resource: controller-03
+    compute_resource: controller-07
     hostgroup: 16
   controller-01:
     hostgroup: 19
@@ -300,19 +300,19 @@ nodes:
     hostgroup: 17
   dashboard-01:
     compute_profile: xlarge
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   dashboard-mgmt-01:
     compute_profile: small
-    compute_resource: controller-04
+    compute_resource: controller-08
     hostgroup: 16
   db-global-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-05
     hostgroup: 16
   db-regional-01:
     compute_profile: xlarge
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
     compute_attributes:
       volumes_attributes:
@@ -326,35 +326,35 @@ nodes:
         value:          'vda'
   dns-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   identity-01:
     compute_profile: xlarge
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   identity-02:
     compute_profile: xlarge
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   identity-03:
     compute_profile: xlarge
-    compute_resource: controller-03
+    compute_resource: controller-07
     hostgroup: 16
   image-01:
     compute_profile: medium
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   image-02:
     compute_profile: medium
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   image-03:
     compute_profile: medium
-    compute_resource: controller-03
+    compute_resource: controller-07
     hostgroup: 16
   logger-01:
     compute_profile: xlarge
-    compute_resource: controller-04
+    compute_resource: controller-08
     compute_attributes:
       volumes_attributes:
         '1':
@@ -367,7 +367,7 @@ nodes:
         value:          'vda'
   metric-01:
     compute_profile: xlarge
-    compute_resource: controller-01
+    compute_resource: controller-07
     compute_attributes:
       volumes_attributes:
         '1':
@@ -377,7 +377,7 @@ nodes:
           format_type:  'qcow2'
   monitor-01:
     compute_profile: large
-    compute_resource: controller-04
+    compute_resource: controller-08
     compute_attributes:
       volumes_attributes:
         '1':
@@ -390,43 +390,43 @@ nodes:
         value:          'vda'
   mq-01:
     compute_profile: xlarge
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   nat-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   nat-02:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   network-01:
     compute_profile: large
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   network-02:
     compute_profile: large
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   network-03:
     compute_profile: large
-    compute_resource: controller-03
+    compute_resource: controller-07
     hostgroup: 16
   novactrl-01:
     compute_profile: large
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   novactrl-02:
     compute_profile: large
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   novactrl-03:
     compute_profile: large
-    compute_resource: controller-03
+    compute_resource: controller-07
     hostgroup: 16
   ns-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
   object-ceph-01:
     mac: 4c:d9:8f:68:39:dd
@@ -445,7 +445,7 @@ nodes:
     hostgroup: 19
   proxy-01:
     compute_profile: small
-    compute_resource: controller-04
+    compute_resource: controller-08
     compute_attributes:
       volumes_attributes:
         '1':
@@ -458,7 +458,7 @@ nodes:
         value:          'vda'
   proxy-02:
     compute_profile: small
-    compute_resource: controller-04
+    compute_resource: controller-07
     hostgroup: 16
     compute_attributes:
       volumes_attributes:
@@ -472,22 +472,22 @@ nodes:
         value:          'vda'
   report-01:
     compute_profile: small
-    compute_resource: controller-01
+    compute_resource: controller-05
   resolver-01:
     compute_profile: small
-    compute_resource: controller-03
+    compute_resource: controller-07
     hostgroup: 16
   resolver-02:
     compute_profile: small
-    compute_resource: controller-04
+    compute_resource: controller-08
     hostgroup: 16
   rgw-01:
     compute_profile: medium
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   status-01:
     compute_profile: small
-    compute_resource: controller-02
+    compute_resource: controller-06
   storage-01:
     mac: b0:83:fe:cd:6a:a4
     hostgroup: 20
@@ -550,12 +550,12 @@ nodes:
     hostgroup: 21
   telemetry-01:
     compute_profile: xlarge
-    compute_resource: controller-03
+    compute_resource: controller-07
   volume-01:
     compute_profile: large
-    compute_resource: controller-01
+    compute_resource: controller-05
     hostgroup: 16
   volume-02:
     compute_profile: large
-    compute_resource: controller-02
+    compute_resource: controller-06
     hostgroup: 16
