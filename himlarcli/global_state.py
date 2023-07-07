@@ -79,6 +79,23 @@ class GlobalState(Client):
 # Resource data models
 #
 
+class SecGroup(Base):
+
+    """ Security Group data model """
+
+    __tablename__ = 'instance'
+
+    id = Column(Integer, primary_key=True)
+    created = Column(DateTime, default=datetime.now)
+    notified = Column(DateTime, default=datetime.now)
+    region = Column(String(15), index=True)
+
+    def to_str(self):
+        return f'sec group: {self.id} ({self.region}) => {self.notified}'
+
+    def compare(self, attributes):
+        pass
+
 class Instance(Base):
 
     """  Instance data model """
