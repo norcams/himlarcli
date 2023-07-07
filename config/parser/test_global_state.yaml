@@ -1,0 +1,14 @@
+---
+desc:   'Global db state test'
+actions:
+  save:     'Save the current state for a resource'
+  purge:    'Purge tables in db'
+
+opt_args:
+  '--region':
+    'dest':     'region'
+    'help':     'override current region'
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
