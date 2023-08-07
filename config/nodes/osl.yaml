@@ -31,48 +31,48 @@ nodes:
     hostgroup: 16
     compute_profile: medium
     compute_resource: controller-07
-  cephmon-01:
-    hostgroup: 16
-    compute_profile: 2xlarge
-    compute_resource: controller-05
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '20G'
-          format_type:  'qcow2'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
-  cephmon-02:
-    hostgroup: 16
-    compute_profile: 2xlarge
-    compute_resource: controller-06
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '20G'
-          format_type:  'qcow2'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
-  cephmon-03:
-    hostgroup: 16
-    compute_profile: 2xlarge
-    compute_resource: controller-07
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '20G'
-          format_type:  'qcow2'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+  # cephmon-01:
+  #   hostgroup: 16
+  #   compute_profile: 2xlarge
+  #   compute_resource: controller-05
+  #   compute_attributes:
+  #     volumes_attributes:
+  #       '1':
+  #         allocation:   '0G'
+  #         pool_name:    'dirpool'
+  #         capacity:     '20G'
+  #         format_type:  'qcow2'
+  #   host_parameters_attributes:
+  #     - name:           'installdevice'
+  #       value:          'vda'
+  # cephmon-02:
+  #   hostgroup: 16
+  #   compute_profile: 2xlarge
+  #   compute_resource: controller-06
+  #   compute_attributes:
+  #     volumes_attributes:
+  #       '1':
+  #         allocation:   '0G'
+  #         pool_name:    'dirpool'
+  #         capacity:     '20G'
+  #         format_type:  'qcow2'
+  #   host_parameters_attributes:
+  #     - name:           'installdevice'
+  #       value:          'vda'
+  # cephmon-03:
+  #   hostgroup: 16
+  #   compute_profile: 2xlarge
+  #   compute_resource: controller-07
+  #   compute_attributes:
+  #     volumes_attributes:
+  #       '1':
+  #         allocation:   '0G'
+  #         pool_name:    'dirpool'
+  #         capacity:     '20G'
+  #         format_type:  'qcow2'
+  #   host_parameters_attributes:
+  #     - name:           'installdevice'
+  #       value:          'vda'
   cephmon-object-01:
     compute_profile: large
     compute_resource: controller-05
@@ -272,20 +272,29 @@ nodes:
     compute_profile: medium
     compute_resource: controller-07
     hostgroup: 16
-  controller-01:
-    hostgroup: 19
+  # controller-01:
+  #   hostgroup: 19
+  #   mac: ec:f4:bb:c7:fb:cc
+  # controller-02:
+  #   hostgroup: 19
+  #   mac: ec:f4:bb:c8:cb:fc
+  # controller-03:
+  #   hostgroup: 19
+  #   mac: ec:f4:bb:c8:01:cc
+  cephmon-01:
+    hostgroup: 17
     mac: ec:f4:bb:c7:fb:cc
-  controller-02:
-    hostgroup: 19
+  cephmon-02:
+    hostgroup: 17
     mac: ec:f4:bb:c8:cb:fc
-  controller-03:
-    hostgroup: 19
+  cephmon-03:
+    hostgroup: 17
     mac: ec:f4:bb:c8:01:cc
-  controller-04:
-    mac: e0:db:55:09:09:96
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sda'
+  # controller-04:
+  #   mac: e0:db:55:09:09:96
+  #   host_parameters_attributes:
+  #     - name:           'installdevice'
+  #       value:          'sda'
   controller-05:
     mac: b0:26:28:f6:18:b6
     hostgroup: 17
