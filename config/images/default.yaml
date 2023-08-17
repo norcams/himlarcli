@@ -190,6 +190,25 @@ images:
       'hw_vif_multiqueue_enabled': 'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
+  'debian12':
+    'name':             'GOLD Debian 12'
+    'depricated':       'Outdated (Debian 12)'
+    'url':              'http://builder/'
+    'latest':           'debian12-latest.qcow2'
+    'builder_checksum': 'debian12-latest.md5'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':               'scsi'
+      'hw_scsi_model':             'virtio-scsi'
+      'hw_rng_model':              'virtio'
+      'hw_qemu_guest_agent':       'yes'
+      'hw_machine_type':           'q35'
+      'hw_firmware_type':          'uefi'
+      'hw_vif_multiqueue_enabled': 'yes'
+      'os_require_quiesce':        'yes'
+      'os_type':                   'linux'
   'fedora_37':
     'name':             'GOLD Fedora 37'
     'depricated':       'Outdated (Fedora 37)'
