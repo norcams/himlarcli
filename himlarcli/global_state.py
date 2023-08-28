@@ -57,6 +57,7 @@ class GlobalState(Client):
         pf = self.log_prefix()
         if not self.dry_run:
             resource.update(data)
+            self.session.commit()
         self.logger.debug('%s update resource %s', pf, resource.to_str())
 
     def get_all(self, class_name, **kwargs):
@@ -79,22 +80,29 @@ class GlobalState(Client):
 # Resource data models
 #
 
-class SecGroup(Base):
+class SecGroupRule(Base):
 
-    """ Security Group data model """
+    """ Security Group Rule data model """
 
-    __tablename__ = 'instance'
+    __tablename__ = 'secgrouprule'
 
     id = Column(Integer, primary_key=True)
+    rule_id = Column(String(63), nullable=False, index=True)
+    secgroup_id = Column(String(63), nullable=False, index=True)
+    project_id = Column(String(63), nullable=False, index=True)
     created = Column(DateTime, default=datetime.now)
     notified = Column(DateTime, default=datetime.now)
     region = Column(String(15), index=True)
 
     def to_str(self):
-        return f'sec group: {self.id} ({self.region}) => {self.notified}'
+        return f'sec group rule: {self.id} ({self.region}) => {self.notified}'
 
     def compare(self, attributes):
         pass
+
+    def update(self, attributes):
+        for k, v in attributes.items():
+            setattr(self, k, v)
 
 class Instance(Base):
 
