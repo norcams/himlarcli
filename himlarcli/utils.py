@@ -110,7 +110,7 @@ def improved_sys_error(text, msg_type='info', exit_code=0):
         sys.stderr.write("%s%s: %s%s\n" % (COLOR_START,prefix,text,COLOR_END))
     else:
         sys.stderr.write("[%s%s%s] %s\n" % (COLOR_START,prefix,COLOR_END,text))
-
+        
     # If message type is "fatal", exit with the given exit_code
     if msg_type == 'fatal':
         sys.exit(exit_code)

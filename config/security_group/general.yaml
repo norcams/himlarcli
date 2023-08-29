@@ -1,0 +1,12 @@
+---
+
+# Number of days between notifications
+notification_interval_days: 30
+
+# Age in days after last notification, after which an entry will be
+# deleted from the database
+clean_dbentry_days: 90
+
+# Email configuration
+mail_from_address: 'support@nrec.no'
+mail_bcc_address:  'iaas-logs@usit.uio.no'
