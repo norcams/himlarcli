@@ -52,6 +52,14 @@ class GlobalState(Client):
             self.session.add(resource)
         self.session.commit()
 
+    def delete(self, resource):
+        """ Delete resource from table """
+        pf = self.log_prefix()
+        if not self.dry_run:
+            self.session.delete(resource)
+            self.session.commit()
+        self.logger.debug('%s delete resource %s', pf, resource.to_str())
+
     def update(self, resource, data):
         """ Update a resource with new data """
         pf = self.log_prefix()
