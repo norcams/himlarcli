@@ -1,0 +1,21 @@
+Dear admin $admin,
+
+Due to an issue in the current version of our OS and hypervisor combination,
+together with certain generations of Intel processors, we are unable to live
+migrate instances from some of our hypervisors when we perform our next
+scheduled maintenance. These instances will be shut off by the NREC team at
+12th of September between 12:00 and 14:00, and started by the NREC team 
+when maintenance is done.
+
+The following instances in your project are affected:
+
+$instances
+
+
+Please contact us if you want us to do a controlled migration of your
+instance(s) to a hypervisor unaffected by this issue before the 
+12th of September. In any case, the instance must be shut off, migrated
+and started, but we can find a time that might suit your project better.
+
+-- 
+NREC team
