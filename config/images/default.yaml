@@ -209,25 +209,6 @@ images:
       'hw_vif_multiqueue_enabled': 'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
-  'fedora_37':
-    'name':             'GOLD Fedora 37'
-    'depricated':       'Outdated (Fedora 37)'
-    'url':              'http://builder/'
-    'latest':           'fedora_37-latest.qcow2'
-    'builder_checksum': 'fedora_37-latest.md5'
-    'min_ram':          1024
-    'min_disk':         8
-    'visibility':       'public'
-    'properties':
-      'hw_disk_bus':               'scsi'
-      'hw_scsi_model':             'virtio-scsi'
-      'hw_rng_model':              'virtio'
-      'hw_qemu_guest_agent':       'yes'
-      'hw_machine_type':           'q35'
-      'hw_firmware_type':          'uefi'
-      'hw_vif_multiqueue_enabled': 'yes'
-      'os_require_quiesce':        'yes'
-      'os_type':                   'linux'
   'fedora_38':
     'name':             'GOLD Fedora 38'
     'depricated':       'Outdated (Fedora 38)'
