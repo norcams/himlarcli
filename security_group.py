@@ -4,6 +4,7 @@ import ipaddress
 from datetime import datetime
 from datetime import timedelta
 from email.mime.text import MIMEText
+from enum import Enum
 
 from himlarcli import tests
 tests.is_virtual_env()
@@ -34,6 +35,12 @@ db = himutils.get_client(GlobalState, options, logger)
 ENABLE_BOGUS_0_MASK = True
 ENABLE_WRONG_MASK   = False
 ENABLE_PORT_LIMIT   = False
+
+# Enum class for check result
+class CheckResult(Enum):
+    OK        = 1  # rule is OK, passes the check
+    VIOLATION = 2  # rule violates the conditions in the check
+    UNUSED    = 3  # rule is not in use
 
 #---------------------------------------------------------------------
 # Action functions
@@ -121,20 +128,20 @@ def action_check():
             # Check for bogus use of /0 mask
             if ENABLE_BOGUS_0_MASK:
                 bogus_0_mask = check_bogus_0_mask(rule, region, project, neutron, nova)
-                if bogus_0_mask == "yes":
+                if bogus_0_mask == CheckResult.VIOLATION:
                     count['bogus_0_mask'] += 1
                     continue
-                if bogus_0_mask == "not-in-use":
+                if bogus_0_mask == CheckResult.UNUSED:
                     count['unused'] += 1
                     continue
 
             # check for wrong netmask
             if ENABLE_WRONG_MASK:
                 wrong_mask = check_wrong_mask(rule, region, project, neutron, nova)
-                if wrong_mask == "yes":
+                if wrong_mask == CheckResult.VIOLATION:
                     count['wrong_mask'] += 1
                     continue
-                if wrong_mask == "not-in-use":
+                if wrong_mask == CheckResult.UNUSED:
                     count['unused'] += 1
                     continue
 
@@ -150,10 +157,10 @@ def action_check():
             # Check port limits
             if ENABLE_PORT_LIMIT:
                 port_limits = check_port_limits(rule, region, project, neutron, nova)
-                if port_limits == "yes":
+                if port_limits == CheckResult.VIOLATION:
                     count['port_limit'] += 1
                     continue
-                if port_limits == "not-in-use":
+                if port_limits == CheckResult.UNUSED:
                     count['unused'] += 1
                     continue
 
@@ -313,7 +320,7 @@ def check_bogus_0_mask(rule, region, project, neutron, nova):
     ip = ipaddress.ip_interface(rule['remote_ip_prefix']).ip
     if str(rule['remote_ip_prefix']).endswith('/0') and ip.compressed not in ('0.0.0.0', '::'):
         if not rule_in_use(rule, neutron, nova):
-            return "not-in-use"
+            return CheckResult.UNUSED
         min_mask = calculate_minimum_netmask(ip, rule['ethertype'])
         verbose_error(f"[{region}] [{project.name}] " +
                       f"{rule['remote_ip_prefix']} has bogus /0 subnet mask " +
@@ -329,8 +336,8 @@ def check_bogus_0_mask(rule, region, project, neutron, nova):
                 notify_user(rule, region, project,
                             violation_type='bogus_0_mask',
                             minimum_netmask=min_mask)
-        return "yes"
-    return "no"
+        return CheckResult.VIOLATION
+    return CheckResult.OK
 
 # Check if the netmask is wrong for the IP
 def check_wrong_mask(rule, region, project, neutron, nova):
@@ -339,7 +346,7 @@ def check_wrong_mask(rule, region, project, neutron, nova):
     packed = int(ip)
     if packed & int(mask) != packed:
         if not rule_in_use(rule, neutron, nova):
-            return "not-in-use"
+            return CheckResult.UNUSED
         min_mask = calculate_minimum_netmask(ip, rule['ethertype'])
         real_ip = real_ip_for_netmask(ip, mask)
         verbose_error(f"[{region}] [{project.name}] " +
@@ -357,8 +364,8 @@ def check_wrong_mask(rule, region, project, neutron, nova):
                             violation_type='wrong_mask',
                             minimum_netmask=min_mask,
                             real_ip=real_ip)
-        return "yes"
-    return "no"
+        return CheckResult.VIOLATION
+    return CheckResult.OK
 
 # Calculates minimum netmask for a given IP
 def calculate_minimum_netmask(ip, family):
@@ -409,7 +416,7 @@ def check_port_limits(rule, region, project, neutron, nova):
         rule_ports = int(rule['port_range_max']) - int(rule['port_range_min']) + 1
     if rule_ports > max_ports:
         if not rule_in_use(rule, neutron, nova):
-            return "not-in-use"
+            return CheckResult.UNUSED
         verbose_warning(f"[{region}] [{project.name}] {rule['remote_ip_prefix']} " +
                         f"{rule['port_range_min']}-{rule['port_range_max']}/{protocol} " +
                         f"has too many open ports ({rule_ports} > {max_ports})")
@@ -423,8 +430,8 @@ def check_port_limits(rule, region, project, neutron, nova):
             if do_notify:
                 notify_user(rule, region, project,
                             violation_type='port_limit')
-        return "yes"
-    return "no"
+        return CheckResult.VIOLATION
+    return CheckResult.OK
 
 # Blacklisting is currently not implemented
 def is_blacklist(rule, project, region):
