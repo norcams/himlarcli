@@ -264,7 +264,7 @@ def notify_user(rule, region, project, violation_type, minimum_netmask=None, rea
                                           mapping=mapping,
                                           log=logger)
     msg = MIMEText(body_content, 'plain')
-    msg['subject'] = f"NREC: Problematic security group rule found in project {project.name}"
+    msg['subject'] = f"[NREC] Problematic security group rule found in project {project.name}"
 
     # Send mail to user
     mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr)
