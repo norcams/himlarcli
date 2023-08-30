@@ -231,11 +231,11 @@ def action_instances():
     users = dict()
     with open(options.email_file) as f:
         intances_in_file = f.read().splitlines()
+    ksclient = Keystone(options.config, debug=options.debug)
     for region in regions:
+        novaclient = utils.get_client(Nova, options, logger, region)
         for i in intances_in_file:
             email = None
-            ksclient = Keystone(options.config, debug=options.debug)
-            novaclient = utils.get_client(Nova, options, logger, region)
             instance = novaclient.get_by_id('server', i)
             if not instance:
                 continue
