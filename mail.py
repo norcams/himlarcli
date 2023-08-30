@@ -247,7 +247,7 @@ def action_instances():
             if not project.enabled:
                 kc.debug_log(f'project {project.name} disabled')
                 continue
-            if hasattr(project, 'contact'):
+            if hasattr(project, 'contact') and project.contact != 'None'::
                 email = project.contact
             elif hasattr(project, 'admin'):
                 email = project.admin
