@@ -242,7 +242,7 @@ def action_instances():
             project = ksclient.get_by_id('project', instance.tenant_id)
             # drop if not existing or disabled
             if not project:
-                kc.debug_log(f'project {i.tenant_id} not found!')
+                kc.debug_log(f'project {instance.tenant_id} not found!')
                 continue
             if not project.enabled:
                 kc.debug_log(f'project {project.name} disabled')
