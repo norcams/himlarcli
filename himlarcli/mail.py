@@ -37,6 +37,8 @@ class Mail(Client):
                 self.log_error(e)
             except smtplib.SMTPServerDisconnected as e:
                 self.log_error(e)
+            except smtplib.SMTPDataError as e:
+                self.log_error(e)
         self.debug_log('Sending mail to %s' % recipients)
 
     def close(self):
