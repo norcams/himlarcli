@@ -1,7 +1,9 @@
 ---
 desc:   'Management of security groups'
 actions:
-  'list':     'List all none whitelisted security group rules'
+  'list':     'List all non-whitelisted security group rules'
+  'check':    'Check security group rules'
+  'clean':    'Clean the database of outdated entries'
 
 opt_args:
   '--domain':
@@ -12,10 +14,24 @@ opt_args:
   '--region':
     'dest':     'region'
     'help':     'only use this region'
+  '-v':
+    'sub':      ['list', 'check', 'clean']
+    'dest':     'verbose'
+    'help':     'Verbosity level (0-3)'
+    'type':     'int'
+    'metavar':  '<integer>'
+    'default':  0
   '-y':
-    'sub':      ['list']
+    'sub':      ['list', 'check']
     'dest':     'assume_yes'
     'help':     'Automatic yes to prompts; assume "yes" as answer to all prompts'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--notify':
+    'sub':      ['check']
+    'dest':     'notify'
+    'help':     'Toggle notification (email to users)'
     'action':   'store_const'
     'const':    true
     'default':  false

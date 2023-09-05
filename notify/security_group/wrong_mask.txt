@@ -1,0 +1,44 @@
+Dear NREC user,
+
+During our periodic sanity check of security groups, we have
+discovered a problem with a security group rule in one of your
+projects:
+
+  Region: $region
+  Project: $project_name (ID: $project_id)
+  Security Group: "$secgroup_name" (ID: $secgroup_id)
+
+Security group rule details:
+
+  Rule ID: $rule_id
+  IP version: $rule_ethertype
+  Ports: $rule_ports
+  Protocol: $rule_protocol
+  Remote IP prefix: $rule_remote_ip_prefix
+
+The problem with this rule is that the IP address and subnet mask
+combination is wrong: The subnet mask does not logically correspond to
+the IP address:
+
+  IP address: $rule_ipaddr
+  Subnet Mask: $rule_netmask
+
+The subnet mask "$rule_netmask" is wrong for this IP address. The CIDR
+address $rule_remote_ip_prefix is effectively the same as
+$real_ip/$rule_netmask. This probably means that your rule opens up
+more than intended. According to our calculations, the minimum subnet
+mask for the IP address $rule_ipaddr is "$minimum_netmask".
+
+The purpose of this message is only to bring this to your attention,
+you may fix this problem at your discretion. If this problem persists,
+we will issue a new notification in $notification_interval days.
+
+For more details about the security group sanity check, visit:
+
+  https://docs.nrec.no/security-group-sanity.html
+
+Don't hesitate to contact support@nrec.no if you have questions!
+
+Best Regards,
+-- 
+NREC Team <support@nrec.no>

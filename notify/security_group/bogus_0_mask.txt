@@ -1,0 +1,43 @@
+Dear NREC user,
+
+During our periodic sanity check of security groups, we have
+discovered a problem with a security group rule in one of your
+projects:
+
+  Region: $region
+  Project: $project_name (ID: $project_id)
+  Security Group: "$secgroup_name" (ID: $secgroup_id)
+
+Security group rule details:
+
+  Rule ID: $rule_id
+  IP version: $rule_ethertype
+  Ports: $rule_ports
+  Protocol: $rule_protocol
+  Remote IP prefix: $rule_remote_ip_prefix
+
+The problem with this rule is that the subnet mask does not correspond to
+the IP address:
+
+  IP address: $rule_ipaddr
+  Subnet Mask: 0
+
+The subnet mask is "0", which negates everything in the IP address.
+While it is legal to write "$rule_ipaddr/0", it is effectively the
+same as "$ip_family_0/0", which is probably not what you want. It
+looks as if you have tried to give access to a single host, but have
+instead given access to the entire internet.
+
+The purpose of this message is only to bring this to your attention,
+you may fix this problem at your discretion. If this problem persists,
+we will issue a new notification in $notification_interval days.
+
+For more details about the security group sanity check, visit:
+
+  https://docs.nrec.no/security-group-sanity.html
+
+Don't hesitate to contact support@nrec.no if you have questions!
+
+Best Regards,
+-- 
+NREC Team <support@nrec.no>

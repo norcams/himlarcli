@@ -100,7 +100,9 @@ class Neutron(Client):
             rules = list()
             while True:
                 r = self.client.list_security_group_rules(marker=marker,
-                                                          limit=per_page)
+                                                          limit=per_page,
+                                                          sort_key='project_id',
+                                                          sort_dir='desc')
                 rules += r['security_group_rules']
                 if len(r) >= per_page:
                     marker = r[-1].id # marker is the last element
