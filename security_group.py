@@ -214,9 +214,9 @@ def notify_user(rule, region, project, violation_type, minimum_netmask=None, rea
 
     # Templates
     template = {
-        'bogus_0_mask' : 'notify/secgroup_bogus_0_mask.txt',
-        'wrong_mask'   : 'notify/secgroup_wrong_mask.txt',
-        'port_limit'   : 'notify/secgroup_port_limit.txt',
+        'bogus_0_mask' : 'notify/security_group/bogus_0_mask.txt',
+        'wrong_mask'   : 'notify/security_group/wrong_mask.txt',
+        'port_limit'   : 'notify/security_group/port_limit.txt',
     }
 
     # Project info
