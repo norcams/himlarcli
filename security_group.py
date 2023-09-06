@@ -41,6 +41,7 @@ class CheckResult(Enum):
     OK        = 1  # rule is OK, passes the check
     VIOLATION = 2  # rule violates the conditions in the check
     UNUSED    = 3  # rule is not in use
+    DELETED   = 4  # secgroup does not exist (i.e. rule is deleted)
 
 #---------------------------------------------------------------------
 # Action functions
@@ -110,7 +111,10 @@ def action_check():
                     rule['remote_ip_prefix'] = '::/0'
 
             # Check if rule owner and security group owner is same
-            if check_wrong_rule_owner(rule, neutron, region):
+            wrong_rule_owner = check_wrong_rule_owner(rule, neutron, region)
+            if wrong_rule_owner == CheckResult.VIOLATION:
+                continue
+            if wrong_rule_owner == CheckResult.DELETED:
                 continue
 
             # check if project exists
@@ -511,12 +515,14 @@ def is_whitelist(rule, project, region):
 # the security group rule
 def check_wrong_rule_owner(rule, neutron, region):
     sec_group = neutron.get_security_group(rule['security_group_id'])
+    if not sec_group:
+        return CheckResult.DELETED
     if rule['project_id'] != sec_group['project_id']:
         verbose_error(f"[{region}] Mismatch for rule ID={rule['id']}: " +
                       f"Security group project {sec_group['project_id']} " +
                       f"!= Rule project {rule['project_id']}")
-        return True
-    return False
+        return CheckResult.VIOLATION
+    return CheckResult.OK
 
 # Load config
 def load_config():
