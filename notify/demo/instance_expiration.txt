@@ -1,12 +1,12 @@
-Dear user,
+Dear NREC user,
 
-This is a reminder that your demo instance has almost reached its
-end date and will be deleted in $enddate day(s).
+This is the $number reminder that your demo instance has almost
+reached its end date and will be deleted in $enddate days.
 
-Project: $project
-Region: $region
-Instance: $instance
-Active days: $activity
+  Project: $project
+  Region: $region
+  Instance: $instance
+  Active days: $activity
 
 If you need the instance for later use, create a snapshot of it.
 For details, please visit the NREC documentation.
@@ -17,10 +17,13 @@ be automatically deleted after 90 days.
 
 If you require a project for more permanent usage, you can apply
 for one using the following link:
-https://request.nrec.no
+
+  https://request.nrec.no/
 
 For more details about NREC and contact information, please visit:
-https://docs.nrec.no
 
---
+  https://docs.nrec.no/
+
+Best Regards,
+-- 
 NREC team
