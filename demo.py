@@ -197,8 +197,6 @@ def action_expired():
             # Ignore if project is disabled
             if not is_project_enabled(project):
                 continue
-            if project.name != 'DEMO-lennart.nordgreen.uib.no':
-                continue
             instances = nc.get_project_instances(project_id=project.id)
             for instance in instances:
                 created = himutils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
