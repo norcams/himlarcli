@@ -352,6 +352,7 @@ def notify_user(instance, project, region, active_days, notification_type):
         'region'   : region.upper(),
         'instance' : instance.name,
         'number'   : notification_type,
+        'max_age'  : MAX_AGE,
     }
     body_content = himutils.load_template(inputfile=template,
                                           mapping=mapping,
