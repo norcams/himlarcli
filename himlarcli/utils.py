@@ -162,7 +162,7 @@ def append_to_file(filename, text):
 def append_to_logfile(filename, date, region, text1, text2, text3):
     filename = get_abs_path(filename)
     try:
-        with open(filename) as f:
+        with open(filename, 'a+') as f:
             f.write("%s, %s, %s, %s, %s\n" % (date, region, text1, text2, text3))
             f.close()
     except IOError as exc:

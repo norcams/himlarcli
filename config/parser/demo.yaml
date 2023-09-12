@@ -1,30 +1,19 @@
 ---
-desc:           'Helper script to move from personal project to demo.'
+desc:           'Automate policy for DEMO projects'
 actions:
-  'list':       'List all demo projects'
+  'projects':   'List all demo projects'
   'instances':  'List all instances in demo projects'
-  'expired':    'Notify demo project users about expired instances'
-  'delete':     'Delete 90+ days demo instances'
+  'expired':    'Notify demo project owners about expired instances'
+  'delete':     'Delete expired demo instances'
+  'cleandb':    'Clean database of stale entries'
 opt_args:
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'
     'default':  'Dataporten'
   '--region':
-    'sub':      ['expired', 'delete', 'instances', 'list']
     'dest':     'region'
     'help':     'only use this region'
-    'required': true
-  '-t':
-    'sub':      ['expired']
-    'dest':     'template'
-    'help':     'mail template file. See notify/'
-    'required': true
-  '-d':
-    'sub':      ['expired', 'instances']
-    'dest':     'day'
-    'help':     'number of days instances have run'
-    'required': true
   '--force':
     'sub':      ['expired', 'delete']
     'dest':     'force'

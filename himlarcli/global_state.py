@@ -112,6 +112,31 @@ class SecGroupRule(Base):
         for k, v in attributes.items():
             setattr(self, k, v)
 
+class DemoInstance(Base):
+
+    """ Demo Instance data model """
+
+    __tablename__ = 'demoinstance'
+
+    id = Column(Integer, primary_key=True)
+    instance_id = Column(String(63), nullable=False, index=True)
+    project_id = Column(String(63), nullable=False, index=True)
+    region = Column(String(15), index=True)
+    created = Column(DateTime, default=datetime.now)
+    notified1 = Column(DateTime, default=None)
+    notified2 = Column(DateTime, default=None)
+    notified3 = Column(DateTime, default=None)
+
+    def to_str(self):
+        return f'demo instance: {self.id} ({self.region}) => {self.created}'
+
+    def compare(self, attributes):
+        pass
+
+    def update(self, attributes):
+        for k, v in attributes.items():
+            setattr(self, k, v)
+
 class Instance(Base):
 
     """  Instance data model """
