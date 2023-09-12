@@ -34,10 +34,14 @@ logfile = f'logs/demo-expired-instances.log'
 db = himutils.get_client(GlobalState, options, logger)
 
 # Age and notification config
-MAX_AGE             = 90 # Max age of a demo instance, in days
-FIRST_NOTIFICATION  = 30 # Days until deletion for 1st notification
-SECOND_NOTIFICATION = 14 # Days until deletion for 2nd notification
-THIRD_NOTIFICATION  = 7  # Days until deletion for 3rd notification
+#MAX_AGE             = 90 # Max age of a demo instance, in days
+#FIRST_NOTIFICATION  = 30 # Days until deletion for 1st notification
+#SECOND_NOTIFICATION = 14 # Days until deletion for 2nd notification
+#THIRD_NOTIFICATION  = 7  # Days until deletion for 3rd notification
+MAX_AGE             = 4 # Max age of a demo instance, in days
+FIRST_NOTIFICATION  = 3 # Days until deletion for 1st notification
+SECOND_NOTIFICATION = 2 # Days until deletion for 2nd notification
+THIRD_NOTIFICATION  = 1 # Days until deletion for 3rd notification
 
 #------------------------------+-----------------------------------+---------+
 #       Text color             |       Background color            |         |
