@@ -563,6 +563,7 @@ class Keystone(Client):
             self.client.roles.grant(role=role,
                                     project=project,
                                     group=group)
+            return {'user':group.name, 'project': project_name, 'role':role.name}
 
     def list_roles(self, project_name, domain=None):
         """ List all roles for a project based on project name.
