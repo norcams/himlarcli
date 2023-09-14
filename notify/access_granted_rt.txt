@@ -1,6 +1,6 @@
 Hi,
 
-Access has been granted to the following users:
+New members added in project $project:
 
 $users
 

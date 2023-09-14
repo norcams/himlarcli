@@ -1,6 +1,6 @@
 Hi,
 
-Access has been revoked for the following users:
+Membership in project $project revoked for the following users:
 
 $users
 

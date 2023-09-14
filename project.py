@@ -259,43 +259,54 @@ def action_extend():
 
 
 def action_grant():
+    # Collect info
+    added_users   = []
+    invalid_users = []
+
+    # Get project, make sure it is valid and correct type
+    project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.fatal(f'Project not found: {options.project}')
+    if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
+        himutils.fatal(f'Project is {project.type}. User access not allowed!')
+
+    # Add users to project
     for user in options.users:
         if not ksclient.is_valid_user(email=user, domain=options.domain):
-            himutils.sys_error('User %s not found as a valid user.' % user)
-        project = ksclient.get_project_by_name(project_name=options.project)
-        if not project:
-            himutils.sys_error('No project found with name "%s"' % options.project)
-        if hasattr(project, 'type') and (project.type == 'demo' or project.type == 'personal'):
-            himutils.sys_error('Project are %s. User access not allowed!' % project.type)
+            himutils.error(f"User not found: {user}")
+            invalid_users.append(user)
         role = ksclient.grant_role(project_name=options.project,
                                    email=user)
         if role:
-            output = role.to_dict() if not isinstance(role, dict) else role
-            output['header'] = "Roles for %s" % options.project
-            printer.output_dict(output)
+            himutils.info(f"Added member of {options.project}: {user}")
+            added_users.append(user)
 
-    if options.mail:
+    # Send email to the added users, and update RT
+    if len(added_users) > 0 and options.mail:
         mail = Mail(options.config, debug=options.debug)
         mail.set_dry_run(options.dry_run)
 
-        if options.rt is None:
-            himutils.sys_error('--rt parameter is missing.')
-        else:
-            rt_mapping = dict(users='\n'.join(options.users))
-            rt_subject = 'NREC: Access granted to users in %s' % options.project
+        if options.rt is not None:
+            rt_mapping = {
+                'users'   : '\n'.join(added_users),
+                'project' : options.project,
+            }
+            rt_subject = f'[NREC] Access granted to users in {options.project}'
             rt_body_content = himutils.load_template(inputfile=access_granted_msg_file,
                                                      mapping=rt_mapping)
 
-        rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
-        mail.send_mail('support@nrec.no', rt_mime)
+            rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
+            mail.send_mail('support@nrec.no', rt_mime)
 
-        for user in options.users:
-            mapping = dict(project_name=options.project, admin=project.admin)
+        for user in added_users:
+            mapping = {
+                'project_name' : options.project,
+                'admin'        : project.admin,
+            }
             body_content = himutils.load_template(inputfile=access_granted_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
-            msg['subject'] = 'NREC: You have been given access to project %s' % options.project
-
+            msg['subject'] = f'[NREC] You have been given access to project {options.project}'
             mail.send_mail(user, msg, fromaddr='noreply@nrec.no')
 
 def action_revoke():
@@ -319,8 +330,11 @@ def action_revoke():
         if options.rt is None:
             himutils.sys_error('--rt parameter is missing.')
         else:
-            rt_mapping = dict(users='\n'.join(options.users))
-            rt_subject = 'NREC: Access revoked for users in %s' % options.project
+            rt_mapping = {
+                'users'   : '\n'.join(options.users),
+                'project' : options.project,
+            }
+            rt_subject = '[NREC] Access revoked for users in %s' % options.project
             rt_body_content = himutils.load_template(inputfile=access_revoked_msg_file,
                                                      mapping=rt_mapping)
 
@@ -332,7 +346,7 @@ def action_revoke():
             body_content = himutils.load_template(inputfile=access_revoked_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
-            msg['subject'] = 'NREC: Your access to project %s is revoked' % options.project
+            msg['subject'] = '[NREC] Your access to project %s is revoked' % options.project
 
             mail.send_mail(user, msg, fromaddr='noreply@nrec.no')
 
