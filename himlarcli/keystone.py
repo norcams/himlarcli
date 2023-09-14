@@ -551,18 +551,18 @@ class Keystone(Client):
             project = self.get_project_by_name(project_name=project_name)
         if not self.dry_run and not project:
             self.logged.debug("could not find project %s" % project_name, 1)
-            return ReturnCode.PROJECT_NOT_FOUND
+            return self.ReturnCode.PROJECT_NOT_FOUND
         if '-group' in email:
             group = self.__get_group(email)
         else:
             group = self.get_group_by_email(email=email)
         if not group:
             self.logger.debug('Group %s-group not found!'  % email)
-            return ReturnCode.GROUP_NOT_FOUND
+            return self.ReturnCode.GROUP_NOT_FOUND
         role = self.__get_role(role_name)
         if not role:
             self.log_error('Role %s not found!'  % role_name)
-            return ReturnCode.ROLE_NOT_FOUND
+            return self.ReturnCode.ROLE_NOT_FOUND
         exists = None
         try:
             if not self.dry_run:
@@ -576,7 +576,7 @@ class Keystone(Client):
         self.logger.debug('=> grant role %s to %s for %s', role.name, email, project_name)
         if exists:
             self.logger.debug('Role %s exist for %s in project %s' % (role.name, email, project_name))
-            return ReturnCode.ALREADY_EXISTS
+            return self.ReturnCode.ALREADY_EXISTS
         elif self.dry_run:
             data = {'user':group.name, 'project': project_name, 'role':role.name}
             self.log_dry_run(function='grant_role', **data)
@@ -584,7 +584,7 @@ class Keystone(Client):
             self.client.roles.grant(role=role,
                                     project=project,
                                     group=group)
-            return ReturnCode.OK
+            return self.ReturnCode.OK
 
     def list_roles(self, project_name, domain=None):
         """ List all roles for a project based on project name.
