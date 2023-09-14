@@ -275,12 +275,12 @@ def action_grant():
         if not ksclient.is_valid_user(email=user, domain=options.domain):
             himutils.error(f"User not found: {user}")
             invalid_users.append(user)
-        role = ksclient.grant_role(project_name=options.project,
+        rc = ksclient.grant_role(project_name=options.project,
                                    email=user)
-        if role == ksclient.ReturnCode.OK:
-            himutils.info(f"Added member of {options.project}: {user}")
+        if rc == ksclient.ReturnCode.OK:
+            himutils.info(f"New member of {options.project}: {user}")
             added_users.append(user)
-        elif role == ksclient.ReturnCode.ALREADY_EXISTS:
+        elif rc == ksclient.ReturnCode.ALREADY_EXISTS:
             himutils.warning(f"User {user} is already a member of {options.project}")
 
     # Send email to the added users, and update RT
