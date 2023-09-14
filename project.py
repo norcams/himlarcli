@@ -276,7 +276,7 @@ def action_grant():
             himutils.error(f"User not found: {user}")
             invalid_users.append(user)
         rc = ksclient.grant_role(project_name=options.project,
-                                   email=user)
+                                 email=user)
         if rc == ksclient.ReturnCode.OK:
             himutils.info(f"New member of {options.project}: {user}")
             added_users.append(user)
