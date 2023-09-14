@@ -537,7 +537,7 @@ class Keystone(Client):
         else:
             group = self.get_group_by_email(email=email)
         if not group:
-            self.log_error('Group %s-group not found!'  % email)
+            self.logger.debug('Group %s-group not found!'  % email)
             return
         role = self.__get_role(role_name)
         if not role:
