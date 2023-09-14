@@ -9,12 +9,31 @@ import keystoneauth1.exceptions as exceptions
 import random
 import string
 import re
+from enum import Enum
+
+# Enum class for check result
+#class CheckResult(Enum):
+#    OK        = 1  # rule is OK, passes the check
+#    VIOLATION = 2  # rule violates the conditions in the check
+#    UNUSED    = 3  # rule is not in use
+#    DELETED   = 4  # secgroup does not exist (i.e. rule is deleted)
 
 # pylint: disable=R0904
 class Keystone(Client):
 
     #version = 3
 
+    ReturnCode = Enum(
+        value="ReturnCode",
+        names=[
+            ( "OK",                0 ),
+            ( "PROJECT_NOT_FOUND", 1 ),
+            ( "GROUP_NOT_FOUND",   2 ),
+            ( "ROLE_NOT_FOUND",    3 ),
+            ( "ALREADY_EXISTS",    4 ),
+        ],
+    )
+    
     def __init__(self, config_path, debug=False, log=None):
         super(Keystone, self).__init__(config_path, debug, log)
         self.client = keystoneclient.Client(session=self.sess,
@@ -531,18 +550,19 @@ class Keystone(Client):
         if not self.dry_run:
             project = self.get_project_by_name(project_name=project_name)
         if not self.dry_run and not project:
-            self.log_error("could not find project %s" % project_name, 1)
+            self.logged.debug("could not find project %s" % project_name, 1)
+            return ReturnCode.PROJECT_NOT_FOUND
         if '-group' in email:
             group = self.__get_group(email)
         else:
             group = self.get_group_by_email(email=email)
         if not group:
             self.logger.debug('Group %s-group not found!'  % email)
-            return
+            return ReturnCode.GROUP_NOT_FOUND
         role = self.__get_role(role_name)
         if not role:
             self.log_error('Role %s not found!'  % role_name)
-            return
+            return ReturnCode.ROLE_NOT_FOUND
         exists = None
         try:
             if not self.dry_run:
@@ -555,7 +575,8 @@ class Keystone(Client):
             self.log_error(e)
         self.logger.debug('=> grant role %s to %s for %s', role.name, email, project_name)
         if exists:
-            self.log_error('Role %s exist for %s in project %s' % (role.name, email, project_name))
+            self.logger.debug('Role %s exist for %s in project %s' % (role.name, email, project_name))
+            return ReturnCode.ALREADY_EXISTS
         elif self.dry_run:
             data = {'user':group.name, 'project': project_name, 'role':role.name}
             self.log_dry_run(function='grant_role', **data)
@@ -563,7 +584,7 @@ class Keystone(Client):
             self.client.roles.grant(role=role,
                                     project=project,
                                     group=group)
-            return {'user':group.name, 'project': project_name, 'role':role.name}
+            return ReturnCode.OK
 
     def list_roles(self, project_name, domain=None):
         """ List all roles for a project based on project name.
