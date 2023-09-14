@@ -277,7 +277,7 @@ def action_grant():
             invalid_users.append(user)
         role = ksclient.grant_role(project_name=options.project,
                                    email=user)
-        if role == ReturnCode.OK:
+        if role == ksclient.ReturnCode.OK:
             himutils.info(f"Added member of {options.project}: {user}")
             added_users.append(user)
 
