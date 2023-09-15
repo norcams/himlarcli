@@ -278,7 +278,7 @@ def action_grant():
         rc = ksclient.grant_role(project_name=options.project,
                                  email=user)
         if rc == ksclient.ReturnCode.OK:
-            himutils.info(f"New member of {options.project}: {user}")
+            himutils.info(f"Granted membership in {options.project} for {user}")
             added_users.append(user)
         elif rc == ksclient.ReturnCode.ALREADY_MEMBER:
             himutils.warning(f"User {user} is already a member of {options.project}")
@@ -312,44 +312,54 @@ def action_grant():
             mail.send_mail(user, msg, fromaddr='noreply@nrec.no')
 
 def action_revoke():
+    # Collect info
+    removed_users = []
+    invalid_users = []
+
+    # Get project, make sure it is valid and correct type
+    project = ksclient.get_project_by_name(project_name=options.project)
+    if not project:
+        himutils.fatal(f'Project not found: {options.project}')
+
+    # Remove users from project
     for user in options.users:
         if not ksclient.is_valid_user(email=user, domain=options.domain):
-            himutils.sys_error('User %s not found as a valid user.' % user)
-        project = ksclient.get_project_by_name(project_name=options.project)
-        if not project:
-            himutils.sys_error('No project found with name "%s"' % options.project)
-        role = ksclient.revoke_role(project_name=options.project,
-                                    emails=[user])
-        if role:
-            output = role.to_dict() if not isinstance(role, dict) else role
-            output['header'] = "Roles for %s" % options.project
-            printer.output_dict(output)
+            himutils.error(f"User not found: {user}")
+            invalid_users.append(user)
+            continue
+        rc = ksclient.revoke_role(project_name=options.project,
+                                    email=user)
+        if rc == ksclient.ReturnCode.OK:
+            himutils.info(f"Revoked membership in {options.project} for {user}")
+            removed_users.append(user)
+        elif rc == ksclient.ReturnCode.NOT_MEMBER:
+            himutils.warning(f"User {user} is not a member of {options.project}")
 
-    if options.mail:
+    if len(removed_users) > 0 and options.mail:
         mail = Mail(options.config, debug=options.debug)
         mail.set_dry_run(options.dry_run)
 
-        if options.rt is None:
-            himutils.sys_error('--rt parameter is missing.')
-        else:
+        if options.rt is not None:
             rt_mapping = {
-                'users'   : '\n'.join(options.users),
+                'users'   : '\n'.join(removed_users),
                 'project' : options.project,
             }
             rt_subject = '[NREC] Access revoked for users in %s' % options.project
             rt_body_content = himutils.load_template(inputfile=access_revoked_msg_file,
                                                      mapping=rt_mapping)
 
-        rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
-        mail.send_mail('support@nrec.no', rt_mime)
+            rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
+            mail.send_mail('support@nrec.no', rt_mime)
 
-        for user in options.users:
-            mapping = dict(project_name=options.project, admin=project.admin)
+        for user in removed_users:
+            mapping = {
+                'project_name' : options.project,
+                'admin'        : project.admin,
+            }
             body_content = himutils.load_template(inputfile=access_revoked_user_msg_file,
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
-            msg['subject'] = '[NREC] Your access to project %s is revoked' % options.project
-
+            msg['subject'] = f'[NREC] Your access to project {options.project} is revoked'
             mail.send_mail(user, msg, fromaddr='noreply@nrec.no')
 
 def action_delete():
