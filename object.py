@@ -55,11 +55,12 @@ def action_revoke():
     # Revoke object role for all users
     for user in users:
         if user['role'] == 'object':
-            rc = ksclient.revoke_role(email=user['group'], project_name=options.project, role_name='object')
+            email = user['role'].removesuffix('-group').removesuffix('-disabled')
+            rc = ksclient.revoke_role(email=email, project_name=options.project, role_name='object')
             if rc == ksclient.ReturnCode.OK:
-                himutils.info(f"Revoked object access in {options.project} from {user['group']}")
+                himutils.info(f"Revoked object access in {options.project} from {email}")
             elif rc == ksclient.ReturnCode.NOT_MEMBER:
-                himutils.warning(f"User {user.group} does not have object access in {options.project}")
+                himutils.warning(f"User {email} does not have object access in {options.project}")
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
