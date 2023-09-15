@@ -278,7 +278,7 @@ def action_grant():
         rc = ksclient.grant_role(project_name=options.project,
                                  email=user)
         if rc == ksclient.ReturnCode.OK:
-            himutils.info(f"Granted membership in {options.project} for {user}")
+            himutils.info(f"Granted membership to {options.project} for {user}")
             added_users.append(user)
         elif rc == ksclient.ReturnCode.ALREADY_MEMBER:
             himutils.warning(f"User {user} is already a member of {options.project}")
@@ -330,7 +330,7 @@ def action_revoke():
         rc = ksclient.revoke_role(project_name=options.project,
                                     email=user)
         if rc == ksclient.ReturnCode.OK:
-            himutils.info(f"Revoked membership in {options.project} for {user}")
+            himutils.info(f"Revoked membership from {options.project} for {user}")
             removed_users.append(user)
         elif rc == ksclient.ReturnCode.NOT_MEMBER:
             himutils.warning(f"User {user} is not a member of {options.project}")
@@ -344,7 +344,7 @@ def action_revoke():
                 'users'   : '\n'.join(removed_users),
                 'project' : options.project,
             }
-            rt_subject = '[NREC] Access revoked for users in %s' % options.project
+            rt_subject = f'[NREC] Access revoked for users in {options.project}'
             rt_body_content = himutils.load_template(inputfile=access_revoked_msg_file,
                                                      mapping=rt_mapping)
 
