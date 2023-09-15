@@ -11,13 +11,6 @@ import string
 import re
 from enum import Enum
 
-# Enum class for check result
-#class CheckResult(Enum):
-#    OK        = 1  # rule is OK, passes the check
-#    VIOLATION = 2  # rule violates the conditions in the check
-#    UNUSED    = 3  # rule is not in use
-#    DELETED   = 4  # secgroup does not exist (i.e. rule is deleted)
-
 # pylint: disable=R0904
 class Keystone(Client):
 
