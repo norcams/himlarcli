@@ -8,6 +8,8 @@ from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
 
+import re
+
 parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
@@ -55,7 +57,7 @@ def action_revoke():
     # Revoke object role for all users
     for user in users:
         if user['role'] == 'object':
-            email = user['role'].removesuffix('-group').removesuffix('-disabled')
+            email = re.sub('(-group|-disabled)$', '', user['role'])
             rc = ksclient.revoke_role(email=email, project_name=options.project, role_name='object')
             if rc == ksclient.ReturnCode.OK:
                 himutils.info(f"Revoked object access in {options.project} from {email}")
