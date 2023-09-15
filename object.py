@@ -25,7 +25,7 @@ else:
     regions = ksclient.find_regions()
 
 if not regions:
-    himutils.sys_error('No valid regions found!')
+    himutils.fatal('No valid regions found!')
 
 def action_grant():
     # Get project, make sure it is valid
@@ -51,7 +51,6 @@ def action_revoke():
         himutils.fatal(f'Project not found: {options.project}')
 
     # Get all users from project
-    #users = ksclient.get_users(domain=options.domain, project=project.id)
     users = ksclient.list_roles(project_name=options.project)
 
     # Revoke object role for all users
@@ -61,11 +60,9 @@ def action_revoke():
             rc = ksclient.revoke_role(email=email, project_name=options.project, role_name='object')
             if rc == ksclient.ReturnCode.OK:
                 himutils.info(f"Revoked object access in {options.project} from {email}")
-            elif rc == ksclient.ReturnCode.NOT_MEMBER:
-                himutils.warning(f"User {email} does not have object access in {options.project}")
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
 if not action:
-    himutils.sys_error("Function action_%s() not implemented" % options.action)
+    himutils.fatal(f"Function action_{options.action}() not implemented")
 action()
