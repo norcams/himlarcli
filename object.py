@@ -49,11 +49,11 @@ def action_revoke():
         himutils.fatal(f'Project not found: {options.project}')
 
     # Get all users from project
-    users = ksclient.get_users(domain=options.domain, project=project.id)
-    #users = ksclient.list_roles(project_name=options.project)
+    #users = ksclient.get_users(domain=options.domain, project=project.id)
+    roles = ksclient.list_roles(project_name=options.project)
 
     # Revoke object role for all users
-    for user in users:
+    for user in roles:
         print(user)
 #        rc = ksclient.revoke_role(email=user.group, project_name=project_name, role_name='object')
 #        if rc == ksclient.ReturnCode.OK:
