@@ -260,7 +260,7 @@ def action_extend():
 
 def action_grant():
     # Collect info
-    added_users   = []
+    granted_users = []
     invalid_users = []
 
     # Get project, make sure it is valid and correct type
@@ -279,18 +279,18 @@ def action_grant():
                                  email=user)
         if rc == ksclient.ReturnCode.OK:
             himutils.info(f"Granted membership to {options.project} for {user}")
-            added_users.append(user)
+            granted_users.append(user)
         elif rc == ksclient.ReturnCode.ALREADY_MEMBER:
             himutils.warning(f"User {user} is already a member of {options.project}")
 
     # Send email to the added users, and update RT
-    if len(added_users) > 0 and options.mail:
+    if len(granted_users) > 0 and options.mail:
         mail = Mail(options.config, debug=options.debug)
         mail.set_dry_run(options.dry_run)
 
         if options.rt is not None:
             rt_mapping = {
-                'users'   : '\n'.join(added_users),
+                'users'   : '\n'.join(granted_users),
                 'project' : options.project,
             }
             rt_subject = f'[NREC] Access granted to users in {options.project}'
@@ -300,7 +300,7 @@ def action_grant():
             rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
             mail.send_mail('support@nrec.no', rt_mime)
 
-        for user in added_users:
+        for user in granted_users:
             mapping = {
                 'project_name' : options.project,
                 'admin'        : project.admin,
@@ -313,7 +313,7 @@ def action_grant():
 
 def action_revoke():
     # Collect info
-    removed_users = []
+    revoked_users = []
     invalid_users = []
 
     # Get project, make sure it is valid and correct type
@@ -331,17 +331,17 @@ def action_revoke():
                                     email=user)
         if rc == ksclient.ReturnCode.OK:
             himutils.info(f"Revoked membership from {options.project} for {user}")
-            removed_users.append(user)
+            revoked_users.append(user)
         elif rc == ksclient.ReturnCode.NOT_MEMBER:
             himutils.warning(f"User {user} is not a member of {options.project}")
 
-    if len(removed_users) > 0 and options.mail:
+    if len(revoked_users) > 0 and options.mail:
         mail = Mail(options.config, debug=options.debug)
         mail.set_dry_run(options.dry_run)
 
         if options.rt is not None:
             rt_mapping = {
-                'users'   : '\n'.join(removed_users),
+                'users'   : '\n'.join(revoked_users),
                 'project' : options.project,
             }
             rt_subject = f'[NREC] Access revoked for users in {options.project}'
@@ -351,7 +351,7 @@ def action_revoke():
             rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
             mail.send_mail('support@nrec.no', rt_mime)
 
-        for user in removed_users:
+        for user in revoked_users:
             mapping = {
                 'project_name' : options.project,
                 'admin'        : project.admin,
