@@ -38,9 +38,9 @@ def action_grant():
     for user in users:
         rc = ksclient.grant_role(email=user['group'], project_name=options.project, role_name='object')
         if rc == ksclient.ReturnCode.OK:
-            himutils.info(f"Granted object access in {options.project} to {user}")
+            himutils.info(f"Granted object access in {options.project} to {user.email}")
         elif rc == ksclient.ReturnCode.ALREADY_MEMBER:
-            himutils.warning(f"User {user} already has object access in {options.project}")
+            himutils.warning(f"User {user.email} already has object access in {options.project}")
 
 def action_revoke():
     # Get project, make sure it is valid
@@ -49,15 +49,15 @@ def action_revoke():
         himutils.fatal(f'Project not found: {options.project}')
 
     # Get all users from project
-    users = ksclient.get_users(domain=options.domain, project=project.id)
+    users = ksclient.list_roles(project_name=options.project)
 
     # Revoke object role for all users
     for user in users:
-        rc = ksclient.revoke_role(email=user.email, project_name=project.name, role_name='object')
+        rc = ksclient.revoke_role(email=user.email, project_name=project_name, role_name='object')
         if rc == ksclient.ReturnCode.OK:
-            himutils.info(f"Revoked object access in {options.project} from {user}")
+            himutils.info(f"Revoked object access in {options.project} from {user.email}")
         elif rc == ksclient.ReturnCode.NOT_MEMBER:
-            himutils.warning(f"User {user} does not have object access in {options.project}")
+            himutils.warning(f"User {user.email} does not have object access in {options.project}")
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
