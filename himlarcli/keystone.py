@@ -20,13 +20,15 @@ class Keystone(Client):
         value="ReturnCode",
         names=[
             ( "OK",                0 ),
-            ( "PROJECT_NOT_FOUND", 1 ),
-            ( "GROUP_NOT_FOUND",   2 ),
-            ( "ROLE_NOT_FOUND",    3 ),
-            ( "ALREADY_EXISTS",    4 ),
+            ( "ERROR",             1 ),
+            ( "PROJECT_NOT_FOUND", 2 ),
+            ( "GROUP_NOT_FOUND",   3 ),
+            ( "ROLE_NOT_FOUND",    4 ),
+            ( "ALREADY_MEMBER",    5 ),
+            ( "NOT_MEMBER",        6 ),
         ],
     )
-    
+
     def __init__(self, config_path, debug=False, log=None):
         super(Keystone, self).__init__(config_path, debug, log)
         self.client = keystoneclient.Client(session=self.sess,
@@ -506,36 +508,41 @@ class Keystone(Client):
 
         return "New password: %s" % password
 
-    def revoke_role(self, emails, project_name, role_name='user'):
+    def revoke_role(self, email, project_name, role_name='user'):
         """
             Revoke role for user in project
             version: 2019-3
-            :param email: list of user email address (str)
+            :param email: user email address (str)
         """
         project = self.get_project_by_name(project_name=project_name)
         if not project:
-            self.log_error("could not find project %s" % project_name, 1)
+            self.debug_log(f"could not find project {project_name}")
+            return self.ReturnCode.PROJECT_NOT_FOUND
         role = self.__get_role(role_name)
         if not role:
-            self.log_error('Role %s not found!'  % role_name)
-            return
+            self.debug_log(f'Role {role_name} not found!')
+            return self.ReturnCode.ROLE_NOT_FOUND
         assignments = self.__get_role_assignments(project_id=project.id, role_id=role.id)
-        for email in emails:
-            group = self.get_group_by_email(email=email)
-            if not group:
-                self.log_error('Group %s-group not found!'  % email)
-                continue
-            if group.name not in assignments:
-                self.debug_log('%s not found in assignments. dropping revoke' % group.name)
-                continue
-            self.debug_log('revoke role %s to %s for %s' % (role.name, email, project_name))
-            if not self.dry_run:
-                try:
-                    self.client.roles.revoke(role=role,
-                                             project=project,
-                                             group=group)
-                except exceptions.base.ClientException as e:
-                    self.log_error(e)
+        group = self.get_group_by_email(email=email)
+        if not group:
+            self.debug_log(f'Group {email}-group not found!')
+            return self.ReturnCode.GROUP_NOT_FOUND
+        if group.name not in assignments:
+            self.debug_log(f'{group.name} not found in assignments. dropping revoke')
+            return self.ReturnCode.NOT_MEMBER
+        if self.dry_run:
+            data = {'user':group.name, 'project': project_name, 'role':role.name}
+            self.log_dry_run(function='revoke_role', **data)
+        else:
+            try:
+                self.client.roles.revoke(role=role,
+                                         project=project,
+                                         group=group)
+            except exceptions.base.ClientException as e:
+                self.log_error(e)
+                return self.ReturnCode.ERROR
+        self.debug_log(f'revoke role {role.name} to {email} for {project_name}')
+        return self.ReturnCode.OK
 
     def grant_role(self, email, project_name, role_name='user'):
         """ Grant a role to a project for a user.
@@ -543,18 +550,18 @@ class Keystone(Client):
         if not self.dry_run:
             project = self.get_project_by_name(project_name=project_name)
         if not self.dry_run and not project:
-            self.logged.debug("could not find project %s" % project_name, 1)
+            self.debug_log(f"could not find project {project_name}")
             return self.ReturnCode.PROJECT_NOT_FOUND
         if '-group' in email:
             group = self.__get_group(email)
         else:
             group = self.get_group_by_email(email=email)
         if not group:
-            self.logger.debug('Group %s-group not found!'  % email)
+            self.debug_log(f'Group {email}-group not found!')
             return self.ReturnCode.GROUP_NOT_FOUND
         role = self.__get_role(role_name)
         if not role:
-            self.log_error('Role %s not found!'  % role_name)
+            self.log_error(f'Role {role_name} not found!')
             return self.ReturnCode.ROLE_NOT_FOUND
         exists = None
         try:
@@ -566,18 +573,22 @@ class Keystone(Client):
                         continue
         except exceptions.http.NotFound as e:
             self.log_error(e)
-        self.logger.debug('=> grant role %s to %s for %s', role.name, email, project_name)
         if exists:
-            self.logger.debug('Role %s exist for %s in project %s' % (role.name, email, project_name))
-            return self.ReturnCode.ALREADY_EXISTS
-        elif self.dry_run:
+            self.debug_log(f'Role {role.name} already exists for {email} in project {project_name}')
+            return self.ReturnCode.ALREADY_MEMBER
+        if self.dry_run:
             data = {'user':group.name, 'project': project_name, 'role':role.name}
             self.log_dry_run(function='grant_role', **data)
         else:
-            self.client.roles.grant(role=role,
-                                    project=project,
-                                    group=group)
-            return self.ReturnCode.OK
+            try:
+                self.client.roles.grant(role=role,
+                                        project=project,
+                                        group=group)
+            except exceptions.base.ClientException as e:
+                self.log_error(e)
+                return self.ReturnCode.ERROR
+        self.debug_log(f'grant role {role.name} to {email} for {project_name}')
+        return self.ReturnCode.OK
 
     def list_roles(self, project_name, domain=None):
         """ List all roles for a project based on project name.

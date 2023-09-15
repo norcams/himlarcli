@@ -280,7 +280,7 @@ def action_grant():
         if rc == ksclient.ReturnCode.OK:
             himutils.info(f"New member of {options.project}: {user}")
             added_users.append(user)
-        elif rc == ksclient.ReturnCode.ALREADY_EXISTS:
+        elif rc == ksclient.ReturnCode.ALREADY_MEMBER:
             himutils.warning(f"User {user} is already a member of {options.project}")
 
     # Send email to the added users, and update RT
