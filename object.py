@@ -57,7 +57,7 @@ def action_revoke():
     # Revoke object role for all users
     for user in users:
         if user['role'] == 'object':
-            email = re.sub('(-group|-disabled)$', '', user['role'])
+            email = re.sub('(-group|-disabled)$', '', user['group'])
             rc = ksclient.revoke_role(email=email, project_name=options.project, role_name='object')
             if rc == ksclient.ReturnCode.OK:
                 himutils.info(f"Revoked object access in {options.project} from {email}")
