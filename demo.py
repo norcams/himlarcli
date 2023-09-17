@@ -34,14 +34,10 @@ logfile = f'logs/demo-expired-instances.log'
 db = himutils.get_client(GlobalState, options, logger)
 
 # Age and notification config
-#MAX_AGE             = 90 # Max age of a demo instance, in days
-#FIRST_NOTIFICATION  = 30 # Days until deletion for 1st notification
-#SECOND_NOTIFICATION = 14 # Days until deletion for 2nd notification
-#THIRD_NOTIFICATION  = 7  # Days until deletion for 3rd notification
-MAX_AGE             = 4 # Max age of a demo instance, in days
-FIRST_NOTIFICATION  = 3 # Days until deletion for 1st notification
-SECOND_NOTIFICATION = 2 # Days until deletion for 2nd notification
-THIRD_NOTIFICATION  = 1 # Days until deletion for 3rd notification
+MAX_AGE             = 90 # Max age of a demo instance, in days
+FIRST_NOTIFICATION  = 30 # Days until deletion for 1st notification
+SECOND_NOTIFICATION = 14 # Days until deletion for 2nd notification
+THIRD_NOTIFICATION  = 7  # Days until deletion for 3rd notification
 
 #------------------------------+-----------------------------------+---------+
 #       Text color             |       Background color            |         |
@@ -280,7 +276,8 @@ def action_delete():
                 instance = nc.get_by_id("server", row.instance_id)
                 created = himutils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                 active_days = (date.today() - created).days
-                #nc.delete_instance(instance)
+                p_warning(f"[{row.region}] [project_id={row.project_id}] Deleting instance {row.instance_id}")
+                nc.delete_instance(instance)
                 himutils.append_to_logfile(
                     logfile,
                     datetime.now(),
@@ -289,7 +286,7 @@ def action_delete():
                     f"Project ID: {row.project_id}",
                     f"Active for: {active_days} days"
                 )
-                p_info(f"[{row.region}] [project_id={row.project_id}] Deleting instance {row.instance_id} from database")
+                p_info(f"[{row.region}] [project_id={row.project_id}] Deleting entry {row.instance_id} from database")
                 db.delete(row)
 
 
@@ -373,8 +370,8 @@ def notify_user(instance, project, region, active_days, notification_type):
         print(body_content)
         print(f"{DIM}––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––{DEF}")
     else:
-        #mail.send_mail(project.admin, msg, fromaddr, ccaddr, bccaddr)
-        #kc.debug_log(f'Sending mail to {project.admin} regarding {instance.id} that has been active for {active_days} days')
+        mail.send_mail(project.admin, msg, fromaddr, ccaddr, bccaddr)
+        kc.debug_log(f'Sending mail to {project.admin} regarding {instance.id} that has been active for {active_days} days')
         himutils.append_to_logfile(
             logfile,
             datetime.now(),
