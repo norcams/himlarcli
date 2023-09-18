@@ -442,7 +442,7 @@ def action_enddate():
                     attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
 
                     # Construct mail content
-                    subject = 'NREC: Project "%s" expires in %d days' % (project.name, days)
+                    subject = '[NREC] Project "%s" expires in %d days' % (project.name, days)
                     body_content = utils.load_template(inputfile=options.template,
                                                        mapping={'project': project.name,
                                                                 'enddate': project_enddate,
@@ -556,7 +556,7 @@ def action_quarantine():
                         attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
 
                         # Construct mail content
-                        subject = 'NREC: Project "%s" will be deleted in %d days' % (project.name, 90 - days)
+                        subject = '[NREC] Project "%s" will be deleted in %d days' % (project.name, 90 - days)
                         body_content = utils.load_template(inputfile=options.template,
                                                            mapping={'project': project.name,
                                                                     'enddate': project_enddate,

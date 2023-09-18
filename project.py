@@ -163,7 +163,7 @@ def action_create():
                            admin=options.admin.lower(),
                            quota=options.quota,
                            end_date=str(enddate))
-            subject = 'NREC: Project %s has been created' % options.project
+            subject = '[NREC] Project %s has been created' % options.project
             body_content = himutils.load_template(inputfile=project_msg,
                                                   mapping=mapping)
         if not body_content:
@@ -247,7 +247,7 @@ def action_extend():
         else:
             mapping = dict(project_name=project.name,
                            end_date=str(enddate))
-            subject = 'NREC: New expiration date for project %s' % project.name
+            subject = '[NREC] New expiration date for project %s' % project.name
             body_content = himutils.load_template(inputfile=project_msg,
                                                   mapping=mapping)
         if not body_content:
@@ -568,7 +568,7 @@ def action_quarantine():
             attachment_payload += Printer.prettyprint_project_instances(project, options, logger, regions)
 
             # Construct mail content
-            subject = 'NREC: Project "%s" is scheduled for deletion' % project.name
+            subject = '[NREC] Project "%s" is scheduled for deletion' % project.name
             body_content = himutils.load_template(inputfile=options.template,
                                                   mapping={'project': project.name,
                                                            'enddate': project_enddate},
