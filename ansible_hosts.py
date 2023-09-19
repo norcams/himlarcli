@@ -46,20 +46,21 @@ filename = "hostfile.%s" % loc
 nodes = "%s-nodes:children" % loc
 
 exclude_nodes = {
-    '(bgo|osl)\-cephmon$',
+    r'(bgo|osl)\-cephmon$',
     '.+storage',
-    '(bgo|osl|test01)\-object',
+    r'(bgo|osl|test01)\-object',
     '.+compute',
     '.+controller',
     '.+leaf',
     '.+torack',
     '.+spine',
     '.+login',
-    '(bgo|osl|test01)\-mgmt',
+    r'(bgo|osl|test01)\-mgmt',
 }
-excludes_seperator = ")|("
 # creates something like "(.+spine)|(.+login)|(.+storage)|((bgo|osl)\-cephmon$)|...."
+excludes_seperator = ")|("
 combined_excludes = "(" + excludes_seperator.join(exclude_nodes) + ")"
+pattern_excluded = re.compile(combined_excludes)
 
 parser = configparser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
@@ -73,7 +74,7 @@ def is_in_excludes(rolevar, excludes):
 for section, hosts in sorted(hostlist.items()):
     parser.set(children, section)
     parser.add_section(section)
-    if not is_in_excludes(section, combined_excludes):
+    if not pattern_excluded.match(section)
         parser.set(nodes, section)
     for host in hosts:
         parser.set(section, host)
