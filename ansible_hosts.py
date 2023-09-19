@@ -44,22 +44,22 @@ for host in hosts['results']:
 children = "%s:children" % loc
 filename = "hostfile.%s" % loc
 nodes = "%s-nodes:children" % loc
-exclude_nodes = {
-    'cephmon$',
-    'storage',
-    'object',
-    'compute',
-    'controller',
-    'leaf',
-    'torack',
-    'spine',
-    'login',
-    'mgmt',
-}
 
-# creates something like "(bgo-torack)|(bgo-spine)|(bgo-cephmon$)"
-excludes_seperator = ")|(" + loc + "-"
-combined_excludes = "("+loc+"-" + excludes_seperator.join(exclude_nodes) + ")"
+exclude_nodes = {
+    '(bgo|osl)\-cephmon$',
+    '.+storage',
+    '(bgo|osl|test01)\-object',
+    '.+compute',
+    '.+controller',
+    '.+leaf',
+    '.+torack',
+    '.+spine',
+    '.+login',
+    '(bgo|osl|test01)\-mgmt',
+}
+excludes_seperator = ")|("
+# creates something like "(.+spine)|(.+login)|(.+storage)|((bgo|osl)\-cephmon$)|...."
+combined_excludes = "(" + excludes_seperator.join(exclude_nodes) + ")"
 
 parser = configparser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
