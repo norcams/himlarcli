@@ -74,7 +74,7 @@ def is_in_excludes(rolevar, excludes):
 for section, hosts in sorted(hostlist.items()):
     parser.set(children, section)
     parser.add_section(section)
-    if not pattern_excluded.match(section)
+    if not pattern_excluded.match(section):
         parser.set(nodes, section)
     for host in hosts:
         parser.set(section, host)
