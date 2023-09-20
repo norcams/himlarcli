@@ -66,11 +66,6 @@ parser = configparser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
 parser.add_section(nodes)
 
-def is_in_excludes(rolevar, excludes):
-    if re.match(excludes, rolevar):
-        return True
-    return False
-
 for section, hosts in sorted(hostlist.items()):
     parser.set(children, section)
     parser.add_section(section)
