@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-import utils
 import configparser
+import re
+import utils
 from himlarcli.foremanclient import ForemanClient
 from himlarcli import utils as himutils
 
@@ -43,22 +44,37 @@ for host in hosts['results']:
 children = "%s:children" % loc
 filename = "hostfile.%s" % loc
 nodes = "%s-nodes:children" % loc
-exclude_nodes = {'storage', 'object', 'compute', 'controller', 'leaf', 'torack', 'spine', 'login', 'mgmt'}
+
+exclude_nodes = {
+    r'(bgo|osl)\-cephmon$',
+    '.+storage',
+    r'(bgo|osl|test01)\-object',
+    '.+compute',
+    '.+controller',
+    '.+leaf',
+    '.+torack',
+    '.+spine',
+    '.+login',
+    r'(bgo|osl|test01)\-mgmt',
+}
+# creates something like "(.+spine)|(.+login)|(.+storage)|((bgo|osl)\-cephmon$)|...."
+excludes_seperator = ")|("
+combined_excludes = "(" + excludes_seperator.join(exclude_nodes) + ")"
+pattern_excluded = re.compile(combined_excludes)
 
 parser = configparser.ConfigParser(allow_no_value=True)
 parser.add_section(children)
 parser.add_section(nodes)
 
+def is_in_excludes(rolevar, excludes):
+    if re.match(excludes, rolevar):
+        return True
+    return False
+
 for section, hosts in sorted(hostlist.items()):
     parser.set(children, section)
     parser.add_section(section)
-    check = section.count('-')
-    if check == 1:
-        loc, role = section.split('-')
-    #Example if test01-nat-linux-01
-    if check == 2:
-        loc, role, var = section.split('-')
-    if role not in exclude_nodes:
+    if not pattern_excluded.match(section):
         parser.set(nodes, section)
     for host in hosts:
         parser.set(section, host)
