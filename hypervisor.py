@@ -157,8 +157,8 @@ def action_list():
             'NAME',
             'AGGREGATE',
             'VMs',
-            'vCPU USED',
-            'RAM GB USED',
+            'vCPUs',
+            'MEMORY (GiB)',
             'STATE',
             'STATUS',
         ]
@@ -178,14 +178,14 @@ def action_list():
             if host.status == 'enabled':
                 r_aggregate = Color.fg.ylw + aggregates.get(host.hypervisor_hostname, 'unknown') + Color.reset
                 r_vms = host.running_vms
-                r_vcpus = host.vcpus_used
-                r_mem = int(host.memory_mb_used/1024)
+                r_vcpus = f"{host.vcpus_used} / {host.vcpus}"
+                r_mem = f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}"
                 r_status = Color.fg.GRN + host.status.upper() + Color.reset
             else:
                 r_aggregate = Color.fg.YLW + aggregates.get(host.hypervisor_hostname, 'unknown') + Color.reset
                 r_vms = Color.dim + str(host.running_vms) + Color.reset
-                r_vcpus = Color.dim + str(host.vcpus_used) + Color.reset
-                r_mem = Color.dim + str(int(host.memory_mb_used/1024)) + Color.reset
+                r_vcpus = Color.dim + f"{host.vcpus_used} / {host.vcpus}" + Color.reset
+                r_mem = Color.dim + f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}" + Color.reset
                 r_status = Color.fg.red + host.status.upper() + Color.reset
             if host.state == 'up':
                 r_state = Color.fg.GRN + host.state.upper() + Color.reset
