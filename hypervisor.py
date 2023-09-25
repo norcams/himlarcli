@@ -31,6 +31,7 @@ def action_instances():
     instances = nc.get_all_instances(search_opts=search_opts)
 
     if options.format == 'table':
+        output = {}
         output['header'] = [
             'ID',
             'NAME',
@@ -152,6 +153,7 @@ def action_list():
     else:
         hosts = nc.get_aggregate_hosts(options.aggregate, True)
     if options.format == 'table':
+        output = {}
         output['header'] = [
             'NAME',
             'AGGREGATE',
