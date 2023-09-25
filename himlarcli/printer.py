@@ -4,6 +4,7 @@ from himlarcli.cinder import Cinder
 from himlarcli.designate import Designate
 from himlarcli.glance import Glance
 from himlarcli import utils
+from himlarcli.color import Color
 from prettytable import PrettyTable
 import re
 import json
@@ -17,7 +18,7 @@ locale.setlocale(locale.LC_ALL, 'en_DK.UTF-8')
 
 class Printer(object):
 
-    VALID_OPTIONS = ['text', 'json', 'csv']
+    VALID_OPTIONS = ['text', 'table', 'json', 'csv']
     INDENT = 2
 
     def __init__(self, output_format):
@@ -40,6 +41,8 @@ class Printer(object):
             return
         if self.format == 'text':
             self.__dict_to_text(objects=objects, sort=sort, one_line=one_line)
+        elif self.format == 'table':
+            self.__dict_to_table(objects=objects)
         elif self.format == 'json':
             self.__dict_to_json(objects=objects, sort=sort)
         elif self.format == 'csv':
@@ -114,6 +117,32 @@ class Printer(object):
             else:
                 sorted_objects = objects
             writer.writerow(sorted_objects)
+
+    @staticmethod
+    def __dict_to_table(objects):
+        if type(objects['header']) is not list:
+            utils.fatal("Table output not support for this action")
+
+        table = PrettyTable()
+        table._max_width = {'value' : 70}
+        table.border = 0
+        table.left_padding_width = 2
+        table.header = 1
+
+        header = []
+        for string in objects['header']:
+            header.append( Color.fg.MGN + Color.bold + string + Color.reset )
+        table.field_names = header
+
+        for i in range(0,len(header),1):
+            table.align[header[i]] = objects['align'][i]
+
+        for k,v in objects.items():
+            if isinstance(k, int):
+                table.add_row(v)
+
+        table.sortby = header[objects['sortby']]
+        print(table)
 
     @staticmethod
     def log_error(msg, code=0):
