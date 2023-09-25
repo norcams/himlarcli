@@ -152,7 +152,6 @@ def action_list():
     else:
         hosts = nc.get_aggregate_hosts(options.aggregate, True)
     if options.format == 'table':
-        output = {'table' : 1}
         output['header'] = [
             'NAME',
             'AGGREGATE',
