@@ -31,7 +31,6 @@ def action_instances():
     instances = nc.get_all_instances(search_opts=search_opts)
 
     if options.format == 'table':
-        output = {'table' : 1}
         output['header'] = [
             'ID',
             'NAME',
