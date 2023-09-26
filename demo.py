@@ -16,6 +16,7 @@ from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
 from himlarcli.global_state import GlobalState, DemoInstance
+from himlarcli.color import Color
 
 parser = Parser()
 options = parser.parse_args()
@@ -38,32 +39,6 @@ MAX_AGE             = 90 # Max age of a demo instance, in days
 FIRST_NOTIFICATION  = 30 # Days until deletion for 1st notification
 SECOND_NOTIFICATION = 14 # Days until deletion for 2nd notification
 THIRD_NOTIFICATION  = 7  # Days until deletion for 3rd notification
-
-#------------------------------+-----------------------------------+---------+
-#       Text color             |       Background color            |         |
-#--------------+---------------+----------------+------------------+         |
-# Base color   |Lighter shade  |  Base color    | Lighter shade    |         |
-#--------------+---------------+----------------+------------------+         |
-BLK='\033[30m'; blk='\033[90m'; BBLK='\033[40m'; bblk='\033[100m' #| Black   |
-RED='\033[31m'; red='\033[91m'; BRED='\033[41m'; bred='\033[101m' #| Red     |
-GRN='\033[32m'; grn='\033[92m'; BGRN='\033[42m'; bgrn='\033[102m' #| Green   |
-YLW='\033[33m'; ylw='\033[93m'; BYLW='\033[43m'; bylw='\033[103m' #| Yellow  |
-BLU='\033[34m'; blu='\033[94m'; BBLU='\033[44m'; bblu='\033[104m' #| Blue    |
-MGN='\033[35m'; mgn='\033[95m'; BMGN='\033[45m'; bmgn='\033[105m' #| Magenta |
-CYN='\033[36m'; cyn='\033[96m'; BCYN='\033[46m'; bcyn='\033[106m' #| Cyan    |
-WHT='\033[37m'; wht='\033[97m'; BWHT='\033[47m'; bwht='\033[107m' #| White   |
-#------------------------------------------------------------------+---------+
-# Effects                                                                    |
-#----------------------------------------------------------------------------+
-DEF='\033[0m'   #Default color and effects                                   |
-BLD='\033[1m'   #Bold\brighter                                               |
-DIM='\033[2m'   #Dim\darker                                                  |
-CUR='\033[3m'   #Italic font                                                 |
-UND='\033[4m'   #Underline                                                   |
-INV='\033[7m'   #Inverted                                                    |
-COF='\033[?25l' #Cursor Off                                                  |
-CON='\033[?25h' #Cursor On                                                   |
-#----------------------------------------------------------------------------+
 
 #---------------------------------------------------------------------
 # Action functions
@@ -107,13 +82,13 @@ def action_projects():
 def action_instances():
     # Define pretty table
     header = [
-        f"{MGN}{BLD}REGION{DEF}",
-        f"{MGN}{BLD}PROJECT{DEF}",
-        f"{MGN}{BLD}INSTANCE ID{DEF}",
-        f"{MGN}{BLD}AGE{DEF}",
-        f"{MGN}{BLD}NOTIFY 1{DEF}",
-        f"{MGN}{BLD}NOTIFY 2{DEF}",
-        f"{MGN}{BLD}NOTIFY 3{DEF}",
+        f"{Color.fg.MGN}{Color.bold}REGION{Color.reset}",
+        f"{Color.fg.MGN}{Color.bold}PROJECT{Color.reset}",
+        f"{Color.fg.MGN}{Color.bold}INSTANCE ID{Color.reset}",
+        f"{Color.fg.MGN}{Color.bold}AGE{Color.reset}",
+        f"{Color.fg.MGN}{Color.bold}NOTIFY 1{Color.reset}",
+        f"{Color.fg.MGN}{Color.bold}NOTIFY 2{Color.reset}",
+        f"{Color.fg.MGN}{Color.bold}NOTIFY 3{Color.reset}",
     ]
     table = PrettyTable()
     table._max_width = {'value' : 70}
@@ -149,29 +124,29 @@ def action_instances():
                                          region=region)
 
                     if active_days >= MAX_AGE:
-                        days = f"{red}{active_days}{DEF}"
+                        days = f"{Color.fg.red}{active_days}{Color.reset}"
                     elif active_days < MAX_AGE and active_days >= (MAX_AGE - FIRST_NOTIFICATION):
-                        days = f"{ylw}{active_days}{DEF}"
+                        days = f"{Color.fg.ylw}{active_days}{Color.reset}"
                     else:
-                        days = f"{grn}{active_days}{DEF}"
+                        days = f"{Color.fg.grn}{active_days}{Color.reset}"
 
                     if entry and entry.notified1 is not None:
-                        n1 = f"{grn}{entry.notified1.strftime('%Y-%m-%d')}{DEF}"
+                        n1 = f"{Color.fg.grn}{entry.notified1.strftime('%Y-%m-%d')}{Color.reset}"
                     else:
-                        n1 = f"{DIM}x{DEF}"
+                        n1 = f"{Color.dim}x{Color.reset}"
                     if entry and entry.notified2 is not None:
-                        n2 = f"{grn}{entry.notified2.strftime('%Y-%m-%d')}{DEF}"
+                        n2 = f"{Color.fg.grn}{entry.notified2.strftime('%Y-%m-%d')}{Color.reset}"
                     else:
-                        n2 = f"{DIM}x{DEF}"
+                        n2 = f"{Color.dim}x{Color.reset}"
                     if entry and entry.notified3 is not None:
-                        n3 = f"{grn}{entry.notified3.strftime('%Y-%m-%d')}{DEF}"
+                        n3 = f"{Color.fg.grn}{entry.notified3.strftime('%Y-%m-%d')}{Color.reset}"
                     else:
-                        n3 = f"{DIM}x{DEF}"
+                        n3 = f"{Color.dim}x{Color.reset}"
 
                     row = [
-                        f"{DIM}{region}{DEF}",
-                        f"{blu}{project.name}{DEF}",
-                        f"{DIM}{instance.id}{DEF}",
+                        f"{Color.dim}{region}{Color.reset}",
+                        f"{Color.fg.blu}{project.name}{Color.reset}",
+                        f"{Color.dim}{instance.id}{Color.reset}",
                         days,
                         n1,
                         n2,
@@ -360,15 +335,15 @@ def notify_user(instance, project, region, active_days, notification_type):
     # Send mail to user
     if options.dry_run:
         p_info(f"Did NOT send spam to {project.admin}:")
-        print(f"{DIM}––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––{DEF}")
-        print(f"{CYN}Subject:{DEF} {DIM}{msg['subject']}{DEF}")
-        print(f"{CYN}To:{DEF} {DIM}{project.admin}{DEF}")
+        print(f"{Color.dim}––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––{Color.reset}")
+        print(f"{Color.fg.CYN}Subject:{Color.reset} {Color.dim}{msg['subject']}{Color.reset}")
+        print(f"{Color.fg.CYN}To:{Color.reset} {Color.dim}{project.admin}{Color.reset}")
         if bccaddr:
-            print(f"{CYN}Bcc:{DEF} {DIM}{bccaddr}{DEF}")
-        print(f"{CYN}From:{DEF} {DIM}{fromaddr}{DEF}")
-        print(f"{DIM}---{DEF}")
+            print(f"{Color.fg.CYN}Bcc:{Color.reset} {Color.dim}{bccaddr}{Color.reset}")
+        print(f"{Color.fg.CYN}From:{Color.reset} {Color.dim}{fromaddr}{Color.reset}")
+        print(f"{Color.dim}---{Color.reset}")
         print(body_content)
-        print(f"{DIM}––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––{DEF}")
+        print(f"{Color.dim}––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––{Color.reset}")
     else:
         mail.send_mail(project.admin, msg, fromaddr, ccaddr, bccaddr)
         kc.debug_log(f'Sending mail to {project.admin} regarding {instance.id} that has been active for {active_days} days')
