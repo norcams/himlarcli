@@ -11,6 +11,7 @@ from himlarcli.printer import Printer
 from himlarcli import utils
 from himlarcli.state import State
 from himlarcli.state import Instance
+from himlarcli.color import Color
 
 parser = Parser()
 options = parser.parse_args()
@@ -28,18 +29,45 @@ else:
     regions = kc.find_regions()
 
 def action_list():
-    printer.output_dict({'header': 'Host aggregate (#hosts, name, az)'})
-    for region in regions:
-        nova = utils.get_client(Nova, options, logger, region)
-        aggregates = nova.get_aggregates(simple=False)
+    if options.format == 'table':
+        output = {}
+        output['header'] = [
+            'NAME',
+            'HOSTS',
+            'AVAILABILITY ZONE',
+        ]
+        output['align'] = [
+            'l',
+            'r',
+            'l',
+        ]
+        output['sortby'] = 0
+        counter = 0
+        for region in regions:
+            nova = utils.get_client(Nova, options, logger, region)
+            aggregates = nova.get_aggregates(simple=False)
 
-        for aggr in aggregates:
-            output = {
-                '2': aggr.name,
-                '3': aggr.metadata['availability_zone'],
-                '1': len(aggr.hosts)
-            }
-            printer.output_dict(output, one_line=True)
+            for aggr in aggregates:
+                output[counter] = [
+                    Color.fg.ylw + aggr.name + Color.reset,
+                    len(aggr.hosts),
+                    Color.fg.CYN + aggr.metadata['availability_zone'] + Color.reset,
+                ]
+                counter += 1
+        printer.output_dict(output, one_line=True)
+    else:
+        printer.output_dict({'header': 'Host aggregate (#hosts, name, az)'})
+        for region in regions:
+            nova = utils.get_client(Nova, options, logger, region)
+            aggregates = nova.get_aggregates(simple=False)
+
+            for aggr in aggregates:
+                output = {
+                    '2': aggr.name,
+                    '3': aggr.metadata['availability_zone'],
+                    '1': len(aggr.hosts)
+                }
+                printer.output_dict(output, one_line=True)
 
 def action_show():
     for region in regions:
