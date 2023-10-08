@@ -575,7 +575,7 @@ class Keystone(Client):
             self.log_error(e)
         if exists:
             self.debug_log(f'Role {role.name} already exists for {email} in project {project_name}')
-            return self.ReturnCode.ROLE_ALREADY_EXISTS
+            return self.ReturnCode.ALREADY_MEMBER
         if self.dry_run:
             data = {'user':group.name, 'project': project_name, 'role':role.name}
             self.log_dry_run(function='grant_role', **data)

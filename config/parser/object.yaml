@@ -11,6 +11,11 @@ opt_args:
   '--region':
     'dest':     'region'
     'help':     'only use this region'
+  '-u':
+    'sub':      ['grant','revoke']
+    'dest':     'users'
+    'help':     'email of a valid openstack user (can be used multiple times)'
+    'action':   'append'
   'project':
    'sub':       ['grant', 'revoke']
    'metavar':   'project'

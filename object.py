@@ -34,15 +34,25 @@ def action_grant():
         himutils.fatal(f'Project not found: {options.project}')
 
     # Get all users from project
-    users = ksclient.list_roles(project_name=options.project)
+    project_users = ksclient.list_roles(project_name=options.project)
+
+    # If option '-u' is specified, limit to the specified
+    # users. Otherwise grant access to all project users
+    if options.users:
+        users = [x for x in project_users if x['group'].replace('-group', '') in options.users]
+    else:
+        users = project_users
 
     # Grant object role for all users
     for user in users:
+        if user['role'] != 'user':
+            continue
         rc = ksclient.grant_role(email=user['group'], project_name=options.project, role_name='object')
+        this_user = user['group'].replace('-group','')
         if rc == ksclient.ReturnCode.OK:
-            himutils.info(f"Granted object access in {options.project} to {user.group}")
+            himutils.info(f"Granted object access in {options.project} for {this_user}")
         elif rc == ksclient.ReturnCode.ALREADY_MEMBER:
-            himutils.warning(f"User {user.group} already has object access in {options.project}")
+            himutils.warning(f"User {this_user} already has object access in {options.project}")
 
 def action_revoke():
     # Get project, make sure it is valid
@@ -51,7 +61,14 @@ def action_revoke():
         himutils.fatal(f'Project not found: {options.project}')
 
     # Get all users from project
-    users = ksclient.list_roles(project_name=options.project)
+    project_users = ksclient.list_roles(project_name=options.project)
+
+    # If option '-u' is specified, limit to the specified
+    # users. Otherwise revoke access to all project users
+    if options.users:
+        users = [x for x in project_users if x['group'].replace('-group', '') in options.users]
+    else:
+        users = project_users
 
     # Revoke object role for all users
     for user in users:
@@ -59,7 +76,7 @@ def action_revoke():
             email = re.sub('(-group|-disabled)$', '', user['group'])
             rc = ksclient.revoke_role(email=email, project_name=options.project, role_name='object')
             if rc == ksclient.ReturnCode.OK:
-                himutils.info(f"Revoked object access in {options.project} from {email}")
+                himutils.info(f"Revoked object access in {options.project} for {email}")
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
