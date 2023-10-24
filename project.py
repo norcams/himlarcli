@@ -612,15 +612,16 @@ def action_access():
 
     # Resource availability by region
     resource_availability = {
-        'vgpu'       : [ 'bgo', 'osl' ],
-        'shpc'       : [ 'bgo', 'osl' ],
-        'shpc_ram'   : [ 'bgo' ],
-        'shpc_disk1' : [ 'osl' ],
-        'shpc_disk2' : [ 'osl' ],
-        'shpc_disk3' : [ 'osl' ],
-        'shpc_disk4' : [ 'osl' ],
-        'ssd'        : [ 'bgo', 'osl' ],
-        'net_uib'    : [ 'bgo' ],
+        'vgpu'         : [ 'bgo', 'osl' ],
+        'shpc'         : [ 'bgo', 'osl' ],
+        'shpc_ram'     : [ 'bgo' ],
+        'shpc_disk1'   : [ 'osl' ],
+        'shpc_disk2'   : [ 'osl' ],
+        'shpc_disk3'   : [ 'osl' ],
+        'shpc_disk4'   : [ 'osl' ],
+        'ssd'          : [ 'bgo', 'osl' ],
+        'net_uib'      : [ 'bgo' ],
+        'net_educloud' : [ 'bgo', 'osl' ],
     }
 
     # Today
@@ -800,6 +801,8 @@ def action_access():
         access_volumetype.append('mass-storage-ssd')
     elif resource == 'net_uib':
         access_networks.append('uib-dualStack')
+    elif resource == 'net_educloud':
+        access_networks.append('educloud1')
 
     # Loop through regions and grant/revoke access
     for region in regions:
