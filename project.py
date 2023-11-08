@@ -622,6 +622,7 @@ def action_access():
         'ssd'          : [ 'bgo', 'osl' ],
         'net_uib'      : [ 'bgo' ],
         'net_educloud' : [ 'bgo', 'osl' ],
+        'net_elastic'  : [ 'bgo', 'osl' ],
     }
 
     # Today
@@ -803,6 +804,8 @@ def action_access():
         access_networks.append('uib-dualStack')
     elif resource == 'net_educloud':
         access_networks.append('educloud1')
+    elif resource == 'net_elastic':
+        access_networks.append('elasticIP')
 
     # Loop through regions and grant/revoke access
     for region in regions:
