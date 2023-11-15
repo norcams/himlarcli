@@ -49,9 +49,3 @@ opt_args:
     'dest':     'file'
     'help':     'File to import TLDs from'
     'required': true
-  '--pretty':
-    'dest':     'pretty'
-    'help':     'Output pretty tables (overrides the "--format" option'
-    'action':   'store_const'
-    'const':    true
-    'default':  false

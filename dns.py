@@ -3,13 +3,13 @@
 
 import utils
 import re
+from collections import OrderedDict
 from himlarcli.keystone import Keystone
 from himlarcli.designate import Designate
 from himlarcli import utils as himutils
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
-from collections import OrderedDict
-from prettytable import PrettyTable
+from himlarcli.color import Color
 
 himutils.is_virtual_env()
 
@@ -51,25 +51,37 @@ def __diff_arrays(first, second):
 def action_blacklist_list():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
     blacklists = designateclient.list_blacklists()
-    outputs = ['pattern','description','id']
-    if options.pretty:
-        x = PrettyTable()
-        x.field_names = outputs
-        x.align['pattern'] = 'l'
-        x.align['description'] = 'l'
+    if options.format == 'table':
+        output = {}
+        output['header'] = [
+            'PATTERN',
+            'DESCRIPTION',
+            'ID',
+        ]
+        output['align'] = [
+            'l',
+            'l',
+            'l',
+        ]
+        output['sortby'] = 0
+        counter = 0
+
         if isinstance(blacklists, list):
             for b in blacklists:
                 if not isinstance(b, dict):
                     b = b.to_dict()
-                array = []
-                for o in outputs:
-                    array.append(b[o])
-                x.add_row(array)
-        print(x)
+                output[counter] = [
+                    Color.fg.WHT + Color.bold + b['pattern'] + Color.reset,
+                    Color.fg.GRN + b['description'] + Color.reset,
+                    Color.dim + b['id'] + Color.reset,
+                ]
+                counter += 1
+        printer.output_dict(output, sort=True, one_line=False)
     else:
-        header = 'Blacklisted DNS domains (%s)' % (', '.join(outputs))
+        header = 'Blacklisted DNS domains (pattern, description, id)'
         printer.output_dict({'header': header})
         output = OrderedDict()
+        outputs = ['pattern','description','id']
         if isinstance(blacklists, list):
             for b in blacklists:
                 if not isinstance(b, dict):
@@ -109,23 +121,37 @@ def action_blacklist_show():
 def action_tld_list():
     designateclient = Designate(options.config, debug=options.debug, log=logger)
     tlds = designateclient.list_tlds()
-    outputs = ['name','description','id']
-    if options.pretty:
-        x = PrettyTable()
-        x.field_names = outputs
-        x.align['name'] = 'l'
-        x.align['description'] = 'l'
-        x.sortby = 'name'
+    if options.format == 'table':
+        output = {}
+        output['header'] = [
+            'NAME',
+            'DESCRIPTION',
+            'ID',
+        ]
+        output['align'] = [
+            'l',
+            'l',
+            'l',
+        ]
+        output['sortby'] = 0
+        counter = 0
         if isinstance(tlds, list):
             for b in tlds:
                 if not isinstance(b, dict):
                     b = b.to_dict()
-                array = []
-                for o in outputs:
-                    array.append(b[o])
-                x.add_row(array)
-        print(x)
+                if b['description'] == 'BULK IMPORT FROM IANA':
+                    desc_color = Color.fg.GRN
+                else:
+                    desc_color = Color.fg.blu
+                output[counter] = [
+                    Color.fg.ylw + Color.bold + b['name'] + Color.reset,
+                    desc_color + b['description'] + Color.reset,
+                    Color.dim + b['id'] + Color.reset,
+                ]
+                counter += 1
+        printer.output_dict(output, sort=True, one_line=False)
     else:
+        outputs = ['name','description','id']
         header = 'Top Level Domains (%s)' % (', '.join(outputs))
         printer.output_dict({'header': header})
         output = OrderedDict()
