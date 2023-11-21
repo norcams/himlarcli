@@ -538,6 +538,10 @@ nodes:
     compute_profile: medium
     compute_resource: controller-05
     hostgroup: 15
+  rgw-02:
+    compute_profile: medium
+    compute_resource: controller-06
+    hostgroup: 15
   sec-01:
     compute_profile: small
     compute_resource: controller-08
