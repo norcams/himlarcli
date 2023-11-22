@@ -508,6 +508,10 @@ nodes:
     compute_profile: medium
     compute_resource: controller-05
     hostgroup: 16
+  rgw-02:
+    compute_profile: medium
+    compute_resource: controller-06
+    hostgroup: 16
   status-01:
     compute_profile: small
     compute_resource: controller-06
