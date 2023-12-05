@@ -115,7 +115,7 @@ nodes:
   compute-10:
     mac: e4:43:4b:46:84:86
     hostgroup: 17
-  compute-atlas-11:
+  compute-epyc-11:
     mac: b0:26:28:1e:86:b2
     hostgroup: 17
   compute-atlas-12:
