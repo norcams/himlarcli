@@ -25,3 +25,6 @@ setuptools==59.6.0
 autosemver==0.5.4
 python-foreman==0.4.20
 progressbar2
+# needed to run request_specs.py - require python 3.9+
+#nova==21.2.3
+
