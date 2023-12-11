@@ -7,6 +7,7 @@ import keystoneauth1.exceptions as keyexc
 from datetime import date, datetime, timedelta
 import urllib
 import time
+from himlarcli import utils as himutils
 
 # pylint: disable=R0904
 
@@ -130,31 +131,101 @@ class Nova(Client):
 
 ################################## AGGREGATE ##################################
 
-    def move_host_aggregate(self, hostname, aggregate, remove_from_old=True):
+    def add_host_to_aggregate(self, hostname, aggregate, move=False):
         host = self.get_host(hostname)
-        to_agg = self.get_aggregate(aggregate)
-        if not host: return # host not found
-        if not to_agg: return # aggregate not found
-        if hostname in to_agg.hosts: return # host already in aggregate
+        aggregate = self.get_aggregate(aggregate)
+        if not host:
+            himutils.error(f"Host '{hostname}' was not found")
+            return False # host not found
+        if not aggregate:
+            himutils.error(f"Aggregate '{aggregate.name}' was not found")
+            return False # aggregate not found
+        if hostname in aggregate.hosts:
+            himutils.error(f"Host {hostname} is already in aggregate {aggregate.name}")
+            return False # host already in aggregate
 
+        # host needs to be enabled for this to work
         if host.status != 'enabled':
-            if not self.dry_run: self.enable_host(hostname)
-            enabled = True
-        else: enabled = False
+            if not self.dry_run:
+                self.enable_host(hostname)
+            artificially_enabled = True
+        else:
+            artificially_enabled = False
 
-        if remove_from_old:
+        if move:
             aggregates = self.get_aggregates(False)
+            # Count number of aggregates host is member of
+            num_aggregates = 0 # number of aggregates for host
             for agg in aggregates:
                 if hostname in agg.hosts:
-                    if not self.dry_run: agg.remove_host(hostname)
-                    self.logger.debug('=> remove host %s from aggregate %s',
-                                      hostname, agg.name)
-        if not self.dry_run:
-            to_agg.add_host(hostname)
-        self.logger.debug('=> add host %s to aggregate %s', hostname, to_agg.name)
+                    num_aggregates += 1
+            if num_aggregates != 1:
+                himutils.error(f"Host {hostname} is member of multiple aggregates. Cannot move.")
+                return False
+            for agg in aggregates:
+                if hostname in agg.hosts:
+                    if not self.dry_run:
+                        agg.remove_host(hostname)
+                    self.logger.debug(f"=> remove host {hostname} from aggregate {agg.name}")
 
-        if enabled and not self.dry_run:
+        # Add host to aggregate
+        if not self.dry_run:
+            try:
+                aggregate.add_host(hostname)
+            except novaclient.exceptions.Conflict:
+                himutils.error(f"Cannot add {hostname} to {aggregate.name}: Availability zone conflict")
+                return False
+        self.logger.debug(f"=> add host {hostname} to aggregate {aggregate.name}")
+
+        # If we temporarily enabled the host, disable it now
+        if artificially_enabled and not self.dry_run:
             self.disable_host(hostname)
+
+        # Finish up
+        return True
+
+    def remove_host_from_aggregate(self, hostname, aggregate):
+        host = self.get_host(hostname)
+        aggregate = self.get_aggregate(aggregate)
+
+        if not host:
+            himutils.error(f"Host '{hostname}' was not found")
+            return False # host not found
+        if not aggregate:
+            himutils.error(f"Aggregate '{aggregate.name}' was not found")
+            return False # aggregate not found
+        if hostname not in aggregate.hosts:
+            himutils.error(f"Host {hostname} is not in aggregate {aggregate.name}")
+            return False # host not in aggregate
+
+        # Count number of aggregates host is member of
+        aggregates = self.get_aggregates(False)
+        num_aggregates = 0 # number of aggregates for host
+        for agg in aggregates:
+            if hostname in agg.hosts:
+                num_aggregates += 1
+        if num_aggregates == 1:
+            himutils.error(f"Host {hostname} is only member of one aggregate. Cannot remove.")
+            return False
+
+        # host needs to be enabled for this to work
+        if host.status != 'enabled':
+            if not self.dry_run:
+                self.enable_host(hostname)
+            artificially_enabled = True
+        else:
+            artificially_enabled = False
+
+        # Remove host from the aggregate
+        if not self.dry_run:
+            aggregate.remove_host(hostname)
+        self.logger.debug(f"=> remove host {hostname} from aggregate {aggregate.name}")
+
+        # If we temporarily enabled the host, disable it now
+        if artificially_enabled and not self.dry_run:
+            self.disable_host(hostname)
+
+        # Finish up
         return True
 
     def get_filtered_aggregates(self, **kwargs):
@@ -258,7 +329,9 @@ class Nova(Client):
             if not hasattr(aggregate, 'hosts'):
                 continue
             for h in aggregate.hosts:
-                hosts[h] = aggregate.name
+                if not h in hosts:
+                    hosts[h] = []
+                hosts[h].append(aggregate.name)
         return hosts
 
     def get_availability_zones(self):
