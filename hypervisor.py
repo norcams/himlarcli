@@ -124,37 +124,34 @@ def action_users():
 
 def action_move():
     hostname = nc.get_fqdn(options.host)
-    instances = nc.get_instances(host=hostname)
-    if instances:
-        himutils.fatal(f"Host {hostname} not empty. Remove instances first")
-    if nc.add_host_to_aggregate(hostname=hostname, aggregate=options.aggregate, move=True):
+    if nc.add_host_to_aggregate(hostname=hostname, aggregate_name=options.aggregate, move=True):
         himutils.info(f"Host {hostname} moved to aggregate {options.aggregate}")
 
 def action_add():
     hostname = nc.get_fqdn(options.host)
-    if nc.add_host_to_aggregate(hostname=hostname, aggregate=options.aggregate, move=False):
+    if nc.add_host_to_aggregate(hostname=hostname, aggregate_name=options.aggregate, move=False):
         himutils.info(f"Host {hostname} added to aggregate {options.aggregate}")
 
 def action_remove():
     hostname = nc.get_fqdn(options.host)
-    if nc.remove_host_from_aggregate(hostname=hostname, aggregate=options.aggregate):
+    if nc.remove_host_from_aggregate(hostname=hostname, aggregate_name=options.aggregate):
         himutils.info(f"Host {hostname} removed from aggregate {options.aggregate}")
 
 def action_enable():
     host = nc.get_host(hostname=nc.get_fqdn(options.host), detailed=True)
     if not host:
-        himutils.sys_error('Could not find valid host %s' % options.host)
+        himutils.fatal(f"Could not find valid host {options.host}")
     if host.status != 'enabled' and not options.dry_run:
         nc.enable_host(host.hypervisor_hostname)
-        print('Host %s enabled' % host.hypervisor_hostname)
+        himutils.info(f"Host {host.hypervisor_hostname} enabled")
 
 def action_disable():
     host = nc.get_host(hostname=nc.get_fqdn(options.host), detailed=True)
     if not host:
-        himutils.sys_error('Could not find valid host %s' % options.host)
+        himutils.fatal(f"Could not find valid host {options.host}")
     if host.status != 'disabled' and not options.dry_run:
         nc.disable_host(host.hypervisor_hostname)
-        print('Host %s disabled' % host.hypervisor_hostname)
+        himutils.info(f"Host {host.hypervisor_hostname} disabled")
 
 def action_list():
     aggregates = nc.get_all_aggregate_hosts()

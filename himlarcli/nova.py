@@ -131,14 +131,14 @@ class Nova(Client):
 
 ################################## AGGREGATE ##################################
 
-    def add_host_to_aggregate(self, hostname, aggregate, move=False):
+    def add_host_to_aggregate(self, hostname, aggregate_name, move=False):
         host = self.get_host(hostname)
-        aggregate = self.get_aggregate(aggregate)
+        aggregate = self.get_aggregate(aggregate_name)
         if not host:
             himutils.error(f"Host '{hostname}' was not found")
             return False # host not found
         if not aggregate:
-            himutils.error(f"Aggregate '{aggregate.name}' was not found")
+            himutils.error(f"Aggregate '{aggregate_name}' was not found")
             return False # aggregate not found
         if hostname in aggregate.hosts:
             himutils.error(f"Host {hostname} is already in aggregate {aggregate.name}")
@@ -156,14 +156,23 @@ class Nova(Client):
             aggregates = self.get_aggregates(False)
             # Count number of aggregates host is member of
             num_aggregates = 0 # number of aggregates for host
+            instances = self.get_instances(host=hostname)
             for agg in aggregates:
                 if hostname in agg.hosts:
                     num_aggregates += 1
             if num_aggregates != 1:
                 himutils.error(f"Host {hostname} is member of multiple aggregates. Cannot move.")
+                if artificially_enabled and not self.dry_run:
+                    self.disable_host(hostname)
                 return False
             for agg in aggregates:
                 if hostname in agg.hosts:
+                    current_az = agg.availability_zone
+                    if instances and current_az != aggregate.availability_zone:
+                        himutils.error(f"Host {hostname} not empty. Cannot move to different AZ. Remove instances first")
+                        if artificially_enabled and not self.dry_run:
+                            self.disable_host(hostname)
+                        return False
                     if not self.dry_run:
                         agg.remove_host(hostname)
                     self.logger.debug(f"=> remove host {hostname} from aggregate {agg.name}")
@@ -174,6 +183,8 @@ class Nova(Client):
                 aggregate.add_host(hostname)
             except novaclient.exceptions.Conflict:
                 himutils.error(f"Cannot add {hostname} to {aggregate.name}: Availability zone conflict")
+                if artificially_enabled and not self.dry_run:
+                    self.disable_host(hostname)
                 return False
         self.logger.debug(f"=> add host {hostname} to aggregate {aggregate.name}")
 
@@ -184,15 +195,15 @@ class Nova(Client):
         # Finish up
         return True
 
-    def remove_host_from_aggregate(self, hostname, aggregate):
+    def remove_host_from_aggregate(self, hostname, aggregate_name):
         host = self.get_host(hostname)
-        aggregate = self.get_aggregate(aggregate)
+        aggregate = self.get_aggregate(aggregate_name)
 
         if not host:
             himutils.error(f"Host '{hostname}' was not found")
             return False # host not found
         if not aggregate:
-            himutils.error(f"Aggregate '{aggregate.name}' was not found")
+            himutils.error(f"Aggregate '{aggregate_name}' was not found")
             return False # aggregate not found
         if hostname not in aggregate.hosts:
             himutils.error(f"Host {hostname} is not in aggregate {aggregate.name}")
