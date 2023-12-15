@@ -228,7 +228,7 @@ images:
       'hw_vif_multiqueue_enabled': 'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
-   'fedora_39':
+  'fedora_39':
     'name':             'GOLD Fedora 39'
     'depricated':       'Outdated (Fedora 39)'
     'url':              'http://builder/'
