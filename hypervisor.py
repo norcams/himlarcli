@@ -124,27 +124,34 @@ def action_users():
 
 def action_move():
     hostname = nc.get_fqdn(options.host)
-    instances = nc.get_instances(host=hostname)
-    if instances:
-        himutils.sys_error('Host %s not empty. Remove instances first' % hostname)
-    if nc.move_host_aggregate(hostname=hostname, aggregate=options.aggregate):
-        print("Host %s moved to aggregate %s" % (hostname, options.aggregate))
+    if nc.add_host_to_aggregate(hostname=hostname, aggregate_name=options.aggregate, move=True):
+        himutils.info(f"Host {hostname} moved to aggregate {options.aggregate}")
+
+def action_add():
+    hostname = nc.get_fqdn(options.host)
+    if nc.add_host_to_aggregate(hostname=hostname, aggregate_name=options.aggregate, move=False):
+        himutils.info(f"Host {hostname} added to aggregate {options.aggregate}")
+
+def action_remove():
+    hostname = nc.get_fqdn(options.host)
+    if nc.remove_host_from_aggregate(hostname=hostname, aggregate_name=options.aggregate):
+        himutils.info(f"Host {hostname} removed from aggregate {options.aggregate}")
 
 def action_enable():
     host = nc.get_host(hostname=nc.get_fqdn(options.host), detailed=True)
     if not host:
-        himutils.sys_error('Could not find valid host %s' % options.host)
+        himutils.fatal(f"Could not find valid host {options.host}")
     if host.status != 'enabled' and not options.dry_run:
         nc.enable_host(host.hypervisor_hostname)
-        print('Host %s enabled' % host.hypervisor_hostname)
+        himutils.info(f"Host {host.hypervisor_hostname} enabled")
 
 def action_disable():
     host = nc.get_host(hostname=nc.get_fqdn(options.host), detailed=True)
     if not host:
-        himutils.sys_error('Could not find valid host %s' % options.host)
+        himutils.fatal(f"Could not find valid host {options.host}")
     if host.status != 'disabled' and not options.dry_run:
         nc.disable_host(host.hypervisor_hostname)
-        print('Host %s disabled' % host.hypervisor_hostname)
+        himutils.info(f"Host {host.hypervisor_hostname} disabled")
 
 def action_list():
     aggregates = nc.get_all_aggregate_hosts()
@@ -156,7 +163,7 @@ def action_list():
         output = {}
         output['header'] = [
             'NAME',
-            'AGGREGATE',
+            'AGGREGATES',
             'VMs',
             'vCPUs',
             'MEMORY (GiB)',
@@ -177,13 +184,13 @@ def action_list():
         for host in hosts:
             r_hostname = Color.fg.blu + host.hypervisor_hostname + Color.reset
             if host.status == 'enabled':
-                r_aggregate = Color.fg.ylw + aggregates.get(host.hypervisor_hostname, 'unknown') + Color.reset
+                r_aggregate = Color.fg.ylw + ','.join(aggregates.get(host.hypervisor_hostname, 'unknown')) + Color.reset
                 r_vms = host.running_vms
                 r_vcpus = f"{host.vcpus_used} / {host.vcpus}"
                 r_mem = f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}"
                 r_status = Color.fg.GRN + host.status.upper() + Color.reset
             else:
-                r_aggregate = Color.fg.YLW + aggregates.get(host.hypervisor_hostname, 'unknown') + Color.reset
+                r_aggregate = Color.fg.YLW + ','.join(aggregates.get(host.hypervisor_hostname, 'unknown')) + Color.reset
                 r_vms = Color.dim + str(host.running_vms) + Color.reset
                 r_vcpus = Color.dim + f"{host.vcpus_used} / {host.vcpus}" + Color.reset
                 r_mem = Color.dim + f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}" + Color.reset
@@ -204,7 +211,7 @@ def action_list():
             counter += 1
         printer.output_dict(output, sort=True, one_line=False)
     else:
-        header = {'header': 'Hypervisor list (name, aggregate, vms, vcpu_used,' +
+        header = {'header': 'Hypervisor list (name, aggregates, vms, vcpu_used,' +
                   'ram_gb_used, state, status)'}
         printer.output_dict(header)
         for host in hosts:
@@ -215,7 +222,7 @@ def action_list():
                 '3': host.running_vms,
                 '4': host.vcpus_used,
                 '5': int(host.memory_mb_used/1024),
-                '2': aggregates.get(host.hypervisor_hostname, 'unknown')
+                '2': ','.join(aggregates.get(host.hypervisor_hostname, 'unknown'))
             }
             printer.output_dict(output, sort=True, one_line=True)
 
