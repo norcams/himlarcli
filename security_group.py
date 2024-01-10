@@ -34,7 +34,7 @@ db = himutils.get_client(GlobalState, options, logger)
 # Use to (de)activate checks
 ENABLE_BOGUS_0_MASK = True
 ENABLE_WRONG_MASK   = True
-ENABLE_PORT_LIMIT   = False
+ENABLE_PORT_LIMIT   = True
 
 # Enum class for check result
 class CheckResult(Enum):
