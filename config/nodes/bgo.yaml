@@ -34,22 +34,6 @@ nodes:
   cephmon-01:
     hostgroup: 16
     mac: ec:f4:bb:cc:ce:f4
-#  cephmon-01:
-#    compute_profile: 2xlarge
-#    compute_resource: controller-05
-#    compute_attributes:
-#      volumes_attributes:
-#        '1':
-#          allocation:   '0G'
-#          pool_name:    'dirpool'
-#          capacity:     '30G'
-#          format_type:  'qcow2'
-#    host_parameters_attributes:
-#      - name:           'installdevice'
-#        value:          'vda'
-#  cephmon-02:
-#    hostgroup: 1
-#    mac: ec:f4:bb:cc:d1:54
   cephmon-02:
     hostgroup: 16
     mac: ec:f4:bb:cc:d1:54
@@ -315,12 +299,6 @@ nodes:
     compute_profile: medium
     compute_resource: controller-05
     hostgroup: 15
-#  controller-02:
-#    mac: ec:f4:bb:cc:d1:54
-#  controller-03:
-#    mac: ec:f4:bb:cc:d0:9c
-#  controller-04:
-#    mac: b0:83:fe:e8:3a:31
   controller-05:
     mac: dc:f4:01:e7:eb:fe
     hostgroup: 16
