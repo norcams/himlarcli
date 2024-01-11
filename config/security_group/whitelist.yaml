@@ -41,6 +41,7 @@ region:
       - xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  # example
     secgroup_id:
       - xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  # example
+      - 4d14d285-0ee9-40a1-a15b-d43c7c192265  # RT: 5905418
   bgo:
     rule_id:
       - xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  # example
