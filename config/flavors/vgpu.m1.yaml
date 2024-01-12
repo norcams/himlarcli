@@ -11,12 +11,12 @@ vgpu.m1:
   'vgpu.m1.large':
     vcpus: 2
     ram: 8192
-    disk: 20
+    disk: 50
   'vgpu.m1.xlarge':
     vcpus: 4
     ram: 16384
-    disk: 20
+    disk: 50
   'vgpu.m1.2xlarge':
     vcpus: 8
     ram: 32768
-    disk: 20
+    disk: 50
