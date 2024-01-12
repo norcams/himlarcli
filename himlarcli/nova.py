@@ -674,6 +674,10 @@ class Nova(Client):
             :param class_filter: flavor class, e.g. m1 or vgpu.m1.
             Version: 2021-3
         """
+        kc = self.get_keystone_client()
+        if not kc.get_by_id('project', project_id):
+            self.debug_log(f'project {project_id} do not exist')
+            return
         dry_run_txt = 'DRY-RUN: ' if self.dry_run else ''
         if action == 'revoke':
             action_func = 'remove_tenant_access'
