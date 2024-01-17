@@ -614,7 +614,7 @@ def action_access():
     resource_availability = {
         'vgpu'         : [ 'bgo', 'osl' ],
         'shpc'         : [ 'bgo', 'osl' ],
-        'shpc_ram'     : [ 'bgo' ],
+        'shpc_ram'     : [ 'bgo', 'osl' ],
         'shpc_disk1'   : [ 'osl' ],
         'shpc_disk2'   : [ 'osl' ],
         'shpc_disk3'   : [ 'osl' ],
