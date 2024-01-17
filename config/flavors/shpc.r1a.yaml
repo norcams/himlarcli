@@ -1,5 +1,5 @@
 ---
-# R1 flavor used for sHPC ONLY in BGO
+# R1 flavor used for sHPC
 public: false
 properties: {}
 shpc.r1a: {}
