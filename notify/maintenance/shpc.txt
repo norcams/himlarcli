@@ -1,20 +1,23 @@
 Hi,
 
-Due to scheduled maintenance, running sHPC instances in NREC will experience
-downtime on $date.
+Due to scheduled maintenance, running sHPC instances in NREC will
+experience downtime on $date.
 
 Affected instance(s) connected to your email $admin
 
 $instances
 
-Instances running on sHPC hosts will experience downtime when the compute host
-is down for maintenance. Please note that, there can be scheduled maintenance
-on the second Tuesday of every month.
+Instances running on sHPC hosts will experience downtime when the
+compute host is down for maintenance. Please note that, there can be
+scheduled maintenance on the second Tuesday of every month.
 
-If you have unused sHPC instances, we would also appreciate if you delete them.
-Resources are limited.
+If you have unused sHPC instances, we would also appreciate if you
+delete them. Resources are limited!
 
-Support and contact information can be found at https://docs.nrec.no
+Support and contact information can be found at
 
---
-NREC team
+  https://docs.nrec.no
+
+Best Regards,
+-- 
+NREC Team <support@nrec.no>
