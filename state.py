@@ -118,8 +118,8 @@ def action_compare():
 def action_replace():
     print('not implemented')
 
-def action_purge():
-    state.purge(options.resource)
+def action_clean():
+    state.clean(options.resource)
 
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
