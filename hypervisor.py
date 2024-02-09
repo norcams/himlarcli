@@ -190,7 +190,7 @@ def action_list():
             r_vms = str(host.running_vms)
             r_vcpus = f"{host.vcpus_used} / {host.vcpus}"
             r_mem = f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}"
-            if re.search(r"^(central1|placeholder1|hpc1)$", r_aggregate):
+            if re.search(r"^(central1|windows1|placeholder1|hpc1)$", r_aggregate):
                 r_disk = "-"
             else:
                 r_disk = f"{host.local_gb_used} / {host.local_gb}"
