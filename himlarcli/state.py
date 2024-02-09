@@ -75,7 +75,7 @@ class State(Client):
     def get_first(self, class_name, **kwargs):
         return self.session.query(class_name).filter_by(**kwargs).first()
 
-    def purge(self, table):
+    def clean(self, table):
         """ Drop a table for database """
         self.logger.debug('=> drop table %s', table.title())
         found_table = getattr(sys.modules[__name__], table.title())

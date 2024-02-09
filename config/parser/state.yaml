@@ -3,7 +3,7 @@ desc:   'Save state to a local sqlite db'
 actions:
   save:     'Save the current state for a resource'
   compare:  'Compare saved and current state of a resource'
-  purge:    'Remove saved stats for a resource'
+  clean:    'Clean saved stats for a resource'
   replace:  'Replace the current state with the one saved'
 
 opt_args:
