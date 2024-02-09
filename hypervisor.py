@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from datetime import date
+import re
 
 from himlarcli import tests as tests
 tests.is_virtual_env()
@@ -167,12 +168,14 @@ def action_list():
             'VMs',
             'vCPUs',
             'MEMORY (GiB)',
+            'DISK (GB)',
             'STATE',
             'STATUS',
         ]
         output['align'] = [
             'l',
             'l',
+            'r',
             'r',
             'r',
             'r',
@@ -183,18 +186,25 @@ def action_list():
         counter = 0
         for host in hosts:
             r_hostname = Color.fg.blu + host.hypervisor_hostname + Color.reset
-            if host.status == 'enabled':
-                r_aggregate = Color.fg.ylw + ','.join(aggregates.get(host.hypervisor_hostname, 'unknown')) + Color.reset
-                r_vms = host.running_vms
-                r_vcpus = f"{host.vcpus_used} / {host.vcpus}"
-                r_mem = f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}"
-                r_status = Color.fg.GRN + host.status.upper() + Color.reset
+            r_aggregate = ','.join(aggregates.get(host.hypervisor_hostname, 'unknown'))
+            r_vms = str(host.running_vms)
+            r_vcpus = f"{host.vcpus_used} / {host.vcpus}"
+            r_mem = f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}"
+            if re.search(r"^(central1|placeholder1|hpc1)$", r_aggregate):
+                r_disk = "-"
             else:
-                r_aggregate = Color.fg.YLW + ','.join(aggregates.get(host.hypervisor_hostname, 'unknown')) + Color.reset
-                r_vms = Color.dim + str(host.running_vms) + Color.reset
-                r_vcpus = Color.dim + f"{host.vcpus_used} / {host.vcpus}" + Color.reset
-                r_mem = Color.dim + f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}" + Color.reset
-                r_status = Color.fg.red + host.status.upper() + Color.reset
+                r_disk = f"{host.local_gb_used} / {host.local_gb}"
+            r_status = host.status.upper()
+            if host.status == 'enabled':
+                r_aggregate = Color.fg.ylw + r_aggregate + Color.reset
+                r_status = Color.fg.GRN + r_status + Color.reset
+            else:
+                r_aggregate = Color.fg.YLW + r_aggregate + Color.reset
+                r_vms = Color.dim + r_vms + Color.reset
+                r_vcpus = Color.dim + r_vcpus + Color.reset
+                r_mem = Color.dim + r_mem + Color.reset
+                r_disk = Color.dim + r_disk + Color.reset
+                r_status = Color.fg.red + r_status + Color.reset
             if host.state == 'up':
                 r_state = Color.fg.GRN + host.state.upper() + Color.reset
             else:
@@ -205,6 +215,7 @@ def action_list():
                 r_vms,
                 r_vcpus,
                 r_mem,
+                r_disk,
                 r_state,
                 r_status,
             ]
@@ -212,17 +223,18 @@ def action_list():
         printer.output_dict(output, sort=True, one_line=False)
     else:
         header = {'header': 'Hypervisor list (name, aggregates, vms, vcpu_used,' +
-                  'ram_gb_used, state, status)'}
+                  'ram_gb_used, local_gb_used, state, status)'}
         printer.output_dict(header)
         for host in hosts:
             output = {
                 '1': host.hypervisor_hostname,
-                '6': host.state,
-                '7': host.status,
+                '2': ','.join(aggregates.get(host.hypervisor_hostname, 'unknown')),
                 '3': host.running_vms,
                 '4': host.vcpus_used,
                 '5': int(host.memory_mb_used/1024),
-                '2': ','.join(aggregates.get(host.hypervisor_hostname, 'unknown'))
+                '6': host.local_gb_used,
+                '7': host.state,
+                '8': host.status,
             }
             printer.output_dict(output, sort=True, one_line=True)
 
