@@ -1,5 +1,5 @@
 ---
-# M1 200GB disk optimized flavor used for sHPC ONLY in OSL
+# M1 200GB disk optimized flavor used for sHPC
 public: false
 properties: {}
 shpc.m1ad1: {}
