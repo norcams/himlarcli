@@ -5,7 +5,7 @@ from himlarcli.printer import Printer
 from himlarcli.mail import Mail
 from himlarcli.nova import Nova
 from himlarcli.cinder import Cinder
-from himlarcli import utils
+from himlarcli import utils as himutils
 from prettytable import PrettyTable
 from datetime import date
 from datetime import datetime
@@ -16,7 +16,7 @@ import json
 import os
 import csv
 
-utils.is_virtual_env()
+himutils.is_virtual_env()
 
 parser = Parser()
 parser.set_autocomplete(True)
@@ -34,7 +34,7 @@ else:
     regions = ksclient.find_regions()
 
 if not regions:
-    utils.sys_error('no regions found with this name!')
+    himutils.fatal('no regions found with this name!')
 
 #---------------------------------------------------------------------
 # Main functions
@@ -42,7 +42,7 @@ if not regions:
 def action_show():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
-        utils.sys_error('No project found with name %s' % options.project)
+        himutils.fatal(f"No project found with name {options.project}")
     sys.stdout.write(Printer.prettyprint_project_metadata(project, options, logger, regions))
     if options.detail:
         sys.stdout.write(Printer.prettyprint_project_zones(project, options, logger))
@@ -125,9 +125,9 @@ def action_resources():
         ssd   = dict()
         for region in regions:
             # Initiate Nova object
-            nc = utils.get_client(Nova, options, logger, region)
+            nc = himutils.get_client(Nova, options, logger, region)
             # Initiate Cinder object
-            cc = utils.get_client(Cinder, options, logger, region)
+            cc = himutils.get_client(Cinder, options, logger, region)
 
             ram[region]   = 0
             disk[region]  = 0
@@ -247,13 +247,11 @@ def action_vendorapi():
 
 def action_mail():
     if not options.template:
-        utils.sys_error("Option '--template' is required when sending mail")
-        sys.exit(1)
+        himutils.fatal("Option '--template' is required when sending mail")
 
     if options.mail_user:
         if not ksclient.is_valid_user(email=options.mail_user, domain=options.domain):
-            print("%s is not a valid user. Please check your spelling or case." % options.mail_user)
-            sys.exit(1)
+            himutils.fatal(f"{options.mail_user} is not a valid user. Please check your spelling or case.")
         users = [options.mail_user]
     else:
         users = ksclient.list_users(domain=options.domain)
@@ -273,7 +271,7 @@ def action_mail():
 
     # Ask for confirmation
     if not options.force and not options.dry_run:
-        if not utils.confirm_action('Send mail to (potentially) %d users?' % len(users)):
+        if not himutils.confirm_action('Send mail to (potentially) %d users?' % len(users)):
             return
 
     # Loop through projects
@@ -297,7 +295,7 @@ def action_mail():
             continue
 
         # Set common mail parameters
-        mail = utils.get_client(Mail, options, logger)
+        mail = himutils.get_client(Mail, options, logger)
         mail = Mail(options.config, debug=options.debug)
         mail.set_dry_run(options.dry_run)
         if options.fromaddr:
@@ -326,10 +324,10 @@ def action_mail():
                 member_counter += 1
 
         # Construct mail content
-        body_content = utils.load_template(inputfile=options.template,
-                                           mapping={'admin_count': admin_counter,
-                                                    'member_count': member_counter},
-                                           log=logger)
+        body_content = himutils.load_template(inputfile=options.template,
+                                              mapping={'admin_count': admin_counter,
+                                                       'member_count': member_counter},
+                                              log=logger)
         msg = mail.create_mail_with_txt_attachment(options.subject,
                                                    body_content,
                                                    attachment_payload,
@@ -345,12 +343,10 @@ def action_mail():
 
 def action_enddate():
     if not options.list and not options.template:
-        utils.sys_error("Option '--template' is required when sending mail")
-        sys.exit(1)
+        himutils.fatal("Option '--template' is required when sending mail")
 
     if not options.list and not options.days:
-        utils.sys_error("Option '--days' is required")
-        sys.exit(1)
+        himutils.fatal("Option '--days' is required")
 
     search_filter = dict()
     projects = ksclient.get_projects(**search_filter)
@@ -412,7 +408,7 @@ def action_enddate():
         enddate = datetime.strptime(project.enddate, '%Y-%m-%d')
 
         # Set common mail parameters
-        mail = utils.get_client(Mail, options, logger)
+        mail = himutils.get_client(Mail, options, logger)
         mail = Mail(options.config, debug=options.debug)
         mail.set_dry_run(options.dry_run)
         bccaddr = 'iaas-logs@usit.uio.no'
@@ -443,11 +439,11 @@ def action_enddate():
 
                     # Construct mail content
                     subject = '[NREC] Project "%s" expires in %d days' % (project.name, days)
-                    body_content = utils.load_template(inputfile=options.template,
-                                                       mapping={'project': project.name,
-                                                                'enddate': project_enddate,
-                                                                'days': days},
-                                                       log=logger)
+                    body_content = himutils.load_template(inputfile=options.template,
+                                                          mapping={'project': project.name,
+                                                                   'enddate': project_enddate,
+                                                                   'days': days},
+                                                          log=logger)
                     msg = mail.create_mail_with_txt_attachment(subject,
                                                                body_content,
                                                                attachment_payload,
@@ -475,12 +471,10 @@ def action_enddate():
 
 def action_quarantine():
     if not options.list and not options.template:
-        utils.sys_error("Option '--template' is required when sending mail")
-        sys.exit(1)
+        himutils.fatal("Option '--template' is required when sending mail")
 
     if not options.list and not options.days:
-        utils.sys_error("Option '--days' is required when sending mail")
-        sys.exit(1)
+        himutils.fatal("Option '--days' is required when sending mail")
 
     # Create datetime object for today at midnight
     dt = date.today()
@@ -500,7 +494,7 @@ def action_quarantine():
     options.detail = True
 
     # Set common mail parameters
-    mail = utils.get_client(Mail, options, logger)
+    mail = himutils.get_client(Mail, options, logger)
     mail = Mail(options.config, debug=options.debug)
     mail.set_dry_run(options.dry_run)
     if options.fromaddr:
@@ -516,15 +510,20 @@ def action_quarantine():
         if project_type == 'demo':
             continue
 
+        # Output error if project is enabled (shouldn't happen)
+        if project.enabled:
+            himutils.warning(f"Project {project.name} has quarantine tags but is enabled")
+            continue
+
         # Get quarantine info
         tags = ksclient.list_project_tags(project.id)
         r_date = re.compile('^quarantine date: .+$')
         date_tags = list(filter(r_date.match, tags))
         if len(date_tags) > 1:
-            utils.sys_error('Too many quarantine dates for project %s' % project.name)
+            himutils.error(f"Too many quarantine dates for project {project.name}")
             continue
         elif len(date_tags) < 1:
-            utils.sys_error('No quarantine date for project %s' % project.name)
+            himutils.error(f"No quarantine date for project {project.name}")
             continue
         m_date = re.match(r'^quarantine date: (\d\d\d\d-\d\d-\d\d)$', date_tags[0])
         quarantine_date_iso = m_date.group(1)
@@ -557,12 +556,12 @@ def action_quarantine():
 
                         # Construct mail content
                         subject = '[NREC] Project "%s" will be deleted in %d days' % (project.name, 90 - days)
-                        body_content = utils.load_template(inputfile=options.template,
-                                                           mapping={'project': project.name,
-                                                                    'enddate': project_enddate,
-                                                                    'ago': days,
-                                                                    'days': 90 - days},
-                                                           log=logger)
+                        body_content = himutils.load_template(inputfile=options.template,
+                                                              mapping={'project': project.name,
+                                                                       'enddate': project_enddate,
+                                                                       'ago': days,
+                                                                       'days': 90 - days},
+                                                              log=logger)
                         msg = mail.create_mail_with_txt_attachment(subject,
                                                                    body_content,
                                                                    attachment_payload,
@@ -613,7 +612,7 @@ def vendorapi_list():
         for region in regions:
             instances = dict()
             # Initiate Nova object
-            nc = utils.get_client(Nova, options, logger, region)
+            nc = himutils.get_client(Nova, options, logger, region)
 
             # Get a list of instances in project
             instances[region] = nc.get_project_instances(project_id=project.id)
@@ -631,5 +630,5 @@ def vendorapi_list():
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    utils.sys_error("Function action_%s() not implemented" % options.action)
+    himutils.fatal("Function action_%s() not implemented" % options.action)
 action()

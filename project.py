@@ -42,14 +42,14 @@ else:
     regions = ksclient.find_regions()
 
 if not regions:
-    himutils.sys_error('no regions found with this name!')
+    himutils.fatal('no regions found with this name!')
 
 def action_create():
     if not ksclient.is_valid_user(options.admin, options.domain) and options.type == 'personal':
-        himutils.sys_error('not valid user', 1)
+        himutils.fatal(f"{options.admin} is not a valid user")
     quota = himutils.load_config('config/quotas/%s.yaml' % options.quota)
     if options.quota and not quota:
-        himutils.sys_error('Could not find quota in config/quotas/%s.yaml' % options.quota)
+        himutils.fatal(f"Could not find quota in config/quotas/{options.quota}.yaml")
     test = 1 if options.type == 'test' else 0
     project_msg = project_msg_file
 
@@ -60,20 +60,20 @@ def action_create():
         try:
             datetime_enddate = datetime.strptime(options.enddate, '%Y-%m-%d')
         except:
-            himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+            himutils.fatal('Invalid date: %s' % options.enddate)
     elif re.match(r'^(\d\d\.\d\d\.\d\d\d\d)$', options.enddate):
         try:
             datetime_enddate = datetime.strptime(options.enddate, '%d.%m.%Y')
         except:
-            himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+            himutils.fatal('Invalid date: %s' % options.enddate)
     else:
-        himutils.sys_error('ERROR: Invalid date: %s' % options.enddate)
+        himutils.fatal('Invalid date: %s' % options.enddate)
     enddate = datetime_enddate.strftime('%Y-%m-%d')
 
     if options.type == 'hpc':
         project_msg = project_hpc_msg_file
         if not enddate:
-            himutils.sys_error('HPC projects must have an enddate', 1)
+            himutils.fatal('HPC projects must have an enddate')
     createdate = datetime.today()
 
     # Parse the "contact" option, setting to None if not used
@@ -82,8 +82,7 @@ def action_create():
     if options.contact is not None:
         contact = options.contact.lower()
         if not ksclient._Keystone__validate_email(contact):
-            errmsg = "%s is not a valid email address." % contact
-            himutils.sys_error(errmsg, 1)
+            himutils.fatal(f"{contact} is not a valid email address.")
 
     if not options.force:
         print('Project name: %s\nDescription: %s\nAdmin: %s\nContact: %s\nOrganization: %s\nType: %s\nEnd date: %s\nQuota: %s\nRT: %s' \
@@ -97,7 +96,7 @@ def action_create():
                    options.quota,
                    options.rt))
         if not himutils.confirm_action('Are you sure you want to create this project?'):
-            himutils.sys_error('Aborted', 1)
+            himutils.fatal('Aborted')
     project = ksclient.create_project(project_name=options.project,
                                       admin=options.admin.lower(),
                                       contact=contact,
@@ -110,9 +109,9 @@ def action_create():
                                       quota=options.quota,
                                       rt=options.rt)
     if not ksclient.is_valid_user(options.admin, options.domain):
-        himutils.sys_error('WARNING: "%s" is not a valid user.' % options.admin, 0)
+        himutils.warning('"%s" is not a valid user.' % options.admin)
     if not project:
-        himutils.sys_error('Failed creating %s' % options.project, 1)
+        himutils.fatal('Failed creating %s' % options.project)
     else:
         output = Keystone.get_dict(project)
         output['header'] = "Show information for %s" % options.project
@@ -158,7 +157,7 @@ def action_create():
         mail.set_dry_run(options.dry_run)
 
         if options.rt is None:
-            himutils.sys_error('--rt parameter is missing.')
+            himutils.fatal('--rt parameter is missing.')
         else:
             mapping = dict(project_name=options.project,
                            admin=options.admin.lower(),
@@ -168,8 +167,7 @@ def action_create():
             body_content = himutils.load_template(inputfile=project_msg,
                                                   mapping=mapping)
         if not body_content:
-            himutils.sys_error('ERROR! Could not find and parse mail body in \
-                               %s' % options.msg)
+            himutils.fatal(f"Could not find and parse mail body in {options.msg}")
 
         mime = mail.rt_mail(options.rt, subject, body_content)
         mail.send_mail('support@nrec.no', mime)
@@ -187,7 +185,7 @@ def action_create_private():
     if m:
         options.org = m.group('org')
     else:
-        himutils.sys_error('Can not guess organization. Run create manually', 1)
+        himutils.fatal('Can not guess organization. Run create manually')
 
     # Set quota to small if not provided
     if not options.quota:
@@ -199,7 +197,7 @@ def action_create_private():
 def action_extend():
     project = ksclient.get_project_by_name(options.project)
     if not project:
-        himutils.sys_error('No project found with name %s' % options.project)
+        himutils.fatal(f"No project found with name {options.project}")
 
     today = datetime.today()
     current = project.enddate if hasattr(project, 'enddate') else 'None'
@@ -208,7 +206,7 @@ def action_extend():
         datetime_enddate = today + timedelta(days=730)
     elif re.match(r'^\+(\d+)([y|m|d])$', options.enddate):
         if current == 'None':
-            himutils.sys_error("Project does not have an existing enddate")
+            himutils.fatal("Project does not have an existing enddate")
         else:
             datetime_current = datetime.strptime(project.enddate, '%Y-%m-%d')
 
@@ -223,14 +221,14 @@ def action_extend():
         try:
             datetime_enddate = datetime.strptime(options.enddate, '%Y-%m-%d')
         except:
-            himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+            himutils.fatal('Invalid date: %s' % options.enddate)
     elif re.match(r'^(\d\d\.\d\d\.\d\d\d\d)$', options.enddate):
         try:
             datetime_enddate = datetime.strptime(options.enddate, '%d.%m.%Y')
         except:
-            himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+            himutils.fatal('Invalid date: %s' % options.enddate)
     else:
-        himutils.sys_error('ERROR: Invalid date: %s' % options.enddate, 1)
+        himutils.fatal('Invalid date: %s' % options.enddate)
 
     enddate = datetime_enddate.strftime('%Y-%m-%d')
     ksclient.update_project(project_id=project.id, enddate=str(enddate),
@@ -244,7 +242,7 @@ def action_extend():
         mail.set_dry_run(options.dry_run)
 
         if options.rt is None:
-            himutils.sys_error('--rt parameter is missing.')
+            himutils.fatal('--rt parameter is missing.')
         else:
             mapping = dict(project_name=project.name,
                            end_date=str(enddate))
@@ -252,8 +250,7 @@ def action_extend():
             body_content = himutils.load_template(inputfile=project_msg,
                                                   mapping=mapping)
         if not body_content:
-            himutils.sys_error('ERROR! Could not find and parse mail body in \
-                               %s' % options.msg)
+            himutils.sys_error(f"Could not find and parse mail body in {options.msg}")
 
         mime = mail.rt_mail(options.rt, subject, body_content)
         mail.send_mail('support@nrec.no', mime)
@@ -404,16 +401,16 @@ def action_list():
             date_tags = list(filter(r_date.match, tags))
             type_tags = list(filter(r_type.match, tags))
             if len(date_tags) > 1:
-                himutils.sys_error('Too many quarantine dates for project %s' % project.name)
+                himutils.error('Too many quarantine dates for project %s' % project.name)
                 continue
             elif len(date_tags) < 1:
-                himutils.sys_error('No quarantine date for project %s' % project.name)
+                himutils.error('No quarantine date for project %s' % project.name)
                 continue
             if len(type_tags) > 1:
-                himutils.sys_error('Too many quarantine reasons for project %s' % project.name)
+                himutils.error('Too many quarantine reasons for project %s' % project.name)
                 continue
             elif len(type_tags) < 1:
-                himutils.sys_error('No quarantine reason for project %s' % project.name)
+                himutils.error('No quarantine reason for project %s' % project.name)
                 continue
             m_date = re.match(r'^quarantine date: (\d\d\d\d-\d\d-\d\d)$', date_tags[0])
             m_type = re.match(r'^quarantine type: (.+)$', type_tags[0])
@@ -461,7 +458,7 @@ def action_list():
 def action_show_access():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
-        himutils.sys_error('No project found with name %s' % options.project)
+        himutils.fatal(f"No project found with name {options.project}")
     roles = ksclient.list_roles(project_name=options.project)
     printer.output_dict({'header': 'Roles in project %s' % options.project})
     for role in roles:
@@ -470,7 +467,7 @@ def action_show_access():
 def action_show_quota():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
-        himutils.sys_error('could not find project {}'.format(options.project))
+        himutils.fatal(f"Could not find project {options.project}")
     for region in regions:
         novaclient = Nova(options.config, debug=options.debug, log=logger, region=region)
         cinderclient = Cinder(options.config, debug=options.debug, log=logger, region=region)
@@ -493,7 +490,7 @@ def action_show_quota():
 def action_show():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
-        himutils.sys_error('No project found with name %s' % options.project)
+        himutils.fatal('No project found with name %s' % options.project)
     output_project = project.to_dict()
     output_project['header'] = "Show information for %s" % project.name
     printer.output_dict(output_project)
@@ -522,7 +519,7 @@ def action_instances():
 def action_quarantine():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
-        himutils.sys_error('No project found with name %s' % options.project)
+        himutils.fatal(f"No project found with name {options.project}")
 
     # Add or remove quarantine
     if options.unset_quarantine:
@@ -530,8 +527,7 @@ def action_quarantine():
         printer.output_msg('Quarantine unset for project: {}'. format(options.project))
     else:
         if not options.reason:
-            himutils.sys_error("Option '--reason' is required")
-            return
+            himutils.fatal("Option '--reason' is required")
 
         if options.date:
             date = himutils.get_date(options.date, None, '%Y-%m-%d')
@@ -544,8 +540,7 @@ def action_quarantine():
             project_admin = project.admin if hasattr(project, 'admin') else 'None'
 
             if not options.template:
-                himutils.sys_error("Option '--template' is required when sending mail")
-                return
+                himutils.fatal("Option '--template' is required when sending mail")
 
             # Set common mail parameters
             mail = himutils.get_client(Mail, options, logger)
@@ -602,7 +597,7 @@ def action_quarantine():
 def action_access():
     project = ksclient.get_project_by_name(project_name=options.project)
     if not project:
-        himutils.fatal('No project found with name %s' % options.project)
+        himutils.fatal(f"No project found with name {options.project}")
 
     # Correct use of options
     if options.grant and options.revoke:
@@ -824,7 +819,7 @@ def action_access():
 
             flavors = himutils.load_config(configfile)
             if not flavors:
-                himutils.fatal('Could not find flavor config file config/flavors/%s.yaml' % flavor)
+                himutils.fatal(f"Could not find flavor config file config/flavors/{flavor}.yaml")
 
             if flavors[flavor]:
                 novaclient = himutils.get_client(Nova, options, logger, region)
@@ -960,5 +955,5 @@ def action_access_list():
 # Run local function with the same name as the action (Note: - => _)
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    himutils.sys_error("Function action_%s() not implemented" % options.action)
+    himutils.fatal("Function action_%s() not implemented" % options.action)
 action()
