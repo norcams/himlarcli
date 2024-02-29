@@ -10,6 +10,9 @@ images:
   'centos8':
     'name':             'GOLD CentOS 8'
     'depricated':       'Outdated (CentOS 8)'
+  'centosstream8':
+    'name':             'GOLD CentOS Stream 8'
+    'depricated':       'Outdated (CentOS Stream 8)'
   'debian9':
     'name':             'GOLD Debian 9'
     'depricated':       'Outdated (Debian 9)'
