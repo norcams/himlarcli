@@ -1,0 +1,6 @@
+---
+type: 'uio'
+images:
+  'uio_rhel7':
+    'name':             'UiO Managed RHEL 7'
+    'depricated':       'Outdated (UiO RHEL7)'
