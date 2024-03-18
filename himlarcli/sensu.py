@@ -29,16 +29,21 @@ class Sensu(Client):
             self.logger.debug('=> DRY-RUN: deleted %s' % host)
 
 
-    def silence_host(self, host, expire=None):
+    def silence_host(self, host, expire=None, reason=None):
         url = self.api_url
         endpoint = '/silenced'
         payload = {'subscription': 'client:' + host,
                    'creator': 'himlarcli',
                    'reason': 'Silenced by himlarcli'}
+
+        # Update payload with options
         if expire:
             payload.update({'expire': int(expire)})
         else:
             payload.update({'expire_on_resolve': True})
+        if reason:
+            payload.update({'reason': reason})
+
         json_payload = json.dumps(payload)
         try:
             response = self.session.post(url+endpoint,

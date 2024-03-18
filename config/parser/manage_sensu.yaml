@@ -16,3 +16,9 @@ opt_args:
     'dest':     'expire'
     'help':     'Duration of silence entry in seconds'
     'required': False
+  '-r':
+    'sub':      ['silence']
+    'dest':     'reason'
+    'help':     'Reason for silencing'
+    'required': False
+    'default':  'Silenced by himlarcli'
