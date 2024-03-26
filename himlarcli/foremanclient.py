@@ -162,7 +162,11 @@ class ForemanClient(Client):
             self.logger.debug('=> mac or compute resource are mandatory for %s' % name)
             return
         if not self.dry_run:
-            result = self.foreman.create_hosts(host)
+            try:
+                result = self.foreman.create_hosts(host)
+            except ForemanException as e:
+                self.logger.debug('=> host config %s' % host)
+                self.log_error(e, 1)
             if not result:
                 self.log_error('Could not create host. Check production.log on foreman host!')
                 return
@@ -170,7 +174,6 @@ class ForemanClient(Client):
                 try:
                     self.foreman.hosts.power(id=result['name'], power_action='start')
                 except ForemanException as e:
-                    self.logger.debug('=> host config %s' % host)
                     self.log_error(e, 1)
             self.logger.debug('=> create host %s' % result)
         else:
