@@ -144,6 +144,8 @@ class ForemanClient(Client):
         host['environment_name'] = self.__get_node_data('environment', node_data, 'production')
         host['interfaces_attributes'] = self.__get_node_data(
             'interfaces_attributes', node_data, {})
+        host['domain_name'] = domain
+        host['subnet_name'] = region
         host['compute_attributes'] = self.__get_node_data(
             'compute_attributes', node_data, {})
         host['host_parameters_attributes'] = self.__get_node_data(
@@ -174,6 +176,7 @@ class ForemanClient(Client):
                 try:
                     self.foreman.hosts.power(id=result['name'], power_action='start')
                 except ForemanException as e:
+                    self.logger.debug('=> host config %s' % host)
                     self.log_error(e, 1)
             self.logger.debug('=> create host %s' % result)
         else:
