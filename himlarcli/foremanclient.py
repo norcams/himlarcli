@@ -165,7 +165,9 @@ class ForemanClient(Client):
             return
         if not self.dry_run:
             try:
-                result = self.foreman.create_hosts(host)
+                result = self.foreman.create_hosts(organization_id=self.get_organization(),
+                                                   location_id=self.get_location(),
+                                                   host=host)
             except ForemanException as e:
                 self.logger.debug('=> host config %s' % host)
                 self.log_error(e, 1)
