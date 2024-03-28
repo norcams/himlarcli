@@ -152,6 +152,13 @@ class ForemanClient(Client):
             'host_parameters_attributes', node_data, {})
         if 'mac' in node_data:
             host['mac'] = node_data['mac']
+        elif not 'interfaces_attributes' in node_data:
+            # for virtual machines we just add the two default bridges unless
+            # we define a different interfaces_attributes hash
+            host['interfaces_attributes'] = {
+                '0': { 'compute_attributes': { 'bridge': 'br0' }},
+                '1': { 'compute_attributes': { 'bridge': 'br1' }},
+            }
         if 'compute_resource' in node_data:
             compute_resource = '%s-%s.%s' % (region, node_data['compute_resource'], domain)
             self.logger.debug(f'=> installing on compute resource {compute_resource}')
