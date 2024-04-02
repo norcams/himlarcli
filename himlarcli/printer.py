@@ -180,7 +180,7 @@ class Printer(object):
         # Print header for project
         out_str += f"{status}PROJECT: {Color.bold}{Color.fg.wht}{project.name}{Color.reset}"
         if user is not None and not options.admin:
-            prole = Color.fg.blu + 'admin' + Color.reset if user == project_admin else Color.fg.GRN + 'member' + Color.reset
+            prole = Color.fg.red + 'admin' + Color.reset if user == project_admin else Color.fg.GRN + 'member' + Color.reset
             out_str += f" ({prole})"
         out_str += "\n" + Color.dim + '=' * 80 + Color.reset + "\n"
 
