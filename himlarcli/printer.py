@@ -163,13 +163,20 @@ class Printer(object):
         project_enddate = project.enddate if hasattr(project, 'enddate') else 'None'
         project_contact = project.contact if hasattr(project, 'contact') else 'None'
         project_roles = kc.list_roles(project_name=project.name)
+        project_tags = kc.list_project_tags(project.id)
+
+        access_tags = []
+        for tag in project_tags:
+            m = re.match(r'^(.+)_access$', tag)
+            if m:
+                access_tags.append(m.group(1))
 
         # Make project create date readable
         project_created = re.sub(r'T\d\d:\d\d:\d\d.\d\d\d\d\d\d', '', project_created)
 
         # Disabled project?
         status = Color.fg.red + "**DISABLED** " + Color.reset if not project.enabled else ''
-        
+
         # Print header for project
         out_str += f"{status}PROJECT: {project.name}"
         if user is not None and not options.admin:
@@ -192,6 +199,10 @@ class Printer(object):
         table_metadata.add_row([Color.fg.blu + 'Created:' + Color.reset, project_created])
         table_metadata.add_row([Color.fg.blu + 'Enddate:' + Color.reset, project_enddate])
         table_metadata.add_row([Color.fg.blu + 'Description:' + Color.reset, project.description])
+        if access_tags:
+            table_metadata.add_row([Color.fg.blu + 'Accesses:' + Color.reset, " ".join(access_tags)])
+        else:
+            table_metadata.add_row([Color.fg.blu + 'Accesses:' + Color.reset, "None"])
         if len(project_roles) > 0:
             users = dict()
             users['user'] = []
