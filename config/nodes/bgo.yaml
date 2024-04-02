@@ -387,6 +387,7 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+    hostgroup: 15
   login-02:
     hostgroup: 15
     compute_profile: small
@@ -539,15 +540,6 @@ nodes:
   status-01:
     compute_profile: small
     compute_resource: controller-06
-  storage-01:
-    mac: b0:83:fe:cd:64:7c
-    hostgroup: 19
-  storage-02:
-    mac: b0:83:fe:cd:4b:39
-    hostgroup: 19
-  storage-03:
-    mac: b0:83:fe:cd:61:3b
-    hostgroup: 19
   storage-04:
     mac: b0:83:fe:cd:61:23
     hostgroup: 19

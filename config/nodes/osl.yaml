@@ -374,6 +374,7 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+    hostgroup: 16
   login-02:
     hostgroup: 16
     compute_profile: small
