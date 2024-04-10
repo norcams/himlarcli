@@ -2,6 +2,7 @@ from himlarcli.client import Client
 import sys
 import configparser
 from foreman.client import Foreman
+from foreman.client import ForemanException
 from himlarcli import utils
 
 class ForemanClient(Client):
@@ -84,6 +85,13 @@ class ForemanClient(Client):
         profile = self.foreman.show_computeprofiles(profile_name)
         return profile['id']
 
+    def get_hostgroup_id(self, hostgroup_name):
+        hostgroups = self.foreman.index_hostgroups()
+        for hg in hostgroups['results']:
+            if hostgroup_name == hg['title']:
+                return hg['id']
+        self.logger.debug(f'=> could not find hostgroup {hostgroup_name} Use full names')
+
     def get_host(self, host):
         host = self.__set_host(host)
         return self.foreman.show_hosts(id=host)
@@ -122,27 +130,39 @@ class ForemanClient(Client):
             self.logger.debug('=> node %s found, dropping create' % name)
             return
         found_resources = self.get_compute_resources()
+        domain = self.config.get('openstack', 'domain')
         host = dict()
+
         host['name'] = name
         host['build'] = self.__get_node_data('build', node_data, '1')
-        host['hostgroup_id'] = self.__get_node_data('hostgroup', node_data, '1')
+        host['hostgroup_id'] = self.get_hostgroup_id(
+            self.__get_node_data('hostgroup', node_data, 'el8/legacy'))
         host['compute_profile_id'] = self.get_profile_id(
-            self.__get_node_data('compute_profile',
-                                 node_data,
-                                 'small'))
+            self.__get_node_data('compute_profile', node_data, 'small'))
         host['organization_id'] = self.get_organization()
         host['location_id'] = self.get_location()
+        host['environment_name'] = self.__get_node_data('environment', node_data, 'production')
         host['interfaces_attributes'] = self.__get_node_data(
             'interfaces_attributes', node_data, {})
+        host['domain_name'] = domain
+        host['subnet_name'] = region
         host['compute_attributes'] = self.__get_node_data(
             'compute_attributes', node_data, {})
         host['host_parameters_attributes'] = self.__get_node_data(
             'host_parameters_attributes', node_data, {})
         if 'mac' in node_data:
             host['mac'] = node_data['mac']
+        elif not 'interfaces_attributes' in node_data:
+            # for virtual machines we just add the two default bridges unless
+            # we define a different interfaces_attributes hash
+            host['interfaces_attributes'] = {
+                '0': { 'compute_attributes': { 'bridge': 'br0' }},
+                '1': { 'compute_attributes': { 'bridge': 'br1' }},
+            }
         if 'compute_resource' in node_data:
-            compute_resource = '%s-%s' % (region, node_data['compute_resource'])
-            if compute_resource in found_resources:
+            compute_resource = '%s-%s.%s' % (region, node_data['compute_resource'], domain)
+            self.logger.debug(f'=> installing on compute resource {compute_resource}')
+            if compute_resource in found_resources.keys():
                 host['compute_resource_id'] = found_resources[compute_resource]
             else:
                 self.logger.debug('=> compute resource %s not found' % compute_resource)
@@ -151,12 +171,22 @@ class ForemanClient(Client):
             self.logger.debug('=> mac or compute resource are mandatory for %s' % name)
             return
         if not self.dry_run:
-            result = self.foreman.create_hosts(host)
+            try:
+                result = self.foreman.create_hosts(organization_id=self.get_organization(),
+                                                   location_id=self.get_location(),
+                                                   host=host)
+            except ForemanException as e:
+                self.logger.debug('=> host config %s' % host)
+                self.log_error(e, 1)
             if not result:
                 self.log_error('Could not create host. Check production.log on foreman host!')
                 return
             if 'mac' not in node_data:
-                self.foreman.hosts.power(id=result['name'], power_action='start')
+                try:
+                    self.foreman.hosts.power(id=result['name'], power_action='start')
+                except ForemanException as e:
+                    self.logger.debug('=> host config %s' % host)
+                    self.log_error(e, 1)
             self.logger.debug('=> create host %s' % result)
         else:
             self.logger.debug('=> dry run: host config %s' % host)
