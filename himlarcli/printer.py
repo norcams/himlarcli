@@ -14,8 +14,6 @@ import csv
 from collections import OrderedDict
 import locale
 
-locale.setlocale(locale.LC_ALL, 'en_DK.UTF-8')
-
 class Printer(object):
 
     VALID_OPTIONS = ['text', 'table', 'json', 'csv']
