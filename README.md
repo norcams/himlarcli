@@ -11,11 +11,6 @@ source bin/activate
 
 ## Development
 
-You will need to install some OS packages. Example for packages
-needed for CentOS 7 and Alma Linux 8 can be found here:
-
-https://github.com/norcams/ansible/
-
 Use virtualenv:
 
 ``` bash
