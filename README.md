@@ -11,18 +11,33 @@ source bin/activate
 
 ## Development
 
+Tested with python 3.11 on el8, el9 and Ubuntu 22.04.
+
 Use virtualenv:
 
 ``` bash
 cd himlarcli
-virtualenv . -p /path/to/python3
+/path/to/python3 -m venv .
 source bin/activate
 pip install --upgrade pip
-# this is needed to install foreman module
-pip install autosemver
-python setup.py develop
 pip install -r requirements.txt
 ```
+
+### el9 and Python 3.11
+
+Packages need to install (tested on AlmaLinux):
+
+* openldap-devel
+* python3.11-devel
+
+### Ubuntu 22.04 and Python 3.11
+
+Packages needed to install:
+
+* python3.11-dev
+* libldap-dev
+* libsasl2-dev
+* build-essential
 
 ### Config file
 
