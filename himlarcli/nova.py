@@ -28,6 +28,8 @@ class Nova(Client):
         """
         super(Nova, self).__init__(config_path, debug, log, region)
         version = self.get_config('openstack', 'compute_api_version')
+        if not version:
+          self.log_error('missing compute_api_version in config file', 1)
         self.debug_log('using nova compute api_version %s' % version)
         self.client = novaclient.Client(APIVersion(version),
                                         session=self.sess,
