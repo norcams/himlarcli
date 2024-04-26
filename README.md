@@ -11,11 +11,6 @@ source bin/activate
 
 ## Development
 
-You will need to install some OS packages. Example for packages
-needed for CentOS 7 and Alma Linux 8 can be found here:
-
-https://github.com/norcams/ansible/
-
 Use virtualenv:
 
 ``` bash
@@ -79,25 +74,4 @@ exit the last script after the user is created.
 
 #### Hosts
 
-This is for use in /etc/hosts in vagrant
-
-```bash
-# vagrant public
-192.168.0.252   access.vagrant.iaas.intern
-192.168.0.254   dashboard.vagrant.iaas.intern
-192.168.0.250   status.vagrant.iaas.intern
-192.168.0.250   api.vagrant.iaas.intern
-192.168.0.250   compute.api.vagrant.iaas.intern
-192.168.0.250   network.api.vagrant.iaas.intern
-192.168.0.250   image.api.vagrant.iaas.intern
-192.168.0.250   identity.api.vagrant.iaas.intern
-192.168.0.250   volume.api.vagrant.iaas.intern
-
-# vagrant trp
-172.31.8.81     identity.trp.vagrant.iaas.intern
-172.31.8.86     compute.trp.vagrant.iaas.intern
-172.31.8.86     network.trp.vagrant.iaas.intern
-
-# vagrant mgmt
-172.31.0.11     foreman.mgmt.vagrant.iaas.intern
-```
+Example of /etc/hosts file: [Working with web services in vagrant](https://iaas.readthedocs.io/team/development/vagrant/web.html#working-with-web-services-in-vagrant)
