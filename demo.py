@@ -249,6 +249,8 @@ def action_delete():
             else:
                 nc = himutils.get_client(Nova, options, logger, row.region)
                 instance = nc.get_by_id("server", row.instance_id)
+                if instance == None:
+                    continue
                 created = himutils.get_date(instance.created, None, '%Y-%m-%dT%H:%M:%SZ')
                 active_days = (date.today() - created).days
                 p_warning(f"[{row.region}] [project_id={row.project_id}] Deleting instance {row.instance_id}")
