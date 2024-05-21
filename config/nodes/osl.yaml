@@ -602,4 +602,4 @@ nodes:
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdg'
+        value:          'sdq'
