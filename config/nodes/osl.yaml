@@ -591,3 +591,9 @@ nodes:
     compute_profile: large
     compute_resource: controller-06
     hostgroup: 16
+  test-01:
+    mac: 00:0a:f7:ba:76:66
+  test-02:
+    mac: 00:0a:f7:bf:30:04
+  test-03:
+    mac: 00:0a:f7:b6:c3:78
