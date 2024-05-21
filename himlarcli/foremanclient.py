@@ -145,7 +145,7 @@ class ForemanClient(Client):
         host['interfaces_attributes'] = self.__get_node_data(
             'interfaces_attributes', node_data, {})
         host['domain_name'] = domain
-        host['subnet_name'] = region
+        host['subnet_name'] = 'mgmt'
         host['compute_attributes'] = self.__get_node_data(
             'compute_attributes', node_data, {})
         host['host_parameters_attributes'] = self.__get_node_data(
