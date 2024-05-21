@@ -677,7 +677,7 @@ class Nova(Client):
             Version: 2021-3
         """
         kc = self.get_keystone_client()
-        if not kc.get_by_id('project', project_id):
+        if not kc.projects.get(project_id):
             self.debug_log(f'project {project_id} do not exist')
             return
         dry_run_txt = 'DRY-RUN: ' if self.dry_run else ''
