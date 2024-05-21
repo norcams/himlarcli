@@ -600,3 +600,6 @@ nodes:
   test-03:
     mac: 00:0a:f7:b6:c3:78
     hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sdg'
