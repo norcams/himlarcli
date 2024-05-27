@@ -604,7 +604,7 @@ nodes:
       - name:           'installdevice'
         value:          'sdq'
   test-04:
-    mac: 18:66:da:8d:b6:49
+    mac: 18:66:da:8d:b6:4d
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
