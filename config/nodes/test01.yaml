@@ -5,6 +5,14 @@ nodes:
   api-01:
     compute_profile: small
     compute_resource: controller-03
+  api-02:
+    hostgroup: legacy/el8
+    compute_profile: small
+    compute_resource: controller-02
+  api-03:
+    hostgroup: legacy/el8
+    compute_profile: small
+    compute_resource: controller-03
   builder-01:
     hostgroup: 5
     compute_profile: medium
@@ -44,8 +52,9 @@ nodes:
     compute_profile: large
     compute_resource: controller-03
   compute-01:
-    hostgroup: 6
+    hostgroup: el8/legacy
     mac: 00:0a:f7:75:2f:80
+    environment: ussuri
     # mac: f8:bc:12:3f:97:90
   compute-02:
     hostgroup: 6
