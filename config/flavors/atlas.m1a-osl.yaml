@@ -20,8 +20,8 @@ atlas.m1a:
   'atlas.m1a.2xlarge':
     vcpus: 8
     ram: 30718
-    disk: 8
+    disk: 10
   'atlas.m1a.4xlarge':
     vcpus: 16
     ram: 61438
-    disk: 8
+    disk: 10
