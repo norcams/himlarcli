@@ -36,7 +36,8 @@ nodes:
   controller-01:
     mac: 00:23:24:5e:34:f1 #8
   controller-02:
-    mac: 00:23:24:5e:33:b5 #7
+    mac: 00:23:24:5e:29:8d #3
+    # mac: 00:23:24:5e:33:b5 #7
   controller-03:
     mac: 00:23:24:5e:35:20 #2
   dashboard-01:
