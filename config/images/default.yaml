@@ -96,7 +96,7 @@ images:
     'latest':           'almalinux9-latest.qcow2'
     'builder_checksum': 'almalinux9-latest.md5'
     'min_ram':          1024
-    'min_disk':         8
+    'min_disk':         10
     'visibility':       'public'
     'properties':
       'hw_disk_bus':               'scsi'
