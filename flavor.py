@@ -165,6 +165,18 @@ def action_list_access():
                     continue
         printer.output_dict(output)
 
+def action_list_available():
+    region = kc.get_region()
+    nc = himutils.get_client(Nova, options, logger, region)
+    flavors = nc.get_flavors()
+    flavor_classes = {}
+    for flavor in flavors:
+      if len(flavor.name.split('.')) > 0:
+        flavor_class = flavor.name.split('.')[0]
+        flavor_classes[flavor_class] = flavor_classes.get(flavor_class, 0) + 1
+    printer.output_dict({'header': 'flavor classes and number of flavors in class'})
+    printer.output_dict(flavor_classes)
+
 def action_available_flavors():
     path = '/opt/himlarcli/config/flavors/*.yaml'
     files = glob.glob(path)

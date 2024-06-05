@@ -10,6 +10,7 @@ actions:
   'list-access':        'List project with access to flavors of this class'
   'instances':          'List instances with flavor this class'
   'available-flavors':  'List all available flavor files'
+  'list-available':     'List all available flavors in current region'
 opt_args:
   '--domain':
     'dest':     'domain'
