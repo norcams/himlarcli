@@ -172,7 +172,7 @@ def action_list_available():
     flavor_classes = {}
     for flavor in flavors:
       if len(flavor.name.split('.')) > 0:
-        flavor_class = flavor.name.split('.')[0]
+        flavor_class = '.'.join(flavor.name.split('.')[:-1])
         flavor_classes[flavor_class] = flavor_classes.get(flavor_class, 0) + 1
     printer.output_dict({'header': 'flavor classes and number of flavors in class'})
     printer.output_dict(flavor_classes)
