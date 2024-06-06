@@ -232,7 +232,8 @@ def action_start_instance():
             logger.debug('%s instance found %s', pre, i.name)
             if i.status == 'ACTIVE':
                 instance = nova.get_by_id('server', i.instance_id)
-                nova.start_instance(instance, unlock=True)
+                if instance:
+                  nova.start_instance(instance, unlock=True)
     state.close()
 
 
