@@ -27,10 +27,12 @@ class Mail(Client):
             mail['To'] = toaddr
         recipients = [toaddr]
         if cc:
-            mail['Cc'] = cc
+            if not 'CC' in mail:
+                mail['CC'] = cc
             recipients = recipients + [cc]
         if bcc:
-            mail['Bcc'] = bcc
+            if not 'BCC' in mail:
+                mail['BCC'] = bcc
             recipients = recipients + [bcc]
         if not self.dry_run:
             try:
