@@ -6,11 +6,23 @@ nodes:
     compute_profile: small
     compute_resource: controller-03
   api-02:
-    hostgroup: legacy/el8
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-02
   api-03:
-    hostgroup: legacy/el8
+    hostgroup: el8/legacy
+    compute_profile: small
+    compute_resource: controller-03
+  api-internal-01:
+    hostgroup: el8/legacy
+    compute_profile: small
+    compute_resource: controller-01
+  api-internal-02:
+    hostgroup: el8/legacy
+    compute_profile: small
+    compute_resource: controller-02
+  api-internal-03:
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-03
   builder-01:
