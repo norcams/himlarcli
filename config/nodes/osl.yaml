@@ -268,6 +268,24 @@ nodes:
   compute-63:
     mac: b4:45:06:ee:35:9d
     hostgroup: 17
+  compute-64:
+    mac: 00:0a:f7:b6:c3:78
+    hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  compute-65:
+    mac: 00:0a:f7:bf:30:04
+    hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  compute-66:
+    mac: 00:0a:f7:ba:76:66
+    hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   console-01:
     compute_profile: medium
     compute_resource: controller-07
@@ -591,18 +609,6 @@ nodes:
     compute_profile: large
     compute_resource: controller-06
     hostgroup: 16
-  test-01:
-    mac: 00:0a:f7:ba:76:66
-    hostgroup: "el8/uefi"
-  test-02:
-    mac: 00:0a:f7:bf:30:04
-    hostgroup: "el8/uefi"
-  test-03:
-    mac: 00:0a:f7:b6:c3:78
-    hostgroup: "el8/uefi"
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sdq'
   test-04:
     mac: 18:66:da:8d:b6:4d
     hostgroup: "el8/uefi"
