@@ -276,7 +276,7 @@ nodes:
       - name:           'installdevice'
         value:          'sda'
   compute-65:
-    mac: 00:0a:f7:bf:30:04
+    mac: 00:0a:f7:bf:30:d4
     environment: victoria
     hostgroup: "el8/uefi"
     host_parameters_attributes:
