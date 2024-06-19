@@ -270,18 +270,21 @@ nodes:
     hostgroup: 17
   compute-64:
     mac: 00:0a:f7:b6:c3:78
+    environment: victoria
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
   compute-65:
     mac: 00:0a:f7:bf:30:04
+    environment: victoria
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
   compute-66:
     mac: 00:0a:f7:ba:76:66
+    environment: victoria
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
