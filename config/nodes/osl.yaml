@@ -615,7 +615,7 @@ nodes:
 #    host_parameters_attributes:
 #      - name:           'installdevice'
 #        value:          'sda'
-#  storage-xxx-27:
+#  storage-xxx-28:
 #    mac: 
 #    environment: victoria
 #    hostgroup: "el8/uefi"
