@@ -26,7 +26,7 @@ nodes:
     compute_profile: small
     compute_resource: controller-03
   builder-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-03
     compute_attributes:
@@ -40,27 +40,27 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   cephmds-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-01
   cephmds-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-02
   cephmds-03:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-03
   cephmon-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-01
   cephmon-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-02
   cephmon-03:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-03
   compute-01:
@@ -80,7 +80,7 @@ nodes:
     hostgroup: 6
     mac: 00:0a:f7:19:75:80
   console-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-03
   controller-01:
@@ -95,43 +95,43 @@ nodes:
     hostgroup: 8
     # mac: f8:bc:12:52:d8:68
   dashboard-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-02
   dashboard-mgmt-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-03
   db-global-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-02
   db-regional-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-01
   dns-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-02
   identity-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-01
   identity-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-02
   image-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-01
   image-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-02
   logger-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-03
     compute_attributes:
@@ -145,41 +145,42 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   metric-01:
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-01
   monitor-01:
     compute_profile: medium
     compute_resource: controller-01
   mq-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: medium
     compute_resource: controller-01
   nat-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-03
   network-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-01
   network-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-02
   network-03:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-03
   novactrl-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-01
   novactrl-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-02
   ns-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-01
   proxy-01:
@@ -198,7 +199,7 @@ nodes:
   proxy-02:
     compute_profile: small
     compute_resource: controller-03
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_attributes:
       volumes_attributes:
         '1':
@@ -210,27 +211,27 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   report-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-03
   resolver-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-02
   resolver-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-03
   sensugo-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-01
   sensugo-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-02
   sensugo-03:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: small
     compute_resource: controller-03
   status-01:
@@ -252,12 +253,23 @@ nodes:
     hostgroup: 4
     mac: b0:83:fe:e8:3a:31
   telemetry-01:
+    hostgroup: el8/legacy
     compute_profile: xlarge
     compute_resource: controller-03
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   tsdb-01:
     compute_profile: small
     compute_resource: controller-03
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_attributes:
       volumes_attributes:
         '1':
@@ -269,7 +281,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   volume-01:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-01
     compute_attributes:
@@ -280,7 +292,7 @@ nodes:
           capacity:     '20G'
           format_type:  'qcow2'
   volume-02:
-    hostgroup: 5
+    hostgroup: el8/legacy
     compute_profile: large
     compute_resource: controller-02
     compute_attributes:
