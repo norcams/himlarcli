@@ -147,7 +147,18 @@ nodes:
   metric-01:
     hostgroup: el8/legacy
     compute_profile: medium
+    environment: victoria
     compute_resource: controller-01
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   monitor-01:
     compute_profile: medium
     compute_resource: controller-01
@@ -254,18 +265,9 @@ nodes:
     mac: b0:83:fe:e8:3a:31
   telemetry-01:
     hostgroup: el8/legacy
+    environment: victoria
     compute_profile: xlarge
-    compute_resource: controller-03
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '20G'
-          format_type:  'qcow2'
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+    compute_resource: controller-02
   tsdb-01:
     compute_profile: small
     compute_resource: controller-03
