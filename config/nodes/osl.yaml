@@ -642,14 +642,14 @@ nodes:
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdl'
+        value:          'sdk'
   storage-v2d-32:
     mac: 14:18:77:6a:55:c5
     environment: victoria
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdl'
+        value:          'sdj'
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-07
