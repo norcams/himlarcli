@@ -635,7 +635,7 @@ nodes:
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdk'
+        value:          'sdl'
   storage-v2d-31:
     mac: 18:66:da:71:4e:25
     environment: victoria
