@@ -498,7 +498,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   proxy-02:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-08
     hostgroup: 15
     compute_attributes:

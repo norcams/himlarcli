@@ -502,7 +502,7 @@ nodes:
       - name:           'installdevice'
         value:          'vda'
   proxy-02:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-07
     hostgroup: 16
     compute_attributes:
