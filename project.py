@@ -602,8 +602,8 @@ def action_access():
     # Correct use of options
     if options.grant and options.revoke:
         himutils.fatal("Can't use both --grant and --revoke")
-    elif not options.grant and not options.revoke and not options.access_extend and not options.access_list:
-        himutils.fatal("Either --grant or --revoke is mandatory")
+    elif not options.grant and not options.revoke and not options.access_extend and not options.access_list and not options.show_args:
+        himutils.fatal("Missing mandatory option --grant/--revoke/--extend/--list/--show-args")
 
     # Resource availability by region
     resource_availability = {
@@ -620,8 +620,50 @@ def action_access():
         'net_elastic'  : [ 'bgo', 'osl' ],
     }
 
+    # Resource info
+    resource_info = {
+        'vgpu'         : 'Access to vGPU flavors and vGPU images',
+        'shpc'         : 'Access to standard sHPC flavors (shpc.m1a and shpc.c1a)',
+        'shpc_ram'     : 'Access to memory sHPC flavors (shpc.r1a)',
+        'shpc_disk1'   : 'Access to 200 GB disk sHPC flavors (shpc.m1ad1 and shpc.c1ad1)',
+        'shpc_disk2'   : 'Access to 500 GB disk sHPC flavors (shpc.m1ad2 and shpc.c1ad2)',
+        'shpc_disk3'   : 'Access to 1TB disk sHPC flavors (shpc.m1ad3 and shpc.c1ad3)',
+        'shpc_disk4'   : 'Access to 2TB disk sHPC flavors (shpc.m1ad4 and shpc.c1ad4)',
+        'ssd'          : 'Access to SSD volumes. Add quota separately',
+        'net_uib'      : 'Access to UiB network',
+        'net_educloud' : 'Access to Educloud network',
+        'net_elastic'  : 'Access to Elastic network',
+    }
+
     # Today
     today = datetime.now().strftime("%Y-%m-%d")
+
+    # Lists the various options for "grant" and "revoke"
+    if options.show_args:
+        # print info about resources and return
+        print(f"{Color.fg.blu}Allowed arguments with --grant and --revoke:{Color.reset}\n")
+        header = [ '%sARGUMENT%s'    % (Color.fg.mgn,Color.reset),
+                   '%sREGIONS%s'     % (Color.fg.mgn,Color.reset),
+                   '%sDESCRIPTION%s' % (Color.fg.mgn,Color.reset)]
+        table_options = PrettyTable()
+        table_options._max_width = {'value' : 70}
+        table_options.border = 0
+        table_options.header = 1
+        table_options.left_padding_width = 2
+        table_options.field_names = header
+        table_options.align[header[0]] = 'l'
+        table_options.align[header[1]] = 'l'
+        table_options.align[header[2]] = 'l'
+        for opt in resource_info.keys():
+            row = [
+                Color.fg.ylw + opt + Color.reset,
+                Color.fg.grn + ', '.join(resource_availability[opt]) + Color.reset,
+                resource_info[opt]
+            ]
+            table_options.add_row(row)
+        table_options.sortby = header[0]
+        print(table_options)
+        return
 
     # Determine resource end date when granting access
     if options.grant or options.access_extend:

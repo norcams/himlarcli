@@ -170,6 +170,13 @@ opt_args:
     'dest':     'revoke'
     'help':     'Revoke access to compute resource'
     'choices':  ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud' ]
+  '--show-args':
+    'sub':      ['access']
+    'dest':     'show_args'
+    'help':     'Show arguments to be used with --grant and --revoke'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   '--extend':
     'sub':      ['access']
     'dest':     'access_extend'
