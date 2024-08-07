@@ -142,6 +142,8 @@ class Printer(object):
                 table.add_row(v)
 
         table.sortby = header[objects['sortby']]
+        if 'reversesort' in objects:
+            table.reversesort = objects['reversesort']
         print(table)
 
     @staticmethod
