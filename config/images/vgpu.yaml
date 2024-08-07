@@ -6,7 +6,7 @@ images:
     'depricated':       'Outdated vGPU (Ubuntu 20.04)'
     'url':              'http://builder/'
     'latest':           'ubuntu_2004_nv_vgpu-latest.qcow2'
-    'builder_checksum': 'ubuntu_2004-nv_vgpu-latest.md5'
+    'builder_checksum': 'ubuntu_2004_nv_vgpu-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'shared'
@@ -40,7 +40,7 @@ images:
     'depricated':       'Outdated vGPU (Ubuntu 22.04)'
     'url':              'http://builder/'
     'latest':           'ubuntu_2204_nv_vgpu-latest.qcow2'
-    'builder_checksum': 'ubuntu_2204-nv_vgpu-latest.md5'
+    'builder_checksum': 'ubuntu_2204_nv_vgpu-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'shared'
@@ -59,7 +59,7 @@ images:
     'depricated':       'Outdated vGPU (Ubuntu 24.04)'
     'url':              'http://builder/'
     'latest':           'ubuntu_2404_nv_vgpu-latest.qcow2'
-    'builder_checksum': 'ubuntu_2404-nv_vgpu-latest.md5'
+    'builder_checksum': 'ubuntu_2404_nv_vgpu-latest.md5'
     'min_ram':          768
     'min_disk':         8
     'visibility':       'shared'
