@@ -7,6 +7,7 @@ python-swiftclient
 python-neutronclient
 python-designateclient
 python-glanceclient
+python-novaclient
 gnocchiclient
 statsd==3.2.1
 pika
