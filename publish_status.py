@@ -41,7 +41,7 @@ def action_important():
     if not twitter.twitter_length(important_msg):
         himutils.sys_error("Message cannot contain more than 280 characters")
     slack.publish_slack(important_msg)
-    twitter.publish_twitter(important_msg)
+    #twitter.publish_twitter(important_msg)
     status.publish(important_msg, msg_type='important')
 
 def action_news():
@@ -49,14 +49,14 @@ def action_news():
         himutils.sys_error("Message cannot contain more than 280 characters")
     confirm_publish(msg)
     slack.publish_slack(msg)
-    twitter.publish_twitter(msg)
+    #twitter.publish_twitter(msg)
     status.publish(msg)
 
 def action_info():
     if not twitter.twitter_length(msg):
         himutils.sys_error("Message cannot contain more than 280 characters")
     confirm_publish(msg)
-    twitter.publish_twitter(msg)
+    #twitter.publish_twitter(msg)
     status.publish(msg)
 
 def action_event():
