@@ -185,7 +185,7 @@ def action_list():
         output['sortby'] = 0
         counter = 0
         for host in hosts:
-            r_hostname = Color.fg.blu + host.hypervisor_hostname + Color.reset
+            r_hostname = Color.fg.blu + re.sub('\.mgmt\..+?\.uhdc\.no$', '', host.hypervisor_hostname) + Color.reset
             r_aggregate = ','.join(aggregates.get(host.hypervisor_hostname, 'unknown'))
             r_vms = str(host.running_vms)
             r_vcpus = f"{host.vcpus_used} / {host.vcpus}"
