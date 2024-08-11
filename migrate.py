@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import time
+import sys
+import re
 
 from himlarcli import tests
 tests.is_virtual_env()
@@ -122,6 +124,43 @@ def action_migrate():
             kc.debug_log('number of instances reached limit %s' % options.limit)
             break
 
+def action_vacuum():
+    if options.limit:
+        q = f'Try to migrate {options.limit} instance(s) from {source} any target'
+    else:
+        q = f'Migrate ALL instances away from {source}'
+    if not himutils.confirm_action(q):
+        return
+    # Disable source host unless no-disable param is used
+    if not options.dry_run and not options.no_disable:
+        nc.disable_host(source)
+    instances = nc.get_all_instances(search_opts=search_opts)
+    count = 0
+    for i in instances:
+        if options.stopped and getattr(i, 'OS-EXT-STS:vm_state') != 'stopped':
+            kc.debug_log(f'drop migrate:  instance not stopped {i.name}')
+            continue # do not count this instance for limit
+        if options.large:
+            if i.flavor['ram'] > options.filter_ram:
+                migrate_instance(i)
+            else:
+                kc.debug_log('drop migrate instance %s: ram %s <= %s'
+                             % (i.name, i.flavor['ram'], options.filter_ram))
+                continue # do not count this instance for limit
+        elif options.small:
+            if i.flavor['ram'] < options.filter_ram:
+                migrate_instance(i)
+            else:
+                kc.debug_log('drop migrate instance %s: ram %s >= %s'
+                             % (i.name, i.flavor['ram'], options.filter_ram))
+                continue # do not count this instance for limit
+        else:
+            migrate_instance(i)
+        count += 1
+        if options.limit and count >= options.limit:
+            kc.debug_log('number of instances reached limit %s' % options.limit)
+            break
+
 def action_evacuate():
     source_host = nc.get_host(source)
     if source_host.state != 'down':
@@ -160,9 +199,9 @@ def action_evacuate():
             logger.debug(f'=> number of instances reached limit {options.limit}')
             break
 
-def migrate_instance(instance, target):
+def migrate_instance(instance, target=None):
     """
-    This will do the migration of an instance to the target.
+    This will do the migration of an instance
     Allowed state for migration:
         * active
         * paused
@@ -170,12 +209,23 @@ def migrate_instance(instance, target):
     """
     state = getattr(instance, 'OS-EXT-STS:vm_state')
     state_task = getattr(instance, 'OS-EXT-STS:task_state')
-    # if there is any task running drop migrate
+
+    # Drop migration if instance has any running task
     if state_task:
         kc.debug_log('instance running task %s, dropping migrate' % state_task)
         himutils.warning(f'Instance {instance.name} ({instance.id} ' +
                          f'is running task {state_task}. Migration dropped')
         return
+
+    # Drop migration if instance is not in a supported vm state
+    handled_states = ['active', 'paused', 'stopped']
+    if state not in handled_states:
+        himutils.warning(f'Not migrating instance {instance.name} ({instance.id}): '
+                         f'Unhandled VM state {state}')
+        kc.debug_log('dropping migrate of %s unknown state %s' % (instance.name, state))
+        return
+
+    # Print information about the migration about to happen
     kc.debug_log('migrate %s to %s' % (instance.name, target))
     if state == 'active':
         state_color = Color.fg.grn
@@ -183,17 +233,46 @@ def migrate_instance(instance, target):
         state_color = Color.fg.RED
     else:
         state_color = Color.fg.blu
-    himutils.info(f'Migrating: {Color.fg.ylw}{instance.name}{Color.reset} '
-                  f'({Color.dim}{instance.id}{Color.reset}) '
-                  f'[{state_color}{state}{Color.reset}] ––→ {Color.fg.cyn}{target}{Color.reset}')
-    if (state == 'active' or state == 'paused') and not options.dry_run:
-        instance.live_migrate(host=target)
-        time.sleep(options.sleep)
-    elif state == 'stopped' and not options.dry_run:
-        instance.migrate(host=target)
-        time.sleep(options.sleep)
-    elif not options.dry_run:
-        kc.debug_log('dropping migrate of %s unknown state %s' % (instance.name, state))
+    if target is None:
+        target_short = 'ANY'
+    else:
+        target_short = re.sub('\.mgmt\..+?\.uhdc\.no$', '', target)
+    sys.stdout.write(f'Migrating: {Color.fg.ylw}{instance.name}{Color.reset} '
+                     f'({Color.dim}{instance.id}{Color.reset}) '
+                     f'[{state_color}{state}{Color.reset}] ––→ '
+                     f'{Color.fg.cyn}{target_short}{Color.reset}: ')
+    sys.stdout.flush()
+
+    # If dry-run: print and return
+    if options.dry_run:
+        print(" DONE (dry-run)")
+        return
+
+    # Call migrate or live-migrate depending on vm state
+    if (state == 'active' or state == 'paused'):
+        instance.live_migrate() if target is None else instance.live_migrate(host=target)
+    elif state == 'stopped':
+        instance.migrate() if target is None else instance.migrate(host=target)
+
+    # Time the migration and report outcome
+    start = time.perf_counter()
+    while True:
+        migrating_instance = nc.get_by_id('server', instance.id)
+        hypervisor = getattr(migrating_instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
+        task_state = getattr(migrating_instance, 'OS-EXT-STS:task_state')
+        if task_state is None and hypervisor != source:
+            finish = time.perf_counter()
+            elapsed = '%.1f' % (finish - start)
+            print(f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed} seconds')
+            break
+        elif task_state is None and hypervisor == source:
+            print(f'{Color.fg.red}{Color.bold}FAILED!{Color.reset}')
+            break
+        time.sleep(1)
+
+    # Sleep the desired amount before returning
+    time.sleep(options.sleep)
+
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
