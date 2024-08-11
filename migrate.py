@@ -236,7 +236,7 @@ def migrate_instance(instance, target=None):
     if target is None:
         sys.stdout.write(f'Migrating: {Color.fg.ylw}{instance.name}{Color.reset} '
                          f'({Color.dim}{instance.id}{Color.reset}) '
-                         f'[{state_color}{state}{Color.reset}]: ')
+                         f'[{state_color}{state}{Color.reset}] ')
     else:
         target_short = re.sub('\.mgmt\..+?\.uhdc\.no$', '', target)
         sys.stdout.write(f'Migrating: {Color.fg.ylw}{instance.name}{Color.reset} '
