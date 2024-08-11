@@ -124,7 +124,7 @@ def action_migrate():
             kc.debug_log('number of instances reached limit %s' % options.limit)
             break
 
-def action_vacuum():
+def action_drain():
     if options.limit:
         q = f'Try to migrate {options.limit} instance(s) from {source} any target'
     else:
