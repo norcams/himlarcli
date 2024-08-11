@@ -233,16 +233,9 @@ def migrate_instance(instance, target=None):
         state_color = Color.fg.RED
     else:
         state_color = Color.fg.blu
-    if target is None:
-        sys.stdout.write(f'Migrating: {Color.fg.ylw}{instance.name}{Color.reset} '
-                         f'({Color.dim}{instance.id}{Color.reset}) '
-                         f'[{state_color}{state}{Color.reset}] ')
-    else:
-        target_short = re.sub('\.mgmt\..+?\.uhdc\.no$', '', target)
-        sys.stdout.write(f'Migrating: {Color.fg.ylw}{instance.name}{Color.reset} '
-                         f'({Color.dim}{instance.id}{Color.reset}) '
-                         f'[{state_color}{state}{Color.reset}] ––> '
-                         f'{Color.fg.cyn}{target_short}{Color.reset}: ')
+    sys.stdout.write(f'Migrating: {Color.fg.ylw}{instance.name}{Color.reset} '
+                     f'({Color.dim}{instance.id}{Color.reset}) '
+                     f'[{state_color}{state}{Color.reset}] ')
     sys.stdout.flush()
 
     # If dry-run: print and return
@@ -265,11 +258,9 @@ def migrate_instance(instance, target=None):
         if task_state is None and hypervisor != source:
             finish = time.perf_counter()
             elapsed = '%.1f' % (finish - start)
-            if target is None:
-                new_host = re.sub('\.mgmt\..+?\.uhdc\.no$', '', hypervisor)
-                sys.stdout.write(f'––> {Color.fg.cyn}{new_host}{Color.reset} ')
-                sys.stdout.flush()
-            print(f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed} seconds')
+            new_host = re.sub('\.mgmt\..+?\.uhdc\.no$', '', hypervisor)
+            print(f'––> {Color.fg.cyn}{new_host}{Color.reset} '
+                  f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed} seconds')
             break
         elif task_state is None and hypervisor == source:
             print(f'{Color.fg.red}{Color.bold}FAILED!{Color.reset}')
