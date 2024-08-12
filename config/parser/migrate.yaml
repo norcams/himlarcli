@@ -66,4 +66,8 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '--instance':
+    'sub':      ['migrate', 'drain']
+    'dest':     'instance'
+    'help':     'Instance ID to migrate'
  

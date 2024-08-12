@@ -88,15 +88,28 @@ def action_migrate():
     target_details = nc.get_host(target)
     if not target_details or target_details.status != 'enabled':
         himutils.fatal(f'Could not find enabled target host {options.target}')
+
+    # Get confirmation
+    if options.instance:
+        q = f'Try to migrate instance {options.instance} from {source} to {target}'
     if options.limit:
         q = f'Try to migrate {options.limit} instance(s) from {source} to {target}'
     else:
         q = f'Migrate ALL instances from {source} to {target}'
     if not himutils.confirm_action(q):
         return
+
     # Disable source host unless no-disable param is used
-    if not options.dry_run and not options.no_disable:
+    if not options.dry_run and not options.no_disable and not options.instance:
         nc.disable_host(source)
+
+    # Migrate single instance
+    if options.instance:
+        options.sleep = 0
+        migrate_instance(options.instance, target)
+        return
+
+    # Migrate several instances
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0
     for i in instances:
