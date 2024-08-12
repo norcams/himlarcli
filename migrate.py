@@ -83,33 +83,37 @@ def action_list():
             }
             printer.output_dict(output, sort=True, one_line=True)
 
+
+def action_instance():
+    target = nc.get_fqdn(options.target)
+    target_details = nc.get_host(target)
+    if not target_details or target_details.status != 'enabled':
+        himutils.fatal(f'Could not find enabled target host {options.target}')
+    instance = nc.get_by_id('server', options.instance_id)
+
+    # Get confirmation
+    q = f'Try to migrate instance {options.instance_id} to {target}'
+    if not himutils.confirm_action(q):
+        return
+
+    # Migrate instance
+    migrate_instance(instance, target)
+
+
 def action_migrate():
     target = nc.get_fqdn(options.target)
     target_details = nc.get_host(target)
     if not target_details or target_details.status != 'enabled':
         himutils.fatal(f'Could not find enabled target host {options.target}')
-
-    # Get confirmation
-    if options.instance:
-        q = f'Try to migrate instance {options.instance} from {source} to {target}'
     if options.limit:
         q = f'Try to migrate {options.limit} instance(s) from {source} to {target}'
     else:
         q = f'Migrate ALL instances from {source} to {target}'
     if not himutils.confirm_action(q):
         return
-
     # Disable source host unless no-disable param is used
-    if not options.dry_run and not options.no_disable and not options.instance:
+    if not options.dry_run and not options.no_disable:
         nc.disable_host(source)
-
-    # Migrate single instance
-    if options.instance:
-        options.sleep = 0
-        migrate_instance(options.instance, target)
-        return
-
-    # Migrate several instances
     instances = nc.get_all_instances(search_opts=search_opts)
     count = 0
     for i in instances:
@@ -136,6 +140,7 @@ def action_migrate():
         if options.limit and count >= options.limit:
             kc.debug_log('number of instances reached limit %s' % options.limit)
             break
+
 
 def action_drain():
     if options.limit:
@@ -281,7 +286,8 @@ def migrate_instance(instance, target=None):
         time.sleep(1)
 
     # Sleep the desired amount before returning
-    time.sleep(options.sleep)
+    if options.sleep:
+        time.sleep(options.sleep)
 
 
 # Run local function with the same name as the action

@@ -4,15 +4,20 @@ actions:
   list:     'List instances for migration'
   migrate:  'Migrate instances from source host to specific target host'
   drain:    'Migrate instances from source host to any host'
+  instance: 'Migrate single instance to specific target host'
   evacuate: 'Evacuate all instances from failed host'
 opt_args:
   'source':
     'metavar':  'source'
     'help':     'Source host. Use either hostname or FQDN'
   'target':
-    'sub':      ['migrate']
+    'sub':      ['migrate', 'instance']
     'metavar':  'target'
     'help':     'Target host. Use either hostname or FQDN'
+  'instance_id':
+    'sub':      ['instance']
+    'metavar':  'instance_id'
+    'help':     'Instance ID to migrate'
   '--limit':
     'sub':      ['migrate', 'drain', 'evacuate']
     'type':     int
@@ -66,8 +71,4 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
-  '--instance':
-    'sub':      ['migrate', 'drain']
-    'dest':     'instance'
-    'help':     'Instance ID to migrate'
  
