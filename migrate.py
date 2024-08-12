@@ -24,7 +24,8 @@ logger = kc.get_logger()
 nc = Nova(options.config, debug=options.debug, log=logger)
 nc.set_dry_run(options.dry_run)
 
-source = nc.get_fqdn(options.source)
+if options.source:
+    source = nc.get_fqdn(options.source)
 search_opts = dict(all_tenants=1, host=source)
 
 if not nc.get_host(source):
@@ -89,7 +90,7 @@ def action_instance():
     target_details = nc.get_host(target)
     if not target_details or target_details.status != 'enabled':
         himutils.fatal(f'Could not find enabled target host {options.target}')
-    instance = nc.get_by_id('server', options.instance_id)
+    instance = nc.get_by_id('server', options.instance)
 
     # Get confirmation
     q = f'Try to migrate instance {options.instance_id} to {target}'

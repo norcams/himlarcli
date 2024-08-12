@@ -8,15 +8,16 @@ actions:
   evacuate: 'Evacuate all instances from failed host'
 opt_args:
   'source':
+    'sub':      ['migrate', 'drain', 'evacuate']
     'metavar':  'source'
     'help':     'Source host. Use either hostname or FQDN'
   'target':
     'sub':      ['migrate', 'instance']
     'metavar':  'target'
     'help':     'Target host. Use either hostname or FQDN'
-  'instance_id':
+  'instance':
     'sub':      ['instance']
-    'metavar':  'instance_id'
+    'metavar':  'instance'
     'help':     'Instance ID to migrate'
   '--limit':
     'sub':      ['migrate', 'drain', 'evacuate']
