@@ -26,10 +26,9 @@ nc.set_dry_run(options.dry_run)
 
 if hasattr(options, 'source'):
     source = nc.get_fqdn(options.source)
-search_opts = dict(all_tenants=1, host=source)
-
-if not nc.get_host(source):
-    himutils.fatal(f"Could not find source host '{source}'")
+    search_opts = dict(all_tenants=1, host=source)
+    if not nc.get_host(source):
+        himutils.fatal(f"Could not find source host '{source}'")
 
 def action_list():
     instances = nc.get_all_instances(search_opts=search_opts)
