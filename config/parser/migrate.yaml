@@ -11,14 +11,14 @@ opt_args:
     'sub':      ['migrate', 'drain', 'evacuate']
     'metavar':  'source'
     'help':     'Source host. Use either hostname or FQDN'
-  'target':
-    'sub':      ['migrate', 'instance']
-    'metavar':  'target'
-    'help':     'Target host. Use either hostname or FQDN'
   'instance':
     'sub':      ['instance']
     'metavar':  'instance'
     'help':     'Instance ID to migrate'
+  'target':
+    'sub':      ['migrate', 'instance']
+    'metavar':  'target'
+    'help':     'Target host. Use either hostname or FQDN'
   '--limit':
     'sub':      ['migrate', 'drain', 'evacuate']
     'type':     int
