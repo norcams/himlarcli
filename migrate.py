@@ -92,7 +92,7 @@ def action_instance():
     instance = nc.get_by_id('server', options.instance)
 
     # Get confirmation
-    q = f'Try to migrate instance {options.instance_id} to {target}'
+    q = f'Try to migrate instance {options.instance} to {target}'
     if not himutils.confirm_action(q):
         return
 
