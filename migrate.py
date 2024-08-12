@@ -261,6 +261,10 @@ def migrate_instance(instance, target=None):
         print(" DONE (dry-run)")
         return
 
+    # Set source if unset (i.e. not set with option)
+    if 'source' not in globals():
+        source = getattr(instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
+
     # Call migrate or live-migrate depending on vm state
     if (state == 'active' or state == 'paused'):
         instance.live_migrate() if target is None else instance.live_migrate(host=target)
