@@ -24,7 +24,7 @@ logger = kc.get_logger()
 nc = Nova(options.config, debug=options.debug, log=logger)
 nc.set_dry_run(options.dry_run)
 
-if options.source:
+if hasattr(options, 'source'):
     source = nc.get_fqdn(options.source)
 search_opts = dict(all_tenants=1, host=source)
 
@@ -287,7 +287,7 @@ def migrate_instance(instance, target=None):
         time.sleep(1)
 
     # Sleep the desired amount before returning
-    if options.sleep:
+    if hasattr(options, 'sleep'):
         time.sleep(options.sleep)
 
 
