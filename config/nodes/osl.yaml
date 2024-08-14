@@ -650,6 +650,13 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdj'
+  storage-v2d-33:
+    mac: ec:f4:bb:d6:58:d0
+    environment: victoria
+    hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-07
@@ -661,9 +668,3 @@ nodes:
     compute_profile: large
     compute_resource: controller-06
     hostgroup: 16
-  test-04:
-    mac: 18:66:da:8d:b6:4d
-    hostgroup: "el8/uefi"
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sdi'
