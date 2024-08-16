@@ -26,6 +26,10 @@ atlas.m1a:
     vcpus: 16
     ram: 61438
     disk: 10
+  'atlas.m1a.6xlarge':
+    vcpus: 24
+    ram: 92158
+    disk: 10
   'atlas.m1a.8xlarge':
     vcpus: 32
     ram: 122878
