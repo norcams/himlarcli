@@ -1,5 +1,6 @@
 ---
 # M1 flavor used for Atlas
+# https://iaas.readthedocs.io/team/tips_and_tricks/dedicated-flavors.html
 public: false
 properties:
   hw_rng:allowed: 'True'
@@ -25,3 +26,7 @@ atlas.m1a:
     vcpus: 16
     ram: 61438
     disk: 10
+  'atlas.m1a.8xlarge':
+    vcpus: 32
+    ram: 122878
+    disk: 20
