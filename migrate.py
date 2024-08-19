@@ -261,9 +261,11 @@ def migrate_instance(instance, target=None):
         print(" DONE (dry-run)")
         return
 
-    # Set source if unset (i.e. not set with option)
-    if 'source' not in globals():
-        source = getattr(instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
+    # Set source hypervisor
+    if 'source' in globals():
+        source_host = source
+    else:
+        source_host = getattr(instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
 
     # Call migrate or live-migrate depending on vm state
     if (state == 'active' or state == 'paused'):
@@ -279,14 +281,14 @@ def migrate_instance(instance, target=None):
         migrating_instance = nc.get_by_id('server', instance.id)
         hypervisor = getattr(migrating_instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
         task_state = getattr(migrating_instance, 'OS-EXT-STS:task_state')
-        if task_state is None and hypervisor != source:
+        if task_state is None and hypervisor != source_host:
             finish = time.perf_counter()
             elapsed = '%.1f' % (finish - start)
             new_host = re.sub('\.mgmt\..+?\.uhdc\.no$', '', hypervisor)
             print(f'––> {Color.fg.cyn}{new_host}{Color.reset} '
                   f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed} seconds')
             break
-        elif task_state is None and hypervisor == source:
+        elif task_state is None and hypervisor == source_host:
             print(f'{Color.fg.red}{Color.bold}FAILED!{Color.reset}')
             break
         elif timeout == 0:
