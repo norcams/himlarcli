@@ -2,52 +2,59 @@
 desc:   'Migate instances. Only use on hosts with shared storage! For local storage see aggregate.py'
 actions:
   list:     'List instances for migration'
-  migrate:  'Migrate instances from host'
-  evacuate: 'Evacuate all instances from host'
+  migrate:  'Migrate instances from source host to specific target host'
+  drain:    'Migrate instances from source host to any host'
+  instance: 'Migrate single instance to specific target host'
+  evacuate: 'Evacuate all instances from failed host'
 opt_args:
   'source':
+    'sub':      ['migrate', 'drain', 'evacuate']
     'metavar':  'source'
     'help':     'Source host. Use either hostname or FQDN'
+  'instance':
+    'sub':      ['instance']
+    'metavar':  'instance'
+    'help':     'Instance ID to migrate'
   'target':
-    'sub':      ['migrate']
+    'sub':      ['migrate', 'instance']
     'metavar':  'target'
     'help':     'Target host. Use either hostname or FQDN'
   '--limit':
-    'sub':      ['migrate', 'evacuate']
+    'sub':      ['migrate', 'drain', 'evacuate']
     'type':     int
     'dest':     'limit'
     'metavar':  '<int>'
     'help':     'number of instances to consider for migration before exit'
   '--sleep':
-    'sub':      ['migrate', 'evacuate']
+    'sub':      ['migrate', 'drain', 'evacuate']
     'dest':     'sleep'
     'metavar':  '<int>'
     'type':     int
     'help':     'number of seconds to sleep between instances'
-    'default':  60
+    'default':  5
   '--no-disable':
-    'sub':      ['migrate']
+    'sub':      ['migrate', 'drain']
     'dest':     'no_disable'
     'help':     'do not disable source hypervisor'
     'action':   'store_const'
     'const':    true
     'default':  false
   '--large':
-    'sub':      ['migrate']
+    'sub':      ['migrate', 'drain']
     'dest':     'large'
     'help':     'only migrate large instances'
     'action':   'store_const'
     'const':    true
     'default':  false
   '--small':
-    'sub':      ['migrate']
+    'sub':      ['migrate', 'drain']
     'dest':     'small'
     'help':     'only migrate small instances'
     'action':   'store_const'
     'const':    true
     'default':  false
   '--ram':
-    'sub':      ['migrate']
+    'sub':      ['migrate', 'drain']
     'dest':     'filter_ram'
     'metavar':  '<int>'
     'type':     int
@@ -59,7 +66,7 @@ opt_args:
     'help':     'host aggregate to evacuate'
     'default':  'central1'
   '--stopped':
-    'sub':      'migrate'
+    'sub':      ['migrate', 'drain']
     'dest':     'stopped'
     'help':     'only migrate stopped instances'
     'action':   'store_const'
