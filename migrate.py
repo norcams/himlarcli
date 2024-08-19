@@ -272,8 +272,10 @@ def migrate_instance(instance, target=None):
         instance.migrate() if target is None else instance.migrate(host=target)
 
     # Time the migration and report outcome
+    timeout = 300  # time out migration loop after 5 minutes
     start = time.perf_counter()
     while True:
+        timeout += -1
         migrating_instance = nc.get_by_id('server', instance.id)
         hypervisor = getattr(migrating_instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
         task_state = getattr(migrating_instance, 'OS-EXT-STS:task_state')
@@ -286,6 +288,9 @@ def migrate_instance(instance, target=None):
             break
         elif task_state is None and hypervisor == source:
             print(f'{Color.fg.red}{Color.bold}FAILED!{Color.reset}')
+            break
+        elif timeout == 0:
+            print(f'{Color.fg.red}{Color.bold}TIMEOUT after 5 min!{Color.reset}')
             break
         time.sleep(1)
 
