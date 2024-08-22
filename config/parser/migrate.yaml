@@ -1,19 +1,21 @@
 ---
 desc:   'Migate instances. Only use on hosts with shared storage! For local storage see aggregate.py'
 actions:
-#  show:     'Show active live-migration process(es) for instance'
-  list:     'List instances for migration'
-  migrate:  'Migrate instances from source host to specific target host'
-  drain:    'Migrate instances from source host to any host'
-  instance: 'Migrate single instance to specific target host'
-  evacuate: 'Evacuate all instances from failed host'
+  list:           'List instances for migration'
+  migrate:        'Migrate instances from source host to specific target host'
+  drain:          'Migrate instances from source host to any host'
+  instance:       'Migrate single instance to specific target host'
+#  show:           'Show active live-migration process(es) for instance'
+#  abort:          'Abort a running live migration'
+#  force-complete: 'Force-complete a running live migration'
+  evacuate:       'Evacuate all instances from failed host'
 opt_args:
   'source':
     'sub':      ['migrate', 'drain', 'evacuate']
     'metavar':  'source'
     'help':     'Source host. Use either hostname or FQDN'
   'instance':
-#    'sub':      ['instance', 'show']
+#    'sub':      ['instance', 'show', 'abort', 'force-complete']
     'sub':      ['instance']
     'metavar':  'instance'
     'help':     'Instance ID'

@@ -35,23 +35,56 @@ if hasattr(options, 'source'):
 #def action_show():
 #    migrations = nc.get_migrations_by_instance_id(options.instance)
 #    for m in migrations:
-#        created_at = datetime.fromisoformat(f'{m.created_at}+00.00').astimezone(ZoneInfo('Europe/Oslo')).strftime('%Y-%m-%d %H:%M:%S %Z')
-#        updated_at = datetime.fromisoformat(f'{m.updated_at}+00.00').astimezone(ZoneInfo('Europe/Oslo')).strftime('%Y-%m-%d %H:%M:%S %Z')
-#        print(
-#            '\n'
-#            f'  {Color.fg.CYN}Status{Color.reset} ...................... {Color.bold}{m.status}{Color.reset}\n'
-#            f'  {Color.fg.CYN}ID{Color.reset} .......................... {m.id}\n'
-#            f'  {Color.fg.CYN}Created At{Color.reset} .................. {created_at}\n'
-#            f'  {Color.fg.CYN}Updated At{Color.reset} .................. {updated_at}\n'
-#            f'  {Color.fg.CYN}Source Compute{Color.reset} .............. {m.source_compute}\n'
-#            f'  {Color.fg.CYN}Dest Compute{Color.reset} ................ {m.dest_compute}\n'
-#            f'  {Color.fg.CYN}Total Memory Bytes{Color.reset} .......... {m.memory_total_bytes}\n'
-#            f'  {Color.fg.CYN}Processed Memory Bytes{Color.reset} ...... {m.memory_processed_bytes}\n'
-#            f'  {Color.fg.CYN}Remaining Memory Bytes{Color.reset} ...... {m.memory_remaining_bytes}\n'
-#            f'  {Color.fg.CYN}Total Disk Bytes{Color.reset} ............ {m.disk_total_bytes}\n'
-#            f'  {Color.fg.CYN}Processed Disk Bytes{Color.reset} ........ {m.disk_processed_bytes}\n'
-#            f'  {Color.fg.CYN}Remaining Disk Bytes{Color.reset} ........ {m.disk_remaining_bytes}\n'
-#        )
+#        show_migration(m)
+#
+#
+#def action_abort():
+#    migrations = nc.get_migrations_by_instance_id(options.instance)
+#    if len(migrations) == 0:
+#        himutils.warning(f'No live-migrations found for instance {options.instance}, nothing to do')
+#        return
+#    if len(migrations) > 1:
+#        himutils.error(f'More than 1 active live-migrations found for instance {options.instance}. Cannot continue')
+#        return
+#
+#    # Show the migration to be aborted
+#    show_migration(migrations[0])
+#
+#    # Get confirmation
+#    q = f'Abort this migration'
+#    if not himutils.confirm_action(q):
+#        return
+#
+#    # Abort migration
+#    nc.abort_live_migration(options.instance, migrations[0].id)
+#
+#
+#def action_force_complete():
+#    migrations = nc.get_migrations_by_instance_id(options.instance)
+#    if len(migrations) == 0:
+#        himutils.warning(f'No live-migrations found for instance {options.instance}, nothing to do')
+#        return
+#    if len(migrations) > 1:
+#        himutils.error(f'More than 1 active live-migrations found for instance {options.instance}. Cannot continue')
+#        return
+#
+#    # Show the migration to be aborted
+#    show_migration(migrations[0])
+#
+#    # Get confirmation
+#    q = f'Abort this migration'
+#    if not himutils.confirm_action(q):
+#        return
+#
+#    # Check if force-complete is possible
+#    if migrations[0].status == "preparing":
+#        himutils.error(f'Migration {migrations[0].id} state of instance {options.instance} is preparing.'
+#                       f' Cannot force complete while the migration is in this state')
+#        return
+#
+#    # Force-complete migration
+#    nc.force_complete_live_migration(options.instance, migrations[0].id)
+
 
 def action_list():
     instances = nc.get_all_instances(search_opts=search_opts)
@@ -322,6 +355,25 @@ def migrate_instance(instance, target=None):
     # Sleep the desired amount before returning
     if hasattr(options, 'sleep'):
         time.sleep(options.sleep)
+
+#def show_migration(m):
+#    created_at = datetime.fromisoformat(f'{m.created_at}+00.00').astimezone(ZoneInfo('Europe/Oslo')).strftime('%Y-%m-%d %H:%M:%S %Z')
+#    updated_at = datetime.fromisoformat(f'{m.updated_at}+00.00').astimezone(ZoneInfo('Europe/Oslo')).strftime('%Y-%m-%d %H:%M:%S %Z')
+#    print(
+#        '\n'
+#        f'  {Color.fg.cyn}Status{Color.reset} {Color.dim}......................{Color.reset} {Color.bold}{m.status}{Color.reset}\n'
+#        f'  {Color.fg.CYN}ID{Color.reset} {Color.dim}..........................{Color.reset} {m.id}\n'
+#        f'  {Color.fg.CYN}Created At{Color.reset} {Color.dim}..................{Color.reset} {created_at}\n'
+#        f'  {Color.fg.CYN}Updated At{Color.reset} {Color.dim}..................{Color.reset} {updated_at}\n'
+#        f'  {Color.fg.CYN}Source Compute{Color.reset} {Color.dim}..............{Color.reset} {m.source_compute}\n'
+#        f'  {Color.fg.CYN}Dest Compute{Color.reset} {Color.dim}................{Color.reset} {m.dest_compute}\n'
+#        f'  {Color.fg.YLW}Total Memory Bytes{Color.reset} {Color.dim}..........{Color.reset} {m.memory_total_bytes}\n'
+#        f'  {Color.fg.YLW}Processed Memory Bytes{Color.reset} {Color.dim}......{Color.reset} {m.memory_processed_bytes}\n'
+#        f'  {Color.fg.YLW}Remaining Memory Bytes{Color.reset} {Color.dim}......{Color.reset} {m.memory_remaining_bytes}\n'
+#        f'  {Color.fg.MGN}Total Disk Bytes{Color.reset} {Color.dim}............{Color.reset} {m.disk_total_bytes}\n'
+#        f'  {Color.fg.MGN}Processed Disk Bytes{Color.reset} {Color.dim}........{Color.reset} {m.disk_processed_bytes}\n'
+#        f'  {Color.fg.MGN}Remaining Disk Bytes{Color.reset} {Color.dim}........{Color.reset} {m.disk_remaining_bytes}\n'
+#    )
 
 
 # Run local function with the same name as the action

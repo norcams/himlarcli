@@ -718,8 +718,16 @@ class Nova(Client):
 ################################ MIGRATION ####################################
 
     def get_migrations_by_instance_id(self, instance_id):
-        migrations = self.client.server_migrations.list(instance_id)
-        return migrations
+        return self.client.server_migrations.list(instance_id)
+
+    def abort_live_migration(self, instance_id, migration_id):
+        return self.client.server_migrations.live_migration_abort(instance_id, migration_id)
+
+    def force_complete_live_migration(self, instance_id, migration_id):
+        return self.client.server_migrations.live_migrate_force_complete(instance_id, migration_id)
+
+    def get_live_migration(self, instance_id, migration_id):
+        return self.client.server_migrations.get(instance_id, migration_id)
 
 ################################## STATIC #####################################
 
