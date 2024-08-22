@@ -1,7 +1,7 @@
 ---
 desc:   'Migate instances. Only use on hosts with shared storage! For local storage see aggregate.py'
 actions:
-  show:     'Show active live-migration process(es) for instance'
+#  show:     'Show active live-migration process(es) for instance'
   list:     'List instances for migration'
   migrate:  'Migrate instances from source host to specific target host'
   drain:    'Migrate instances from source host to any host'
@@ -13,7 +13,8 @@ opt_args:
     'metavar':  'source'
     'help':     'Source host. Use either hostname or FQDN'
   'instance':
-    'sub':      ['instance', 'show']
+#    'sub':      ['instance', 'show']
+    'sub':      ['instance']
     'metavar':  'instance'
     'help':     'Instance ID'
   'target':
