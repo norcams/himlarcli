@@ -3,6 +3,8 @@
 import time
 import sys
 import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from himlarcli import tests
 tests.is_virtual_env()
@@ -29,6 +31,27 @@ if hasattr(options, 'source'):
     search_opts = dict(all_tenants=1, host=source)
     if not nc.get_host(source):
         himutils.fatal(f"Could not find source host '{source}'")
+
+def action_show():
+    migrations = nc.get_migrations_by_instance_id(options.instance)
+    for m in migrations:
+        created_at = datetime.fromisoformat(f'{m.created_at}+00.00').astimezone(ZoneInfo('Europe/Oslo')).strftime('%Y-%m-%d %H:%M:%S %Z')
+        updated_at = datetime.fromisoformat(f'{m.updated_at}+00.00').astimezone(ZoneInfo('Europe/Oslo')).strftime('%Y-%m-%d %H:%M:%S %Z')
+        print(
+            '\n'
+            f'  {Color.fg.CYN}Status{Color.reset} ...................... {Color.bold}{m.status}{Color.reset}\n'
+            f'  {Color.fg.CYN}ID{Color.reset} .......................... {m.id}\n'
+            f'  {Color.fg.CYN}Created At{Color.reset} .................. {created_at}\n'
+            f'  {Color.fg.CYN}Updated At{Color.reset} .................. {updated_at}\n'
+            f'  {Color.fg.CYN}Source Compute{Color.reset} .............. {m.source_compute}\n'
+            f'  {Color.fg.CYN}Dest Compute{Color.reset} ................ {m.dest_compute}\n'
+            f'  {Color.fg.CYN}Total Memory Bytes{Color.reset} .......... {m.memory_total_bytes}\n'
+            f'  {Color.fg.CYN}Processed Memory Bytes{Color.reset} ...... {m.memory_processed_bytes}\n'
+            f'  {Color.fg.CYN}Remaining Memory Bytes{Color.reset} ...... {m.memory_remaining_bytes}\n'
+            f'  {Color.fg.CYN}Total Disk Bytes{Color.reset} ............ {m.disk_total_bytes}\n'
+            f'  {Color.fg.CYN}Processed Disk Bytes{Color.reset} ........ {m.disk_processed_bytes}\n'
+            f'  {Color.fg.CYN}Remaining Disk Bytes{Color.reset} ........ {m.disk_remaining_bytes}\n'
+        )
 
 def action_list():
     instances = nc.get_all_instances(search_opts=search_opts)

@@ -715,6 +715,12 @@ class Nova(Client):
             access_list[flavor.name] = self.client.flavor_access.list(flavor=flavor.id)
         return access_list
 
+################################ MIGRATION ####################################
+
+    def get_migrations_by_instance_id(self, instance_id):
+        migrations = self.client.server_migrations.list(instance_id)
+        return migrations
+
 ################################## STATIC #####################################
 
     def get_fqdn_host(self, host):
