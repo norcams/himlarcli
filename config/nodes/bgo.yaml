@@ -211,9 +211,13 @@ nodes:
   compute-vgpu-53:
     mac: 34:48:ed:f9:59:c2
     hostgroup: 16
-  compute-gpu1-54:
+  compute-vgpu-54:
     mac: 34:48:ed:f9:5a:de
-    hostgroup: 16
+    environment: victoria
+    hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   compute-epyc-55:
     mac: 70:b5:e8:d0:b0:a8
     hostgroup: 16
