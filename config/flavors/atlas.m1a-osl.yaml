@@ -30,7 +30,13 @@ atlas.m1a:
     vcpus: 24
     ram: 92158
     disk: 10
+    properties:
+      hw:numa_nodes: 2
+      hw:cpu_sockets: 1
   'atlas.m1a.8xlarge':
     vcpus: 32
     ram: 122878
     disk: 20
+    properties:
+      hw:numa_nodes: 2
+      hw:cpu_sockets: 1
