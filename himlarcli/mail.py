@@ -4,7 +4,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
-from email import encoders,utils
+from email.utils import formatdate,make_msgid
+from email import encoders
 
 class Mail(Client):
 
@@ -34,8 +35,8 @@ class Mail(Client):
             if not 'BCC' in mail:
                 mail['BCC'] = bcc
             recipients = recipients + [bcc]
-        mail['Date'] = email.utils.formatdate(localtime=True)
-        mail['Message-ID'] = email.utils.make_msgid(idstring="nrec-" + msgid)
+        mail['Date'] = formatdate(localtime=True)
+        mail['Message-ID'] = make_msgid(idstring="nrec-" + msgid)
         if not self.dry_run:
             try:
                 self.server.sendmail(fromaddr, recipients, mail.as_string())
