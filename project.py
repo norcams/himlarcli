@@ -170,7 +170,7 @@ def action_create():
             himutils.fatal(f"Could not find and parse mail body in {options.msg}")
 
         mime = mail.rt_mail(options.rt, subject, body_content)
-        mail.send_mail('support@nrec.no', mime)
+        mail.send_mail('support@nrec.no', mime, msgid='project-create-rt')
 
 def action_create_private():
     # Set default options
@@ -253,7 +253,7 @@ def action_extend():
             himutils.sys_error(f"Could not find and parse mail body in {options.msg}")
 
         mime = mail.rt_mail(options.rt, subject, body_content)
-        mail.send_mail('support@nrec.no', mime)
+        mail.send_mail('support@nrec.no', mime, msgid='project-extend-rt')
 
 
 def action_grant():
@@ -296,7 +296,7 @@ def action_grant():
                                                      mapping=rt_mapping)
 
             rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
-            mail.send_mail('support@nrec.no', rt_mime)
+            mail.send_mail('support@nrec.no', rt_mime, msgid='project-grant-rt')
 
         for user in granted_users:
             mapping = {
@@ -307,7 +307,7 @@ def action_grant():
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
             msg['subject'] = f'[NREC] You have been given access to project {options.project}'
-            mail.send_mail(user, msg, fromaddr='noreply@nrec.no')
+            mail.send_mail(user, msg, fromaddr='noreply@nrec.no', msgid='project-grant')
 
 def action_revoke():
     # Collect info
@@ -347,7 +347,7 @@ def action_revoke():
                                                      mapping=rt_mapping)
 
             rt_mime = mail.rt_mail(options.rt, rt_subject, rt_body_content)
-            mail.send_mail('support@nrec.no', rt_mime)
+            mail.send_mail('support@nrec.no', rt_mime, msgid='project-revoke-rt')
 
         for user in revoked_users:
             mapping = {
@@ -358,7 +358,7 @@ def action_revoke():
                                                   mapping=mapping)
             msg = MIMEText(body_content, 'plain')
             msg['subject'] = f'[NREC] Your access to project {options.project} is revoked'
-            mail.send_mail(user, msg, fromaddr='noreply@nrec.no')
+            mail.send_mail(user, msg, fromaddr='noreply@nrec.no', msgid='project-revoke')
 
 def action_delete():
     question = 'Delete project %s and all resources' % options.project
@@ -576,7 +576,7 @@ def action_quarantine():
                                                        fromaddr,
                                                        ccaddr)
             # Send mail to user
-            mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr)
+            mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr, msgid='project-quarantine')
             if options.dry_run:
                 print("Did NOT send spam to %s;" % project_admin)
                 print("Subject: %s" % subject)

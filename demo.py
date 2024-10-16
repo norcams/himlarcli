@@ -347,7 +347,7 @@ def notify_user(instance, project, region, active_days, notification_type):
         print(body_content)
         print(f"{Color.dim}––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––{Color.reset}")
     else:
-        mail.send_mail(project.admin, msg, fromaddr, ccaddr, bccaddr)
+        mail.send_mail(project.admin, msg, fromaddr, ccaddr, bccaddr, msgid='demo')
         kc.debug_log(f'Sending mail to {project.admin} regarding {instance.id} that has been active for {active_days} days')
         himutils.append_to_logfile(
             logfile,

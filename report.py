@@ -334,7 +334,7 @@ def action_mail():
                                                    'resources.txt',
                                                    fromaddr)
         # Send mail to user
-        mail.send_mail(user, msg, fromaddr)
+        mail.send_mail(user, msg, fromaddr, msgid='report')
         if options.dry_run:
             print("Did NOT send spam to %s" % user)
             print("    --> admin for %d projects, member of %d projects" % (admin_counter, member_counter))
@@ -453,7 +453,7 @@ def action_enddate():
                                                                bccaddr)
 
                     # Send mail to user
-                    mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr)
+                    mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr, msgid='enddate')
                     if options.dry_run:
                         print("Did NOT send spam to %s;" % project_admin)
                         print("Subject: %s" % subject)
@@ -571,7 +571,7 @@ def action_quarantine():
                                                                    bccaddr)
 
                         # Send mail to user
-                        mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr)
+                        mail.send_mail(project_admin, msg, fromaddr, ccaddr, bccaddr, msgid='quarantine')
                         if options.dry_run:
                             print("Did NOT send spam to %s;" % project_admin)
                             print("Subject: %s" % subject)
