@@ -4,7 +4,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
-from email import encoders
+from email import encoders,utils
 
 class Mail(Client):
 
@@ -18,7 +18,7 @@ class Mail(Client):
         """ Turn on debug mode on smtplib """
         self.server.set_debuglevel(level)
 
-    def send_mail(self, toaddr, mail, fromaddr=None, cc=None, bcc=None):
+    def send_mail(self, toaddr, mail, fromaddr=None, cc=None, bcc=None, msgid=None):
         if fromaddr is None:
             fromaddr = self.get_config('mail', 'from_addr')
         if not 'From' in mail:
@@ -34,6 +34,8 @@ class Mail(Client):
             if not 'BCC' in mail:
                 mail['BCC'] = bcc
             recipients = recipients + [bcc]
+        mail['Date'] = email.utils.formatdate(localtime=True)
+        mail['Message-ID'] = email.utils.make_msgid(idstring="nrec-" + msgid)
         if not self.dry_run:
             try:
                 self.server.sendmail(fromaddr, recipients, mail.as_string())
