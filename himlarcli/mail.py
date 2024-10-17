@@ -19,7 +19,7 @@ class Mail(Client):
         """ Turn on debug mode on smtplib """
         self.server.set_debuglevel(level)
 
-    def send_mail(self, toaddr, mail, fromaddr=None, cc=None, bcc=None, msgid=None):
+    def send_mail(self, toaddr, mail, fromaddr=None, cc=None, bcc=None, msgid='default'):
         if fromaddr is None:
             fromaddr = self.get_config('mail', 'from_addr')
         if not 'From' in mail:
