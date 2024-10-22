@@ -195,14 +195,9 @@ def get_config(config_path):
     return config
 
 def get_config_entry(config, section, option, default=None):
-    try:
-        value = config.get(section, option)
-        return value
-    except configparser.NoOptionError:
-        sys_error('=> config file section [%s] missing option %s'
-                          % (section, option))
-    except configparser.NoSectionError:
-        sys_error('=> config file missing section %s' % section)
+    if config.has_option(section, option):
+        return config.get(section, option)
+    improved_sys_error(f'config file section [{section}] missing option {option}', 'warning')
     return default
 
 def get_current_date(format='%Y-%m-%dT%H:%M:%S.%f%z'):
