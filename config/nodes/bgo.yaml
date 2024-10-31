@@ -315,21 +315,21 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-vgpul40s-89:
+  compute-l40s-89:
     mac: c4:cb:e1:b5:c5:bc
     environment: victoria
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-vgpul40s-90:
+  compute-l40s-90:
     mac: c4:cb:e1:b5:c5:b4
     environment: victoria
     hostgroup: "el8/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-vgpul40s-91:
+  compute-l40s-91:
     mac: c4:cb:e1:b5:c6:70
     environment: victoria
     hostgroup: "el8/uefi"
