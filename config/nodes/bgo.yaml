@@ -312,7 +312,7 @@ nodes:
   compute-84:
     mac: c4:cb:e1:af:62:98
     hostgroup: 16
-  compute-vgpu-88:
+  compute-l40s-88:
     mac: c4:cb:e1:b5:c5:8c
     environment: victoria
     hostgroup: "el8/uefi"
