@@ -63,6 +63,7 @@ class HimlarService:
         self.daemon_context.stdin = sys.stdin
         self.daemon_context.stdout = sys.stdout
         self.daemon_context.stderr = sys.stderr
+#        self.daemon_context.working_directory = app.working_directory
 
         self.pidfile = None
         if app.pidfile_path is not None:
