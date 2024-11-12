@@ -12,15 +12,16 @@ class MQclient():
     def __init__(self, config_path, debug, log=None):
         self.config = self.load_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug, log)
-        self.logger.debug('=> config file: %s', self.config_path)
+        self.logger.debug('=> config file: %s', config_path)
         self.dry_run = False
         self.debug = debug
         credentials = pika.PlainCredentials(
             username=self.__get_config('rabbitmq', 'username'),
             password=self.__get_config('rabbitmq', 'password'))
-
+        host = self.__get_config('rabbitmq', 'host')
+        self.logger.debug('=> trying to connect to %s', host)
         parameters = pika.ConnectionParameters(
-            host=self.__get_config('rabbitmq', 'host'),
+            host=host,
             virtual_host=self.__get_config('rabbitmq', 'vhost'),
             credentials=credentials,
             connection_attempts=5,
@@ -29,6 +30,7 @@ class MQclient():
             blocked_connection_timeout=20,
             heartbeat=10)
         self.connection = pika.BlockingConnection(parameters)
+        self.logger.debug('=> connection complete to %s', host)
 
     def set_dry_run(self, dry_run):
         self.logger.debug('=> set dry_run to %s in %s', dry_run, type(self).__name__)
