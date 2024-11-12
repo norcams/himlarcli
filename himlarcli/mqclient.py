@@ -27,8 +27,8 @@ class MQclient():
             connection_attempts=5,
             retry_delay=30,
             socket_timeout=10,
-            blocked_connection_timeout=20,
-            heartbeat=10)
+            blocked_connection_timeout=30,
+            heartbeat=60)
         self.connection = pika.BlockingConnection(parameters)
         self.logger.debug('=> connection complete to %s', host)
 
