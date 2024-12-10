@@ -3,6 +3,7 @@
 import time
 import sys
 import re
+from datetime import timedelta
 #from datetime import datetime
 #from zoneinfo import ZoneInfo
 
@@ -330,7 +331,7 @@ def migrate_instance(instance, target=None):
         instance.migrate() if target is None else instance.migrate(host=target)
 
     # Time the migration and report outcome
-    timeout = 300  # time out migration loop after 5 minutes
+    timeout = 86400  # time out migration loop after 24 hours
     start = time.perf_counter()
     while True:
         timeout += -1
@@ -339,16 +340,23 @@ def migrate_instance(instance, target=None):
         task_state = getattr(migrating_instance, 'OS-EXT-STS:task_state')
         if task_state is None and hypervisor != source_host:
             finish = time.perf_counter()
-            elapsed = '%.1f' % (finish - start)
+            td_str = str(timedelta(seconds=(finish - start)))
+            x = td_str.split(':')
+            if int(x[0]) > 0:
+                elapsed_str = "%d hours %d minutes %.1f seconds" % (int(x[0]), int(x[1]), float(x[2]))
+            elif int(x[0]) == 0 and int(x[1]) > 0:
+                elapsed_str = "%d minutes %.1f seconds" % (int(x[1]), float(x[2]))
+            else:
+                elapsed_str = "%.1f seconds" % float(x[2])
             new_host = re.sub('\.mgmt\..+?\.uhdc\.no$', '', hypervisor)
             print(f'––> {Color.fg.cyn}{new_host}{Color.reset} '
-                  f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed} seconds')
+                  f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed_str}')
             break
         elif task_state is None and hypervisor == source_host:
             print(f'{Color.fg.red}{Color.bold}FAILED!{Color.reset}')
             break
         elif timeout == 0:
-            print(f'{Color.fg.red}{Color.bold}TIMEOUT after 5 min!{Color.reset}')
+            print(f'{Color.fg.red}{Color.bold}TIMEOUT after 24 hours!{Color.reset}')
             break
         time.sleep(1)
 
