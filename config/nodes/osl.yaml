@@ -85,15 +85,15 @@ nodes:
     compute_profile: large
     compute_resource: controller-07
     hostgroup: 16
-  compute-01:
-    mac: ec:f4:bb:ce:20:0c
-    hostgroup: 19
-  compute-02:
-    mac: ec:f4:bb:ce:27:24
-    hostgroup: 19
-  compute-03:
-    mac: ec:f4:bb:ce:28:24
-    hostgroup: 19
+#  compute-01:
+#    mac: ec:f4:bb:ce:20:0c
+#    hostgroup: 19
+#  compute-02:
+#    mac: ec:f4:bb:ce:27:24
+#    hostgroup: 19
+#  compute-03:
+#    mac: ec:f4:bb:ce:28:24
+#    hostgroup: 19
   compute-04:
     mac: 24:6e:96:32:2d:34
     hostgroup: 19
