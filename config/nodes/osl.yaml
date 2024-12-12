@@ -289,6 +289,20 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
+  compute-l40s-67:
+    mac: 6c:92:cf:0d:e4:80
+    environment: wallaby
+    hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  compute-l40s-68:
+    mac: 6c:92:cf:0c:fd:38
+    environment: wallaby
+    hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   console-01:
     compute_profile: medium
     compute_resource: controller-07
