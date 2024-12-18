@@ -1,12 +1,12 @@
 ---
 type: 'gold'
 images:
-  'winsrv2019std':
-    'name':             'GOLD Windows Server 2019 Standard'
-    'depricated':       'Outdated Windows Server 2019 Standard (Windows)'
+  'winsrv2022std':
+    'name':             'GOLD Windows Server 2022 Standard'
+    'depricated':       'Outdated Windows Server 2022 Standard (Windows)'
     'url':              'http://builder/'
-    'latest':           'winsrv_2019-latest.raw'
-    'builder_checksum': 'winsrv_2019-latest.md5'
+    'latest':           'winsrv_2022-latest.raw'
+    'builder_checksum': 'winsrv_2022-latest.md5'
     'min_ram':          4090
     'min_disk':         39
     'disk_format':      'raw'
@@ -20,12 +20,12 @@ images:
       'hw_vif_multiqueue_enabled': 'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'windows'
-  'winsrv2022std':
-    'name':             'GOLD Windows Server 2022 Standard'
-    'depricated':       'Outdated Windows Server 2022 Standard (Windows)'
+  'winsrv2025std':
+    'name':             'GOLD Windows Server 2025 Standard'
+    'depricated':       'Outdated Windows Server 2025 Standard (Windows)'
     'url':              'http://builder/'
-    'latest':           'winsrv_2022-latest.raw'
-    'builder_checksum': 'winsrv_2022-latest.md5'
+    'latest':           'winsrv_2025-latest.raw'
+    'builder_checksum': 'winsrv_2025-latest.md5'
     'min_ram':          4090
     'min_disk':         39
     'disk_format':      'raw'
