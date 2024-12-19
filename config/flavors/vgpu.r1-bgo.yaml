@@ -11,4 +11,4 @@ vgpu.r1:
   'vgpu.r1.4xlarge':
     vcpus: 16
     ram: 131072
-    disk: 40
+    disk: 100
