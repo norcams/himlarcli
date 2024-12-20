@@ -30,7 +30,7 @@ opt_args:
   'resource':
    'sub':       ['access_list']
    'metavar':   'resource'
-   'choices':   ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud', 'net_elastic' ]
+   'choices':   ['vgpu', 'vgpu_l40s', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud', 'net_elastic' ]
   '--region':
     'sub':      ['show', 'create', 'instances', 'show-access', 'show-quota', 'access']
     'dest':     'region'
@@ -164,12 +164,12 @@ opt_args:
     'sub':      ['access']
     'dest':     'grant'
     'help':     'Grant access to compute resource'
-    'choices':  ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud', 'net_elastic' ]
+    'choices':  ['vgpu', 'vgpu_l40s', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud', 'net_elastic' ]
   '--revoke':
     'sub':      ['access']
     'dest':     'revoke'
     'help':     'Revoke access to compute resource'
-    'choices':  ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud', 'net_elastic' ]
+    'choices':  ['vgpu', 'vgpu_l40s', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud', 'net_elastic' ]
   '--show-args':
     'sub':      ['access']
     'dest':     'show_args'
@@ -181,7 +181,7 @@ opt_args:
     'sub':      ['access']
     'dest':     'access_extend'
     'help':     'Set new end date for access to resource'
-    'choices':  ['vgpu', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud', 'net_elastic' ]
+    'choices':  ['vgpu', 'vgpu_l40s', 'shpc', 'shpc_ram', 'shpc_disk1', 'shpc_disk2', 'shpc_disk3', 'shpc_disk4', 'ssd', 'net_uib', 'net_educloud', 'net_elastic' ]
   '--until':
     'sub':      ['access']
     'dest':     'until'

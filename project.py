@@ -608,6 +608,7 @@ def action_access():
     # Resource availability by region
     resource_availability = {
         'vgpu'         : [ 'bgo', 'osl' ],
+        'vgpu_l40s'    : [ 'bgo', 'osl' ],
         'shpc'         : [ 'bgo', 'osl' ],
         'shpc_ram'     : [ 'bgo', 'osl' ],
         'shpc_disk1'   : [ 'bgo', 'osl' ],
@@ -622,7 +623,8 @@ def action_access():
 
     # Resource info
     resource_info = {
-        'vgpu'         : 'Access to vGPU flavors and vGPU images',
+        'vgpu'         : 'Access to standard vGPU flavors and vGPU images',
+        'vgpu_l40s'    : 'Access to L40s vGPU flavors and vGPU images',
         'shpc'         : 'Access to standard sHPC flavors (shpc.m1a and shpc.c1a)',
         'shpc_ram'     : 'Access to memory sHPC flavors (shpc.r1a)',
         'shpc_disk1'   : 'Access to 200 GB disk sHPC flavors (shpc.m1ad1 and shpc.c1ad1)',
@@ -817,6 +819,9 @@ def action_access():
     access_networks = list()
     if resource == 'vgpu':
         access_flavors.append('vgpu.m1')
+        access_images.append('vgpu')
+    elif resource == 'vgpu_l40s':
+        access_flavors.append('vgpu.r1')
         access_images.append('vgpu')
     elif resource == 'shpc':
         access_flavors.append('shpc.m1a')
