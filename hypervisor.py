@@ -186,7 +186,7 @@ def action_list():
         counter = 0
         for host in hosts:
             r_hostname = Color.fg.blu + re.sub('\.mgmt\..+?\.uhdc\.no$', '', host.hypervisor_hostname) + Color.reset
-            r_aggregate = ','.join(aggregates.get(host.hypervisor_hostname, 'unknown'))
+            r_aggregate = ','.join(aggregates.get(host.hypervisor_hostname, []))
             r_vms = str(host.running_vms)
             r_vcpus = f"{host.vcpus_used} / {host.vcpus}"
             r_mem = f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}"
