@@ -1,5 +1,5 @@
 ---
-# BGO only
+# r1 flavor used for vGPU L40s
 public: false
 properties: {}
 vgpu.r1: {}
