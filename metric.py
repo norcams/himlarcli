@@ -23,6 +23,29 @@ logger = kc.get_logger()
 nc = Nova(options.config, debug=options.debug, log=logger, region=region)
 nc.set_dry_run(options.dry_run)
 
+def action_identity():
+    start = himutils.get_date(None, date.today() - timedelta(days=30))
+    stop = himutils.get_date(None, date.today() + timedelta(days=1))
+    gc = Gnocchi(options.config, debug=options.debug, log=logger, region=region)
+    client = gc.get_client()
+    resources = client.resource.list(resource_type='identity', details=True, history=True)
+    printer.output_dict({'header': 'identiy events: %s (user, date, events)' % len(resources)})
+    for resource in resources:
+        output = {
+            1: resource['user_id'],
+            0: resource['started_at'],
+            2: 0
+        }
+        for metric, metric_id in resource['metrics'].items():
+            measurement = client.metric.get_measures(metric=metric_id,
+                                                     aggregation='count',
+                                                     start=start,
+                                                     stop=stop,
+                                                     refresh=True)
+            if measurement:
+                output[2] += measurement[0][2]
+        printer.output_dict(output, one_line=True)
+
 def action_resources():
     gc = Gnocchi(options.config, debug=options.debug, log=logger, region=region)
     client = gc.get_client()

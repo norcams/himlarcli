@@ -4,6 +4,7 @@ actions:
   'instance':   'Get metric from instance'
   'resources':  'Openstack resources'
   'metrics':    ''
+  'identity':   'identity metrics'
 
 opt_args:
   'instance':
