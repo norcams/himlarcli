@@ -29,3 +29,11 @@ class Gnocchi(Client):
             resource = None
             self.log_error('Resource with ID %s not found!' % resource_id)
         return resource
+
+    def get_resource_types(self):
+        try:
+            resources = self.client.resource_type.list()
+        except Exception as e:
+            self.log_error(e)
+        #print(resources)
+        return resources

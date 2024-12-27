@@ -2,11 +2,14 @@
 desc:           'Get metric from gnocchi'
 actions:
   'instance':   'Get metric from instance'
+  'resources':  'Openstack resources'
+  'metrics':    ''
 
 opt_args:
   'instance':
     'metavar':  'instance'
     'help':     'instance/server ID'
+    'sub':      ['instance']
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'

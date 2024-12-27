@@ -18,14 +18,35 @@ printer = Printer(options.format)
 
 kc = Keystone(options.config, debug=options.debug)
 kc.set_dry_run(options.dry_run)
+region = kc.get_region() # use default from config
 logger = kc.get_logger()
-nc = Nova(options.config, debug=options.debug, log=logger)
+nc = Nova(options.config, debug=options.debug, log=logger, region=region)
 nc.set_dry_run(options.dry_run)
+
+def action_resources():
+    gc = Gnocchi(options.config, debug=options.debug, log=logger, region=region)
+    client = gc.get_client()
+    resources = gc.get_resource_types()
+    for resource in resources:
+        rlist = client.resource.list(resource_type=resource['name'], details=True)
+        if rlist:
+            printer.output_dict({'header': 'resource type: %s' % resource['name']})
+            printer.output_msg('number of resources %s' % len(rlist))
+
+def action_metrics():
+    gc = Gnocchi(options.config, debug=options.debug, log=logger, region=region)
+    client = gc.get_client()
+    metrics = client.metric.list()
+
+    # for metric in metrics:
+    #     print('metric name: %s' % metric['name'])
+    printer.output_msg('number of metrics %s' % len(metrics))
+
 
 def action_instance():
     start = himutils.get_date(options.start, date.today() - timedelta(days=1))
     stop = himutils.get_date(options.end, date.today() + timedelta(days=1))
-    gc = Gnocchi(options.config, debug=options.debug, log=logger)
+    gc = Gnocchi(options.config, debug=options.debug, log=logger, region=region)
     instance = nc.get_by_id('server', options.instance)
     resources = gc.get_resource(resource_type='instance', resource_id=instance.id)
     metrics = resources['metrics']
