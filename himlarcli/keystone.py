@@ -268,7 +268,7 @@ class Keystone(Client):
     def is_disabled_user(self, email, domain=None):
         email = self.__get_uib_email(email)
         group = self.get_group_by_email(email)
-        if group.name == "%s-disabled" % email:
+        if re.match(r'.+-disabled$', group.name):
             return True
         else:
             return False
