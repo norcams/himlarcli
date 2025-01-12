@@ -71,6 +71,25 @@ images:
       'hw_vif_multiqueue_enabled': 'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
+  'centosstream10':
+    'name':             'GOLD CentOS Stream 10'
+    'depricated':       'Outdated (CentOS Stream 10)'
+    'url':              'http://builder/'
+    'latest':           'centosstream10-latest.qcow2'
+    'builder_checksum': 'centosstream10-latest.md5'
+    'min_ram':          1024
+    'min_disk':         8
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':               'scsi'
+      'hw_scsi_model':             'virtio-scsi'
+      'hw_rng_model':              'virtio'
+      'hw_qemu_guest_agent':       'yes'
+      'hw_machine_type':           'q35'
+      'hw_firmware_type':          'uefi'
+      'hw_vif_multiqueue_enabled': 'yes'
+      'os_require_quiesce':        'yes'
+      'os_type':                   'linux'
   'almalinux8':
     'name':             'GOLD Alma Linux 8'
     'depricated':       'Outdated (Alma Linux 8)'
