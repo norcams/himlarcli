@@ -10,5 +10,5 @@ properties:
 vgpu.r1:
   'vgpu.r1.4xlarge':
     vcpus: 16
-    ram: 131072
+    ram: 122880
     disk: 200
