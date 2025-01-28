@@ -13,4 +13,4 @@ gr1.L40S.24g:
   'gr1.L40S.24g.4xlarge':
     vcpus: 16
     ram: 122880
-    disk: 200
+    disk: 100
