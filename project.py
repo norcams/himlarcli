@@ -821,7 +821,7 @@ def action_access():
         access_flavors.append('vgpu.m1')
         access_images.append('vgpu')
     elif resource == 'vgpu_l40s':
-        access_flavors.append('vgpu.r1')
+        access_flavors.append('gr1.L40S.24g')
         access_images.append('vgpu')
     elif resource == 'shpc':
         access_flavors.append('shpc.m1a')
