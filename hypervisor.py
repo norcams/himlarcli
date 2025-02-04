@@ -12,6 +12,7 @@ from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli import utils as himutils
 from himlarcli.color import Color
+from himlarcli.placement import Placement
 
 parser = Parser()
 options = parser.parse_args()
@@ -24,6 +25,9 @@ nc = Nova(options.config, debug=options.debug, log=logger)
 nc.set_dry_run(options.dry_run)
 
 
+#---------------------------------------------------------------------
+# Main functions
+#---------------------------------------------------------------------
 def action_instances():
     host = nc.get_host(nc.get_fqdn(options.host))
     if not host:
@@ -162,81 +166,167 @@ def action_list():
         hosts = nc.get_aggregate_hosts(options.aggregate, True)
     if options.format == 'table':
         output = {}
-        output['header'] = [
-            'NAME',
-            'AGGREGATES',
-            'VMs',
-            'vCPUs',
-            'MEMORY (GiB)',
-            'DISK (GB)',
-            'STATE',
-            'STATUS',
-        ]
-        output['align'] = [
-            'l',
-            'l',
-            'r',
-            'r',
-            'r',
-            'r',
-            'l',
-            'l',
-        ]
+        if options.verbose:
+            output['header'] = [
+                'NAME',
+                'AGGREGATES',
+                'VMs',
+                'VM states',
+                'vCPUs',
+                'MEMORY (GiB)',
+                'DISK (GB)',
+                'STATE',
+                'STATUS',
+            ]
+            output['align'] = [
+                'l',
+                'l',
+                'r',
+                'r',
+                'r',
+                'r',
+                'r',
+                'l',
+                'l',
+            ]
+        else:
+            output['header'] = [
+                'NAME',
+                'AGGREGATES',
+                'STATE',
+                'STATUS',
+            ]
+            output['align'] = [
+                'l',
+                'l',
+                'l',
+                'l',
+            ]
         output['sortby'] = 0
         counter = 0
+        region = kc.get_config('openstack', 'region')
         for host in hosts:
             r_hostname = Color.fg.blu + re.sub('\.mgmt\..+?\.uhdc\.no$', '', host.hypervisor_hostname) + Color.reset
             r_aggregate = ','.join(aggregates.get(host.hypervisor_hostname, []))
-            r_vms = str(host.running_vms)
-            r_vcpus = f"{host.vcpus_used} / {host.vcpus}"
-            r_mem = f"{int(host.memory_mb_used/1024)} / {int(host.memory_mb/1024)}"
-            if re.search(r"^(central1|windows1|placeholder1|hpc1)$", r_aggregate):
-                r_disk = "-"
-            else:
-                r_disk = f"{host.local_gb_used} / {host.local_gb}"
             r_status = host.status.upper()
+            if options.verbose:
+                resource_usage = get_resource_usage(host.id, region)
+                r_vcpus = f"{resource_usage['vcpu_used']} / {resource_usage['vcpu_max']} ({resource_usage['vcpu_allocation_ratio']})"
+                r_mem = f"{resource_usage['memory_gb_used']} / {resource_usage['memory_gb_max']} ({resource_usage['memory_allocation_ratio']})"
+                search_opts = dict(all_tenants=1, host=host.hypervisor_hostname)
+                instances = nc.get_all_instances(search_opts=search_opts)
+                r_vms = str(len(instances))
+                r_vm_states = ''
+                count = {
+                    'active':  0,
+                    'shutoff': 0,
+                    'paused':  0,
+                    'other':   0,
+                }
+                for i in instances:
+                    if i.status == 'ACTIVE':
+                        count['active'] += 1
+                    elif i.status == 'SHUTOFF':
+                        count['shutoff'] += 1
+                    elif i.status == 'PAUSED':
+                        count['paused'] += 1
+                    else:
+                        count['other'] += 1
+                if count['active'] > 0:
+                    r_vm_states += f"{Color.fg.grn}{count['active']}{Color.reset} "
+                else:
+                    r_vm_states += f"{Color.dim}-{Color.reset} "
+                if count['shutoff'] > 0:
+                    r_vm_states += f"{Color.fg.red}{count['shutoff']:2d}{Color.reset} "
+                else:
+                    r_vm_states += f"{Color.dim} -{Color.reset} "
+                if count['paused'] > 0:
+                    r_vm_states += f"{Color.fg.blu}{count['paused']}{Color.reset} "
+                else:
+                    r_vm_states += f"{Color.dim}-{Color.reset} "
+                if count['other'] > 0:
+                    r_vm_states += f"{Color.fg.ylw}{count['other']}{Color.reset}"
+                else:
+                    r_vm_states += f"{Color.dim}-{Color.reset}"
+
+                if re.search(r"^(central1|windows1|placeholder1|hpc1)$", r_aggregate):
+                    r_disk = "-"
+                else:
+                    r_disk = f"{resource_usage['disk_gb_used']} / {resource_usage['disk_gb_max']} ({resource_usage['disk_allocation_ratio']})"
+
             if host.status == 'enabled':
                 r_aggregate = Color.fg.ylw + r_aggregate + Color.reset
                 r_status = Color.fg.GRN + r_status + Color.reset
             else:
                 r_aggregate = Color.fg.YLW + r_aggregate + Color.reset
-                r_vms = Color.dim + r_vms + Color.reset
-                r_vcpus = Color.dim + r_vcpus + Color.reset
-                r_mem = Color.dim + r_mem + Color.reset
-                r_disk = Color.dim + r_disk + Color.reset
                 r_status = Color.fg.red + r_status + Color.reset
+                if options.verbose:
+                    r_vcpus = Color.dim + r_vcpus + Color.reset
+                    r_mem = Color.dim + r_mem + Color.reset
+                    r_disk = Color.dim + r_disk + Color.reset
             if host.state == 'up':
                 r_state = Color.fg.GRN + host.state.upper() + Color.reset
             else:
                 r_state = Color.fg.red + host.state.upper() + Color.reset
-            output[counter] = [
-                r_hostname,
-                r_aggregate,
-                r_vms,
-                r_vcpus,
-                r_mem,
-                r_disk,
-                r_state,
-                r_status,
-            ]
+            if options.verbose:
+                output[counter] = [
+                    r_hostname,
+                    r_aggregate,
+                    r_vms,
+                    r_vm_states,
+                    r_vcpus,
+                    r_mem,
+                    r_disk,
+                    r_state,
+                    r_status,
+                ]
+            else:
+                output[counter] = [
+                    r_hostname,
+                    r_aggregate,
+                    r_state,
+                    r_status,
+                ]
             counter += 1
         printer.output_dict(output, sort=True, one_line=False)
     else:
-        header = {'header': 'Hypervisor list (name, aggregates, vms, vcpu_used,' +
-                  'ram_gb_used, local_gb_used, state, status)'}
+        header = {'header': 'Hypervisor list (name, aggregates, ' +
+                  'state, status)'}
         printer.output_dict(header)
         for host in hosts:
             output = {
                 '1': host.hypervisor_hostname,
                 '2': ','.join(aggregates.get(host.hypervisor_hostname, 'unknown')),
-                '3': host.running_vms,
-                '4': host.vcpus_used,
-                '5': int(host.memory_mb_used/1024),
-                '6': host.local_gb_used,
-                '7': host.state,
-                '8': host.status,
+                '3': host.state,
+                '4': host.status,
             }
             printer.output_dict(output, sort=True, one_line=True)
+
+#---------------------------------------------------------------------
+# Helper functions
+#---------------------------------------------------------------------
+
+def get_resource_usage(hypervisor_uuid:str, region:str):
+    placement = Placement(kc, region)
+    resource = placement.get_resource_provider_usages(hypervisor_uuid)
+    inventory_vcpu   = placement.get_resource_provider_inventory(hypervisor_uuid, 'VCPU')
+    inventory_memory = placement.get_resource_provider_inventory(hypervisor_uuid, 'MEMORY_MB')
+    inventory_disk   = placement.get_resource_provider_inventory(hypervisor_uuid, 'DISK_GB')
+
+    data = {
+        "vcpu_used":               resource['usages']['VCPU'],
+        "vcpu_max":                inventory_vcpu['max_unit'],
+        "vcpu_allocation_ratio":   inventory_vcpu['allocation_ratio'],
+        "memory_gb_used":          int(resource['usages']['MEMORY_MB'] / 1024),
+        "memory_gb_max":           int(inventory_memory['max_unit'] / 1024),
+        "memory_allocation_ratio": inventory_memory['allocation_ratio'],
+        "disk_gb_used":            resource['usages']['DISK_GB'],
+        "disk_gb_max":             inventory_disk['max_unit'],
+        "disk_allocation_ratio":   inventory_disk['allocation_ratio'],
+        }
+
+    return data
+
 
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)

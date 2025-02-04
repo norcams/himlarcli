@@ -31,3 +31,10 @@ opt_args:
     'dest':     aggregate
     'default':  'all'
     'help':     Limit list to one aggregate
+  '-v':
+    'sub':      ['list']
+    'dest':     'verbose'
+    'help':     'Be more verbose'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
