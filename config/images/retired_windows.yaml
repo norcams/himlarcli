@@ -1,0 +1,10 @@
+---
+type: 'gold'
+images:
+  'winsrv2019core':
+    'name':             'GOLD Windows Server 2019 Core'
+    'depricated':       'Outdated Windows Server 2019 Core (Windows)'
+  'winsrv2019std':
+    'name':             'GOLD Windows Server 2019 Standard'
+    'depricated':       'Outdated Windows Server 2019 Standard (Windows)'
+
