@@ -40,7 +40,7 @@ opt_args:
     'dest':     'status'
     'help':     'image status'
     'default':  'active'
-    'choices':  ['acitve', 'deactive']
+    'choices':  ['active', 'deactive']
   '-v':
     'sub':      ['list', 'usage', 'purge']
     'dest':     'visibility'
