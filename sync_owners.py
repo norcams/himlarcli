@@ -3,6 +3,7 @@
 from himlarcli import tests as tests
 tests.is_virtual_env()
 
+import dateutil
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -41,8 +42,10 @@ class Owner(Base):
     project_name = Column(String(255), nullable=False)
     admin = Column(String(255))
     user = Column(String(255))
-    timestamp = Column(DateTime, default=datetime.now)
+    last_sync = Column(DateTime, default=datetime.now, nullable=False)
+    created = Column(DateTime, nullable=False)
     instance_id = Column(String(63))
+    status = Column(String(16), nullable=False)
 
     def update(self, attributes):
         for k,v in attributes.items():
@@ -62,9 +65,10 @@ def action_sync():
         instances = nc.get_all_instances()
         for i in instances:
             owner = dict()
-            # Get IP address
+            # If the instance do not have addresses we continue
             if not i.addresses:
                 continue
+            # Get IP address
             for network in network_list:
                 if str(network) not in i.addresses:
                     continue
@@ -89,6 +93,8 @@ def action_sync():
             user = kc.get_by_id('user', i.user_id)
             owner['user'] = user.name.lower() if user else None
             owner['instance_id'] = i.id
+            owner['status'] = i.status.lower()
+            owner['created'] = dateutil.parser.parse(i.created)
             # Update owner
             old = session.query(Owner).filter(Owner.ip == owner['ip']).first()
             if old is not None:
