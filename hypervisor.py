@@ -232,7 +232,7 @@ def action_list():
                     elif i.status == 'PAUSED':
                         count['paused'] += 1
                     elif i.status == 'ERROR':
-                        count['paused'] += 1
+                        count['error'] += 1
                     else:
                         count['other'] += 1
                 if count['active'] > 0:
