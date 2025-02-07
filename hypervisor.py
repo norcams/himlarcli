@@ -296,12 +296,13 @@ def action_list():
                 ]
             counter += 1
         printer.output_dict(output, sort=True, one_line=False)
-        print("-----")
-        print(f"VM States: {Color.fg.grn}ACTIVE{Color.reset} ",
-              f"{Color.fg.RED}SHUTOFF{Color.reset} ",
-              f"{Color.fg.blu}PAUSED{Color.reset} ",
-              f"{Color.bg.red}{Color.fg.wht}{Color.bold}ERROR{Color.reset} ",
-              f"{Color.fg.ylw}other...{Color.reset}")
+        if options.verbose:
+            print("-----")
+            print(f"VM States: {Color.fg.grn}ACTIVE{Color.reset} ",
+                  f"{Color.fg.RED}SHUTOFF{Color.reset} ",
+                  f"{Color.fg.blu}PAUSED{Color.reset} ",
+                  f"{Color.bg.red}{Color.fg.wht}{Color.bold}ERROR{Color.reset} ",
+                  f"{Color.fg.ylw}other...{Color.reset}")
     else:
         header = {'header': 'Hypervisor list (name, aggregates, ' +
                   'state, status)'}
