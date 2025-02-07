@@ -221,6 +221,7 @@ def action_list():
                     'active':  0,
                     'shutoff': 0,
                     'paused':  0,
+                    'error':   0,
                     'other':   0,
                 }
                 for i in instances:
@@ -230,6 +231,8 @@ def action_list():
                         count['shutoff'] += 1
                     elif i.status == 'PAUSED':
                         count['paused'] += 1
+                    elif i.status == 'ERROR':
+                        count['paused'] += 1
                     else:
                         count['other'] += 1
                 if count['active'] > 0:
@@ -237,11 +240,15 @@ def action_list():
                 else:
                     r_vm_states += f"{Color.dim}-{Color.reset} "
                 if count['shutoff'] > 0:
-                    r_vm_states += f"{Color.fg.red}{count['shutoff']:2d}{Color.reset} "
+                    r_vm_states += f"{Color.fg.RED}{count['shutoff']:2d}{Color.reset} "
                 else:
                     r_vm_states += f"{Color.dim} -{Color.reset} "
                 if count['paused'] > 0:
                     r_vm_states += f"{Color.fg.blu}{count['paused']}{Color.reset} "
+                else:
+                    r_vm_states += f"{Color.dim}-{Color.reset} "
+                if count['error'] > 0:
+                    r_vm_states += f"{Color.bg.red}{Color.fg.wht}{Color.bold}{count['error']}{Color.reset} "
                 else:
                     r_vm_states += f"{Color.dim}-{Color.reset} "
                 if count['other'] > 0:
