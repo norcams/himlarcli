@@ -171,7 +171,7 @@ def action_list():
                 'NAME',
                 'AGGREGATES',
                 'VMs',
-                'VM states',
+                'VM Status',
                 'vCPUs',
                 'MEMORY (GiB)',
                 'DISK (GB)',
@@ -298,7 +298,7 @@ def action_list():
         printer.output_dict(output, sort=True, one_line=False)
         if options.verbose:
             print("-----")
-            print(f"VM States: {Color.fg.grn}ACTIVE{Color.reset} ",
+            print(f"VM Status: {Color.fg.grn}ACTIVE{Color.reset} ",
                   f"{Color.fg.RED}SHUTOFF{Color.reset} ",
                   f"{Color.fg.blu}PAUSED{Color.reset} ",
                   f"{Color.bg.red}{Color.fg.wht}{Color.bold}ERROR{Color.reset} ",
