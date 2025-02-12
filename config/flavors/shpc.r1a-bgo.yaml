@@ -27,3 +27,7 @@ shpc.r1a:
     vcpus: 48
     ram: 393216
     disk: 20
+  'shpc.r1a.16xlarge':
+    vcpus: 64
+    ram: 524288
+    disk: 20
