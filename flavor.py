@@ -99,9 +99,11 @@ def action_update():
             for project_id in projects:
                 all_projects.add(project_id.tenant_id)
         for project in all_projects:
-            nc.update_flavor_access(class_filter=options.flavor,
-                                    project_id=project,
-                                    action='grant')
+            # only keep access if project still exists
+            if kc.get_by_id('project', project):
+                nc.update_flavor_access(class_filter=options.flavor,
+                                        project_id=project,
+                                        action='grant')
 
 def action_purge():
     q = 'Purge flavors from class {} in region(s) {}'.format(options.flavor, ','.join(regions))
