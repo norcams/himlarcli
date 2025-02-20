@@ -10,6 +10,10 @@ sleep 60
 /opt/himlarcli/image.py update -i uio.yaml
 sleep 60
 
+# uib images
+/opt/himlarcli/image.py update -i uib.yaml
+sleep 60
+
 # vgpu images
 /opt/himlarcli/image.py update -i vgpu.yaml
 sleep 300
