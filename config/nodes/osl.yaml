@@ -617,57 +617,49 @@ nodes:
     hostgroup: 21
   storage-v2d-26:
     mac: 18:66:da:8d:b6:4d
-    environment: victoria
-    hostgroup: "el8/uefi"
+    hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdl'
   storage-v2d-27:
     mac: 18:66:da:9a:d4:5c
-    environment: victoria
-    hostgroup: "el8/uefi"
+    hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdl'
   storage-v2d-28:
     mac: 18:66:da:71:2d:01
-    environment: victoria
-    hostgroup: "el8/uefi"
+    hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdl'
   storage-v2d-29:
     mac: 18:66:da:71:11:4c
-    environment: victoria
-    hostgroup: "el8/uefi"
+    hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdk'
   storage-v2d-30:
     mac: 18:66:da:71:22:2f
-    environment: victoria
-    hostgroup: "el8/uefi"
+    hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdl'
   storage-v2d-31:
     mac: 18:66:da:71:4e:25
-    environment: victoria
-    hostgroup: "el8/uefi"
+    hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdk'
   storage-v2d-32:
     mac: 14:18:77:6a:55:c5
-    environment: victoria
-    hostgroup: "el8/uefi"
+    hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sdj'
   storage-v2d-33:
     mac: ec:f4:bb:d6:58:d0
-    environment: victoria
-    hostgroup: "el8/uefi"
+    hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
