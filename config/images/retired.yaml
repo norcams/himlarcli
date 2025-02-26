@@ -58,6 +58,9 @@ images:
   'fedora_39':
     'name':             'GOLD Fedora 39'
     'depricated':       'Outdated (Fedora 39)'
+  'fedora_40':
+    'name':             'GOLD Fedora 40'
+    'depricated':       'Outdated (Fedora 40)'
   'ubuntu_1604':
     'name':             'GOLD Ubuntu 16.04 LTS'
     'depricated':       'Outdated (Ubuntu 16.04)'
@@ -76,3 +79,6 @@ images:
   'ubuntu_2110':
     'name':             'GOLD Ubuntu 21.10'
     'depricated':       'Outdated (Ubuntu 21.10)'
+  'ubuntu_2004':
+    'name':             'GOLD Ubuntu 20.04'
+    'depricated':       'Outdated (Ubuntu 20.04)'

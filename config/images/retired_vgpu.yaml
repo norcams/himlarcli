@@ -7,3 +7,6 @@ images:
   'vgpu_centos8':
     'name':             'vGPU CentOS 8'
     'depricated':       'Outdated vGPU (CentOS 8)'
+  'vgpu_ubuntu_2004':
+    'name':             'vGPU Ubuntu 20.04 LTS'
+    'depricated':       'Outdated vGPU (Ubuntu 20.04)'
