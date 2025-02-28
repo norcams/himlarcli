@@ -95,6 +95,7 @@ def action_sync():
             owner['instance_id'] = i.id
             owner['status'] = i.status.lower()
             owner['created'] = dateparser.parse(i.created)
+            owner['last_sync'] = datetime.now()
             # Update owner
             old = session.query(Owner).filter(Owner.ip == owner['ip']).first()
             if old is not None:
