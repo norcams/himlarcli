@@ -3,7 +3,7 @@
 from himlarcli import tests as tests
 tests.is_virtual_env()
 
-import dateutil
+from dateutil import parser as dateparser
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -94,7 +94,7 @@ def action_sync():
             owner['user'] = user.name.lower() if user else None
             owner['instance_id'] = i.id
             owner['status'] = i.status.lower()
-            owner['created'] = dateutil.parser.parse(i.created)
+            owner['created'] = dateparser.parse(i.created)
             # Update owner
             old = session.query(Owner).filter(Owner.ip == owner['ip']).first()
             if old is not None:
