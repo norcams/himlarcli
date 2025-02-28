@@ -120,7 +120,10 @@ def action_sync():
             owner['status'] = i.status.lower()
             old = session.query(Owner).filter(Owner.instance_id == i.id).first()
             if old is not None:
-                old.update(owner)
+                terminated = dateparser.parse(getattr(i, 'OS-SRV-USG:terminated_at'))
+                if old.last_sync < terminated:
+                    logger.debug('=> %sinstance terminated since last sync %s', dry_run_txt, i.id)
+                    old.update(owner)
             if not options.dry_run:
                 session.commit()
     session.close()
