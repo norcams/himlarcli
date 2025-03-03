@@ -3,6 +3,7 @@
 from himlarcli import tests as tests
 tests.is_virtual_env()
 
+from dateutil import parser as dateparser
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -16,7 +17,6 @@ from himlarcli.parser import Parser
 from himlarcli import utils as himutils
 
 parser = Parser()
-parser.toggle_show('dry-run')
 parser.toggle_show('format')
 options = parser.parse_args()
 
@@ -41,14 +41,26 @@ class Owner(Base):
     project_name = Column(String(255), nullable=False)
     admin = Column(String(255))
     user = Column(String(255))
-    timestamp = Column(DateTime, default=datetime.now)
+    last_sync = Column(DateTime, default=datetime.now, nullable=False)
+    created = Column(DateTime, nullable=False)
     instance_id = Column(String(63))
+    status = Column(String(16), nullable=False)
 
     def update(self, attributes):
+        dry_run_txt = 'DRY-RUN: ' if options.dry_run else ''
+        change_last_sync = False
         for k,v in attributes.items():
+            if getattr(self, k) != v:
+                change_last_sync = True
             setattr(self, k, v)
+        if change_last_sync:
+            logger.debug('=> %supdate owner for ip %s', dry_run_txt, self.ip)
+            self.last_sync = datetime.now()
+        else:
+            logger.debug('=> %sno need to update owner for ip %s', dry_run_txt, self.ip)
 
 def action_sync():
+    dry_run_txt = 'DRY-RUN: ' if options.dry_run else ''
     engine = create_engine(kc.get_config('report', 'database_uri'))
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
@@ -62,9 +74,10 @@ def action_sync():
         instances = nc.get_all_instances()
         for i in instances:
             owner = dict()
-            # Get IP address
+            # If the instance do not have addresses we continue
             if not i.addresses:
                 continue
+            # Get IP address
             for network in network_list:
                 if str(network) not in i.addresses:
                     continue
@@ -89,31 +102,50 @@ def action_sync():
             user = kc.get_by_id('user', i.user_id)
             owner['user'] = user.name.lower() if user else None
             owner['instance_id'] = i.id
+            owner['status'] = i.status.lower()
+            owner['created'] = dateparser.parse(i.created).replace(tzinfo=None)
             # Update owner
             old = session.query(Owner).filter(Owner.ip == owner['ip']).first()
             if old is not None:
-                logger.debug('=> update owner for ip %s', owner['ip'])
                 old.update(owner)
             else:
-                logger.debug('=> create owner for ip %s', owner['ip'])
+                logger.debug('=> %screate owner for ip %s', dry_run_txt, owner['ip'])
                 session.add(Owner(**owner))
-            session.commit()
+            if not options.dry_run:
+                session.commit()
+        instances = nc.get_all_instances({'all_tenants': 1, 'deleted': 1})
+        # Update status for deleted instances
+        for i in instances:
+            owner = dict()
+            owner['status'] = i.status.lower()
+            old = session.query(Owner).filter(Owner.instance_id == i.id).first()
+            if old is not None:
+                terminated = dateparser.parse(getattr(i, 'OS-SRV-USG:terminated_at'))
+                if old.last_sync < terminated:
+                    logger.debug('=> %sinstance terminated since last sync %s', dry_run_txt, i.id)
+                    old.update(owner)
+            if not options.dry_run:
+                session.commit()
     session.close()
 
 def action_purge():
+    dry_run_txt = 'DRY-RUN: ' if options.dry_run else ''
     engine = create_engine(kc.get_config('report', 'database_uri'))
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     for region in regions:
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
-        instances = nc.get_all_instances({'all_tenants': 1, 'deleted': 1})
-        for i in instances:
-            old = session.query(Owner).filter(Owner.instance_id == i.id).first()
-            if old is not None:
-                logger.debug('=> purge owner for instance %s', old.ip)
-                session.delete(old)
-                session.commit()
+        # delete instance from owner table when instance do not exists in openstack
+        # and status is not deleted (this must be an old delete instance)
+        for i in session.query(Owner).filter(Owner.status != 'deleted').all():
+            instance = nc.get_by_id('server', i.instance_id)
+            if not instance:
+                logger.debug('=> %spurge owner for instance %s', dry_run_txt, i.ip)
+                session.delete(i)
+                if not options.dry_run:
+                    session.commit()
+        # todo: delete all from table instances where there is not an corresponding IP in owner
     session.close()
 
 # Run local function with the same name as the action
