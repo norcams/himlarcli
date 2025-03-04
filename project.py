@@ -618,8 +618,8 @@ def action_access():
         'ssd'          : [ 'bgo', 'osl' ],
         'net_uib'      : [ 'bgo' ],
         'net_uio_dual' : [ 'osl' ],
-        'net_uio_ipv6' : [ 'osl' ],
-        'net_educloud' : [ 'osl' ],
+        'net_uio_ipv6' : [ 'bgo', 'osl' ],
+        'net_educloud' : [ 'bgo', 'osl' ],
         'net_elastic'  : [ 'bgo', 'osl' ],
     }
 
@@ -849,11 +849,11 @@ def action_access():
     elif resource == 'net_uib':
         access_networks.append('uib-dualStack')
     elif resource == 'net_uio_dual':
-        access_networks.append('uio_dualStack')
+        access_networks.append('uio-dualStack')
     elif resource == 'net_uio_ipv6':
-        access_networks.append('uio_IPv6')
+        access_networks.append('uio-IPv6')
     elif resource == 'net_educloud':
-        access_networks.append('educloud_IPv6')
+        access_networks.append('educloud-IPv6')
     elif resource == 'net_elastic':
         access_networks.append('elasticIP')
 
