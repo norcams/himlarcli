@@ -129,6 +129,8 @@ def action_sync():
     session.close()
 
 def action_purge():
+    print('do not work at the moment')
+    pass
     dry_run_txt = 'DRY-RUN: ' if options.dry_run else ''
     engine = create_engine(kc.get_config('report', 'database_uri'))
     Base.metadata.bind = engine
