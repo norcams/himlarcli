@@ -662,7 +662,7 @@ nodes:
     hostgroup: "el8/legacy"
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdi'
+        value:          'sdj'
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-07
