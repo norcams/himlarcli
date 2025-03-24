@@ -299,21 +299,17 @@ nodes:
   status-01:
     compute_profile: small
     compute_resource: controller-02
+  # furbished osl-storage-01..05
   storage-01:
-    mac: 00:24:e8:2e:e3:9d
-    hostgroup: 7
+    mac: b0:83:fe:cd:6a:a4
   storage-02:
-    mac: 00:26:b9:7d:15:3a
-    hostgroup: 7
+    mac: b0:83:fe:cd:28:f2
   storage-03:
-    mac: b8:ac:6f:8a:94:af
-    hostgroup: 7
+    mac: b0:83:fe:cd:19:d6
   storage-04:
-    mac: b8:ac:6f:80:f1:b0
-    hostgroup: 7
+    mac: b0:83:fe:cd:31:a1
   storage-05:
-    mac: 00:26:b9:79:1a:ce
-    hostgroup: 7
+    mac: b0:83:fe:cd:5b:8d
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-03
