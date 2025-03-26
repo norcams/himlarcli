@@ -615,6 +615,8 @@ def action_access():
         'shpc_disk2'   : [ 'bgo', 'osl' ],
         'shpc_disk3'   : [ 'bgo', 'osl' ],
         'shpc_disk4'   : [ 'bgo', 'osl' ],
+        'd1_flavor'    : [ 'bgo', 'osl' ],
+        'uib_image'    : [ 'bgo' ],
         'ssd'          : [ 'bgo', 'osl' ],
         'net_uib'      : [ 'bgo' ],
         'net_uio_dual' : [ 'osl' ],
@@ -633,6 +635,8 @@ def action_access():
         'shpc_disk2'   : 'Access to 500 GB disk sHPC flavors (shpc.m1ad2 and shpc.c1ad2)',
         'shpc_disk3'   : 'Access to 1TB disk sHPC flavors (shpc.m1ad3 and shpc.c1ad3)',
         'shpc_disk4'   : 'Access to 2TB disk sHPC flavors (shpc.m1ad4 and shpc.c1ad4)',
+        'd1_flavor'    : 'Access to disk bound flavor set (d1)',
+        'uib_image'    : 'Access to UiB Managed image (UiB Rocky Linux 8 with Puppet)',
         'ssd'          : 'Access to SSD volumes. Add quota separately',
         'net_uib'      : 'Access to UiB network',
         'net_uio_dual' : 'Access to UiO dualStack network',
@@ -844,6 +848,10 @@ def action_access():
     elif resource == 'shpc_disk4':
         access_flavors.append('shpc.m1ad4')
         access_flavors.append('shpc.c1ad4')
+    elif resource == 'd1_flavor':
+        access_flavors.append('d1')
+    elif resource == 'uib_image':
+        access_images.append('rockylinux8_uib_puppet')
     elif resource == 'ssd':
         access_volumetype.append('mass-storage-ssd')
     elif resource == 'net_uib':
