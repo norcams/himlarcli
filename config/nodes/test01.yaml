@@ -156,9 +156,11 @@ nodes:
   novactrl-01:
     compute_profile: large
     compute_resource: controller-01
+    environment: xena
   novactrl-02:
     compute_profile: large
     compute_resource: controller-02
+    environment: xena
   ns-01:
     compute_profile: small
     compute_resource: controller-01
