@@ -224,7 +224,7 @@ nodes:
         value:          'sda'
   compute-epyc-55:
     mac: 70:b5:e8:d0:b0:a8
-    hostgroup: 16
+    hostgroup: "el8/uefi"
   compute-epyc-56:
     mac: 70:b5:e8:d0:b3:00
     hostgroup: 16
