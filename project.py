@@ -616,6 +616,7 @@ def action_access():
         'shpc_disk3'   : [ 'bgo', 'osl' ],
         'shpc_disk4'   : [ 'bgo', 'osl' ],
         'd1_flavor'    : [ 'bgo', 'osl' ],
+        'win_flavor'   : [ 'bgo' ],
         'uib_image'    : [ 'bgo' ],
         'ssd'          : [ 'bgo', 'osl' ],
         'net_uib'      : [ 'bgo' ],
@@ -636,6 +637,7 @@ def action_access():
         'shpc_disk3'   : 'Access to 1TB disk sHPC flavors (shpc.m1ad3 and shpc.c1ad3)',
         'shpc_disk4'   : 'Access to 2TB disk sHPC flavors (shpc.m1ad4 and shpc.c1ad4)',
         'd1_flavor'    : 'Access to disk bound flavor set (d1)',
+        'win_flavor'   : 'Access to Windows flavor set (win). Only BGO',
         'uib_image'    : 'Access to UiB Managed image (UiB Rocky Linux 8 with Puppet)',
         'ssd'          : 'Access to SSD volumes. Add quota separately',
         'net_uib'      : 'Access to UiB network',
@@ -850,6 +852,8 @@ def action_access():
         access_flavors.append('shpc.c1ad4')
     elif resource == 'd1_flavor':
         access_flavors.append('d1')
+    elif resource == 'win_flavor':
+        access_flavors.append('win')
     elif resource == 'uib_image':
         access_images.append('rockylinux8_uib_puppet')
     elif resource == 'ssd':
