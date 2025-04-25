@@ -1,0 +1,21 @@
+---
+# M1 80GB disk optimized flavor used for sHPC
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  aggregate_instance_extra_specs:type: 's== shpc_cpu'
+shpc.m1ad0:
+  'shpc.m1ad0.2xlarge':
+    vcpus: 8
+    ram: 32768
+    disk: 80
+  'shpc.m1ad0.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 80
+  'shpc.m1ad0.8xlarge':
+    vcpus: 32
+    ram: 131072
+    disk: 80

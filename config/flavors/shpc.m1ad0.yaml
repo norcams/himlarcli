@@ -1,0 +1,5 @@
+---
+# M1 80GB disk optimized flavor used for sHPC
+public: false
+properties: {}
+shpc.m1ad0: {}
