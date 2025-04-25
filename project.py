@@ -611,6 +611,7 @@ def action_access():
         'vgpu_l40s'    : [ 'bgo', 'osl' ],
         'shpc'         : [ 'bgo', 'osl' ],
         'shpc_ram'     : [ 'bgo', 'osl' ],
+        'shpc_disk0'   : [ 'bgo', 'osl' ],
         'shpc_disk1'   : [ 'bgo', 'osl' ],
         'shpc_disk2'   : [ 'bgo', 'osl' ],
         'shpc_disk3'   : [ 'bgo', 'osl' ],
@@ -632,6 +633,7 @@ def action_access():
         'vgpu_l40s'    : 'Access to L40s vGPU flavors and vGPU images',
         'shpc'         : 'Access to standard sHPC flavors (shpc.m1a and shpc.c1a)',
         'shpc_ram'     : 'Access to memory sHPC flavors (shpc.r1a)',
+        'shpc_disk0'   : 'Access to 80 GB disk sHPC flavors (shpc.m1ad0 and shpc.c1ad0)',
         'shpc_disk1'   : 'Access to 200 GB disk sHPC flavors (shpc.m1ad1 and shpc.c1ad1)',
         'shpc_disk2'   : 'Access to 500 GB disk sHPC flavors (shpc.m1ad2 and shpc.c1ad2)',
         'shpc_disk3'   : 'Access to 1TB disk sHPC flavors (shpc.m1ad3 and shpc.c1ad3)',
@@ -838,6 +840,9 @@ def action_access():
         access_flavors.append('shpc.c1a')
     elif resource == 'shpc_ram':
         access_flavors.append('shpc.r1a')
+    elif resource == 'shpc_disk0':
+        access_flavors.append('shpc.m1ad0')
+        access_flavors.append('shpc.c1ad0')
     elif resource == 'shpc_disk1':
         access_flavors.append('shpc.m1ad1')
         access_flavors.append('shpc.c1ad1')
