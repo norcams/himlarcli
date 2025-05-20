@@ -1,6 +1,6 @@
 1. Create Nettskjema API Client at ```https://authorization.nettskjema.no/client```
 
-2. Copy Client Id and Client Secret and paste to clientId and clientSecret in ```create-nettskjema-access-token.sh```
+2. Copy Client Id and Client Secret and paste to clientId and clientSecret in ```create-nettskjema-access-token.sh```. Note! Make sure to keep the secret. You will not be able to see it from Nettskjema again!
 
 3. Copy Nettskjema API Client Username (e.g.: bb910dc1-1c15-458c-b5cd-de72890ca13a@apiclient) from ```https://authorization.nettskjema.no/client``` and paste to ```https://nettskjema.no/user/form/289417/settings#permissions```
 
