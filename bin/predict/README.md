@@ -16,5 +16,5 @@ source create-nettskjema-access-token.sh
 5. Predict CLI from Nettskjema Ref. selected-to-latest
 
 ```bash
-bash new-project.sh SUBMISSIN_ID
+bash new-project.sh SUBMISSION_ID
 ```
