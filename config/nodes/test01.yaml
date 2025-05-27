@@ -67,6 +67,10 @@ nodes:
   compute-04:
     hostgroup: el8/legacy
     mac: 00:0a:f7:19:75:80
+  compute-05:
+    hostgroup: el8/uefi
+    mac: 00:0a:f7:0e:51:70
+    environment: yoga
   console-01:
     compute_profile: medium
     compute_resource: controller-03
@@ -81,6 +85,9 @@ nodes:
     mac: 00:0e:1e:8b:df:50
     hostgroup: 8
     # mac: f8:bc:12:52:d8:68
+  controller-04:
+    mac: 00:10:18:c3:d3:b0
+    hostgroup: el8/uefi
   dashboard-01:
     compute_profile: large
     compute_resource: controller-02
