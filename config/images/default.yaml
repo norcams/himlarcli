@@ -110,6 +110,25 @@ images:
       'hw_vif_multiqueue_enabled': 'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
+  'almalinux10':
+    'name':             'GOLD Alma Linux 10'
+    'depricated':       'Outdated (Alma Linux 10)'
+    'url':              'http://builder/'
+    'latest':           'almalinux10-latest.qcow2'
+    'builder_checksum': 'almalinux10-latest.md5'
+    'min_ram':          1024
+    'min_disk':         10
+    'visibility':       'public'
+    'properties':
+      'hw_disk_bus':               'scsi'
+      'hw_scsi_model':             'virtio-scsi'
+      'hw_rng_model':              'virtio'
+      'hw_qemu_guest_agent':       'yes'
+      'hw_machine_type':           'q35'
+      'hw_firmware_type':          'uefi'
+      'hw_vif_multiqueue_enabled': 'yes'
+      'os_require_quiesce':        'yes'
+      'os_type':                   'linux'
   'rockylinux8':
     'name':             'GOLD Rocky Linux 8'
     'depricated':       'Outdated (Rocky Linux 8)'
