@@ -1,6 +1,6 @@
 ---
 # C1 flavor - more vCPU than default
-public: false
+public: true
 properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
