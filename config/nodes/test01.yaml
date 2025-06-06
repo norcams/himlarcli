@@ -69,7 +69,7 @@ nodes:
     mac: 00:0a:f7:19:75:80
   compute-05:
     hostgroup: el8/uefi
-    mac: 00:0a:f7:0e:51:70
+    mac: 00:0a:f7:97:80:c4
     environment: yoga
   console-01:
     compute_profile: medium
