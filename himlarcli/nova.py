@@ -785,7 +785,7 @@ class Nova(Client):
                                              marker=marker,
                                              limit=per_page)
                 instances += i
-                if len(i) >= per_page:
+                if len(i) >= per_page - 1: # it will return 999 if per_page is 1000
                     marker = i[-1].id # marker is the last element
                 else:
                     break # end of loop
