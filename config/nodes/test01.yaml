@@ -214,6 +214,8 @@ nodes:
   sensugo-01:
     compute_profile: medium
     compute_resource: controller-01
+    hostgroup: el9/legacy
+    environment: monitor
   sensugo-02:
     compute_profile: small
     compute_resource: controller-02
