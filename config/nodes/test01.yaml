@@ -104,8 +104,10 @@ nodes:
     compute_profile: small
     compute_resource: controller-02
   identity-01:
-    compute_profile: medium
+    compute_profile: large
     compute_resource: controller-01
+    hostgroup: el9/legacy
+    environment: yoga_el9
   identity-02:
     compute_profile: large
     compute_resource: controller-02
