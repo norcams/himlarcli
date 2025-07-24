@@ -260,12 +260,14 @@ nodes:
   tsdb-01:
     compute_profile: small
     compute_resource: controller-03
+    hostgroup: el9/legacy
+    environment: monitor
     compute_attributes:
       volumes_attributes:
         '1':
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '20G'
+          capacity:     '50G'
           format_type:  'qcow2'
     host_parameters_attributes:
       - name:           'installdevice'
