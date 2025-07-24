@@ -574,6 +574,21 @@ nodes:
   sec-01:
     compute_profile: small
     compute_resource: controller-08
+  sensugo-01:
+    compute_profile: medium
+    compute_resource: controller-05
+    hostgroup: el9/legacy
+    environment: monitor
+  sensugo-02:
+    compute_profile: small
+    compute_resource: controller-06
+    hostgroup: el9/legacy
+    environment: monitor
+  sensugo-03:
+    compute_profile: small
+    compute_resource: controller-07
+    hostgroup: el9/legacy
+    environment: monitor
   status-01:
     compute_profile: small
     compute_resource: controller-06
@@ -775,6 +790,21 @@ nodes:
   telemetry-01:
     compute_profile: xlarge
     compute_resource: controller-05
+  tsdb-01:
+    compute_profile: small
+    compute_resource: controller-08
+    hostgroup: el9/legacy
+    environment: monitor
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '50G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   volume-01:
     compute_profile: large
     compute_resource: controller-05
