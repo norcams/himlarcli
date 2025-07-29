@@ -254,9 +254,10 @@ nodes:
     hostgroup: 4
     mac: b0:83:fe:e8:3a:31
   telemetry-01:
-    environment: victoria
     compute_profile: xlarge
     compute_resource: controller-02
+    hostgroup: el9/legacy
+    environment: yoga_el9
   tsdb-01:
     compute_profile: small
     compute_resource: controller-03
