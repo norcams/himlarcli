@@ -289,6 +289,8 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '20G'
           format_type:  'qcow2'
+    hostgroup: el9/legacy
+    environment: yoga_el9
   volume-02:
     compute_profile: large
     compute_resource: controller-02
