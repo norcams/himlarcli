@@ -299,6 +299,18 @@ nodes:
           pool_name:    'dirpool'
           capacity:     '20G'
           format_type:  'qcow2'
+  volume-03:
+    compute_profile: large
+    compute_resource: controller-03
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '20G'
+          format_type:  'qcow2'
+    hostgroup: el9/legacy
+    environment: yoga_el9
   workflow-01:
     compute_profile: small
     compute_resource: controller-03
