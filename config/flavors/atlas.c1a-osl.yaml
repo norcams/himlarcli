@@ -30,3 +30,25 @@ atlas.c1a:
     vcpus: 32
     ram:   81918
     disk:  20
+  'atlas.c1a.16xlarge':
+    vcpus: 64
+    ram:   163838
+    disk:  40
+  'atlas.c1a.24xlarge':
+    vcpus: 96
+    ram:   245758
+    disk:  40
+  'atlas.c1a.32xlarge':
+    vcpus: 128
+    ram:   327678
+    disk:  80
+    properties:
+      hw:numa_nodes: 2
+      hw:cpu_sockets: 2
+  'atlas.c1a.48xlarge':
+    vcpus: 192
+    ram:   491518
+    disk:  120
+    properties:
+      hw:numa_nodes: 2
+      hw:cpu_sockets: 2
