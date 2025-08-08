@@ -37,7 +37,7 @@ atlas.c1a:
   'atlas.c1a.24xlarge':
     vcpus: 96
     ram:   245758
-    disk:  40
+    disk:  60
   'atlas.c1a.32xlarge':
     vcpus: 128
     ram:   327678
