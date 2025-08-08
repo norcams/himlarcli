@@ -189,9 +189,13 @@ nodes:
   novactrl-01:
     compute_profile: large
     compute_resource: controller-01
+    hostgroup: el9/legacy
+    environment: yoga_el9
   novactrl-02:
     compute_profile: large
     compute_resource: controller-02
+    hostgroup: el9/legacy
+    environment: yoga_el9
   ns-01:
     compute_profile: small
     compute_resource: controller-01
