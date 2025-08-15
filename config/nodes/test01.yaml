@@ -96,6 +96,8 @@ nodes:
   dashboard-mgmt-01:
     compute_profile: medium
     compute_resource: controller-03
+    hostgroup: el9/legacy
+    environment: yoga_el9
   db-global-01:
     compute_profile: small
     compute_resource: controller-02
