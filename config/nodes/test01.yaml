@@ -154,7 +154,8 @@ nodes:
         value:          'vda'
   metric-01:
     compute_profile: xlarge
-    environment: victoria
+    hostgroup: el9/legacy
+    environment: yoga_el9
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
