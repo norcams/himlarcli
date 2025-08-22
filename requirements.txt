@@ -11,6 +11,7 @@ python-novaclient
 gnocchiclient
 statsd==3.2.1
 pika
+sensu_go
 prettytable==0.7.2
 PyMySQL
 SQLAlchemy
@@ -28,4 +29,3 @@ python-foreman==0.4.20
 progressbar2
 # needed to run request_specs.py - require python 3.9+
 #nova==21.2.3
-
