@@ -35,8 +35,8 @@ def action_hosts():
 
     diff_foreman_minus_sensu = list(set(hostlist_foreman) - set(hostlist_sensu))
     diff_sensu_minus_foreman = list(set(hostlist_sensu) - set(hostlist_foreman))
-    printer.output_dict({'not_in_sensu': diff_foreman_minus_sensu})
-    printer.output_dict({'not_in_foreman': diff_sensu_minus_foreman})
+    printer.output_dict({'not_in_sensu': sorted(diff_foreman_minus_sensu)})
+    printer.output_dict({'not_in_foreman': sorted(diff_sensu_minus_foreman)})
 
 
 # Run local function with the same name as the action (Note: - => _)
