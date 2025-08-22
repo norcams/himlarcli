@@ -1,0 +1,6 @@
+---
+# Use empty value for None
+desc: 'Validate the state of NREC sensu setup'
+actions:
+  'hosts':         'check that we monitor all hosts we have in foreman'
+opt_args: {}
