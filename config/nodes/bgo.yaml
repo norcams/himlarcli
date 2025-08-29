@@ -410,7 +410,8 @@ nodes:
   image-02:
     compute_profile: medium
     compute_resource: controller-06
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: yoga_el9
   image-03:
     compute_profile: medium
     compute_resource: controller-07
