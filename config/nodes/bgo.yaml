@@ -405,7 +405,8 @@ nodes:
   image-01:
     compute_profile: medium
     compute_resource: controller-05
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: yoga_el9
   image-02:
     compute_profile: medium
     compute_resource: controller-06
