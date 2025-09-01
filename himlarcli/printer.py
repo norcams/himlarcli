@@ -177,7 +177,7 @@ class Printer(object):
         project_created = re.sub(r'T\d\d:\d\d:\d\d.\d\d\d\d\d\d', '', project_created)
 
         # Disabled project?
-        status = Color.fg.red + "**DISABLED** " + Color.reset if not project.enabled else ''
+        status = Color.fg.red + "**DISABLED** " + Color.reset if not (project.enabled or project.enabled is 'True') else ''
 
         # Print header for project
         out_str += f"{status}PROJECT: {Color.bold}{Color.fg.wht}{project.name}{Color.reset}"
