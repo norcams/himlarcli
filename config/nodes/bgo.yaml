@@ -169,7 +169,8 @@ nodes:
     hostgroup: 16
   compute-38:
     mac: dc:f4:01:e7:ea:2e
-    hostgroup: 16
+    environment: yoga
+    hostgroup: "el8/uefi"
   compute-39:
     mac: dc:f4:01:e7:e9:f6
     hostgroup: 16
