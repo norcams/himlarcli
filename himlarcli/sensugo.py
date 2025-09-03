@@ -1,5 +1,6 @@
 from himlarcli.client import Client
 import sensu_go
+import inspect
 from himlarcli import utils
 
 class SensuGo(Client):
@@ -17,6 +18,33 @@ class SensuGo(Client):
     def get_client(self):
         return self.client
 
+    def get_events(self):
+        events = self.client.events.list()
+        return events
+
+    def get_silenced(self, host, check):
+        return self.client.silences.get(f'entity:{host}:{check}')
+
+    def list_silenced(self):
+        hosts = self.client.silences.list()
+        return hosts
+
+    def clear_silenced(self, host, check):
+        self.client.silences.delete(f'entity:{host}:{check}')
+
+    def silence_check(self, host, check, expire='-1', reason='himlarcli'):
+        spec = {
+            'subscription': f'entity:{host}',
+            'check': check,
+            'expire': int(expire),
+            'expire_on_resolve': True,
+            'reason': reason}
+        metadata = { 'name': f'entity:{host}:{check}' }
+        self.client.silences.create(spec=spec, metadata=metadata)
+
+    def delete_client(self, host):
+        pass
+
     # TODO
     # def delete_client(self, host):
     #     url = self.api_url
@@ -31,43 +59,3 @@ class SensuGo(Client):
     #         self.logger.debug('=> DRY-RUN: deleted %s' % host)
     #
     #
-    # def silence_host(self, host, expire=None, reason=None):
-    #     url = self.api_url
-    #     endpoint = '/silenced'
-    #     payload = {'subscription': 'client:' + host,
-    #                'creator': 'himlarcli',
-    #                'reason': 'Silenced by himlarcli'}
-    #
-    #     # Update payload with options
-    #     if expire:
-    #         payload.update({'expire': int(expire)})
-    #     else:
-    #         payload.update({'expire_on_resolve': True})
-    #     if reason:
-    #         payload.update({'reason': reason})
-    #
-    #     json_payload = json.dumps(payload)
-    #     try:
-    #         response = self.session.post(url+endpoint,
-    #                                      headers=self.headers,
-    #                                      data=json_payload,
-    #                                      timeout=5)
-    #         self.logger.debug('=> HTTP Status: %s' % (response.status_code))
-    #     except requests.exceptions.ConnectionError:
-    #         pass
-    #
-    # def list_silenced(self):
-    #     url = self.api_url
-    #     endpoint = '/silenced'
-    #     reponse = self.session.get(url+endpoint, headers=self.headers)
-    #     print(reponse.text)
-    #
-    # def clear_silenced(self, host):
-    #     url = self.api_url
-    #     endpoint = '/silenced/clear'
-    #     payload = {'subscription': 'client:' + host}
-    #     json_payload = json.dumps(payload)
-    #     response = self.session.post(url+endpoint,
-    #                                  headers=self.headers,
-    #                                  data=json_payload)
-    #     self.logger.debug('=> %s' % response.status_code)

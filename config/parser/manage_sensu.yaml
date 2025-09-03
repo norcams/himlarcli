@@ -1,21 +1,28 @@
 ---
 desc: 'Manage Sensu'
 actions:
+  events:        'list events'
   delete:        'Delete host from Sensu'
   silence:       'Silence host'
   unsilence:     'Unsilence host'
   list-silenced: 'Lists silenced hosts'
+  show-silenced: 'Show silenced host'
 opt_args:
   '-H':
-    'sub':      ['delete','silence','unsilence']
+    'sub':      ['delete','silence','unsilence', 'show-silenced']
     'dest':     'host'
     'help':     'Hostname'
     'required': True
+  '-C':
+    'sub':      ['silence', 'unsilence', 'show-silenced']
+    'dest':     'check'
+    'help':     'Check name'
   '-e':
     'sub':      ['silence']
     'dest':     'expire'
     'help':     'Duration of silence entry in seconds'
     'required': False
+    'default':  -1
   '-r':
     'sub':      ['silence']
     'dest':     'reason'
