@@ -53,6 +53,24 @@ def action_silence():
 def action_delete():
     sensu.delete_client(options.host)
 
+def action_silence_known():
+    expire = 604800 # one week default
+
+    # remove old known issues based on substring 'known-issue:' in reason
+    silenced = sensu.list_silenced()
+    for event in silenced:
+        if 'reason' in event.spec and 'known-issue:' in event.spec['reason']:
+            host = sensu.get_host_from_subscription(event.spec['subscription'])
+            check = event.spec['check']
+            sensu.clear_silenced(host, check)
+
+    # make sure we clear all the same silence before we try to add it again
+    config = utils.load_region_config('config/sensu', 'known_issues')
+    for event in config[sensu.get_region()]:
+        reason = f"known-issue: {event['reason']}"
+        sensu.clear_silenced(event['host'], event['check'])
+        sensu.silence_check(event['host'], event['check'], expire, reason)
+
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
     utils.sys_error(f"Function action_{options.action}() not implemented")

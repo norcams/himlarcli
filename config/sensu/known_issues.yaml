@@ -1,0 +1,33 @@
+---
+bgo:
+  - host: 'bgo-compute-04'
+    check: 'redfish-check'
+    reason: 'replace memory DIMM'
+  - host: 'bgo-compute-vgpu-52'
+    check: 'redfish-check'
+    reason: 'need to replace PSU'
+  - host: 'bgo-cephmon-01'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
+  - host: 'bgo-cephmon-02'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
+  - host: 'bgo-cephmon-03'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
+
+osl: {}
+
+test01: {}
+
+# used for testing and example of known issue in a region
+vagrant:
+  - host: 'vagrant-proxy-01'
+    check: 'multiplex_designate_up'
+    reason: 'dns optional'
+  - host: 'vagrant-proxy-01'
+    check: 'multiplex_keystone_up'
+    reason: 'bad weather'
+  - host: 'vagrant-tsdb-01'
+    check: '*'
+    reason: 'we do not run this in vagrant'
