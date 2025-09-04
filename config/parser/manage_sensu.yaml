@@ -29,4 +29,4 @@ opt_args:
     'dest':     'reason'
     'help':     'Reason for silencing'
     'required': False
-    'default':  'Silenced by himlarcli'
+    'default':  'silenced by himlarcli'

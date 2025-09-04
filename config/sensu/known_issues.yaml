@@ -13,3 +13,6 @@ vagrant:
   - host: 'vagrant-proxy-01'
     check: 'multiplex_keystone_up'
     reason: 'bad weather'
+  - host: 'vagrant-tsdb-01'
+    check: '*'
+    reason: 'we do not run this in vagrant'

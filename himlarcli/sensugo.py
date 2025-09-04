@@ -29,10 +29,11 @@ class SensuGo(Client):
 
     def clear_silenced(self, host, check):
         try:
-            self.debug_log(f'silence {check} for {host}')
+            self.debug_log(f'unsilence {check} for {host}')
             self.client.silences.delete(f'entity:{host}:{check}')
         except sensu_go.errors.ResponseError as e:
-            utils.improved_sys_error(e, 'error')
+            message = e.text
+            self.debug_log(f'{check} for {host}: {message}')
 
     def silence_check(self, host, check, expire='-1', reason='himlarcli'):
         spec = {
@@ -43,7 +44,7 @@ class SensuGo(Client):
             'reason': reason}
         metadata = { 'name': f'entity:{host}:{check}' }
         try:
-            self.debug_log(f'unsilence {check} for {host}')
+            self.debug_log(f'silence {check} for {host}')
             self.client.silences.create(spec=spec, metadata=metadata)
         except ValueError as e:
             utils.improved_sys_error(e, 'error')
@@ -53,3 +54,7 @@ class SensuGo(Client):
             self.client.entities.delete(host)
         except sensu_go.errors.ResponseError as e:
             utils.improved_sys_error(e, 'error')
+
+    @staticmethod
+    def get_host_from_subscription(sub):
+        return sub.split(':')[-1]
