@@ -1,5 +1,20 @@
 ---
-bgo: {}
+bgo:
+  - host: 'bgo-compute-04'
+    check: 'redfish-check'
+    reason: 'replace memory DIMM'
+  - host: 'bgo-compute-vgpu-52'
+    check: 'redfish-check'
+    reason: 'need to replace PSU'
+  - host: 'bgo-cephmon-01'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
+  - host: 'bgo-cephmon-02'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
+  - host: 'bgo-cephmon-03'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
 
 osl: {}
 
