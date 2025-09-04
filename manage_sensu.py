@@ -9,7 +9,6 @@ himutils.is_virtual_env()
 parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
-#sensu = Sensu(options.config, debug=options.debug)
 sensu = SensuGo(options.config, options.debug)
 
 def action_events():
@@ -43,8 +42,7 @@ def action_silence():
     sensu.silence_check(options.host, options.check, options.expire, options.reason)
 
 def action_delete():
-    print('not working!')
-    #sensu.delete_client(options.host)
+    sensu.delete_client(options.host)
 
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:

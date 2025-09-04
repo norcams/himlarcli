@@ -47,10 +47,7 @@ class SensuGo(Client):
             utils.improved_sys_error(e, 'error')
 
     def delete_client(self, host):
-        pass
-
-    # TODO def delete_client(self, host): url = self.api_url endpoint =
-    # '/clients/' + host if not self.dry_run: try: response =
-    # self.session.delete(url+endpoint, timeout=5) self.logger.debug('=> %s' %
-    # response.status_code) except requests.exceptions.ConnectionError: pass
-    # else: self.logger.debug('=> DRY-RUN: deleted %s' % host) # #
+        try:
+            self.client.entities.delete(host)
+        except sensu_go.errors.ResponseError as e:
+            utils.improved_sys_error(e, 'error')
