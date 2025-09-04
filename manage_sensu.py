@@ -2,9 +2,9 @@
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.sensugo import SensuGo
-from himlarcli import utils as himutils
+from himlarcli import utils as utils
 
-himutils.is_virtual_env()
+utils.is_virtual_env()
 
 parser = Parser()
 options = parser.parse_args()
@@ -26,8 +26,17 @@ def action_events():
 
 def action_list_silenced():
     silenced = sensu.list_silenced()
+    printer.output_dict({'header': 'Silenced checks (name, reason)'})
     for check in silenced:
-        print(check.name)
+        if 'reason' in check.spec:
+            reason = '=> ' + check.spec['reason']
+        else:
+            reason = '=> unknown'
+        out_event = {
+            '1': check.name,
+            '2': reason
+        }
+        printer.output_dict(out_event, sort=True, one_line=True)
 
 def action_show_silenced():
     silenced = sensu.get_silenced(options.host, options.check)
@@ -46,5 +55,5 @@ def action_delete():
 
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
-    himutils.sys_error("Function action_%s() not implemented" % options.action)
+    utils.sys_error(f"Function action_{options.action}() not implemented")
 action()
