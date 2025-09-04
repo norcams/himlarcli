@@ -826,4 +826,5 @@ nodes:
   volume-03:
     compute_profile: large
     compute_resource: controller-07
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: yoga_el9
