@@ -30,7 +30,10 @@ class SensuGo(Client):
         return hosts
 
     def clear_silenced(self, host, check):
-        self.client.silences.delete(f'entity:{host}:{check}')
+        try:
+            self.client.silences.delete(f'entity:{host}:{check}')
+        except sensu_go.errors.ResponseError as e:
+            utils.improved_sys_error(e, 'error')
 
     def silence_check(self, host, check, expire='-1', reason='himlarcli'):
         spec = {
@@ -40,7 +43,10 @@ class SensuGo(Client):
             'expire_on_resolve': True,
             'reason': reason}
         metadata = { 'name': f'entity:{host}:{check}' }
-        self.client.silences.create(spec=spec, metadata=metadata)
+        try:
+            self.client.silences.create(spec=spec, metadata=metadata)
+        except ValueError as e:
+            utils.improved_sys_error(e, 'error')
 
     def delete_client(self, host):
         pass
