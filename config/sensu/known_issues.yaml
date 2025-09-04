@@ -16,7 +16,25 @@ bgo:
     check: 'ceph-check'
     reason: 'still scrub warnings'
 
-osl: {}
+osl:
+  - host: 'osl-storage-v2h-14'
+    check: 'redfish-check'
+    reason: 'need internal disk change'
+  - host: 'osl-storage-v2h-18'
+    check: 'keepalive'
+    reason: 'missing disk controller'
+  - host: 'osl-object-ceph-05'
+    check: 'redfish-check'
+    reason: 'need new disk'
+  - host: 'osl-cephmon-01'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
+  - host: 'osl-cephmon-02'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
+  - host: 'osl-cephmon-03'
+    check: 'ceph-check'
+    reason: 'still scrub warnings'
 
 test01: {}
 
