@@ -1,14 +1,12 @@
-from himlarcli.client import Client
 import sensu_go
-import inspect
+from himlarcli.client import Client
 from himlarcli import utils
 
+# pylint: disable=C0115
 class SensuGo(Client):
 
     def __init__(self, config_path, debug=False, log=None):
-        super(SensuGo, self).__init__(config_path, debug, log)
-        self.logger.debug('=> config file: %s' % config_path)
-        api_url = self.get_config('sensugo', 'url')
+        super().__init__(config_path, debug, log)
         self.client = sensu_go.Client(address=self.get_config('sensugo', 'url'),
                                       username=self.get_config('sensugo', 'username'),
                                       password=self.get_config('sensugo', 'password'),
@@ -51,17 +49,8 @@ class SensuGo(Client):
     def delete_client(self, host):
         pass
 
-    # TODO
-    # def delete_client(self, host):
-    #     url = self.api_url
-    #     endpoint = '/clients/' + host
-    #     if not self.dry_run:
-    #         try:
-    #             response = self.session.delete(url+endpoint, timeout=5)
-    #             self.logger.debug('=> %s' % response.status_code)
-    #         except requests.exceptions.ConnectionError:
-    #             pass
-    #     else:
-    #         self.logger.debug('=> DRY-RUN: deleted %s' % host)
-    #
-    #
+    # TODO def delete_client(self, host): url = self.api_url endpoint =
+    # '/clients/' + host if not self.dry_run: try: response =
+    # self.session.delete(url+endpoint, timeout=5) self.logger.debug('=> %s' %
+    # response.status_code) except requests.exceptions.ConnectionError: pass
+    # else: self.logger.debug('=> DRY-RUN: deleted %s' % host) # #
