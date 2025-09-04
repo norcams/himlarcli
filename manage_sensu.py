@@ -53,6 +53,13 @@ def action_silence():
 def action_delete():
     sensu.delete_client(options.host)
 
+def action_silence_known():
+    expire = 604800 # one week
+    config = utils.load_region_config('config/sensu', 'known_issues')
+    for event in config[sensu.get_region()]:
+        sensu.clear_silenced(event['host'], event['check'])
+        sensu.silence_check(event['host'], event['check'], expire, event['reason'])
+
 action = locals().get('action_' + options.action.replace('-', '_'))
 if not action:
     utils.sys_error(f"Function action_{options.action}() not implemented")

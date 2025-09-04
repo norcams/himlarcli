@@ -1,0 +1,15 @@
+---
+bgo: {}
+
+osl: {}
+
+test01: {}
+
+# used for testing and example of known issue in a region
+vagrant:
+  - host: 'vagrant-proxy-01'
+    check: 'multiplex_designate_up'
+    reason: 'dns optional'
+  - host: 'vagrant-proxy-01'
+    check: 'multiplex_keystone_up'
+    reason: 'bad weather'

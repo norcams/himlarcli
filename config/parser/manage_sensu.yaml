@@ -7,6 +7,7 @@ actions:
   unsilence:     'Unsilence host'
   list-silenced: 'Lists silenced hosts'
   show-silenced: 'Show silenced host'
+  silence-known: 'Silence known issues'
 opt_args:
   '-H':
     'sub':      ['delete','silence','unsilence', 'show-silenced']
