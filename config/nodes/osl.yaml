@@ -438,8 +438,10 @@ nodes:
         '1':
           allocation:   '0G'
           pool_name:    'dirpool'
-          capacity:     '100G'
+          capacity:     '150G'
           format_type:  'qcow2'
+    hostgroup: el9/legacy
+    environment: yoga_el9
   monitor-01:
     compute_profile: large
     compute_resource: controller-08
