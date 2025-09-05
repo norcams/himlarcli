@@ -5,7 +5,7 @@ import pprint
 from himlarcli import utils as himutils
 from himlarcli.foremanclient import ForemanClient
 from himlarcli.parser import Parser
-from himlarcli.sensu import Sensu
+from himlarcli.sensugo import SensuGo
 #from himlarcli.printer import Printer
 
 himutils.is_virtual_env()
@@ -17,7 +17,7 @@ options = parser.parse_args()
 client = ForemanClient(options.config, options.debug)
 region = client.get_config('openstack', 'region')
 logger = client.get_logger()
-sensu = Sensu(options.config, debug=options.debug)
+sensu = SensuGo(options.config, options.debug)
 
 # Load node config
 node_config = himutils.load_config('config/nodes/%s.yaml' % region)
@@ -69,7 +69,7 @@ def action_rebuild():
     if options.sensu_expire:
         sensu.silence_host(node_name, options.sensu_expire)
     else:
-        sensu.delete_client(node_name)
+        sensu.silence_check(node_name, 'keepalive', options.sensu_expire)
     client.set_host_build(node_name)
 
 def action_reinstall():
@@ -80,7 +80,7 @@ def action_reinstall():
                 return
         client.delete_node(node_name)
         if options.sensu_expire:
-            sensu.silence_host(node_name, options.sensu_expire)
+            sensu.silence_check(node_name, 'keepalive', options.sensu_expire)
         else:
             sensu.delete_client(node_name)
         client.create_node(name=node_name,
