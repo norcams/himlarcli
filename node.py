@@ -67,9 +67,10 @@ def action_delete():
 def action_rebuild():
     node_name = '%s-%s' % (region, options.node)
     if options.sensu_expire:
-        sensu.silence_host(node_name, options.sensu_expire)
+        sensu.silence_check(node_name, 'keepalive', options.sensu_expire,
+                            'himlarcli: node.py rebuild')
     else:
-        sensu.silence_check(node_name, 'keepalive', options.sensu_expire)
+        sensu.silence_check(node_name, 'keepalive', reason='himlarcli: node.py rebuild')
     client.set_host_build(node_name)
 
 def action_reinstall():
@@ -80,7 +81,8 @@ def action_reinstall():
                 return
         client.delete_node(node_name)
         if options.sensu_expire:
-            sensu.silence_check(node_name, 'keepalive', options.sensu_expire)
+            sensu.silence_check(node_name, 'keepalive', options.sensu_expire,
+                                'himlarcli: node.py rebuild')
         else:
             sensu.delete_client(node_name)
         client.create_node(name=node_name,
