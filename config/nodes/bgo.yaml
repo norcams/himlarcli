@@ -510,7 +510,8 @@ nodes:
   novactrl-02:
     compute_profile: large
     compute_resource: controller-06
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: yoga_el9
   novactrl-03:
     compute_profile: large
     compute_resource: controller-07
