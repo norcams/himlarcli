@@ -82,7 +82,7 @@ def action_reinstall():
         client.delete_node(node_name)
         if options.sensu_expire:
             sensu.silence_check(node_name, 'keepalive', options.sensu_expire,
-                                'himlarcli: node.py rebuild')
+                                'himlarcli: node.py reinstall')
         else:
             sensu.delete_client(node_name)
         client.create_node(name=node_name,
