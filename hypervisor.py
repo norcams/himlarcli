@@ -161,9 +161,9 @@ def action_disable():
 def action_list():
     aggregates = nc.get_all_aggregate_hosts()
     if options.aggregate == 'all':
-        hosts = nc.get_hosts()
+        hosts = nc.get_hosts(detailed=False)
     else:
-        hosts = nc.get_aggregate_hosts(options.aggregate, True)
+        hosts = nc.get_aggregate_hosts(aggregate=options.aggregate, detailed=False)
     if options.format == 'table':
         output = {}
         if options.verbose:
