@@ -35,6 +35,9 @@ osl:
   - host: 'osl-cephmon-03'
     check: 'ceph-check'
     reason: 'still scrub warnings'
+  - host: 'osl-storage-v2d-32'
+    check: 'redfish-check'
+    reason: 'predicted disk failure'
 
 test01: {}
 
