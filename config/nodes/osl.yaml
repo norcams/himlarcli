@@ -306,7 +306,8 @@ nodes:
   console-01:
     compute_profile: medium
     compute_resource: controller-07
-    hostgroup: 16
+    hostgroup: el9/legacy
+    environment: yoga_el9
   # controller-01:
   #   hostgroup: 19
   #   mac: ec:f4:bb:c7:fb:cc

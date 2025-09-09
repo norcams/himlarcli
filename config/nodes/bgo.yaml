@@ -345,7 +345,8 @@ nodes:
   console-01:
     compute_profile: medium
     compute_resource: controller-05
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: yoga_el9
   controller-05:
     mac: dc:f4:01:e7:eb:fe
     hostgroup: 16
