@@ -389,7 +389,8 @@ nodes:
   dns-01:
     compute_profile: small
     compute_resource: controller-05
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: yoga_el9
   identity-01:
     compute_profile: xlarge
     compute_resource: controller-05
