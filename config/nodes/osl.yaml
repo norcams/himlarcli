@@ -351,7 +351,8 @@ nodes:
   dashboard-mgmt-01:
     compute_profile: small
     compute_resource: controller-08
-    hostgroup: 16
+    hostgroup: el9/legacy
+    environment: yoga_el9
   db-global-01:
     compute_profile: small
     compute_resource: controller-05
