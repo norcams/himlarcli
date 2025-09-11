@@ -62,6 +62,9 @@ do
       answer_texts+=("$(echo $answer_elements | jq '.answerOptions[]' | jq "select(.answerOptionId==$answerOptionId).text" | tr -d '"')")
     done
   fi
+  # Debug
+  echo elementId: $elementId : answer_text: $answer_text
+  echo elementId: $elementId : answer_texts: ${anser_texts[*]}
   # Project Type
   if [[ $elementId == 4559698 ]]
   then
@@ -107,10 +110,15 @@ do
   elif [[ $elementId == 5051926 ]]
   then
     otherShpcResourcesArray=()
-    for otherShpcResource in "${answer_texts[@]}"
-    do
-      otherShpcResourcesArray+=("$otherShpcResource")
-    done
+    if [ -n "$answer_text" ]
+    then
+      otherShpcResourcesArray+=("$answer_text")
+    else
+      for otherShpcResource in "${answer_texts[@]}"
+      do
+        otherShpcResourcesArray+=("$otherShpcResource")
+      done
+    fi
     numOtherShpcResources=${#otherShpcResourcesArray[@]}
   # Project sHPC quota
   # In this script: Total project quota is the largest of base quota and sHPC quota.
@@ -338,7 +346,8 @@ if [[ ${pcargs[createArgument]} != create-private ]]
 then
   if [ ! -z ${clues[additionalUsers]} ]
   then
-    pguserargs=$(bash -c 'users=(${0//\\r\\n/ }); for u in ${users[*]}; do echo -n "-u $u "; done' ${clues[additionalUsers]})
+    #pguserargs=$(bash -c 'users=(${0//\\r\\n/ }); for u in ${users[*]}; do echo -n "-u $u "; done' ${clues[additionalUsers]})
+    pguserargs=$(bash -c 'users=(${0//\\n/ }); for u in ${users[*]}; do echo -n "-u $u "; done' ${clues[additionalUsers]})
     pguserargs="-u ${pcargs[admin]} $pguserargs"
 
     # Parse full project.py grant cmd
