@@ -63,8 +63,8 @@ do
     done
   fi
   # Debug
-  echo elementId: $elementId : answer_text: $answer_text
-  echo elementId: $elementId : answer_texts: ${anser_texts[*]}
+  #echo elementId: $elementId : answer_text: $answer_text
+  #echo elementId: $elementId : answer_texts: ${anser_texts[*]}
   # Project Type
   if [[ $elementId == 4559698 ]]
   then
