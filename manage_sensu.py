@@ -48,7 +48,7 @@ def action_unsilence():
 
 def action_silence():
     print(f'silence entity:{options.host}:{options.check}')
-    sensu.silence_check(options.host, options.check, options.expire, options.reason)
+    sensu.silence_check(options.host, options.check, options.expire, options.reason, True)
 
 def action_delete():
     sensu.delete_client(options.host)

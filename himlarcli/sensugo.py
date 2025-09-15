@@ -1,5 +1,6 @@
 import sensu_go
 from himlarcli.client import Client
+from himlarcli.slack import Slack
 from himlarcli import utils
 
 # pylint: disable=C0115
@@ -35,7 +36,7 @@ class SensuGo(Client):
             message = e.text
             self.debug_log(f'{check} for {host}: {message}')
 
-    def silence_check(self, host, check, expire='-1', reason='himlarcli'):
+    def silence_check(self, host, check, expire='-1', reason='himlarcli', slack=False):
         spec = {
             'subscription': f'entity:{host}',
             'check': check,
@@ -48,6 +49,10 @@ class SensuGo(Client):
             self.client.silences.create(spec=spec, metadata=metadata)
         except ValueError as e:
             utils.improved_sys_error(e, 'error')
+        if slack:
+            msg = f'Silence {check} for {host}: {reason}'
+            slack_client = self._get_client(Slack)
+            slack_client.publish_slack(msg, 'vakt', 'sensu')
 
     def delete_client(self, host):
         try:

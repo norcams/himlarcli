@@ -12,10 +12,14 @@ class Slack(Client):
         self.slack_user = self.get_config('slack', 'user')
         self.slack_channel = self.get_config('slack', 'channel')
 
-    def publish_slack(self, msg):
+    def publish_slack(self, msg, channel=None, user=None):
+        if not channel:
+            channel = self.slack_channel
+        if not user:
+            user = self.slack_user
         url = self.webhook_url
-        payload = {"channel": self.slack_channel,
-                   "username": self.slack_user,
+        payload = {"channel": channel,
+                   "username": user,
                    "text": msg}
         json_payload = json.dumps(payload)
         log_msg = 'Message published to %s by %s: %s' % (self.slack_channel, self.slack_user, msg)
