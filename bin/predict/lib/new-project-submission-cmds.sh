@@ -32,7 +32,7 @@ set -e
 RT=$1
 SUBMISSION_ID=$2
 element_data=$3
-answer_data=$(curl -s -H "Authorization: Bearer ${NETTSKJEMA_API_ACCESS_TOKEN}" -X GET https://api.nettskjema.no/v3/form/submission/${SUBMISSION_ID})
+answer_data=$(curl -s -H "Authorization: Bearer ${NETTSKJEMA_API_ACCESS_TOKEN}" -X GET https://nettskjema.no/api/v3/form/submission/${SUBMISSION_ID})
 
 echo
 

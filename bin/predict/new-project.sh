@@ -10,7 +10,7 @@ export NETTSKJEMA_API_ACCESS_TOKEN=TOKEN
 API v3 Reference:
 
 https://www.uio.no/tjenester/it/adm-app/nettskjema/hjelp/api-clients-v3.md
-https://api.nettskjema.no/v3/swagger-ui/index.html#/
+https://nettskjema.no/api/v3/swagger-ui/index.html#/
 '
 
 fromSubmissionId=$1
@@ -23,7 +23,7 @@ then
   exit
 fi
 
-element_data=$(curl -s -H "Authorization: Bearer ${NETTSKJEMA_API_ACCESS_TOKEN}" -X GET https://api.nettskjema.no/v3/form/289417/elements)
+element_data=$(curl -s -H "Authorization: Bearer ${NETTSKJEMA_API_ACCESS_TOKEN}" -X GET https://nettskjema.no/api/v3/form/289417/elements)
 
 submissionIds=($(bash $(dirname $0)/lib/new-project-submission-ids.sh $(($fromSubmissionId-1))))
 
