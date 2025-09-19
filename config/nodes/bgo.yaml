@@ -812,7 +812,7 @@ nodes:
     hostgroup: el9/legacy
     environment: yoga_el9
   tsdb-01:
-    compute_profile: small
+    compute_profile: xlarge
     compute_resource: controller-08
     hostgroup: el9/legacy
     environment: monitor
