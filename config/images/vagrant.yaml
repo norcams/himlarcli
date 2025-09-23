@@ -11,3 +11,4 @@ images:
     'min_ram':          256
     'min_disk':         1
     'visibility':       'public'
+    'owner':            'openstack'
