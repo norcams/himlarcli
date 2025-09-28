@@ -10,3 +10,6 @@ images:
   'ubuntu_2004':
     'name':             'vGPU Ubuntu 20.04 LTS'
     'depricated':       'Outdated vGPU (Ubuntu 20.04)'
+  'almalinux8':
+    'name':             'vGPU Alma Linux 8'
+    'depricated':       'Outdated vGPU (Alma Linux 8)'
