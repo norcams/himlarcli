@@ -11,9 +11,6 @@ bgo:
     reason: 'still scrub warnings'
 
 osl:
-  - host: 'osl-storage-v2h-18'
-    check: 'keepalive'
-    reason: 'missing disk controller'
   - host: 'osl-object-ceph-05'
     check: 'redfish-check'
     reason: 'need new disk'
