@@ -75,7 +75,9 @@ def action_aggregate():
             if not project.enabled:
                 kc.debug_log(f'project {project.name} disabled')
                 continue
-            if hasattr(project, 'admin'):
+            if hasattr(project, 'contact'):
+                email = project.contact
+            elif hasattr(project, 'admin'):
                 email = project.admin
             else:
                 kc.debug_log('could not find admin for project {}'.
