@@ -625,6 +625,7 @@ def action_access():
         'net_uio_ipv6' : [ 'bgo', 'osl' ],
         'net_educloud' : [ 'bgo', 'osl' ],
         'net_elastic'  : [ 'bgo', 'osl' ],
+        'net_elixir'   : [ 'bgo' ],
     }
 
     # Resource info
@@ -647,6 +648,7 @@ def action_access():
         'net_uio_ipv6' : 'Access to UiO IPv6 network',
         'net_educloud' : 'Access to Educloud network',
         'net_elastic'  : 'Access to Elastic network',
+        'net_elixir'   : 'Access to Elixir dualstack network. Only BGO'
     }
 
     # Today
@@ -873,6 +875,8 @@ def action_access():
         access_networks.append('educloud-IPv6')
     elif resource == 'net_elastic':
         access_networks.append('elasticIP')
+    elif resource == 'net_elastic':
+        access_networks.append('elixir-dualStack')
 
     # Loop through regions and grant/revoke access
     for region in regions:
