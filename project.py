@@ -202,6 +202,10 @@ def action_extend():
     today = datetime.today()
     current = project.enddate if hasattr(project, 'enddate') else 'None'
 
+    # We don't allow extension on quarantined projects
+    if ksclient.check_project_tag(project.id, 'quarantine_active'):
+        himutils.fatal(f"Project {options.project} is quarantined. Remove quarantine first")
+
     if options.enddate == 'max':
         datetime_enddate = today + timedelta(days=730)
     elif re.match(r'^\+(\d+)([y|m|d])$', options.enddate):
