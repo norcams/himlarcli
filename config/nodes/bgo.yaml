@@ -342,6 +342,13 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
+  compute-elixir1-92:
+    mac: c4:cb:e1:f7:61:96
+    environment: yoga
+    hostgroup: "el8/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   console-01:
     compute_profile: medium
     compute_resource: controller-05
