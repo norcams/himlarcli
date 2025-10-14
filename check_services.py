@@ -16,8 +16,8 @@ logger = himutils.get_logger(__name__, config, options.debug)
 # statsd
 statsd_server = config.get('statsd', 'server')
 statsd_port = config.get('statsd', 'port')
-prefix = 'uh-iaas.%s.checks' % region
-statsd = statsd.StatsClient(statsd_server, statsd_port, prefix=prefix)
+prefix = config.get('statsd', 'prefix')
+statsd = statsd.StatsClient(statsd_server, statsd_port, prefix=f'{prefix}.{region}.check')
 
 # Services to check
 services = himutils.load_region_config('config/checks', region=region, log=logger)
