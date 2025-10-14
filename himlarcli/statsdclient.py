@@ -6,12 +6,13 @@ class StatsdClient(Client):
 
     """ Client to interface statsd """
 
-    def __init__(self, config_path, debug=False, log=None, prefix='uh-iaas'):
+    def __init__(self, config_path, debug=False, log=None, prefix=None):
         super().__init__(config_path, debug, log)
 
         server = self.get_config('statsd', 'server')
         port = self.get_config('statsd', 'port')
-
+        if not prefix:
+            prefix = self.get_config('statsd', 'prefix', 'nrec')
         self.client = statsd.StatsClient(server, port, prefix=prefix)
         self.debug_log(f'connected to statsd server {server}:{port}')
 
