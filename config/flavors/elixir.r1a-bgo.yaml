@@ -1,0 +1,14 @@
+---
+# r1a flavor used for Elixir
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  aggregate_instance_extra_specs:type: 's== elixir1'
+
+elixir.r1a:
+  'elixir.r1a.4xlarge':
+    vcpus: 16
+    ram: 131072
+    disk: 100
