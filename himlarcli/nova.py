@@ -162,6 +162,11 @@ class Nova(Client):
             for agg in aggregates:
                 if hostname in agg.hosts:
                     num_aggregates += 1
+            if num_aggregates == 0:
+                himutils.error(f"Host {hostname} is not i any aggregate. Cannot 'move' - did you mean 'add'?")
+                if artificially_enabled and not self.dry_run:
+                    self.disable_host(hostname)
+                return False
             if num_aggregates != 1:
                 himutils.error(f"Host {hostname} is member of multiple aggregates. Cannot move.")
                 if artificially_enabled and not self.dry_run:
