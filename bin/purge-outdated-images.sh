@@ -64,6 +64,7 @@ images_gold=(
     rockylinux8
     rockylinux9
     rockylinux10
+    winsrv2016std
     winsrv2019core
     winsrv2019std
     winsrv2022std

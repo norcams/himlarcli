@@ -1,6 +1,9 @@
 ---
 type: 'gold'
 images:
+  'winsrv2016std':
+    'name':             'GOLD Windows Server 2016 Standard'
+    'depricated':       '(Outdated) Windows Server 2016 Standard'
   'winsrv2019core':
     'name':             'GOLD Windows Server 2019 Core'
     'depricated':       'Outdated Windows Server 2019 Core (Windows)'
