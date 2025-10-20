@@ -75,8 +75,8 @@ for image in ${images_vgpu[@]}; do
     echo "Deleting unused deactivated images with name: $image"
     ./image.py purge -n $image -t vgpu -v shared --force
     if [ "$?" != "0" ]; then
-	echo "ERROR: Something went wrong!"
-	exit 1
+        echo "ERROR: Something went wrong!"
+        exit 1
     fi
     echo "Usage:"
     ./image.py usage -n $image -t vgpu -v shared -s deactive
@@ -87,8 +87,8 @@ for image in ${images_uio[@]}; do
     echo "Deleting unused deactivated images with name: $image"
     ./image.py purge -n $image -t uio -v shared --force
     if [ "$?" != "0" ]; then
-	echo "ERROR: Something went wrong!"
-	exit 1
+        echo "ERROR: Something went wrong!"
+        exit 1
     fi
     echo "Usage:"
     ./image.py usage -n $image -t uio -v shared -s deactive
@@ -99,8 +99,8 @@ for image in ${images_uib[@]}; do
     echo "Deleting unused deactivated images with name: $image"
     ./image.py purge -n $image -t uib -v shared --force
     if [ "$?" != "0" ]; then
-	echo "ERROR: Something went wrong!"
-	exit 1
+        echo "ERROR: Something went wrong!"
+        exit 1
     fi
     echo "Usage:"
     ./image.py usage -n $image -t uib -v shared -s deactive
@@ -111,8 +111,8 @@ for image in ${images_gold[@]}; do
     echo "Deleting unused deactivated images with name: $image"
     ./image.py purge -n $image -t gold -v public --force
     if [ "$?" != "0" ]; then
-	echo "ERROR: Something went wrong!"
-	exit 1
+        echo "ERROR: Something went wrong!"
+        exit 1
     fi
     echo "Usage:"
     ./image.py usage -n $image -t gold -v public -s deactive
