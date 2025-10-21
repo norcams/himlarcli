@@ -1,3 +1,4 @@
+#!/bin/bash
 : '
 bash new-project.sh FROM_SUBMISSION_ID
 
