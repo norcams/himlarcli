@@ -22,7 +22,7 @@ class Slack(Client):
                    "username": user,
                    "text": msg}
         json_payload = json.dumps(payload)
-        log_msg = 'Message published to %s by %s: %s' % (self.slack_channel, self.slack_user, msg)
+        log_msg = 'Message published to %s by %s: %s' % (channel, user, msg)
         if not self.dry_run:
             requests.post(url, data=json_payload)
         else:
