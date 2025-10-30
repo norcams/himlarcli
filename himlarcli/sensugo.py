@@ -52,7 +52,7 @@ class SensuGo(Client):
         if slack:
             msg = f'Silence {check} for {host}: {reason}'
             slack_client = self._get_client(Slack)
-            slack_client.publish_slack(msg, 'vakt', 'sensu')
+            slack_client.publish_slack(msg)
 
     def delete_client(self, host):
         try:
