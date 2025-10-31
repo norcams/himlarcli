@@ -47,6 +47,7 @@ images_gold=(
     fedora_40
     fedora_41
     fedora_42
+    fedora_43
     debian9
     debian10
     debian11
