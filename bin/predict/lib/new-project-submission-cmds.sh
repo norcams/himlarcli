@@ -1,3 +1,4 @@
+#!/bin/bash
 : '
 bash iaas-project-submission-cmds.sh RT SUBMISSION_ID
 
@@ -70,8 +71,8 @@ do
   if [[ $elementId == 4559698 ]]
   then
     clues[projectType]=$answer_text
-  # Special resources
-  elif [[ $elementId == 5052840 ]]
+  # Special resources for shared projects
+  elif [[ $elementId == 5052840 ]] || [[ $elementId == 8318293 ]]
   then
     # Only one special resource
     specialResource="$answer_text"
@@ -134,8 +135,12 @@ do
   elif [[ $elementId == 5052847 ]]
   then
     clues[ssdVolumeQuota]=$answer_text
+  # SSD volume quota for vgpu projects
+  elif [[ $elementId == 8318312 ]]
+  then
+    clues[ssdVolumeQuota]=$answer_text
   # Regular volume quota for vgpu projects
-  elif [[ $elementId == 5052849 ]]
+  elif [[ $elementId == 8318294 ]]
   then
     clues[regularVolumeQuota]=$answer_text
   # Optional contact
@@ -448,9 +453,21 @@ then
 fi
 if [ ! -z ${clues[ssdVolumeQuota]} ]
   then
-  # Parse full openstack SSD quota set cmd
-  cmd="openstack quota set --gigabytes $((${clues[regularVolumeQuota]}+${clues[ssdVolumeQuota]})) ${pcargs[project]}" # @caleno verified that this necessary: When setting SSD quota, the regular quota needs to be increased as well with the same amount as the SSD quota.
-  echo $cmd
+  # Increase regularVolumeQuota with ssdVolumeQuota
+  if [ -z ${clues[regularVolumeQuota]} ]
+  then
+    # If regular volume quota is not specified, get it from the default quota
+    cmd="regularVolumeQuota=\$(openstack quota show -f shell ${clues[projectName]} | grep -E '^gigabytes=' | cut -d '=' -f 2 | tr -d '"'"'"')"
+    echo $cmd
+    echo "echo \$regularVolumeQuota"
+    cmd="openstack quota set --gigabytes \$((\$regularVolumeQuota+${clues[ssdVolumeQuota]})) ${pcargs[project]}" # @caleno verified that this necessary: When setting SSD quota, the regular quota needs to be increased as well with the same amount as the SSD quota.
+    echo $cmd 
+  else
+    # Since regularVolumeQuota is specified, parse full openstack SSD quota set cmd
+    cmd="openstack quota set --gigabytes $((${clues[regularVolumeQuota]}+${clues[ssdVolumeQuota]})) ${pcargs[project]}" # @caleno verified that this necessary: When setting SSD quota, the regular quota needs to be increased as well with the same amount as the SSD quota.
+    echo $cmd
+  fi
+  # Finally, set the actual ssdVolumeQuota
   cmd="openstack quota set --volume-type mass-storage-ssd --gigabytes ${clues[ssdVolumeQuota]} ${pcargs[project]}"
   echo $cmd
 fi

@@ -1,3 +1,4 @@
+#!/bin/bash
 : '
 bash iaas-project-submission-ids.sh FROM_SUBMISSION_ID
 
