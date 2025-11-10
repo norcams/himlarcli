@@ -70,6 +70,7 @@ nodes:
     host_parameters_attributes: #default name is vda in legacy hostgroup
       - name:           'installdevice'
         value:          'sda'
+    environment: yoga_el9
   compute-05:
     hostgroup: el9/uefi
     mac: 00:0a:f7:97:80:c4
