@@ -67,6 +67,9 @@ nodes:
   compute-04:
     hostgroup: el9/legacy
     mac: 00:0a:f7:19:75:80
+    host_parameters_attributes: #default name is vda in legacy hostgroup
+      - name:           'installdevice'
+        value:          'sda'
   compute-05:
     hostgroup: el9/uefi
     mac: 00:0a:f7:97:80:c4
