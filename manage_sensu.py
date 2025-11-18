@@ -26,7 +26,7 @@ def action_events():
 
 def action_list_silenced():
     silenced = sensu.list_silenced()
-    printer.output_dict({'header': 'Silenced checks (name, reason)'})
+    printer.output_dict({'header': 'Silenced checks (name, reason, expire_on_resolve)'})
     for check in silenced:
         if 'reason' in check.spec:
             reason = '=> ' + check.spec['reason']
@@ -34,7 +34,8 @@ def action_list_silenced():
             reason = '=> unknown'
         out_event = {
             '1': check.name,
-            '2': reason
+            '2': reason,
+            '3':  check.spec['expire_on_resolve']
         }
         printer.output_dict(out_event, sort=True, one_line=True)
 
@@ -48,7 +49,8 @@ def action_unsilence():
 
 def action_silence():
     print(f'silence entity:{options.host}:{options.check}')
-    sensu.silence_check(options.host, options.check, options.expire, options.reason, True)
+    sensu.silence_check(options.host, options.check, options.expire,
+                        options.reason, True, not options.resolve)
 
 def action_delete():
     sensu.delete_client(options.host)

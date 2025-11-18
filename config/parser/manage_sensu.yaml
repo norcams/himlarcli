@@ -24,6 +24,13 @@ opt_args:
     'help':     'Duration of silence entry in seconds'
     'required': False
     'default':  -1
+  '--no-resolve':
+    'sub':      ['silence']
+    'dest':     'resolve'
+    'help':     'Do not expire silence on resolve'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   '-r':
     'sub':      ['silence']
     'dest':     'reason'

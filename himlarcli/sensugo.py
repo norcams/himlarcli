@@ -36,12 +36,12 @@ class SensuGo(Client):
             message = e.text
             self.debug_log(f'{check} for {host}: {message}')
 
-    def silence_check(self, host, check, expire='-1', reason='himlarcli', slack=False):
+    def silence_check(self, host, check, expire='-1', reason='himlarcli', slack=False, expire_on_resolve=True):
         spec = {
             'subscription': f'entity:{host}',
             'check': check,
             'expire': int(expire),
-            'expire_on_resolve': True,
+            'expire_on_resolve': expire_on_resolve,
             'reason': reason}
         metadata = { 'name': f'entity:{host}:{check}' }
         try:
