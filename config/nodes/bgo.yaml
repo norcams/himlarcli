@@ -314,6 +314,18 @@ nodes:
   compute-84:
     mac: c4:cb:e1:af:62:98
     hostgroup: 16
+  compute-85:
+    mac: c4:cb:e1:af:77:9c
+    environment: yoga
+    hostgroup: "el8/uefi"  
+  compute-86:
+    mac: c4:cb:e1:b5:51:84
+    environment: yoga
+    hostgroup: "el8/uefi"
+  compute-87:
+    mac: c4:cb:e1:b5:51:4e
+    environment: yoga
+    hostgroup: "el8/uefi"  
   compute-l40s-88:
     mac: c4:cb:e1:b5:c5:8c
     environment: victoria
