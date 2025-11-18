@@ -67,7 +67,7 @@ class SensuGo(Client):
             self.client.entities.delete(host)
         except sensu_go.errors.ResponseError as e:
             message = e.text
-            self.debug_log(f'{check} for {host}: {message}')
+            self.debug_log(f'{host}: {message}')
 
     @staticmethod
     def get_host_from_subscription(sub):
