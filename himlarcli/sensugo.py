@@ -53,6 +53,9 @@ class SensuGo(Client):
             utils.improved_sys_error(e, 'error')
         if slack:
             msg = f'Silence {check} for {host}: {reason}'
+            if not expire_on_resolve:
+                msg += ' and no expire on resolve'
+            self.debug_log(f'slack message: {msg}')
             slack_client = self._get_client(Slack)
             try:
                 slack_client.publish_slack(msg)
