@@ -2,6 +2,7 @@ import sensu_go
 from himlarcli.client import Client
 from himlarcli.slack import Slack
 from himlarcli import utils
+import requests
 
 # pylint: disable=C0115
 class SensuGo(Client):
@@ -13,6 +14,7 @@ class SensuGo(Client):
                                       password=self.get_config('sensugo', 'password'),
                                       #verify=False,
                                       ca_path=self.get_config('sensugo', 'ca_path'))
+        self.debug_log(f'connect to {self.get_config("sensugo", "url")}')
 
     def get_client(self):
         return self.client
@@ -52,7 +54,10 @@ class SensuGo(Client):
         if slack:
             msg = f'Silence {check} for {host}: {reason}'
             slack_client = self._get_client(Slack)
-            slack_client.publish_slack(msg)
+            try:
+                slack_client.publish_slack(msg)
+            except requests.exceptions.MissingSchema as e:
+                utils.improved_sys_error(f'slack problem: {e}', 'error')
 
     def delete_client(self, host):
         try:
