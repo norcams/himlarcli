@@ -32,6 +32,9 @@ osl:
   - host: 'osl-storage-v2d-32'
     check: 'redfish-check'
     reason: 'predicted disk failure'
+  - host: 'osl-storage-v2h-19'
+    check: 'redfish-check'
+    reason: 'disk37 is abnormal'
 
 test01: {}
 
