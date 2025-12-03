@@ -25,6 +25,7 @@ Tested on RT SUBMISSION_ID Summary
 6147307 31095286
 6570990 33117323 Share, with large base quota, custom HDD and SSH volume quota, optional contact, other users, large os disk shpc quotas
 7122374 37984258 shpc_disk3
+7260314 39570088 Handle comma "," in Additional Users field
 and more
 '
 
@@ -350,10 +351,10 @@ echo $cmd
 # Build project.py grant cmd -u arguments
 if [[ ${pcargs[createArgument]} != create-private ]]
 then
-  if [ ! -z ${clues[additionalUsers]} ]
+  if [ ! -z "${clues[additionalUsers]}" ]
   then
     #pguserargs=$(bash -c 'users=(${0//\\r\\n/ }); for u in ${users[*]}; do echo -n "-u $u "; done' ${clues[additionalUsers]})
-    pguserargs=$(bash -c 'users=(${0//\\n/ }); for u in ${users[*]}; do echo -n "-u $u "; done' ${clues[additionalUsers]})
+    pguserargs=$(bash -c 'users=(${0//\\n/ }); for u in ${users[*]}; do u=$(echo $u | tr -d ','); echo -n "-u $u "; done' "${clues[additionalUsers]}")
     pguserargs="-u ${pcargs[admin]} $pguserargs"
 
     # Parse full project.py grant cmd
