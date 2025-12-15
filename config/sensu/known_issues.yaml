@@ -12,6 +12,12 @@ bgo:
   - host: 'bgo-compute-39'
     check: 'redfish-check'
     reason: 'need new cmos battery'
+  - host: 'bgo-compute-40'
+    check: 'redfish-check'
+    reason: 'need new cmos battery'
+  - host: 'bgo-compute-clarino-37'
+    check: 'redfish-check'
+    reason: 'disk issues'
 
 osl:
   - host: 'osl-object-ceph-05'
