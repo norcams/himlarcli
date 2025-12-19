@@ -523,6 +523,8 @@ nodes:
   proxy-01:
     compute_profile: small
     compute_resource: controller-08
+    hostgroup: el9/legacy
+    environment: el9
     compute_attributes:
       volumes_attributes:
         '1':

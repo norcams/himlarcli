@@ -317,7 +317,7 @@ nodes:
   compute-85:
     mac: c4:cb:e1:af:77:9c
     environment: yoga
-    hostgroup: "el8/uefi"  
+    hostgroup: "el8/uefi"
   compute-epyc-86:
     mac: c4:cb:e1:b5:51:84
     environment: yoga
@@ -325,7 +325,7 @@ nodes:
   compute-epyc-87:
     mac: c4:cb:e1:b5:51:4e
     environment: yoga
-    hostgroup: "el8/uefi"  
+    hostgroup: "el8/uefi"
   compute-l40s-88:
     mac: c4:cb:e1:b5:c5:8c
     environment: victoria
@@ -563,6 +563,7 @@ nodes:
     compute_profile: small
     compute_resource: controller-08
     hostgroup: el9/legacy
+    environment: el9
     compute_attributes:
       volumes_attributes:
         '1':
