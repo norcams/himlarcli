@@ -1,0 +1,25 @@
+---
+# Use empty value for None
+desc: 'Report instance network (IP'
+actions:
+  'list':             'list'
+  'mail':             'mail'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+    'weight':   60
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
+  '-e':
+    'sub':      ['mail']
+    'dest':     'email'
+    'help':     'email address to send report to'
+    'required': true
+  '-s':
+    'sub':      ['mail']
+    'dest':     'subject'
+    'help':     'email subject to use'
+    'default':  '[NREC] Used network list'
