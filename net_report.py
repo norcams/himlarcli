@@ -56,9 +56,7 @@ def action_mail():
     mail = utils.get_client(Mail, options, logger)
     fromaddr = "support@nrec.no"
     attachment_payload = json.dumps(networks, indent=2)
-    body_content = (
-        f"Dump of used NREC IP addresses in {', '.join(regions)} region(s) attached."
-    )
+    body_content = f"Dump of used NREC IP addresses in {', '.join(regions)} attached."
     msg = mail.create_mail_with_txt_attachment(
         options.subject, body_content, attachment_payload, "resources.json", fromaddr
     )
