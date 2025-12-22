@@ -31,7 +31,7 @@ def get_network_list():
     for region in regions:
         logger.debug("=> region %s", region)
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
-        instances = nc.get_instances()
+        instances = nc.get_all_instances()
         for i in instances:
             instance = {"id": i.id}
             # instance["power_state"] = getattr(i, "OS-EXT-STS:power_state")
