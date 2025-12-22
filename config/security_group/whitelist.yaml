@@ -10,14 +10,15 @@ port:
   - 80
   - 443
 remote_ip_prefix:
-  - 10.1.0.0/22          # BGO: private1_IPv4
+  - 10.0.0.0/8           # rfc1918
+  - 172.16.0.0/12        # rfc1918
+  - 192.168.0.0/16       # rfc1918
   - 158.39.77.0/24       # BGO: public1_IPv4
   - 158.39.74.0/24       # BGO: public2_IPv4
   - 158.39.201.0/24      # BGO: public4_IPv4
   - 158.37.65.0/24       # BGO: public5_IPv4
   - 2001:700:2:8301::/64 # BGO: public1_IPv6
   - 2001:700:2:8300::/64 # BGO: public2_IPv6
-  - 10.2.0.0/22          # OSL: private1_IPv4
   - 158.37.63.0/24       # OSL: public1_IPv4
   - 158.39.75.0/24       # OSL: public2_IPv4
   - 158.39.48.0/24       # OSL: public4_IPv4
