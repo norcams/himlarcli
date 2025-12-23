@@ -55,13 +55,14 @@ def action_mail():
     # Set common mail parameters
     mail = utils.get_client(Mail, options, logger)
     fromaddr = "support@nrec.no"
+    bccaddr = 'iaas-logs@usit.uio.no'
     attachment_payload = json.dumps(networks, indent=2)
     body_content = f"Dump of used NREC IP addresses in {', '.join(regions)} attached."
     msg = mail.create_mail_with_txt_attachment(
         options.subject, body_content, attachment_payload, "resources.json", fromaddr
     )
 
-    mail.send_mail(options.email, msg, fromaddr, msgid="report")
+    mail.send_mail(options.email, msg, fromaddr, bcc=bccaddr, msgid="report")
     logger.debug("=> send mail to %s", options.email)
 
 
