@@ -206,7 +206,7 @@ def action_list():
         counter = 0
         region = kc.get_config('openstack', 'region')
         for host in hosts:
-            r_hostname = Color.fg.blu + re.sub('\.mgmt\..+?\.uhdc\.no$', '', host.hypervisor_hostname) + Color.reset
+            r_hostname = Color.fg.blu + re.sub(r'\.mgmt\..+?\.uhdc\.no$', '', host.hypervisor_hostname) + Color.reset
             r_aggregate = ','.join(aggregates.get(host.hypervisor_hostname, []))
             r_status = host.status.upper()
             if options.verbose:
