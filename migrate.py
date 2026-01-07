@@ -348,7 +348,7 @@ def migrate_instance(instance, target=None):
                 elapsed_str = "%d minutes %.1f seconds" % (int(x[1]), float(x[2]))
             else:
                 elapsed_str = "%.1f seconds" % float(x[2])
-            new_host = re.sub('\.mgmt\..+?\.uhdc\.no$', '', hypervisor)
+            new_host = re.sub(r'\.mgmt\..+?\.uhdc\.no$', '', hypervisor)
             print(f'––> {Color.fg.cyn}{new_host}{Color.reset} '
                   f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed_str}')
             break
