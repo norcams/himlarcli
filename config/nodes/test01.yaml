@@ -25,14 +25,14 @@ nodes:
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '140G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "140G"
+          format_type: "qcow2"
     host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+      - name: "installdevice"
+        value: "vda"
   cephmds-01:
     compute_profile: medium
     compute_resource: controller-01
@@ -68,13 +68,13 @@ nodes:
     hostgroup: el9/legacy
     mac: 00:0a:f7:19:75:80
     host_parameters_attributes: #default name is vda in legacy hostgroup
-      - name:           'installdevice'
-        value:          'sda'
-    environment: yoga_el9
+      - name: "installdevice"
+        value: "sda"
+    environment: zed
   compute-05:
     hostgroup: el9/uefi
     mac: 00:0a:f7:97:80:c4
-    environment: yoga
+    environment: zed
   console-01:
     compute_profile: medium
     compute_resource: controller-03
@@ -148,14 +148,14 @@ nodes:
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '100G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "100G"
+          format_type: "qcow2"
     host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+      - name: "installdevice"
+        value: "vda"
   metric-01:
     compute_profile: xlarge
     hostgroup: el9/legacy
@@ -163,14 +163,14 @@ nodes:
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '20G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "20G"
+          format_type: "qcow2"
     host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+      - name: "installdevice"
+        value: "vda"
   monitor-01:
     compute_profile: medium
     compute_resource: controller-01
@@ -228,14 +228,14 @@ nodes:
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '50G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "50G"
+          format_type: "qcow2"
     host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+      - name: "installdevice"
+        value: "vda"
   report-01:
     compute_profile: small
     compute_resource: controller-03
@@ -290,24 +290,24 @@ nodes:
     environment: monitor
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '50G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "50G"
+          format_type: "qcow2"
     host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+      - name: "installdevice"
+        value: "vda"
   volume-01:
     compute_profile: large
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '20G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "20G"
+          format_type: "qcow2"
     hostgroup: el9/legacy
     environment: yoga_el9
   volume-02:
@@ -315,11 +315,11 @@ nodes:
     compute_resource: controller-02
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '20G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "20G"
+          format_type: "qcow2"
     hostgroup: el9/legacy
     environment: yoga_el9
   volume-03:
@@ -327,11 +327,11 @@ nodes:
     compute_resource: controller-03
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '20G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "20G"
+          format_type: "qcow2"
     hostgroup: el9/legacy
     environment: yoga_el9
   workflow-01:
