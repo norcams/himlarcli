@@ -68,9 +68,9 @@ def action_rebuild():
     node_name = '%s-%s' % (region, options.node)
     if options.sensu_expire:
         sensu.silence_check(node_name, 'keepalive', options.sensu_expire,
-                            'himlarcli: node.py rebuild', True, True)
+                            'himlarcli: node.py rebuild', True, False)
     else:
-        sensu.silence_check(node_name, 'keepalive', 'himlarcli: node.py rebuild', True, True)
+        sensu.silence_check(node_name, 'keepalive', '7200', 'himlarcli: node.py rebuild', True, False)
     client.set_host_build(node_name)
 
 def action_reinstall():
