@@ -88,7 +88,8 @@ nodes:
     mac: 00:0a:f7:79:c5:f3
   compute-alice-11:
     mac: 20:04:0f:ed:9a:7a
-    hostgroup: 16
+    hostgroup: el9/uefi
+    environment: zed
   compute-alice-12:
     mac: 20:04:0f:ed:6f:96
     hostgroup: 16
