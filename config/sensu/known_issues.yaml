@@ -9,9 +9,6 @@ bgo:
   - host: 'bgo-cephmon-03'
     check: 'ceph-check'
     reason: 'still scrub warnings'
-  - host: 'bgo-compute-40'
-    check: 'redfish-check'
-    reason: 'need new cmos battery'
 
 osl:
   - host: 'osl-object-ceph-05'
