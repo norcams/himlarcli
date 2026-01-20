@@ -52,10 +52,9 @@ nodes:
     compute_profile: large
     compute_resource: controller-03
   compute-01:
-    hostgroup: el8/legacy
+    hostgroup: el9/uefi
+    environment: zed
     mac: 00:0a:f7:75:2f:80
-    environment: ussuri
-    # mac: f8:bc:12:3f:97:90
   compute-02:
     hostgroup: el8/legacy
     mac: f4:e9:d4:ad:38:e0
