@@ -19,6 +19,7 @@ images_uio=(
 
 images_uib=(
     rockylinux8_uib_puppet
+    almalinux10_uib_puppet
 )
 
 images_gold=(

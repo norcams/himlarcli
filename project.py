@@ -867,6 +867,7 @@ def action_access():
         access_flavors.append('win')
     elif resource == 'uib_image':
         access_images.append('rockylinux8_uib_puppet')
+        access_images.append('almalinux10_uib_puppet')
     elif resource == 'ssd':
         access_volumetype.append('mass-storage-ssd')
     elif resource == 'net_uib':
