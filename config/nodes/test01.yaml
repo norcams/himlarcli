@@ -51,17 +51,20 @@ nodes:
   cephmon-03:
     compute_profile: large
     compute_resource: controller-03
-  compute-01:
+  compute-shpc-01:
     hostgroup: el9/legacy
     environment: zed
     mac: 00:0a:f7:75:2f:80
     host_parameters_attributes: #default name is vda in legacy hostgroup
       - name: "installdevice"
         value: "sda"
-  compute-02:
-    hostgroup: el8/legacy
+  compute-shpc-02:
+    hostgroup: el9/legacy
+    environment: zed
     mac: f4:e9:d4:ad:38:e0
-    # mac: 74:86:7a:d1:64:d6
+    host_parameters_attributes: #default name is vda in legacy hostgroup
+      - name: "installdevice"
+        value: "sda"
   compute-03:
     hostgroup: el8/legacy
     mac: f4:e9:d4:ad:60:d0
