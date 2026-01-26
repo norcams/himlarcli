@@ -271,6 +271,7 @@ fi
 pcargs[rt]=${clues[rt]}
 
 # institution and region specific options
+# TODO: implement for NMBU, UiT, VetInst
 if [[ ${clues[educationalInstitution]} == 'University of Oslo (UiO)' ]]
 then
   # May need to shorten UiO E-mail to <username>@uio.no. The correct shortened UiO E-mail may be found using bofh on the submitted UiO E-mail in the form.
@@ -292,6 +293,16 @@ then
   pcargs[admin]=${clues[respondentEmail]}
   # -o (choose from 'nrec', 'uio', 'uib', 'uit', 'ntnu', 'nmbu', 'vetinst', 'hvl')
   pcargs[org]=uib
+elif [[ ${clues[educationalInstitution]} == 'Western Norway University of Applied Sciences (HVL)' ]]
+then
+  # user (create-private)
+  pcargs[user]=${clues[respondentEmail]}
+  # --region (create)
+  pcargs[region]=None
+  # -a (create)
+  pcargs[admin]=${clues[respondentEmail]}
+  # -o (choose from 'nrec', 'uio', 'uib', 'uit', 'ntnu', 'nmbu', 'vetinst', 'hvl')
+  pcargs[org]=hvl
 else
   # user (create-private)
   pcargs[user]=${clues[respondentEmail]}
