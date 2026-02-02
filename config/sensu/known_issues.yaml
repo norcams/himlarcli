@@ -9,9 +9,12 @@ bgo:
   - host: 'bgo-cephmon-03'
     check: 'ceph-check'
     reason: 'still scrub warnings'
+  - host: 'bgo-compute-02'
+    check: 'redfish-check'
+    reason: 'Correctable memory error rate exceeded for DIMM_A2'
   - host: 'bgo-compute-alice-13'
     check: 'redfish-check'
-    reason: 'BOSS disk SSD 1 dead'
+    reason: 'BOSS disk SSD 1 dead'    
     
 osl:
   - host: 'osl-object-ceph-05'
