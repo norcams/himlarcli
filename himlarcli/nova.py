@@ -33,13 +33,15 @@ class Nova(Client):
         self.debug_log('using nova compute api_version %s' % version)
         self.client = novaclient.Client(APIVersion(version),
                                         session=self.sess,
-                                        region_name=self.region)
+                                        region_name=self.region,
+                                        interface='public')
 
     def get_keystone_client(self):
         """ Create a new keystone client if needed and then return the client """
         if not self.ksclient:
             self.ksclient = keystoneclient.Client(session=self.sess,
-                                                  region_name=self.region)
+                                                  region_name=self.region,
+                                                  interface='public')
         return self.ksclient
 
 
