@@ -338,26 +338,33 @@ def migrate_instance(instance, target=None):
         migrating_instance = nc.get_by_id('server', instance.id)
         hypervisor = getattr(migrating_instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
         task_state = getattr(migrating_instance, 'OS-EXT-STS:task_state')
-        if task_state is None and hypervisor != source_host:
-            finish = time.perf_counter()
-            td_str = str(timedelta(seconds=(finish - start)))
-            x = td_str.split(':')
-            if int(x[0]) > 0:
-                elapsed_str = "%d hours %d minutes %.1f seconds" % (int(x[0]), int(x[1]), float(x[2]))
-            elif int(x[0]) == 0 and int(x[1]) > 0:
-                elapsed_str = "%d minutes %.1f seconds" % (int(x[1]), float(x[2]))
-            else:
-                elapsed_str = "%.1f seconds" % float(x[2])
-            new_host = re.sub(r'\.mgmt\..+?\.uhdc\.no$', '', hypervisor)
-            print(f'––> {Color.fg.cyn}{new_host}{Color.reset} '
-                  f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed_str}')
-            break
-        elif task_state is None and hypervisor == source_host:
-            print(f'{Color.fg.red}{Color.bold}FAILED!{Color.reset}')
-            break
-        elif timeout == 0:
-            print(f'{Color.fg.red}{Color.bold}TIMEOUT after 24 hours!{Color.reset}')
-            break
+        status = getattr(migrating_instance, 'status')
+        if status == 'VERIFY_RESIZE':
+            try:
+                migrating_instance.confirm_resize()
+            except:
+                pass
+        else:
+            if task_state is None and hypervisor != source_host:
+                finish = time.perf_counter()
+                td_str = str(timedelta(seconds=(finish - start)))
+                x = td_str.split(':')
+                if int(x[0]) > 0:
+                    elapsed_str = "%d hours %d minutes %.1f seconds" % (int(x[0]), int(x[1]), float(x[2]))
+                elif int(x[0]) == 0 and int(x[1]) > 0:
+                    elapsed_str = "%d minutes %.1f seconds" % (int(x[1]), float(x[2]))
+                else:
+                    elapsed_str = "%.1f seconds" % float(x[2])
+                new_host = re.sub(r'\.mgmt\..+?\.uhdc\.no$', '', hypervisor)
+                print(f'––> {Color.fg.cyn}{new_host}{Color.reset} '
+                      f'{Color.fg.grn}{Color.bold}COMPLETE{Color.reset} in {elapsed_str}')
+                break
+            elif task_state is None and hypervisor == source_host:
+                print(f'{Color.fg.red}{Color.bold}FAILED!{Color.reset}')
+                break
+            elif timeout == 0:
+                print(f'{Color.fg.red}{Color.bold}TIMEOUT after 24 hours!{Color.reset}')
+                break
         time.sleep(1)
 
     # Sleep the desired amount before returning
