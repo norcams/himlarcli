@@ -24,3 +24,11 @@ shpc.m1a:
     vcpus: 4
     ram: 16384
     disk: 20
+  'shpc.m1a.2xlarge':
+    vcpus: 8
+    ram: 32768
+    disk: 20
+  'shpc.m1a.4xlarge':
+    vcpus: 16
+    ram: 65536
+    disk: 20
