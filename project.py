@@ -645,7 +645,7 @@ def action_access():
         'shpc_disk4'   : 'Access to 2TB disk sHPC flavors (shpc.m1ad4 and shpc.c1ad4)',
         'd1_flavor'    : 'Access to disk bound flavor set (d1)',
         'win_flavor'   : 'Access to Windows flavor set (win). Only BGO',
-        'uib_image'    : 'Access to UiB Managed image (UiB Rocky Linux 8 with Puppet)',
+        'uib_image'    : 'Access to UiB Managed images ({rockylinux8,almalinux10}_uib_puppet)',
         'ssd'          : 'Access to SSD volumes. Add quota separately',
         'net_uib'      : 'Access to UiB network',
         'net_uio_dual' : 'Access to UiO dualStack network',
