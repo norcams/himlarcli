@@ -15,6 +15,9 @@ bgo:
   - host: 'bgo-compute-alice-13'
     check: 'redfish-check'
     reason: 'BOSS disk SSD 1 dead'    
+  - host: 'bgo-compute-38'
+    check: 'redfish-check'
+    reason: 'The CMOS battery is not ready either because the battery is not fully charged or a transient battery event is observed.' 
     
 osl:
   - host: 'osl-object-ceph-05'
