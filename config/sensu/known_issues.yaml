@@ -18,6 +18,9 @@ bgo:
   - host: 'bgo-compute-38'
     check: 'redfish-check'
     reason: 'The CMOS battery is not ready either because the battery is not fully charged or a transient battery event is observed.' 
+  - host: 'bgo-compute-06'
+    check: 'redfish-check'
+    reason: 'Correctable memory error rate exceeded for DIMM_B1.'
     
 osl:
   - host: 'osl-object-ceph-05'
