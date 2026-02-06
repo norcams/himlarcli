@@ -110,9 +110,13 @@ nodes:
   db-global-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: el9/legacy
+    environment: zed
   db-regional-01:
     compute_profile: large
     compute_resource: controller-01
+    hostgroup: el9/legacy
+    environment: zed
   dns-01:
     compute_profile: small
     compute_resource: controller-02
