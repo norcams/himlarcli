@@ -172,14 +172,11 @@ nodes:
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
-        "1":
+        "0":
           allocation: "0G"
           pool_name: "dirpool"
           capacity: "20G"
           format_type: "qcow2"
-    host_parameters_attributes:
-      - name: "installdevice"
-        value: "vda"
   monitor-01:
     compute_profile: medium
     compute_resource: controller-01
