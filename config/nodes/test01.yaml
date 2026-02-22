@@ -168,7 +168,7 @@ nodes:
   metric-01:
     compute_profile: xlarge
     hostgroup: el9/legacy
-    environment: yoga_el9
+    environment: zed
     compute_resource: controller-01
     compute_attributes:
       volumes_attributes:
