@@ -110,9 +110,13 @@ nodes:
   db-global-01:
     compute_profile: small
     compute_resource: controller-02
+    hostgroup: el9/legacy
+    environment: zed
   db-regional-01:
     compute_profile: large
     compute_resource: controller-01
+    hostgroup: el9/legacy
+    environment: zed
   dns-01:
     compute_profile: small
     compute_resource: controller-02
@@ -164,18 +168,8 @@ nodes:
   metric-01:
     compute_profile: xlarge
     hostgroup: el9/legacy
-    environment: yoga_el9
+    environment: zed
     compute_resource: controller-01
-    compute_attributes:
-      volumes_attributes:
-        "1":
-          allocation: "0G"
-          pool_name: "dirpool"
-          capacity: "20G"
-          format_type: "qcow2"
-    host_parameters_attributes:
-      - name: "installdevice"
-        value: "vda"
   monitor-01:
     compute_profile: medium
     compute_resource: controller-01

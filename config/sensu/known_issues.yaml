@@ -14,8 +14,14 @@ bgo:
     reason: 'Correctable memory error rate exceeded for DIMM_A2'
   - host: 'bgo-compute-alice-13'
     check: 'redfish-check'
-    reason: 'BOSS disk SSD 1 dead'    
-    
+    reason: 'BOSS disk SSD 1 dead'
+  - host: 'bgo-compute-38'
+    check: 'redfish-check'
+    reason: 'The CMOS battery is not ready either because the battery is not fully charged or a transient battery event is observed.'
+  - host: 'bgo-compute-06'
+    check: 'redfish-check'
+    reason: 'Correctable memory error rate exceeded for DIMM_B1.'
+
 osl:
   - host: 'osl-object-ceph-05'
     check: 'redfish-check'
@@ -29,6 +35,9 @@ osl:
   - host: 'osl-storage-v2h-19'
     check: 'redfish-check'
     reason: 'disk37 is abnormal'
+  - host: 'osl-compute-epyc-14'
+    check: 'redfish-check'
+    reason: 'cpu1 voltage outside of range'
 
 test01: {}
 

@@ -363,6 +363,20 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
+  compute-l40s-93:
+    mac: 6C:83:75:48:2D:2C
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sdb'
+  compute-l40s-94:
+    mac: 6C:83:75:48:08:EA
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sdb'
   console-01:
     compute_profile: medium
     compute_resource: controller-05
@@ -393,11 +407,13 @@ nodes:
   db-global-01:
     compute_profile: small
     compute_resource: controller-06
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: zed
   db-regional-01:
     compute_profile: xlarge
     compute_resource: controller-05
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: zed
     compute_attributes:
       volumes_attributes:
         '1':

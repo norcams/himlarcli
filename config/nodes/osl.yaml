@@ -356,11 +356,13 @@ nodes:
   db-global-01:
     compute_profile: small
     compute_resource: controller-05
-    hostgroup: 16
+    hostgroup: el9/legacy
+    environment: zed
   db-regional-01:
     compute_profile: xlarge
     compute_resource: controller-05
-    hostgroup: 16
+    hostgroup: el9/legacy
+    environment: zed
     compute_attributes:
       volumes_attributes:
         '1':
