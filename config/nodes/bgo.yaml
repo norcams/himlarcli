@@ -378,7 +378,7 @@ nodes:
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdb'
+        value:          'disk/by-id/wwn-0x6c4efbb1708330003072cd3056c5bf9f'
   console-01:
     compute_profile: medium
     compute_resource: controller-05
