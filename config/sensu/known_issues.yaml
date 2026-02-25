@@ -21,6 +21,9 @@ bgo:
   - host: 'bgo-compute-06'
     check: 'redfish-check'
     reason: 'Correctable memory error rate exceeded for DIMM_B1.'
+  - host: 'bgo-compute-01'
+    check: 'check-metadata-api'
+    reason: 'Main reason is that nova-metadata binary version is set to 64 in nova database'
 
 osl:
   - host: 'osl-object-ceph-05'
