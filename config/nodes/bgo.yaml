@@ -244,7 +244,8 @@ nodes:
     hostgroup: 16
   compute-60:
     mac: 34:48:ed:f9:87:da
-    hostgroup: 16
+    environment: zed
+    hostgroup: el9/uefi
   compute-alice2-61:
     mac: b0:7b:25:f8:6a:8e
     hostgroup: 17
