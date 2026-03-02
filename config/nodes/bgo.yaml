@@ -372,7 +372,7 @@ nodes:
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sdb'
+        value:          'disk/by-id/wwn-0x600062b2216365c030cecc050f12782a'
   compute-l40s-94:
     mac: 6C:83:75:48:08:EA
     environment: zed
