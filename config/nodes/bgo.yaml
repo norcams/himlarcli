@@ -394,7 +394,7 @@ nodes:
     mac: c4:cb:e1:ab:3f:20
     environment: zed
     hostgroup: el9/uefi
-  compute-epyc-098:
+  compute-098:
     mac: 8c:84:74:fc:29:e0
     environment: zed
     hostgroup: el9/uefi
