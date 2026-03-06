@@ -323,7 +323,7 @@ nodes:
     hostgroup: 16
   compute-085:
     mac: c4:cb:e1:af:77:9c
-    environment: yoga
+    environment: zed
     hostgroup: "el8/uefi"
   compute-epyc-86:
     mac: c4:cb:e1:b5:51:84
@@ -383,33 +383,21 @@ nodes:
       - name:           'installdevice'
         value:          'disk/by-id/wwn-0x6c4efbb1708330003072cd3056c5bf9f'
   compute-095:
-    mac: C4:CB:E1:E1:95:A0
+    mac: c4:cb:e1:e1:95:a0
     environment: zed
     hostgroup: el9/uefi
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sda'
-  compute-096:
-    mac:
+  compute-epyc-096:
+    mac: c4:cb:e1:ab:3f:24
     environment: zed
     hostgroup: el9/uefi
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sda'
-  compute-097:
-    mac:
+  compute-epyc-097:
+    mac: c4:cb:e1:ab:3f:20
     environment: zed
     hostgroup: el9/uefi
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sda'
-  compute-098:
-    mac:
+  compute-epyc-098:
+    mac: 8c:84:74:fc:29:e0
     environment: zed
     hostgroup: el9/uefi
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sda'
   console-01:
     compute_profile: medium
     compute_resource: controller-05
