@@ -439,15 +439,8 @@ nodes:
   metric-01:
     compute_profile: xlarge
     compute_resource: controller-07
-    compute_attributes:
-      volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'dirpool'
-          capacity:     '150G'
-          format_type:  'qcow2'
     hostgroup: el9/legacy
-    environment: yoga_el9
+    environment: zed
   monitor-01:
     compute_profile: large
     compute_resource: controller-08
