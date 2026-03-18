@@ -34,7 +34,7 @@ remote_ip_prefix:
 project_name:
   - nrec-exampleproject     # example
   - PRIVATE-example.uio.no  # example
-  - system-uio-it-osprov-general
+  - uio-it-osprov-general
 
 # Region specific whitelist
 region:
