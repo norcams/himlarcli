@@ -425,28 +425,28 @@ nodes:
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'nvme0n1'
   compute-epyc-100:
     mac:  8c:84:74:61:f2:a0
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'nvme0n1'
   compute-epyc-101:
     mac:  8c:84:74:61:ea:50
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'nvme0n1'
   compute-epyc-102:
     mac:  40:5b:7f:4b:b8:00
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'nvme0n1
   console-01:
     compute_profile: medium
     compute_resource: controller-05
