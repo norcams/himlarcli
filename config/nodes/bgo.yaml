@@ -334,7 +334,7 @@ nodes:
     hostgroup: el9/uefi
     environment: zed
   compute-alice2-078:
-    mac: ec:2a:72:02:84:32
+    mac: ec:2a:72:4c:99:54
     hostgroup: el9/uefi
     environment: zed
   compute-alice2-079:
