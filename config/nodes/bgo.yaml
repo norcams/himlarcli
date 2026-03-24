@@ -453,21 +453,21 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
-  compute-elixir-100:
+  compute-elixir1-100:
     mac:  8c:84:74:61:f2:a0
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
-  compute-elixir-101:
+  compute-elixir1-101:
     mac:  8c:84:74:61:ea:50
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
-  compute-elixir-102:
+  compute-elixir1-102:
     mac:  40:5b:7f:4b:b8:00
     environment: zed
     hostgroup: el9/uefi
