@@ -1,0 +1,5 @@
+---
+# r1a flavor used for elixir ONLY in BGO
+public: false
+properties: {}
+elixir.r1a: {}

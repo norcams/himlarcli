@@ -1,14 +1,23 @@
 ---
 # r1a flavor used for Elixir
+# used for elixir shpc compute hosts
 public: false
 properties:
-  hw_rng:allowed: 'True'
+  hw_rng:allowed: "True"
   hw_rng:rate_bytes: 2048
   hw_rng:rate_period: 1
-  aggregate_instance_extra_specs:type: 's== elixir1'
+  aggregate_instance_extra_specs:type: "s== elixir1"
 
 elixir.r1a:
-  'elixir.r1a.4xlarge':
+  "elixir.r1a.4xlarge":
     vcpus: 16
     ram: 131072
-    disk: 100
+    disk: 200
+  "elixir.r1a.8xlarge":
+    vcpus: 32
+    ram: 262144
+    disk: 200
+  "elixir.r1a.16xlarge":
+    vcpus: 64
+    ram: 524288
+    disk: 200
