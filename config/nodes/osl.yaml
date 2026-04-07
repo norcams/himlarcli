@@ -112,9 +112,10 @@ nodes:
   compute-09:
     mac: e4:43:4b:46:5b:72
     hostgroup: 17
-  compute-10:
+  compute-010:
     mac: e4:43:4b:46:84:86
-    hostgroup: 17
+    hostgroup: el9/uefi
+    environment: zed
   compute-epyc-11:
     mac: b0:26:28:1e:86:b2
     hostgroup: 17
