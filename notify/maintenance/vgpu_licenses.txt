@@ -1,0 +1,28 @@
+Hi,
+
+Due to scheduled upgrade of the NVIDIA license servers at UiO, running
+vGPU instances in the NREC OSL region will experience license downtime
+on $date:
+
+  https://www.uio.no/tjenester/it/aktuelt/planlagte-tjenesteavbrudd/2026/2026-04-16-oppgradering-av-nvidia-lisensserver.html
+
+Affected instance(s) connected to your email $admin
+
+$instances
+
+Instances running on vGPU hosts in OSL will experience downtime on the
+licensing front while the work is ongoing. Also, the license token
+will need to be replaced on running instances:
+
+  https://docs.nrec.no/vgpu.html#checking-license-status-and-getting-client-token
+
+NB! If you have unused vGPU instances, we would appreciate if you
+delete them. Resources are limited!
+
+Support and contact information can be found at
+
+  https://docs.nrec.no
+
+Best Regards,
+-- 
+NREC Team <support@nrec.no>
