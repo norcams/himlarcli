@@ -6,7 +6,7 @@ on $date:
 
   https://www.uio.no/tjenester/it/aktuelt/planlagte-tjenesteavbrudd/2026/2026-04-16-oppgradering-av-nvidia-lisensserver.html
 
-Affected instance(s) connected to your email $admin
+Affected instances connected to your email $admin
 
 $instances
 
