@@ -11,20 +11,24 @@ Affected instances connected to your email $admin
 $instances
 
 Instances running on vGPU hosts in OSL will experience downtime on the
-licensing front while the work is ongoing. Also, the license client
-token will need to be replaced on running instances:
+licensing front while the work is ongoing, but whether or not the
+downtime affects you depends on when the license needs to be
+renewed.
+
+Also, the license client token will need to be replaced on running
+instances:
 
   https://docs.nrec.no/vgpu.html#checking-license-status-and-getting-client-token
 
-IMPORTANT: Updating the client token must be done by you, the user! We
-do not have access to your instances and can not do this on your behalf.
+IMPORTANT: Updating the client token must be done by you! We do not
+have access to your instances and can not do this on your behalf.
 
 NB! If you have unused vGPU instances, we would appreciate if you
-delete them. Resources are limited!
+delete them. GPU resources are popular and extremely limited!
 
 Support and contact information can be found at
 
-  https://docs.nrec.no
+  https://docs.nrec.no/
 
 Best Regards,
 -- 
