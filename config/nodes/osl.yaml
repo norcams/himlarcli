@@ -99,8 +99,11 @@ nodes:
     hostgroup: 19
   compute-005:
     mac: 24:6e:96:32:1e:2c
-    hostgroup: el9/uefi
+    hostgroup: el9/legacy
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   compute-06:
     mac: 24:6e:96:32:28:ec
     hostgroup: 19
