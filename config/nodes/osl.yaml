@@ -94,9 +94,13 @@ nodes:
 #  compute-03:
 #    mac: ec:f4:bb:ce:28:24
 #    hostgroup: 19
-  compute-04:
+  compute-004:
     mac: 24:6e:96:32:2d:34
-    hostgroup: 19
+    hostgroup: el9/legacy
+    environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   compute-005:
     mac: 24:6e:96:32:1e:2c
     hostgroup: el9/legacy
