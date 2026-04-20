@@ -18,6 +18,9 @@ bgo:
   - host: 'bgo-compute-alice-012'
     check: 'redfish-check'
     reason: 'Memory errors detected for DIMM_B'
+  - host: 'bgo-compute-alice-029'
+    check: 'redfish-check'
+    reason: 'PSU1 is not working. We should try to exchange it with PSU2'
   - host: 'bgo-compute-alice2-075'
     check: 'redfish-check'
     reason: 'Problem with raiser for disk. Need reseat'
@@ -30,7 +33,7 @@ bgo:
   - host: 'bgo-compute-06'
     check: 'redfish-check'
     reason: 'Correctable memory error rate exceeded for DIMM_B1.'
-  - host: 'bgo-compute-01'
+  - host: 'bgo-compute-clarino-36'
     check: 'check-metadata-api'
     reason: 'Main reason is that nova-metadata binary version is set to 64 in nova database'
 
