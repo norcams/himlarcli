@@ -293,13 +293,10 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-65:
+  compute-065:
     mac: 00:0a:f7:bf:30:d4
-    environment: victoria
-    hostgroup: "el8/uefi"
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sda'
+    hostgroup: "el9/uefi"
+    environment: zed
   compute-066:
     mac: 00:0a:f7:ba:76:66
     hostgroup: el9/uefi
