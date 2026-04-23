@@ -94,9 +94,10 @@ nodes:
     mac: 20:04:0f:ed:6f:96
     hostgroup: el9/uefi
     environment: zed
-  compute-alice-13:
+  compute-alice-013:
     mac: 20:04:0f:ed:67:b6
-    hostgroup: 17
+    hostgroup: el9/uefi
+    environment: zed
   compute-alice-014:
     mac: 20:04:0f:eb:e1:42
     hostgroup: el9/uefi
@@ -268,12 +269,14 @@ nodes:
     mac: 34:48:ed:f9:87:da
     environment: zed
     hostgroup: el9/uefi
-  compute-alice2-61:
+  compute-alice2-061:
     mac: b0:7b:25:f8:6a:8e
-    hostgroup: 17
-  compute-alice2-62:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-alice2-062:
     mac: b0:7b:25:f8:6b:54
-    hostgroup: 17
+    hostgroup: el9/uefi
+    environment: zed
   compute-alice2-063:
     mac: b0:7b:25:f8:69:b4
     hostgroup: el9/uefi
