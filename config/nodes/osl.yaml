@@ -201,6 +201,30 @@ nodes:
     mac: 90:5a:08:bc:cf:6a
     hostgroup: el9/uefi
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'nvme0n1'
+  compute-atlas3-070:
+    mac: 90:5a:08:0f:21:ab
+    hostgroup: el9/uefi
+    environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'nvme0n1'
+  compute-atlas3-071:
+    mac: 90:5a:08:bc:d0:7a
+    hostgroup: el9/uefi
+    environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'nvme0n1'
+  compute-atlas3-072:
+    mac: 90:5a:08:bc:dc:4a
+    hostgroup: el9/uefi
+    environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'nvme0n1'
   compute-hpc-25:
     mac: 0c:c4:7a:fb:c8:28
     hostgroup: 17
