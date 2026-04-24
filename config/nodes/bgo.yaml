@@ -486,7 +486,7 @@ nodes:
       - name:           'installdevice'
         value:          'sda'
   compute-104:
-    mac:  8c:84:74:fc:11:a0
+    mac:  8c:84:74:fc:11:a2
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
