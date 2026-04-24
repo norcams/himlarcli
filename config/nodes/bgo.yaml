@@ -479,7 +479,7 @@ nodes:
       - name:           'installdevice'
         value:          'nvme0n1'
   compute-103:
-    mac:  8c:84:74:fc:13:e4
+    mac:  8c:84:74:fc:13:e6
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
