@@ -27,6 +27,7 @@ Tested on RT SUBMISSION_ID Summary
 7122374 37984258 shpc_disk3
 7260314 39570088 Handle comma "," in Additional Users field
 7336908 40203766 HVL Shared
+7472637 45483352 uib-it-rail-test-nor1
 and more
 '
 
@@ -36,6 +37,9 @@ RT=$1
 SUBMISSION_ID=$2
 element_data=$3
 answer_data=$(curl -s -H "Authorization: Bearer ${NETTSKJEMA_API_ACCESS_TOKEN}" -X GET https://nettskjema.no/api/v3/form/submission/${SUBMISSION_ID})
+
+# Debug
+#echo $answer_data > answer_data.json
 
 echo
 
@@ -114,7 +118,7 @@ do
   elif [[ $elementId == 5051926 ]]
   then
     otherShpcResourcesArray=()
-    if [ -n "$answer_text" ]
+    if [ ${#answer_texts[@]} -eq 0 ]
     then
       otherShpcResourcesArray+=("$answer_text")
     else

@@ -26,6 +26,9 @@ fi
 
 element_data=$(curl -s -H "Authorization: Bearer ${NETTSKJEMA_API_ACCESS_TOKEN}" -X GET https://nettskjema.no/api/v3/form/289417/elements)
 
+# Debug
+#echo $element_data > element_data.json
+
 submissionIds=($(bash $(dirname $0)/lib/new-project-submission-ids.sh $(($fromSubmissionId-1))))
 
 numSubmissions=${#submissionIds[*]}
