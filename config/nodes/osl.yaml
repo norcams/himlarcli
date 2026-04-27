@@ -203,28 +203,28 @@ nodes:
     environment: zed
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'nvme0n1'
+        value:          'dev/disk/by-id/nvme-Micron_7450_MTFDKBA480TFR_24484C7BA1A0'
   compute-atlas3-070:
     mac: 90:5a:08:0f:21:a8
     hostgroup: el9/uefi
     environment: zed
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'nvme0n1'
+        value:          'disk/by-id/nvme-Micron_7450_MTFDKBA480TFR_24474C3A0B7D'
   compute-atlas3-071:
     mac: 90:5a:08:bc:d0:7a
     hostgroup: el9/uefi
     environment: zed
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'nvme0n1'
+        value:          'dev/disk/by-id/nvme-Micron_7450_MTFDKBA480TFR_24484C7B451B'
   compute-atlas3-072:
     mac: 90:5a:08:bc:dc:4a
     hostgroup: el9/uefi
     environment: zed
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'nvme0n1'
+        value:          'dev/disk/by-id/nvme-Micron_7450_MTFDKBA480TFR_24464C5D4F02'
   compute-hpc-25:
     mac: 0c:c4:7a:fb:c8:28
     hostgroup: 17
