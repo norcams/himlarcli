@@ -151,7 +151,7 @@ class Quota(Base):
 
     def compare(self, attributes):
         miss_match = {}
-        for k, v in attributes.iteritems():
+        for k, v in attributes.items():
             if k == 'id':
                 continue
             if k not in Quota.__dict__:

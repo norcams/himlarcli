@@ -133,12 +133,12 @@ class Mail(Client):
             if admin:
                 users[email][i.name]['project'] = project.name
         # Send mail
-        for user, instances in users.iteritems():
+        for user, instances in users.items():
             user_instances = (
                 "You are receiving this e-mail because you (or a team you're part of)\n"
                 "have the following instances running in NREC.\n\n"
             )
-            for server, info in instances.iteritems():
+            for server, info in instances.items():
                 extra = list()
                 for option in options:
                     extra.append(info[option])
