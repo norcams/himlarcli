@@ -44,7 +44,7 @@ def config_file(config_path):
             tests = yaml.full_load(template)
         except yaml.YAMLError as e:
             print(e)
-    for section, options in tests.iteritems():
+    for section, options in tests.items():
         if not config.has_section(section):
             print("Missing section [%s]" % section)
             sys.exit(1)

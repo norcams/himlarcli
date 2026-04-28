@@ -5,15 +5,14 @@ import unicodedata
 from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from himlarcli import utils
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 
-class Client(object):
+class Client(ABC):
 
     """ Constant used to mark a class as region aware """
     USE_REGION = False
 
-    __metaclass__ = ABCMeta
     region = None
 
     def __init__(self, config_path, debug, log=None, region=None):
