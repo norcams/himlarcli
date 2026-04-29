@@ -1,1 +1,1 @@
-:nrec: *{{ distro_name }} {{ distro_version }} is now available as <GOLD Image|https://docs.nrec.no/gold-images.html>* :tada:
+:nrec: *{{ distro_name }} {{ distro_version }}* is now available as <https://docs.nrec.no/gold-images.html|GOLD image> :tada:
