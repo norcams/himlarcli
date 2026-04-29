@@ -2,8 +2,7 @@
 import sys
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
-from himlarcli.slack import Slack
-from himlarcli.twitter import Twitter
+from himlarcli.slack2 import Slack
 from himlarcli.status import Status
 from himlarcli import utils as himutils
 
@@ -14,7 +13,6 @@ options = parser.parse_args()
 printer = Printer(options.format)
 
 slack = Slack(options.config, debug=options.debug)
-twitter = Twitter(options.config, debug=options.debug)
 status = Status(options.config, debug=options.debug)
 
 def confirm_publish(final_msg):
@@ -38,25 +36,16 @@ def action_important():
     if options.link:
         important_msg += " For live updates visit https://status.uh-iaas.no"
     confirm_publish(important_msg)
-    if not twitter.twitter_length(important_msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
     slack.publish_slack(important_msg)
-    #twitter.publish_twitter(important_msg)
     status.publish(important_msg, msg_type='important')
 
 def action_news():
-    if not twitter.twitter_length(msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
     confirm_publish(msg)
     slack.publish_slack(msg)
-    #twitter.publish_twitter(msg)
     status.publish(msg)
 
 def action_info():
-    if not twitter.twitter_length(msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
     confirm_publish(msg)
-    #twitter.publish_twitter(msg)
     status.publish(msg)
 
 def action_event():
@@ -71,7 +60,6 @@ else:
     himutils.sys_error("No template or message given.")
 
 slack.set_dry_run(options.dry_run)
-twitter.set_dry_run(options.dry_run)
 status.set_dry_run(options.dry_run)
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
