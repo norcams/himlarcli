@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import sys
+import os
+from jinja2 import Environment, meta
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
 from himlarcli.slack2 import Slack
@@ -21,6 +23,27 @@ def confirm_publish(final_msg):
         sys.exit(1)
 
 def parse_template():
+    template_path = himutils.get_abs_path(options.template)
+    if not os.path.isfile(template_path):
+        himutils.sys_error("Template not found: %s" % template_path)
+    with open(template_path, 'r') as f:
+        content = f.read()
+    if '{{' in content:
+        return _render_jinja_template(content)
+    else:
+        return _render_legacy_template(content)
+
+def _render_jinja_template(content):
+    env = Environment()
+    variables = sorted(meta.find_undeclared_variables(env.parse(content)))
+    mapping = {}
+    print("Fill in template variables (press Enter to leave blank):")
+    for var in variables:
+        value = input("  %s: " % var)
+        mapping[var] = value
+    return env.from_string(content).render(**mapping).rstrip('\n')
+
+def _render_legacy_template(content):
     mapping = {}
     if options.region:
         mapping['region'] = options.region.upper()
@@ -28,8 +51,7 @@ def parse_template():
         mapping['date'] = options.date
     msg_content = himutils.load_template(inputfile=options.template,
                                          mapping=mapping)
-    stripped_msg = msg_content.rstrip('\n')
-    return stripped_msg
+    return msg_content.rstrip('\n')
 
 def action_important():
     important_msg = msg
