@@ -1,4 +1,4 @@
-:nrec: :warning: *Planned Outage - {{ headline }} - {{ start_time }}* :warning:
+:nrec: :warning: _*Planned Outage - {{ headline }} - {{ start_time }}*_ :warning:
 
 There will be an outage starting at {{ start_time }}, which will last approximately {{ duration }}.
 
