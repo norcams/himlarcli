@@ -67,12 +67,11 @@ def action_important():
     slack.publish_slack(important_msg)
     status.publish(important_msg, msg_type='important')
 
-def action_news():
+def action_slack():
     confirm_publish(msg)
     slack.publish_slack(msg)
-#    status.publish(msg)
 
-def action_info():
+def action_status():
     confirm_publish(msg)
     status.publish(msg)
 
