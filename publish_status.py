@@ -42,7 +42,7 @@ def action_important():
 def action_news():
     confirm_publish(msg)
     slack.publish_slack(msg)
-    status.publish(msg)
+#    status.publish(msg)
 
 def action_info():
     confirm_publish(msg)
