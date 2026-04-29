@@ -18,7 +18,13 @@ slack = Slack(options.config, debug=options.debug)
 status = Status(options.config, debug=options.debug)
 
 def confirm_publish(final_msg):
-    print(('The following message will be published: %s' % final_msg))
+    lines = final_msg.splitlines()
+    width = max((len(l) for l in lines), default=0)
+    border = '─' * (width + 2)
+    print('┌' + border + '┐')
+    for line in lines:
+        print('│ ' + line.ljust(width) + ' │')
+    print('└' + border + '┘')
     if not himutils.confirm_action('Are you sure you want to publish?'):
         sys.exit(1)
 
