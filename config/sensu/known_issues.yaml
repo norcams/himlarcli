@@ -12,7 +12,7 @@ bgo:
   - host: 'bgo-compute-02'
     check: 'redfish-check'
     reason: 'Correctable memory error rate exceeded for DIMM_A2'
-  - host: 'bgo-compute-alice-13'
+  - host: 'bgo-compute-alice-013'
     check: 'redfish-check'
     reason: 'BOSS disk SSD 1 dead'
   - host: 'bgo-compute-alice-012'
