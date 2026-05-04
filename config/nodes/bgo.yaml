@@ -70,10 +70,10 @@ nodes:
   compute-06:
     hostgroup: 18
     mac: 18:66:da:82:be:7a
-  compute-07:
+  compute-007:
     mac: 00:0a:f7:79:c5:df
-    environment: victoria
-    hostgroup: "el8/legacy"
+    hostgroup: el9/uefi
+    environment: zed
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
@@ -192,13 +192,14 @@ nodes:
   compute-clarino-37:
     mac: f4:02:70:cd:de:48
     hostgroup: 16
-  compute-38:
+  compute-038:
     mac: dc:f4:01:e7:ea:2e
-    environment: yoga
-    hostgroup: "el8/uefi"
-  compute-39:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-039:
     mac: dc:f4:01:e7:e9:f6
-    hostgroup: 16
+    hostgroup: el9/uefi
+    environment: zed
   compute-40:
     mac: dc:f4:01:e8:1f:92
     hostgroup: el9/uefi
