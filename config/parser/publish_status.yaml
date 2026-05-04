@@ -4,7 +4,7 @@ actions:
   important: 'Publish to Slack and NREC status backend (tagged important)'
   slack:     'Publish to Slack (tagged info)'
   status:    'Publish to NREC status backend (tagged info)'
-  event:     'Publish to NREC event backend'
+  event:     'Publish to NREC event backend (tagged event)'
 opt_args:
   '-t':
     'dest':     'template'
