@@ -1,14 +1,14 @@
 ---
-desc: 'Publish status message to Slack, Twitter and UH-IaaS status backend'
+desc: 'Publish message to Slack and NREC status backend'
 actions:
-  important: 'Publish to Slack, Twitter and UH-IaaS status backend (tagged important)'
-  news:      'Publish to Slack, Twitter and UH-IaaS status backend (tagged info)'
-  info:      'Publish to Twitter and UH-IaaS status backend (tagged info)'
-  event:     'Publish to UH-IaaS event backend'
+  important: 'Publish to Slack and NREC status backend (tagged important)'
+  slack:     'Publish to Slack (tagged info)'
+  status:    'Publish to NREC status backend (tagged info)'
+  event:     'Publish to NREC event backend (tagged event)'
 opt_args:
   '-t':
     'dest':     'template'
-    'help':     'Message body template file, eg. notify/notify_maintenance.txt'
+    'help':     'Message body template file, e.g. notify/slack/outage.txt'
   '-m':
     'dest':     'message'
     'help':     'Message body as a command-line argument (overrides -t option if both are given)'
