@@ -395,10 +395,10 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-l40s-91:
+  compute-l40s-091:
     mac: c4:cb:e1:b5:c6:70
-    environment: victoria
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
