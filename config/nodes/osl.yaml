@@ -315,13 +315,10 @@ nodes:
   compute-63:
     mac: b4:45:06:ee:35:9d
     hostgroup: 17
-  compute-64:
+  compute-064:
     mac: 00:0a:f7:b6:c3:78
-    environment: victoria
-    hostgroup: "el8/uefi"
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'sda'
+    environment: zed
+    hostgroup: "el9/uefi"
   compute-065:
     mac: 00:0a:f7:bf:30:d4
     hostgroup: "el9/uefi"
