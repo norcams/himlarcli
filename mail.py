@@ -234,6 +234,7 @@ def action_instances():
         intances_in_file = f.read().splitlines()
     ksclient = Keystone(options.config, debug=options.debug)
     for region in regions:
+        kc.debug_log(f'check instances in region={region}')
         novaclient = utils.get_client(Nova, options, logger, region)
         for i in intances_in_file:
             email = None
