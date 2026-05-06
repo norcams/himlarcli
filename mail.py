@@ -141,10 +141,10 @@ def action_flavor():
         project_filter = utils.load_file(inputfile=options.filter_project_file, log=logger)
     else:
         project_filter = []
+    users = dict()
     for region in regions:
         nc = utils.get_client(Nova, options, logger, region)
         flavors = nc.get_flavors(class_filter=options.flavor)
-        users = dict()
 
         for flavor in flavors:
             search_opts = dict(all_tenants=1, flavor=flavor.id)
@@ -202,10 +202,9 @@ def action_flavor():
 
     for user, instance in users.items():
         columns = ['status', 'project', 'region']
-        mapping = dict(region=region,
+        mapping = dict(region=None,
                        date=options.date,
                        instances=utils.get_instance_table(instance, columns),
-                       project=project.name,
                        admin=user,
                        flavor=options.flavor)
         body_content = utils.load_template(inputfile=template,
@@ -290,7 +289,6 @@ def action_instances():
         mapping = dict(region=None,
                        date=options.date,
                        instances=utils.get_instance_table(instance, columns),
-                       project=project.name,
                        admin=user)
         body_content = utils.load_template(inputfile=template,
                                            mapping=mapping,
