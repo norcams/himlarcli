@@ -15,7 +15,7 @@ opt_args:
     'default':  'Dataporten'
     'weight':   100
   '--region':
-    'sub':      ['aggregate']
+    'sub':      ['aggregate', 'instances']
     'dest':     'region'
     'help':     'only use this region'
   '-t':
