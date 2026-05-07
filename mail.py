@@ -250,9 +250,9 @@ def action_instances():
                 kc.debug_log(f'project {project.name} disabled')
                 continue
             if hasattr(project, 'contact') and project.contact != 'None':
-                email = project.contact
+                email = project.contact.lower()
             elif hasattr(project, 'admin'):
-                email = project.admin
+                email = project.admin.lower()
             else:
                 kc.debug_log('could not find admin for project {}'.
                              format(project.name))
