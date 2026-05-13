@@ -362,7 +362,7 @@ nodes:
     mac: c4:cb:e1:af:63:cc
     hostgroup: el9/uefi
     environment: zed
-  compute-o84:
+  compute-084:
     mac: c4:cb:e1:af:62:98
     hostgroup: el9/uefi
     environment: zed
