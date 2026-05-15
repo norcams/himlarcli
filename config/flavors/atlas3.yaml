@@ -11,6 +11,7 @@ properties:
   hw:cpu_thread_policy: 'require'
   hw:mem_page_size: 2048
   trait:CUSTOM_NREC_ATLAS3: 'required'
+atlas3:
   'atlas3.32-cores':
     vcpus: 32
     ram:   128797
