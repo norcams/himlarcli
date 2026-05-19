@@ -5,25 +5,28 @@ properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 2048
   hw_rng:rate_period: 1
+  hw:mem_page_size: 2048
+  hw:cpu_policy: 'dedicated'
+  hw:cpu_thread_policy: 'require'
   trait:CUSTOM_NREC_ATLAS3: 'required'
 atlas3:
   'atlas3.32-cores':
     vcpus: 32
-    ram:   128797
+    ram:   125610
     disk:  146
   'atlas3.48-cores':
     vcpus: 48
-    ram:   193196
+    ram:   188415
     disk:  219
   'atlas3.64-cores':
     vcpus: 64
-    ram:   257595
+    ram:   251221
     disk:  292
   'atlas3.96-cores':
     vcpus: 96
-    ram:   386392
+    ram:   376831
     disk:  438
   'atlas3.192-cores':
     vcpus: 192
-    ram:   772785
+    ram:   753663
     disk:  876
