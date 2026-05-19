@@ -16,17 +16,17 @@ atlas3:
     disk:  146
   'atlas3.48-cores':
     vcpus: 48
-    ram:   188415
-    disk:  219
+    ram:   188414
+    disk:  218
   'atlas3.64-cores':
     vcpus: 64
-    ram:   251221
+    ram:   251220
     disk:  292
   'atlas3.96-cores':
     vcpus: 96
-    ram:   376831
+    ram:   376830
     disk:  438
   'atlas3.192-cores':
     vcpus: 192
-    ram:   753663
+    ram:   753662
     disk:  876
