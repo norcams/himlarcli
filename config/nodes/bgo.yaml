@@ -200,7 +200,7 @@ nodes:
     mac: dc:f4:01:e7:e9:f6
     hostgroup: el9/uefi
     environment: zed
-  compute-40:
+  compute-040:
     mac: dc:f4:01:e8:1f:92
     hostgroup: el9/uefi
     environment: zed
