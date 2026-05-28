@@ -417,7 +417,7 @@ nodes:
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'disk/by-id/wwn-0x6f4ee0806d8a7c002ef2ee3fa721a84a'
+        value:          'disk/by-id/wwn-0x6f4ee0806d8a7c002db263a30a03f4d8'
   compute-elixir1-92:
     mac: c4:cb:e1:f7:61:96
     environment: yoga
