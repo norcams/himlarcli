@@ -394,25 +394,25 @@ nodes:
     hostgroup: "el8/uefi"
   compute-l40s-88:
     mac: c4:cb:e1:b5:c5:8c
-    environment: victoria
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
-  compute-l40s-89:
+        value:          'disk/by-id/wwn-0x6f4ee0806d8ace002e8d5db287658928'
+  compute-l40s-089:
     mac: c4:cb:e1:b5:c5:bc
-    environment: victoria
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'disk/by-id/wwn-0x6f4ee0806d8ad2002e8d62e9ca910e9b'
   compute-l40s-90:
     mac: c4:cb:e1:b5:c5:b4
-    environment: victoria
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'disk/by-id/wwn-0x6f4ee0806d8b09002db287110743dc0f'
   compute-l40s-091:
     mac: c4:cb:e1:b5:c6:70
     environment: zed
