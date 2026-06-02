@@ -392,7 +392,7 @@ nodes:
     mac: c4:cb:e1:b5:51:4e
     environment: yoga
     hostgroup: "el8/uefi"
-  compute-l40s-88:
+  compute-l40s-088:
     mac: c4:cb:e1:b5:c5:8c
     environment: zed
     hostgroup: el9/uefi
@@ -406,7 +406,7 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'disk/by-id/wwn-0x6f4ee0806d8ad2002e8d62e9ca910e9b'
-  compute-l40s-90:
+  compute-l40s-090:
     mac: c4:cb:e1:b5:c5:b4
     environment: zed
     hostgroup: el9/uefi
