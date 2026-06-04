@@ -305,9 +305,10 @@ nodes:
     mac: b4:45:06:ee:c0:61
     environment: zed
     hostgroup: "el9/uefi"
-  compute-60:
+  compute-060:
     mac: b4:45:06:f0:4c:79
-    hostgroup: 17
+    environment: zed
+    hostgroup: "el9/uefi"
   compute-61:
     mac: b4:45:06:ee:bf:6b
     hostgroup: 17
@@ -329,10 +330,10 @@ nodes:
     mac: 00:0a:f7:ba:76:66
     hostgroup: el9/uefi
     environment: zed
-  compute-l40s-67:
+  compute-l40s-067:
     mac: 6c:92:cf:0d:e4:80
-    environment: wallaby
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: "el9/uefi"
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'

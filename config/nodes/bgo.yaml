@@ -77,15 +77,27 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-08:
-    hostgroup: 18
+  compute-008:
     mac: 00:0a:f7:79:c5:e3
-  compute-09:
-    hostgroup: 18
+    hostgroup: el9/legacy
+    environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  compute-009:
     mac: 00:0a:f7:82:54:23
-  compute-10:
-    hostgroup: 18
+    hostgroup: el9/legacy
+    environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  compute-010:
     mac: 00:0a:f7:79:c5:f3
+    hostgroup: el9/legacy
+    environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   compute-alice-011:
     mac: 20:04:0f:ed:9a:7a
     hostgroup: el9/uefi
@@ -200,7 +212,7 @@ nodes:
     mac: dc:f4:01:e7:e9:f6
     hostgroup: el9/uefi
     environment: zed
-  compute-40:
+  compute-040:
     mac: dc:f4:01:e8:1f:92
     hostgroup: el9/uefi
     environment: zed
@@ -260,12 +272,14 @@ nodes:
   compute-epyc-57:
     mac: 70:b5:e8:d0:ab:e8
     hostgroup: 16
-  compute-58:
+  compute-058:
     mac: 34:48:ed:f9:6c:02
-    hostgroup: 16
-  compute-59:
+    environment: zed
+    hostgroup: el9/uefi
+  compute-059:
     mac: 34:48:ed:f9:61:8a
-    hostgroup: 16
+    environment: zed
+    hostgroup: el9/uefi
   compute-060:
     mac: 34:48:ed:f9:87:da
     environment: zed
@@ -362,9 +376,10 @@ nodes:
     mac: c4:cb:e1:af:63:cc
     hostgroup: el9/uefi
     environment: zed
-  compute-84:
+  compute-084:
     mac: c4:cb:e1:af:62:98
-    hostgroup: 16
+    hostgroup: el9/uefi
+    environment: zed
   compute-085:
     mac: c4:cb:e1:af:77:9c
     environment: zed
@@ -377,34 +392,34 @@ nodes:
     mac: c4:cb:e1:b5:51:4e
     environment: yoga
     hostgroup: "el8/uefi"
-  compute-l40s-88:
+  compute-l40s-088:
     mac: c4:cb:e1:b5:c5:8c
-    environment: victoria
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
-  compute-l40s-89:
+        value:          'disk/by-id/wwn-0x6f4ee0806d8ace002e8d5db287658928'
+  compute-l40s-089:
     mac: c4:cb:e1:b5:c5:bc
-    environment: victoria
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
-  compute-l40s-90:
+        value:          'disk/by-id/wwn-0x6f4ee0806d8ad2002e8d62e9ca910e9b'
+  compute-l40s-090:
     mac: c4:cb:e1:b5:c5:b4
-    environment: victoria
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'disk/by-id/wwn-0x6f4ee0806d8b09002db287110743dc0f'
   compute-l40s-091:
     mac: c4:cb:e1:b5:c6:70
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'disk/by-id/wwn-0x6f4ee0806d8a7c002db263a30a03f4d8'
   compute-elixir1-92:
     mac: c4:cb:e1:f7:61:96
     environment: yoga

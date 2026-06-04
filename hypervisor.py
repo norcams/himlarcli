@@ -323,12 +323,13 @@ def action_list():
 def get_resource_usage(hypervisor_uuid:str, region:str):
     placement = Placement(kc, region)
     resource = placement.get_resource_provider_usages(hypervisor_uuid)
-    inventory_vcpu   = placement.get_resource_provider_inventory(hypervisor_uuid, 'VCPU')
+    cpu_resource_class = 'VCPU' if 'VCPU' in resource['usages'] else 'PCPU'
+    inventory_vcpu = placement.get_resource_provider_inventory(hypervisor_uuid, cpu_resource_class)
     inventory_memory = placement.get_resource_provider_inventory(hypervisor_uuid, 'MEMORY_MB')
     inventory_disk   = placement.get_resource_provider_inventory(hypervisor_uuid, 'DISK_GB')
 
     data = {
-        "vcpu_used":               resource['usages']['VCPU'],
+        "vcpu_used":               resource['usages'][cpu_resource_class],
         "vcpu_max":                inventory_vcpu['max_unit'],
         "vcpu_allocation_ratio":   inventory_vcpu['allocation_ratio'],
         "memory_gb_used":          int(resource['usages']['MEMORY_MB'] / 1024),
