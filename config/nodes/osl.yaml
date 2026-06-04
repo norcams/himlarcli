@@ -343,6 +343,22 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
+  compute-shpc-073:
+    mac: 3c:ec:ef:5d:45:f8
+    hostgroup: el9/uefi
+    environment: zed
+#  compute-shpc-074:
+#    mac: 
+#    hostgroup: el9/uefi
+#    environment: zed
+#  compute-shpc-075:
+#    mac: 
+#    hostgroup: el9/uefi
+#    environment: zed
+#  compute-shpc-076:
+#    mac: 
+#    hostgroup: el9/uefi
+#    environment: zed
   console-01:
     compute_profile: medium
     compute_resource: controller-07
