@@ -388,10 +388,10 @@ nodes:
     mac: c4:cb:e1:b5:51:84
     environment: yoga
     hostgroup: "el8/uefi"
-  compute-epyc-87:
+  compute-epyc-087:
     mac: c4:cb:e1:b5:51:4e
-    environment: yoga
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: el9/uefi
   compute-l40s-088:
     mac: c4:cb:e1:b5:c5:8c
     environment: zed
