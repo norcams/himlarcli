@@ -539,6 +539,10 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda' 
+  compute-h200-111:
+    mac: 90:5a:08:bd:5b:3e
+    environment: zed
+    hostgroup: el9/uefi 
   console-01:
     compute_profile: medium
     compute_resource: controller-05
