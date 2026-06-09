@@ -392,6 +392,9 @@ nodes:
     mac: c4:cb:e1:b5:51:4e
     environment: zed
     hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/scsi-SATA_DELLBOSS_VD_15bd70470f6d0010'
   compute-l40s-088:
     mac: c4:cb:e1:b5:c5:8c
     environment: zed
