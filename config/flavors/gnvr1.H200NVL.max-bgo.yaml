@@ -1,0 +1,16 @@
+---
+# r1 flavor used for vGPU NVIDIA L40S with 24GB GPU-memory
+# for bgo region
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 's== h200nvl'
+  resources:VGPU: '1'
+  trait:CUSTOM_NREC_VGPU_H200NVL: 'required'
+gnvr1.H200NVL.max:
+  'gnvr1.H200NVL.max.4xlarge':
+    vcpus: 56
+    ram: 458752
+    disk: 1000

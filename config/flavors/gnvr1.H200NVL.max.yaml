@@ -1,0 +1,5 @@
+---
+# r1 flavor used for vGPU NVIDIA L40S with 24GB GPU-memory
+public: false
+properties: {}
+gr1.L40S.24g: {}
