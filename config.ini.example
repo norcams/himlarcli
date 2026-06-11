@@ -45,5 +45,10 @@ base_dn=dc=uib,dc=no
 channel=#channel
 token=xoxb-...
 
+# Used with --test flag in publish_status.py
+[slack_publish_test]
+channel=#channel-test
+token=xoxb-...
+
 [log]
 path=./

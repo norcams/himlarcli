@@ -5,13 +5,13 @@ from himlarcli import utils
 
 class Slack:
 
-    def __init__(self, config_path, debug=False, log=None):
+    def __init__(self, config_path, debug=False, log=None, section='slack_publish'):
         self.config_path = config_path
         self.config = utils.get_himlarcli_config(config_path)
         self.logger = utils.get_logger(__name__, self.config, debug, log)
         self.dry_run = False
-        token = self.get_config('slack_publish', 'token')
-        self.default_channel = self.get_config('slack_publish', 'channel')
+        token = self.get_config(section, 'token')
+        self.default_channel = self.get_config(section, 'channel')
         self.client = WebClient(token=token)
 
     def set_dry_run(self, dry_run):
