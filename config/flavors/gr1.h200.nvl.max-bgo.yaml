@@ -1,0 +1,24 @@
+---
+# r1 flavor used for NVIDIA H200 NVL MAX
+# for bgo region
+## bgo-compute-h200-111 spec
+# 64 cores
+# 768GB RAM
+# 7TB disk
+# 4x Nvidia h200 NVLink Board 4-WAY 
+
+##
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 's== h200nvl'
+  trait:CUSTOM_NREC_VGPU_H200_NVL_MAX: 'required'
+  pci_passthrough:alias: 'h200nvl:4' # Use all 4 gpus with alias h200nvl
+
+gr1.h200.nvl.max:
+  'gr1.h200.nvl.max':
+    vcpus: 64 #(max)
+    ram: 747520 #(730GB)
+    disk: 5800
