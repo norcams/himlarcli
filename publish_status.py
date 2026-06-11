@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import sys
+import os
+from jinja2 import Environment, meta
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
-from himlarcli.slack import Slack
-from himlarcli.twitter import Twitter
+from himlarcli.slack2 import Slack
 from himlarcli.status import Status
 from himlarcli import utils as himutils
 
@@ -14,15 +15,41 @@ options = parser.parse_args()
 printer = Printer(options.format)
 
 slack = Slack(options.config, debug=options.debug)
-twitter = Twitter(options.config, debug=options.debug)
 status = Status(options.config, debug=options.debug)
 
 def confirm_publish(final_msg):
-    print(('The following message will be published: %s' % final_msg))
+    lines = final_msg.splitlines()
+    width = max((len(l) for l in lines), default=0)
+    border = '─' * (width + 2)
+    print('┌' + border + '┐')
+    for line in lines:
+        print('│ ' + line.ljust(width) + ' │')
+    print('└' + border + '┘')
     if not himutils.confirm_action('Are you sure you want to publish?'):
         sys.exit(1)
 
 def parse_template():
+    template_path = himutils.get_abs_path(options.template)
+    if not os.path.isfile(template_path):
+        himutils.sys_error("Template not found: %s" % template_path)
+    with open(template_path, 'r') as f:
+        content = f.read()
+    if '{{' in content:
+        return _render_jinja_template(content)
+    else:
+        return _render_legacy_template(content)
+
+def _render_jinja_template(content):
+    env = Environment()
+    variables = sorted(meta.find_undeclared_variables(env.parse(content)))
+    mapping = {}
+    print("Fill in template variables (press Enter to leave blank):")
+    for var in variables:
+        value = input("  %s: " % var)
+        mapping[var] = value
+    return env.from_string(content).render(**mapping).rstrip('\n')
+
+def _render_legacy_template(content):
     mapping = {}
     if options.region:
         mapping['region'] = options.region.upper()
@@ -30,33 +57,22 @@ def parse_template():
         mapping['date'] = options.date
     msg_content = himutils.load_template(inputfile=options.template,
                                          mapping=mapping)
-    stripped_msg = msg_content.rstrip('\n')
-    return stripped_msg
+    return msg_content.rstrip('\n')
 
 def action_important():
     important_msg = msg
     if options.link:
         important_msg += " For live updates visit https://status.uh-iaas.no"
     confirm_publish(important_msg)
-    if not twitter.twitter_length(important_msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
     slack.publish_slack(important_msg)
-    #twitter.publish_twitter(important_msg)
     status.publish(important_msg, msg_type='important')
 
-def action_news():
-    if not twitter.twitter_length(msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
+def action_slack():
     confirm_publish(msg)
     slack.publish_slack(msg)
-    #twitter.publish_twitter(msg)
-    status.publish(msg)
 
-def action_info():
-    if not twitter.twitter_length(msg):
-        himutils.sys_error("Message cannot contain more than 280 characters")
+def action_status():
     confirm_publish(msg)
-    #twitter.publish_twitter(msg)
     status.publish(msg)
 
 def action_event():
@@ -71,7 +87,6 @@ else:
     himutils.sys_error("No template or message given.")
 
 slack.set_dry_run(options.dry_run)
-twitter.set_dry_run(options.dry_run)
 status.set_dry_run(options.dry_run)
 # Run local function with the same name as the action
 action = locals().get('action_' + options.action)
