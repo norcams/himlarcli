@@ -26,4 +26,10 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '--test':
+    'dest':     'test'
+    'help':     'Use slack_publish_test config section instead of slack_publish'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
 

@@ -14,7 +14,8 @@ parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
 
-slack = Slack(options.config, debug=options.debug)
+slack_section = 'slack_publish_test' if options.test else 'slack_publish'
+slack = Slack(options.config, debug=options.debug, section=slack_section)
 status = Status(options.config, debug=options.debug)
 
 def confirm_publish(final_msg):
