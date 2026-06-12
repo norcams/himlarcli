@@ -1,0 +1,12 @@
+:warning: *Scheduled maintenance - {{ start_time }}* :warning:
+
+There will be an outage starting at {{ start_time }}, which will last approximately {{ duration }}.
+
+*Reason for outage:*
+
+We will be applying updates to servers and rebooting them
+
+*Affected Services:*
+
+{{ affected_services }}
+All API services and the dashboard will be unavailable in BGO and OSL due to maintenance. Running instances will not be affected.
