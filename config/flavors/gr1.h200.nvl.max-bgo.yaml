@@ -20,7 +20,7 @@ properties:
   trait:CUSTOM_NREC_VGPU_H200_NVL_MAX: 'required'
   pci_passthrough:alias: 'h200nvl:4' # Use all 4 gpus with alias h200nvl
 
-gr1.h200.nvl.max:
+gr1.h200.nvl:
   'gr1.h200.nvl.max':
     vcpus: 56 #(8 for host, less jitter) Not dedicated, vCPUs are floating
     ram: 747520 #(730GB) 56/730 split (28 + 365 per node)
