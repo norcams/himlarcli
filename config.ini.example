@@ -40,5 +40,15 @@ from_addr=no-reply@uib.no
 server=ldap.uib.no
 base_dn=dc=uib,dc=no
 
+# For use with publish_status.py (slack2.py: modern api, bot token)
+[slack_publish]
+channel=#channel
+token=xoxb-...
+
+# Used with --test flag in publish_status.py
+[slack_publish_test]
+channel=#channel-test
+token=xoxb-...
+
 [log]
 path=./

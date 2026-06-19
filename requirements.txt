@@ -20,6 +20,8 @@ pylint
 backports.functools_lru_cache
 configparser
 tweepy
+slack_sdk
+jinja2
 tabulate
 # needed for python-foreman
 dulwich==0.19.16
