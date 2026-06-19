@@ -45,6 +45,19 @@ osl:
   - host: 'osl-compute-46'
     check: 'redfish-check'
     reason: 'DIMM011 memory configuration error'
+  - host: 'osl-compute-atlas3-069'
+    check: 'redfish-check'
+    reason: 'FAN issue but temperature OK, ongoing support case'
+  - host: 'osl-compute-atlas3-070'
+    check: 'redfish-check'
+    reason: 'FAN issue but temperature OK, ongoing support case'
+  - host: 'osl-compute-atlas3-071'
+    check: 'redfish-check'
+    reason: 'FAN issue but temperature OK, ongoing support case'
+  - host: 'osl-compute-atlas3-072'
+    check: 'redfish-check'
+    reason: 'FAN issue but temperature OK, ongoing support case'
+
 
 test01: {}
 
