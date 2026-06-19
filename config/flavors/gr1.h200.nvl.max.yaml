@@ -1,0 +1,5 @@
+---
+# r1 flavor used for vGPU NVIDIA H200 NVL MAX
+public: false
+properties: {}
+gr1.h200.nvl.max: {}

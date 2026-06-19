@@ -1,0 +1,27 @@
+---
+# r1 flavor used for NVIDIA H200 NVL MAX
+# for bgo region
+## bgo-compute-h200-111 spec
+# 64 cores
+# 768GB RAM
+# 1.9TB disk
+# 4x Nvidia h200 NVLink Board 4-WAY 
+
+##
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  hw:numa_nodes: 2
+  hw:cpu_sockets: 2
+  #hw:mem_page_size: ## guest uses default 4K/THP. With 1048576 ~730 pages but needs pre-alocate at boot, 373,000 pages with size of 2048
+  aggregate_instance_extra_specs:type: 's== h200nvl'
+  trait:CUSTOM_NREC_VGPU_H200_NVL_MAX: 'required'
+  pci_passthrough:alias: 'h200nvl:4' # Use all 4 gpus with alias h200nvl
+
+gr1.h200.nvl.max:
+  'gr1.h200.nvl.max':
+    vcpus: 56 #(8 for host, less jitter) Not dedicated, vCPUs are floating
+    ram: 747520 #(730GB) 56/730 split (28 + 365 per node)
+    disk: 1500 # Not sure how much disk space is needd for other files  
