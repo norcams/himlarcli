@@ -7,21 +7,25 @@
 # 1.9TB disk
 # 4x Nvidia h200 NVLink Board 4-WAY 
 
-##
+## Need  NVIDIA datacenter driver + nvidia-fabricmanager for NVlink
+
+## 1 numa node, half RAM and CPU but direct GPU access, less latency 
 public: false
 properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
   hw_rng:rate_period: 60
-  hw:numa_nodes: 2
-  hw:cpu_sockets: 2
+  hw:numa_nodes: 1
+  hw:cpu_sockets: 1
+  hw:pci_numa_affinity_policy: required
+  #hw:cpu_policy: dedicated
   #hw:mem_page_size: ## guest uses default 4K/THP. With 1048576 ~730 pages but needs pre-alocate at boot, 373,000 pages with size of 2048
   aggregate_instance_extra_specs:type: 's== h200nvl'
-  trait:CUSTOM_NREC_VGPU_H200_NVL_MAX: 'required'
+  #trait:CUSTOM_NREC_VGPU_H200_NVL_MAX: 'required'
   pci_passthrough:alias: 'h200nvl:4' # Use all 4 gpus with alias h200nvl
 
 gr1.h200.nvl:
-  'gr1.h200.nvl.max':
-    vcpus: 56 #(8 for host, less jitter) Not dedicated, vCPUs are floating
-    ram: 747520 #(730GB) 56/730 split (28 + 365 per node)
+  'gr1.h200.nvl.n1':
+    vcpus: 28 # Not dedicated, vCPUs are floating
+    ram: 368640 #(360GB) /730 split (28vCPU + 360GB RAM per node)
     disk: 1500 # Not sure how much disk space is needd for other files  
