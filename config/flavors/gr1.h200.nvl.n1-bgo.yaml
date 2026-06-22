@@ -24,8 +24,8 @@ properties:
   #trait:CUSTOM_NREC_VGPU_H200_NVL_MAX: 'required'
   pci_passthrough:alias: 'h200nvl:4' # Use all 4 gpus with alias h200nvl
 
-gr1.h200.nvl:
-  'gr1.h200.nvl.n1':
+gr1.h200.nvl1:
+  'gr1.h200.nvl1.n1':
     vcpus: 28 # Not dedicated, vCPUs are floating
     ram: 368640 #(360GB) /730 split (28vCPU + 360GB RAM per node)
     disk: 1500 # Not sure how much disk space is needd for other files  

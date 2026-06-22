@@ -24,7 +24,7 @@ properties:
   pci_passthrough:alias: 'h200nvl:4' # Use all 4 gpus with alias h200nvl
 
 gr1.h200.nvl2:
-  'gr1.h200.nvl.n2':
+  'gr1.h200.nvl2.n2':
     vcpus: 56 #(8 for host, less jitter) Not dedicated, vCPUs are floating
     ram: 737280 #(720GB) 56/720 split (28vCPU + 360GB RAM per node)
     disk: 1500 # Not sure how much disk space is needd for other files  
