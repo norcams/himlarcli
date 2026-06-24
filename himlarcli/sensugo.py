@@ -53,19 +53,25 @@ class SensuGo(Client):
         metadata = { 'name': f'entity:{host}:{check}' }
         try:
             self.debug_log(f'silence {check} for {host}')
-            self.client.silences.create(spec=spec, metadata=metadata)
+            if not self.dry_run:
+                self.client.silences.create(spec=spec, metadata=metadata)
         except ValueError as e:
             utils.improved_sys_error(e, 'error')
+
+        msg = f'Silence {check} for {host}: "{reason}"'
+        if not expire_on_resolve:
+            msg += ' and no expire on resolve'
+        if self.dry_run:
+            msg = 'DRY-RUN: ' + msg
         if slack:
-            msg = f'Silence {check} for {host}: {reason}'
-            if not expire_on_resolve:
-                msg += ' and no expire on resolve'
             self.debug_log(f'slack message: {msg}')
             slack_client = self._get_client(Slack)
             try:
-                slack_client.publish_slack(msg)
+                if not self.dry_run:
+                    slack_client.publish_slack(msg)
             except requests.exceptions.MissingSchema as e:
                 utils.improved_sys_error(f'slack problem: {e}', 'error')
+        return msg
 
     def delete_client(self, host):
         try:
