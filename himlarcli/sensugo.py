@@ -10,7 +10,11 @@ class SensuGo(Client):
 
     def __init__(self, config_path, debug=False, log=None):
         super().__init__(config_path, debug, log)
-        self.client = sensu_go.Client(address=self.get_config('sensugo', 'url'),
+        sensu_url = self.get_config('sensugo', 'url')
+        if not sensu_url:
+            self.log_error('could not find url under [sensugo] in config.ini', 1)
+            return # not needed since script will end on the line above
+        self.client = sensu_go.Client(address=sensu_url,
                                       username=self.get_config('sensugo', 'username'),
                                       password=self.get_config('sensugo', 'password'),
                                       #verify=False,
