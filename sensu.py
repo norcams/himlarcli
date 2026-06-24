@@ -10,6 +10,7 @@ parser = Parser()
 options = parser.parse_args()
 printer = Printer(options.format)
 sensu = SensuGo(options.config, options.debug)
+sensu.set_dry_run(options.dry_run)
 
 def action_events():
     sensu_events = sensu.get_events()
