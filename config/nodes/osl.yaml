@@ -170,9 +170,10 @@ nodes:
   compute-atlas-31:
     mac: 0c:c4:7a:ff:3e:04
     hostgroup: 23
-  compute-atlas-32:
+  compute-atlas-032:
     mac: 0c:c4:7a:ff:3d:a0
-    hostgroup: 23
+    hostgroup: el9/legacy
+    environment: zed
   compute-atlas-33:
     mac: 0c:c4:7a:ff:3d:e4
     hostgroup: 23
