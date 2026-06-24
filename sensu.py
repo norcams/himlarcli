@@ -74,8 +74,14 @@ def action_silence_known():
         return
     for event in config[sensu.get_region()]:
         reason = f"known-issue: {event['reason']}"
+        if 'resolve' in event:
+            expire_on_resolve = event['resolve']
+        else:
+            expire_on_resolve = True
         sensu.clear_silenced(event['host'], event['check'])
-        sensu.silence_check(event['host'], event['check'], expire, reason)
+        msg =sensu.silence_check(event['host'], event['check'], expire,
+                reason, False, expire_on_resolve)
+        print(msg)
 
 action = locals().get('action_' + options.action.replace('-', '_'))
 if action:
