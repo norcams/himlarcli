@@ -45,15 +45,19 @@ osl:
   - host: 'osl-compute-atlas3-069'
     check: 'redfish-check'
     reason: 'FAN issue but temperature OK, ongoing support case'
+    resolve: false
   - host: 'osl-compute-atlas3-070'
     check: 'redfish-check'
     reason: 'FAN issue but temperature OK, ongoing support case'
+    resolve: false
   - host: 'osl-compute-atlas3-071'
     check: 'redfish-check'
     reason: 'FAN issue but temperature OK, ongoing support case'
+    resolve: false
   - host: 'osl-compute-atlas3-072'
     check: 'redfish-check'
     reason: 'FAN issue but temperature OK, ongoing support case'
+    resolve: false
 
 
 test01: {}
@@ -66,6 +70,7 @@ vagrant:
   - host: 'vagrant-proxy-01'
     check: 'multiplex_keystone_up'
     reason: 'bad weather'
+    resolve: true
   - host: 'vagrant-tsdb-01'
     check: '*'
     reason: 'we do not run this in vagrant'
