@@ -1,4 +1,5 @@
 import sensu_go
+from sensu_go import errors
 from himlarcli.client import Client
 from himlarcli.slack import Slack
 from himlarcli import utils
@@ -34,7 +35,7 @@ class SensuGo(Client):
         try:
             self.debug_log(f'unsilence {check} for {host}')
             self.client.silences.delete(f'entity:{host}:{check}')
-        except sensu_go.errors.ResponseError as e:
+        except errors.ResponseError as e:
             message = e.text
             self.debug_log(f'{check} for {host}: {message}')
 
@@ -65,7 +66,7 @@ class SensuGo(Client):
     def delete_client(self, host):
         try:
             self.client.entities.delete(host)
-        except sensu_go.errors.ResponseError as e:
+        except errors.ResponseError as e:
             message = e.text
             self.debug_log(f'{host}: {message}')
 
