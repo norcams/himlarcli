@@ -31,6 +31,13 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '--no-slack':
+    'sub':      ['silence']
+    'dest':     'slack'
+    'help':     'Do not post silence on slack'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   '-r':
     'sub':      ['silence']
     'dest':     'reason'
