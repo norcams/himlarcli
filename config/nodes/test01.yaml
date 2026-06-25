@@ -207,6 +207,8 @@ nodes:
   ns-01:
     compute_profile: small
     compute_resource: controller-01
+    hostgroup: el9/legacy
+    environment: zed_bind
   proxy-01:
     compute_profile: small
     compute_resource: controller-03
