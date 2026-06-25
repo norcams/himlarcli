@@ -149,55 +149,70 @@ nodes:
   compute-epyc-16:
     mac: b0:26:28:1e:76:98
     hostgroup: 17
-  compute-atlas-21:
+  compute-atlas-021:
     mac: 0c:c4:7a:fb:c8:30
-    hostgroup: 23
-  compute-atlas-22:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-022:
     mac: 0c:c4:7a:fb:c9:da
-    hostgroup: 23
-  compute-atlas-23:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-023:
     mac: 0c:c4:7a:fb:c8:36
-    hostgroup: 23
-  compute-atlas-24:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-024:
     mac: 0c:c4:7a:fb:c8:1e
-    hostgroup: 23
-  compute-atlas-29:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-029:
     mac: 0c:c4:7a:ff:3e:56
-    hostgroup: 23
-  compute-atlas-30:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-030:
     mac: 0c:c4:7a:ff:3d:b6
-    hostgroup: 23
-  compute-atlas-31:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-031:
     mac: 0c:c4:7a:ff:3e:04
-    hostgroup: 23
+    hostgroup: el9/uefi
+    environment: zed
   compute-atlas-032:
     mac: 0c:c4:7a:ff:3d:a0
     hostgroup: el9/uefi
     environment: zed
-  compute-atlas-33:
+  compute-atlas-033:
     mac: 0c:c4:7a:ff:3d:e4
-    hostgroup: 23
-  compute-atlas-34:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-034:
     mac: 0c:c4:7a:ff:3d:f4
-    hostgroup: 23
-  compute-atlas-35:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-035:
     mac: 0c:c4:7a:ff:3d:ae
-    hostgroup: 23
-  compute-atlas-36:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-036:
     mac: 0c:c4:7a:ff:3d:fa
-    hostgroup: 23
-  compute-atlas-37:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-037:
     mac: 0c:c4:7a:ff:3d:dc
-    hostgroup: 23
-  compute-atlas-38:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-038:
     mac: 0c:c4:7a:ff:3d:d6
-    hostgroup: 23
-  compute-atlas-39:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-039:
     mac: 0c:c4:7a:ff:3d:e0
-    hostgroup: 23
-  compute-atlas-40:
+    hostgroup: el9/uefi
+    environment: zed
+  compute-atlas-040:
     mac: 0c:c4:7a:ff:3d:b2
-    hostgroup: 23
+    hostgroup: el9/uefi
+    environment: zed
   compute-atlas3-069:
     mac: 90:5a:08:bc:cf:6a
     hostgroup: el9/uefi
