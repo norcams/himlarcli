@@ -153,18 +153,30 @@ nodes:
     mac: 0c:c4:7a:fb:c8:30
     hostgroup: el9/uefi
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   compute-atlas-022:
     mac: 0c:c4:7a:fb:c9:da
     hostgroup: el9/uefi
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   compute-atlas-023:
     mac: 0c:c4:7a:fb:c8:36
     hostgroup: el9/uefi
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   compute-atlas-024:
     mac: 0c:c4:7a:fb:c8:1e
     hostgroup: el9/uefi
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
   compute-atlas-029:
     mac: 0c:c4:7a:ff:3e:56
     hostgroup: el9/uefi
