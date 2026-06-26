@@ -205,7 +205,7 @@ nodes:
     hostgroup: el9/legacy
     environment: yoga_el9
   ns-01:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-01
     hostgroup: el9/legacy
     environment: zed_bind
