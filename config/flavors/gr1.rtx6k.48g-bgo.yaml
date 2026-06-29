@@ -1,0 +1,15 @@
+---
+# r1 flavor used for vGPU NVIDIA L40S with 24GB GPU-memory
+# for bgo region
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  resources:VGPU: '1'
+  trait:CUSTOM_NREC_VGPU_RTX_48G: 'required'
+gr1.rtx6k.48g:
+  'gr1.rtx6k.48g.4xlarge':
+    vcpus: 16
+    ram: 122880
+    disk: 100

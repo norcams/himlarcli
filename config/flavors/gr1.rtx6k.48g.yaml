@@ -1,0 +1,5 @@
+---
+# r1 flavor used for vGPU NVIDIA RTX PRO 6000 MIG profile with 48GB GPU-memory 
+public: false
+properties: {}
+gr1.rtx6k.48g: {}
