@@ -1,5 +1,6 @@
 ---
+# M1 flavor class used for ATLAS3 (OSL)
 # https://iaas.readthedocs.io/team/tips_and_tricks/dedicated-flavors.html
 public: false
 properties: {}
-atlas3: {}
+atlas3.m1a: {}

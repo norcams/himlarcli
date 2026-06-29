@@ -1,5 +1,5 @@
 ---
-# M1 flavor used for Atlas ONLY in OSL
+# M1 flavor class used for ATLAS1 (OSL)
 public: false
 properties: {}
 atlas.m1a: {}

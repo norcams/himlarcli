@@ -1,54 +1,24 @@
 ---
-# C1 flavor used for Atlas
 # https://iaas.readthedocs.io/team/tips_and_tricks/dedicated-flavors.html
 public: false
 properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 2048
   hw_rng:rate_period: 1
-  hw:numa_nodes: 1
-  hw:cpu_sockets: 1
+  hw:mem_page_size: 2048
   hw:cpu_policy: 'dedicated'
   hw:cpu_thread_policy: 'require'
-  hw:mem_page_size: 2048
-  aggregate_instance_extra_specs:type: 's== atlas_c1a'
+  trait:CUSTOM_NREC_ATLAS2: 'required'
 atlas.c1a:
-#  Disk limitation
-#  'atlas.c1a.xlarge':
-#    vcpus: 4
-#    ram:   10238
-#    disk:  8
-  'atlas.c1a.2xlarge':
-    vcpus: 8
-    ram:   20438
-    disk:  10
-  'atlas.c1a.4xlarge':
-    vcpus: 16
-    ram:   40958
-    disk:  10
   'atlas.c1a.8xlarge':
     vcpus: 32
-    ram:   81918
+    ram:   81920
     disk:  20
-  'atlas.c1a.16xlarge':
-    vcpus: 64
-    ram:   163838
-    disk:  40
+  'atlas.c1a.12xlarge':
+    vcpus: 48
+    ram:   122880
+    disk:  30
   'atlas.c1a.24xlarge':
     vcpus: 96
-    ram:   245758
-    disk:  60
-  'atlas.c1a.32xlarge':
-    vcpus: 128
-    ram:   327678
+    ram:   245760
     disk:  80
-    properties:
-      hw:numa_nodes: 2
-      hw:cpu_sockets: 2
-  'atlas.c1a.48xlarge':
-    vcpus: 192
-    ram:   491518
-    disk:  120
-    properties:
-      hw:numa_nodes: 2
-      hw:cpu_sockets: 2
