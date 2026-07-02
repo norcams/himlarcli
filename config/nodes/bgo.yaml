@@ -515,41 +515,41 @@ nodes:
       - name:           'installdevice'
         value:          'sda'
   compute-elixir2-105:
-    mac:  
+    mac:
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
   compute-elixir2-106:
-    mac: 
+    mac:
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda' 
+        value:          'sda'
   compute-elixir2-107:
-    mac:  
+    mac:
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
   compute-elixir2-108:
-    mac:  
+    mac:
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda' 
+        value:          'sda'
   compute-rtx6k-110:
     mac: 6c:83:75:35:1d:f6
     environment: zed
-    hostgroup: el9/uefi 
+    hostgroup: el9/uefi
   compute-h200-111:
     mac: 90:5a:08:bd:5b:3e
     environment: zed
-    hostgroup: el9/uefi 
+    hostgroup: el9/uefi
   compute-alice3-112:
     mac: 8c:84:74:ff:4e:bc
     environment: zed
