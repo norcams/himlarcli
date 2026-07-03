@@ -289,9 +289,10 @@ nodes:
   compute-45:
     mac: 1c:20:db:eb:fe:8b
     hostgroup: 23
-  compute-46:
+  compute-046:
     mac: 1c:20:db:eb:fe:3e
-    hostgroup: 23
+    environment: zed
+    hostgroup: "el9/uefi"
   compute-47:
     mac: 1c:20:db:eb:fe:92
     hostgroup: 23
