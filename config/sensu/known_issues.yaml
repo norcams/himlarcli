@@ -39,9 +39,6 @@ osl:
   - host: 'osl-compute-epyc-14'
     check: 'redfish-check'
     reason: 'cpu1 voltage outside of range'
-  - host: 'osl-compute-46'
-    check: 'redfish-check'
-    reason: 'DIMM011 memory configuration error'
 
 test01: {}
 
