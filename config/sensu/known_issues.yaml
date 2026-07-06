@@ -40,7 +40,17 @@ osl:
     check: 'redfish-check'
     reason: 'cpu1 voltage outside of range'
 
-test01: {}
+test01:
+  - host: 'test01-cephmon-01'
+    check: 'ceph-check'
+    reason: 'need to fix compute-05'
+  - host: 'test01-cephmon-02'
+    check: 'ceph-check'
+    reason: 'need to fix compute-05'
+  - host: 'test01-cephmon-03'
+    check: 'ceph-check'
+    reason: 'need to fix compute-05'
+
 
 # used for testing and example of known issue in a region
 vagrant:
