@@ -347,9 +347,10 @@ nodes:
     mac: b4:45:06:ee:48:2d
     environment: zed
     hostgroup: "el9/uefi"
-  compute-63:
+  compute-063:
     mac: b4:45:06:ee:35:9d
-    hostgroup: 17
+    environment: zed
+    hostgroup: "el9/uefi"
   compute-064:
     mac: 00:0a:f7:b6:c3:78
     environment: zed
