@@ -1,12 +1,11 @@
 import os
 import sys
 import configparser
-import unicodedata
 from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from himlarcli import utils
 from abc import ABC, abstractmethod
-
+from typing import Union
 
 class Client(ABC):
 
@@ -32,7 +31,7 @@ class Client(ABC):
 
         if 'keystone_cachain' in openstack:
             self.sess = session.Session(auth=auth,
-                                        verify=openstack['keystone_cachain'])
+                                        verify=openstack['keystone_cachain']) # type: ignore
         else:
             self.sess = session.Session(auth=auth)
 
@@ -44,7 +43,7 @@ class Client(ABC):
 
 
     @abstractmethod
-    def get_client(self):
+    def get_client(self) -> Union[None, object]:
         pass
 
     def set_dry_run(self, dry_run):
@@ -175,7 +174,6 @@ class Client(ABC):
         """ Use to get an instance of a different client than the one calling
             version: 2019-11
             :param: client_class: the class of the client """
-        class_without_region = ['Keystone', 'Designate']
         if not region:
             region = self.region
         if client_class.USE_REGION:

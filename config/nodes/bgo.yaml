@@ -288,10 +288,16 @@ nodes:
     mac: b0:7b:25:f8:6a:8e
     hostgroup: el9/uefi
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sdb'
   compute-alice2-062:
     mac: b0:7b:25:f8:6b:54
     hostgroup: el9/uefi
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sdb'
   compute-alice2-063:
     mac: b0:7b:25:f8:69:b4
     hostgroup: el9/uefi
