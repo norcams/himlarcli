@@ -54,7 +54,7 @@ nodes:
   compute-shpc-01:
     hostgroup: el9/legacy
     environment: zed
-    mac: 00:0a:f7:75:2f:80
+    mac: f4:e9:d4:ad:60:d0
     host_parameters_attributes: #default name is vda in legacy hostgroup
       - name: "installdevice"
         value: "sda"
@@ -67,7 +67,7 @@ nodes:
         value: "sda"
   compute-03:
     hostgroup: el8/legacy
-    mac: f4:e9:d4:ad:60:d0
+    mac: 00:0a:f7:75:2f:80
     # mac: f8:bc:12:52:d8:48
   compute-04:
     hostgroup: el9/legacy
