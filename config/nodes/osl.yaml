@@ -280,9 +280,10 @@ nodes:
   compute-vgpu-20:
     mac: 34:48:ed:f9:79:8e
     hostgroup: 17
-  compute-43:
+  compute-043:
     mac: 1c:20:db:ec:60:a8
-    hostgroup: 23
+    environment: zed
+    hostgroup: "el9/uefi"
   compute-44:
     mac: 1c:20:db:ec:0a:dd
     hostgroup: 23
