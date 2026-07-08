@@ -68,7 +68,9 @@ nodes:
   compute-03:
     hostgroup: el8/legacy
     mac: 00:0a:f7:75:2f:80
-    # mac: f8:bc:12:52:d8:48
+    host_parameters_attributes: #default name is vda in legacy hostgroup
+      - name: "installdevice"
+        value: "sda"
   compute-04:
     hostgroup: el9/legacy
     mac: 00:0a:f7:19:75:80
