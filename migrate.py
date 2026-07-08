@@ -10,6 +10,7 @@ from datetime import timedelta
 from himlarcli import tests
 tests.is_virtual_env()
 
+import novaclient.exceptions as exceptions
 from himlarcli.keystone import Keystone
 from himlarcli.nova import Nova
 from himlarcli.parser import Parser
@@ -325,10 +326,14 @@ def migrate_instance(instance, target=None):
         source_host = getattr(instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
 
     # Call migrate or live-migrate depending on vm state
-    if (state == 'active' or state == 'paused'):
-        instance.live_migrate() if target is None else instance.live_migrate(host=target)
-    elif state == 'stopped':
-        instance.migrate() if target is None else instance.migrate(host=target)
+    try:
+        if (state == 'active' or state == 'paused'):
+            instance.live_migrate() if target is None else instance.live_migrate(host=target)
+        elif state == 'stopped':
+            instance.migrate() if target is None else instance.migrate(host=target)
+    except exceptions.NotFound:
+        # this will happen if the instacne is deleted after the script was started
+        print(f'{Color.fg.red}{Color.bold}Instance not found!{Color.reset}')
 
     # Time the migration and report outcome
     timeout = 86400  # time out migration loop after 24 hours
