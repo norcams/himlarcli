@@ -394,7 +394,7 @@ nodes:
     mac: c4:cb:e1:b5:51:84
     environment: yoga
     hostgroup: "el8/uefi"
-  compute-epyc-087:
+  compute-shpc-087:
     mac: c4:cb:e1:b5:51:4e
     environment: zed
     hostgroup: el9/uefi
