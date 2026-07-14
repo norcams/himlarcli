@@ -478,7 +478,7 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         ivalue:          'nvme0n1'
-  compute-epyc-099:
+  compute-shpc-099:
     mac: 8c:84:74:62:13:90
     environment: zed
     hostgroup: el9/uefi
