@@ -266,6 +266,9 @@ nodes:
     mac: 70:b5:e8:d0:b0:a8
     environment: zed
     hostgroup: "el9/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x62cea7f07f086300276c7815ecc1de9d'
   compute-epyc-56:
     mac: 70:b5:e8:d0:b3:00
     hostgroup: 16
