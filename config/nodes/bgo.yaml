@@ -262,10 +262,10 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-epyc-55:
+  compute-shpc-055:
     mac: 70:b5:e8:d0:b0:a8
-    environment: yoga
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: "el9/uefi"
   compute-epyc-56:
     mac: 70:b5:e8:d0:b3:00
     hostgroup: 16
