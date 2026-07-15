@@ -1,0 +1,16 @@
+Hi,
+
+Due to an linux kernel exploit in our hypervisors we had to reboot your
+instance(s) in order to fix the issue.
+
+The following instance(s) in your project are affected:
+
+$instances
+
+This reboot might also mitigated any kernel exploits your OS vendor have
+released patches for since your last reboot of your instance as long as
+you have not turned of automatic updates in your instance.
+
+Best Regards,
+--
+NREC Team <support@nrec.no>
