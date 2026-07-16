@@ -240,9 +240,13 @@ nodes:
   compute-epyc-48:
     mac: f4:02:70:d3:42:0c
     hostgroup: 16
-  compute-epyc-49:
+  compute-shpc-049:
     mac: f4:02:70:cd:da:de
-    hostgroup: 16
+    environment: zed
+    hostgroup: "el9/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x64cd98f0b1fadc002615dea2ac318307'
   compute-epyc-50:
     mac: f4:02:70:cd:de:86
     hostgroup: 16
@@ -393,10 +397,13 @@ nodes:
     mac: c4:cb:e1:af:77:9c
     environment: zed
     hostgroup: "el9/uefi"
-  compute-epyc-86:
+  compute-shpc-086:
     mac: c4:cb:e1:b5:51:84
-    environment: yoga
-    hostgroup: "el8/uefi"
+    environment: zed
+    hostgroup: "el9/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/scsi-SATA_DELLBOSS_VD_d8bd23277d6d0010'
   compute-shpc-087:
     mac: c4:cb:e1:b5:51:4e
     environment: zed
