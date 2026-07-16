@@ -1,0 +1,16 @@
+Hi,
+
+After migrating your instance(s) to a new hypervisor there might be any
+issue with IPv6 traffic to and from the instance. A restart of the network
+on the instance or a reboot should fix the issue.
+
+The following instance(s) in your project are affected:
+
+$instances
+
+We apologize for the inconvenience. Please don't hesitate to contact us if you
+have any problems solving this issue.
+
+Best Regards,
+--
+NREC Team <support@nrec.no>
