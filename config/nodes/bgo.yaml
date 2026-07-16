@@ -262,9 +262,13 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'disk/by-id/wwn-0x64cd98f0b1faeb00262add99fb02fd87'
-  compute-epyc-51:
+  compute-shpc-051:
     mac: f4:02:70:d0:04:e0
-    hostgroup: 16
+    environment: zed
+    hostgroup: "el9/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x64cd98f0b4790e00262ade06d6966b05'
   compute-vgpu-52:
     mac: f0:d4:e2:e6:ae:d2
     hostgroup: 16
