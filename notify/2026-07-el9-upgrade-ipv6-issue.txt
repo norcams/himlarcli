@@ -1,6 +1,6 @@
 Hi,
 
-After migrating your instance(s) to a new hypervisor there might be any
+After migrating your instance(s) to a new hypervisor there might be an
 issue with IPv6 traffic to and from the instance. A restart of the network
 on the instance or a reboot should fix the issue.
 
