@@ -219,9 +219,13 @@ nodes:
   compute-epyc-41:
     mac: f4:02:70:d7:8b:3c
     hostgroup: 16
-  compute-epyc-42:
+  compute-shpc-042:
     mac: f4:02:70:d7:8c:76
-    hostgroup: 16
+    environment: zed
+    hostgroup: "el9/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x64cd98f09c7cdd002615dee4bfc50159'
   compute-epyc-43:
     mac: f4:02:70:d7:8c:a2
     hostgroup: 16
@@ -289,9 +293,13 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'disk/by-id/wwn-0x62cea7f07f086300276c7815ecc1de9d'
-  compute-epyc-56:
+  compute-shpc-056:
     mac: 70:b5:e8:d0:b3:00
-    hostgroup: 16
+    environment: zed
+    hostgroup: "el9/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x62cea7f07f085200276bf9f1d61707c0'
   compute-epyc-57:
     mac: 70:b5:e8:d0:ab:e8
     hostgroup: 16
