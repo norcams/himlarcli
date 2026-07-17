@@ -24,7 +24,7 @@ slack_sdk
 jinja2
 tabulate
 # needed for python-foreman
-dulwich==0.19.16
+dulwich==1.2.5
 #setuptools==70.0.0 FIXME
 autosemver==0.5.4
 python-foreman==0.4.20
