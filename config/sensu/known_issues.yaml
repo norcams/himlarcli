@@ -24,7 +24,9 @@ bgo:
   - host: 'bgo-compute-clarino-36'
     check: 'check-metadata-api'
     reason: 'Main reason is that nova-metadata binary version is set to 64 in nova database'
-
+  - host: 'bgo-compute-alice-023'
+    check: 'redfish-check'
+    reason: 'Correctable memory errors detected for DIMM_B4'
 
 osl:
   - host: 'osl-object-ceph-05'
