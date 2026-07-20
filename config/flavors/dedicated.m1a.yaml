@@ -1,0 +1,5 @@
+---
+# DEDICATED m1a flavor
+public: false
+properties: {}
+dedicated.m1a: {}
