@@ -256,7 +256,7 @@ def action_list():
                 else:
                     r_vm_states += f"{Color.dim}-{Color.reset}"
 
-                if re.search(r"^(central1|windows1|placeholder1|hpc1)$", r_aggregate):
+                if re.search(r"^(central1|windows1|placeholder1|hpc1|dedicated1)$", r_aggregate):
                     r_disk = "-"
                 else:
                     r_disk = f"{resource_usage['disk_gb_used']} / {resource_usage['disk_gb_max']} ({resource_usage['disk_allocation_ratio']})"
