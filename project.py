@@ -611,48 +611,50 @@ def action_access():
 
     # Resource availability by region
     resource_availability = {
-        'vgpu'         : [ 'bgo', 'osl' ],
-        'vgpu_l40s'    : [ 'bgo', 'osl' ],
-        'shpc'         : [ 'bgo', 'osl' ],
-        'shpc_ram'     : [ 'bgo', 'osl' ],
-        'shpc_disk0'   : [ 'bgo', 'osl' ],
-        'shpc_disk1'   : [ 'bgo', 'osl' ],
-        'shpc_disk2'   : [ 'bgo', 'osl' ],
-        'shpc_disk3'   : [ 'bgo', 'osl' ],
-        'shpc_disk4'   : [ 'bgo', 'osl' ],
-        'd1_flavor'    : [ 'bgo', 'osl' ],
-        'win_flavor'   : [ 'bgo' ],
-        'uib_image'    : [ 'bgo' ],
-        'ssd'          : [ 'bgo', 'osl' ],
-        'net_uib'      : [ 'bgo' ],
-        'net_uio_dual' : [ 'osl' ],
-        'net_uio_ipv6' : [ 'bgo', 'osl' ],
-        'net_educloud' : [ 'bgo', 'osl' ],
-        'net_elastic'  : [ 'bgo', 'osl' ],
-        'net_elixir'   : [ 'bgo' ],
+        'vgpu'             : [ 'bgo', 'osl' ],
+        'vgpu_l40s'        : [ 'bgo', 'osl' ],
+        'shpc'             : [ 'bgo', 'osl' ],
+        'shpc_ram'         : [ 'bgo', 'osl' ],
+        'shpc_disk0'       : [ 'bgo', 'osl' ],
+        'shpc_disk1'       : [ 'bgo', 'osl' ],
+        'shpc_disk2'       : [ 'bgo', 'osl' ],
+        'shpc_disk3'       : [ 'bgo', 'osl' ],
+        'shpc_disk4'       : [ 'bgo', 'osl' ],
+        'd1_flavor'        : [ 'bgo', 'osl' ],
+        'win_flavor'       : [ 'bgo' ],
+        'dedicated_flavor' : [ 'osl' ],
+        'uib_image'        : [ 'bgo' ],
+        'ssd'              : [ 'bgo', 'osl' ],
+        'net_uib'          : [ 'bgo' ],
+        'net_uio_dual'     : [ 'osl' ],
+        'net_uio_ipv6'     : [ 'bgo', 'osl' ],
+        'net_educloud'     : [ 'bgo', 'osl' ],
+        'net_elastic'      : [ 'bgo', 'osl' ],
+        'net_elixir'       : [ 'bgo' ],
     }
 
     # Resource info
     resource_info = {
-        'vgpu'         : 'Access to standard vGPU flavors and vGPU images',
-        'vgpu_l40s'    : 'Access to L40s vGPU flavors and vGPU images',
-        'shpc'         : 'Access to standard sHPC flavors (shpc.m1a and shpc.c1a)',
-        'shpc_ram'     : 'Access to memory sHPC flavors (shpc.r1a)',
-        'shpc_disk0'   : 'Access to 80 GB disk sHPC flavors (shpc.m1ad0 and shpc.c1ad0)',
-        'shpc_disk1'   : 'Access to 200 GB disk sHPC flavors (shpc.m1ad1 and shpc.c1ad1)',
-        'shpc_disk2'   : 'Access to 500 GB disk sHPC flavors (shpc.m1ad2 and shpc.c1ad2)',
-        'shpc_disk3'   : 'Access to 1TB disk sHPC flavors (shpc.m1ad3 and shpc.c1ad3)',
-        'shpc_disk4'   : 'Access to 2TB disk sHPC flavors (shpc.m1ad4 and shpc.c1ad4)',
-        'd1_flavor'    : 'Access to disk bound flavor set (d1)',
-        'win_flavor'   : 'Access to Windows flavor set (win). Only BGO',
-        'uib_image'    : 'Access to UiB Managed images ({rockylinux8,almalinux10}_uib_puppet)',
-        'ssd'          : 'Access to SSD volumes. Add quota separately',
-        'net_uib'      : 'Access to UiB network',
-        'net_uio_dual' : 'Access to UiO dualStack network',
-        'net_uio_ipv6' : 'Access to UiO IPv6 network',
-        'net_educloud' : 'Access to Educloud network',
-        'net_elastic'  : 'Access to Elastic network',
-        'net_elixir'   : 'Access to Elixir dualstack network. Only BGO'
+        'vgpu'             : 'Access to standard vGPU flavors and vGPU images',
+        'vgpu_l40s'        : 'Access to L40s vGPU flavors and vGPU images',
+        'shpc'             : 'Access to standard sHPC flavors (shpc.m1a and shpc.c1a)',
+        'shpc_ram'         : 'Access to memory sHPC flavors (shpc.r1a)',
+        'shpc_disk0'       : 'Access to 80 GB disk sHPC flavors (shpc.m1ad0 and shpc.c1ad0)',
+        'shpc_disk1'       : 'Access to 200 GB disk sHPC flavors (shpc.m1ad1 and shpc.c1ad1)',
+        'shpc_disk2'       : 'Access to 500 GB disk sHPC flavors (shpc.m1ad2 and shpc.c1ad2)',
+        'shpc_disk3'       : 'Access to 1TB disk sHPC flavors (shpc.m1ad3 and shpc.c1ad3)',
+        'shpc_disk4'       : 'Access to 2TB disk sHPC flavors (shpc.m1ad4 and shpc.c1ad4)',
+        'd1_flavor'        : 'Access to disk bound flavor set (d1)',
+        'win_flavor'       : 'Access to Windows flavor set (win). Only BGO',
+        'dedicated_flavor' : 'Access to Dedicated flavor set (dedicated.m1a). Only OSL',
+        'uib_image'        : 'Access to UiB Managed images ({rockylinux8,almalinux10}_uib_puppet)',
+        'ssd'              : 'Access to SSD volumes. Add quota separately',
+        'net_uib'          : 'Access to UiB network',
+        'net_uio_dual'     : 'Access to UiO dualStack network',
+        'net_uio_ipv6'     : 'Access to UiO IPv6 network',
+        'net_educloud'     : 'Access to Educloud network',
+        'net_elastic'      : 'Access to Elastic network',
+        'net_elixir'       : 'Access to Elixir dualstack network. Only BGO'
     }
 
     # Today
@@ -865,6 +867,8 @@ def action_access():
         access_flavors.append('d1')
     elif resource == 'win_flavor':
         access_flavors.append('win')
+    elif resource == 'dedicated_flavor':
+        access_flavors.append('dedicated.m1a')
     elif resource == 'uib_image':
         access_images.append('uib')
     elif resource == 'ssd':
