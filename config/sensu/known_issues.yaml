@@ -38,7 +38,7 @@ osl:
   - host: 'osl-storage-v2d-32'
     check: 'redfish-check'
     reason: 'predicted disk failure'
-  - host: 'osl-compute-epyc-14'
+  - host: 'osl-compute-shpc-014'
     check: 'redfish-check'
     reason: 'cpu1 voltage outside of range'
 
