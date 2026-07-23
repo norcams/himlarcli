@@ -7,6 +7,14 @@ properties:
   hw_rng:rate_period: 1
   aggregate_instance_extra_specs:type: 's== shpc_cpu'
 shpc.c1ad4:
+  'shpc.c1ad4.large': 
+    vcpus: 2 
+    ram: 4096
+    disk: 2000
+  'shpc.c1ad4.xlarge': 
+    vcpus: 4
+    ram: 8192
+    disk: 2000  
   'shpc.c1ad4.2xlarge':
     vcpus: 8
     ram: 16384
