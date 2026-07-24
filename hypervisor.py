@@ -210,19 +210,33 @@ def action_list():
         # In verbose mode, gather all per-host data up front so the rendering
         # loop below does no network I/O:
         #   - one Placement client (shared session, endpoint looked up once)
-        #   - all instances fetched once and grouped by compute host
         #   - resource usage fetched concurrently across hosts
+        #   - instances: for a single aggregate, fetch only that aggregate's
+        #     hosts (scoped per host, in parallel); for all hosts a single
+        #     cloud-wide fetch is cheaper than many per-host calls
         resource_usages = {}
         instances_by_host = {}
         if options.verbose:
             placement = Placement(kc, region)
-            for instance in nc.get_all_instances(search_opts={'all_tenants': 1}):
-                inst_host = getattr(instance, 'OS-EXT-SRV-ATTR:host', None)
-                instances_by_host.setdefault(inst_host, []).append(instance)
+            all_hosts = options.aggregate == 'all'
+            if all_hosts:
+                for instance in nc.get_all_instances(search_opts={'all_tenants': 1}):
+                    inst_host = getattr(instance, 'OS-EXT-SRV-ATTR:host', None)
+                    instances_by_host.setdefault(inst_host, []).append(instance)
+
+            def gather(host):
+                usage = get_resource_usage(placement, host.id)
+                instances = None
+                if not all_hosts:
+                    instances = nc.get_all_instances(search_opts={
+                        'all_tenants': 1, 'host': host.hypervisor_hostname})
+                return host.id, host.hypervisor_hostname, usage, instances
+
             with ThreadPoolExecutor(max_workers=10) as executor:
-                resource_usages = dict(executor.map(
-                    lambda h: (h.id, get_resource_usage(placement, h.id)),
-                    hosts))
+                for host_id, host_name, usage, instances in executor.map(gather, hosts):
+                    resource_usages[host_id] = usage
+                    if instances is not None:
+                        instances_by_host[host_name] = instances
 
         for host in hosts:
             r_hostname = Color.fg.blu + re.sub(r'\.mgmt\..+?\.uhdc\.no$', '', host.hypervisor_hostname) + Color.reset
