@@ -268,9 +268,10 @@ nodes:
   compute-hpc-25:
     mac: 0c:c4:7a:fb:c8:28
     hostgroup: 17
-  compute-hpc-26:
+  compute-ded-026:
     mac: 0c:c4:7a:fb:c8:2a
-    hostgroup: 17
+    environment: zed
+    hostgroup: "el9/uefi"
   compute-ded-027:
     mac: 0c:c4:7a:fb:c8:a0
     environment: zed
