@@ -13,6 +13,8 @@ statsd==3.2.1
 pika
 sensu_go
 prettytable==0.7.2
+requests
+urllib3
 PyMySQL
 SQLAlchemy
 # only needed for pylint

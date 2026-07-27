@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from datetime import date
+from concurrent.futures import ThreadPoolExecutor
 import re
 
 from himlarcli import tests as tests
@@ -205,16 +206,47 @@ def action_list():
         output['sortby'] = 0
         counter = 0
         region = kc.get_config('openstack', 'region')
+
+        # In verbose mode, gather all per-host data up front so the rendering
+        # loop below does no network I/O:
+        #   - one Placement client (shared session, endpoint looked up once)
+        #   - resource usage fetched concurrently across hosts
+        #   - instances: for a single aggregate, fetch only that aggregate's
+        #     hosts (scoped per host, in parallel); for all hosts a single
+        #     cloud-wide fetch is cheaper than many per-host calls
+        resource_usages = {}
+        instances_by_host = {}
+        if options.verbose:
+            placement = Placement(kc, region)
+            all_hosts = options.aggregate == 'all'
+            if all_hosts:
+                for instance in nc.get_all_instances(search_opts={'all_tenants': 1}):
+                    inst_host = getattr(instance, 'OS-EXT-SRV-ATTR:host', None)
+                    instances_by_host.setdefault(inst_host, []).append(instance)
+
+            def gather(host):
+                usage = get_resource_usage(placement, host.id)
+                instances = None
+                if not all_hosts:
+                    instances = nc.get_all_instances(search_opts={
+                        'all_tenants': 1, 'host': host.hypervisor_hostname})
+                return host.id, host.hypervisor_hostname, usage, instances
+
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                for host_id, host_name, usage, instances in executor.map(gather, hosts):
+                    resource_usages[host_id] = usage
+                    if instances is not None:
+                        instances_by_host[host_name] = instances
+
         for host in hosts:
             r_hostname = Color.fg.blu + re.sub(r'\.mgmt\..+?\.uhdc\.no$', '', host.hypervisor_hostname) + Color.reset
             r_aggregate = ','.join(aggregates.get(host.hypervisor_hostname, []))
             r_status = host.status.upper()
             if options.verbose:
-                resource_usage = get_resource_usage(host.id, region)
+                resource_usage = resource_usages[host.id]
                 r_vcpus = f"{resource_usage['vcpu_used']} / {resource_usage['vcpu_max']} ({resource_usage['vcpu_allocation_ratio']})"
                 r_mem = f"{resource_usage['memory_gb_used']} / {resource_usage['memory_gb_max']} ({resource_usage['memory_allocation_ratio']})"
-                search_opts = dict(all_tenants=1, host=host.hypervisor_hostname)
-                instances = nc.get_all_instances(search_opts=search_opts)
+                instances = instances_by_host.get(host.hypervisor_hostname, [])
                 r_vms = str(len(instances))
                 r_vm_states = ''
                 count = {
@@ -321,24 +353,27 @@ def action_list():
 # Helper functions
 #---------------------------------------------------------------------
 
-def get_resource_usage(hypervisor_uuid:str, region:str):
-    placement = Placement(kc, region)
+def get_resource_usage(placement, hypervisor_uuid:str):
+    # One call for all usages and one for all inventory classes, instead of
+    # one usage call plus three per-class inventory calls.
     resource = placement.get_resource_provider_usages(hypervisor_uuid)
-    cpu_resource_class = 'VCPU' if 'VCPU' in resource['usages'] else 'PCPU'
-    inventory_vcpu = placement.get_resource_provider_inventory(hypervisor_uuid, cpu_resource_class)
-    inventory_memory = placement.get_resource_provider_inventory(hypervisor_uuid, 'MEMORY_MB')
-    inventory_disk   = placement.get_resource_provider_inventory(hypervisor_uuid, 'DISK_GB')
+    inventories = placement.get_resource_provider_inventories(hypervisor_uuid)
+    usages = resource.get('usages', {})
+    cpu_resource_class = 'VCPU' if 'VCPU' in usages else 'PCPU'
+    inventory_vcpu   = inventories.get(cpu_resource_class, {})
+    inventory_memory = inventories.get('MEMORY_MB', {})
+    inventory_disk   = inventories.get('DISK_GB', {})
 
     data = {
-        "vcpu_used":               resource['usages'][cpu_resource_class],
-        "vcpu_max":                inventory_vcpu['max_unit'],
-        "vcpu_allocation_ratio":   inventory_vcpu['allocation_ratio'],
-        "memory_gb_used":          int(resource['usages']['MEMORY_MB'] / 1024),
-        "memory_gb_max":           int(inventory_memory['max_unit'] / 1024),
-        "memory_allocation_ratio": inventory_memory['allocation_ratio'],
-        "disk_gb_used":            resource['usages']['DISK_GB'],
-        "disk_gb_max":             inventory_disk['max_unit'],
-        "disk_allocation_ratio":   inventory_disk['allocation_ratio'],
+        "vcpu_used":               usages.get(cpu_resource_class, 0),
+        "vcpu_max":                inventory_vcpu.get('max_unit', 0),
+        "vcpu_allocation_ratio":   inventory_vcpu.get('allocation_ratio', 0),
+        "memory_gb_used":          int(usages.get('MEMORY_MB', 0) / 1024),
+        "memory_gb_max":           int(inventory_memory.get('max_unit', 0) / 1024),
+        "memory_allocation_ratio": inventory_memory.get('allocation_ratio', 0),
+        "disk_gb_used":            usages.get('DISK_GB', 0),
+        "disk_gb_max":             inventory_disk.get('max_unit', 0),
+        "disk_allocation_ratio":   inventory_disk.get('allocation_ratio', 0),
         }
 
     return data
