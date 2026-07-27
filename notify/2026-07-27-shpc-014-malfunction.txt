@@ -1,0 +1,23 @@
+Hi,
+
+Today at around 03:00 we experienced a catastrophic hardware failure
+on one of our SHPC hypervisors in the OSL region. The nature of the
+malfunction is such that the node is unrecoverable, which means that
+the hypervisor is gone forever.
+
+The following instance(s) in your project are affected:
+
+$instances
+
+We will attempt to migrate your instance(s) to a working hypervisor.
+However, since SHPC utilizes local drives for instance disk, getting
+access to the data is a challenge and will take time, if we manage to
+do it at all. We will keep you updated.
+
+If your instance is unimportant and can be deleted, or recreated
+instead, please let us know as soon as possible, as making it work may
+be labor intensive on our part.
+
+Best Regards,
+--
+NREC Team <support@nrec.no>
