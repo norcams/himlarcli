@@ -1,0 +1,24 @@
+Hi,
+
+This is a followup notification regarding the recent hardware
+malfunction on one of our SHPC hypervisors in the OSL region. The
+following instances were affected:
+
+$instances
+
+We are happy to report that we have successfully evacuated the
+instances to a new hypervisor. We apologize for the downtime caused by
+this outage.
+
+As a reminder, the SHPC service is a popular service and is strained
+for resources, even more so now that we have lost a hypervisor. Please
+delete instances that are no longer needed, so that resources are
+freed up for other users.
+
+Note that simply shutting the instance off, while it helps to a small
+degree, is not enough. The scheduler still has to keep enough
+resources free for the instance to successfully start if requested.
+
+Best Regards,
+--
+NREC Team <support@nrec.no>
