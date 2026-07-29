@@ -152,13 +152,13 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'disk/by-id/wwn-0x64cd98f03d4d3e00239d0f571bac897b'
-  compute-shpc-014:
-    mac: b0:26:28:1e:7a:be
-    hostgroup: el9/uefi
-    environment: zed
-    host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'disk/by-id/wwn-0x64cd98f03d4d8200239d0ff21b8a0940'
+#  compute-shpc-014:
+#    mac: b0:26:28:1e:7a:be
+#    hostgroup: el9/uefi
+#    environment: zed
+#    host_parameters_attributes:
+#      - name:           'installdevice'
+#        value:          'disk/by-id/wwn-0x64cd98f03d4d8200239d0ff21b8a0940'
   compute-shpc-015:
     mac: b0:26:28:1e:78:c6
     hostgroup: el9/uefi
