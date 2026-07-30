@@ -354,9 +354,13 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'disk/by-id/scsi-SATA_DELLBOSS_VD_4129379089450010'
-  compute-epyc-54:
+  compute-shpc-054:
     mac: b0:7b:25:f8:62:66
-    hostgroup: 17
+    environment: zed
+    hostgroup: "el9/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/scsi-SATA_DELLBOSS_VD_594c1d14febb0010'
   compute-epyc-55:
     mac: b0:7b:25:f8:64:a6
     hostgroup: 17
