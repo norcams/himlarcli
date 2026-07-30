@@ -1,15 +1,37 @@
 ---
 # r1 flavor used for vGPU NVIDIA RTX PRO 6000 MIG profile with 96GB GPU-memory 
 # for GEOWOLF in bgo region
-public: false
 properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
   hw_rng:rate_period: 60
-  resources:VGPU: '1'
-  trait:CUSTOM_NREC_VGPU_RTX_96G: 'required'
-gr1.rtx6k.96g:
-  'gr1.rtx6k.96g.8xlarge': ## Split everything in four
+  hw:numa_nodes: 1
+  hw:cpu_sockets: 1
+  hw:pci_numa_affinity_policy: required   # keep guest CPU+RAM local to its GPU
+  # hw:cpu_policy: dedicated              # leave SHARED (commented) — see note below
+  aggregate_instance_extra_specs:type: 's== rtx6k'
+  pci_passthrough:alias: 'rtx6k:1'        # exactly one whole GPU per instance
+  gr1.rtx6k.96g:
+  # 16 vcpus — clean 1:1 physical-core mapping (2 guests × 16 = 32 cores/socket).
+  # No SMT sharing, no oversubscription. Safest; best latency consistency.
+  'gr1.rtx6k.96g.4xlarge':
+    vcpus: 16
+    ram: 96256
+    disk: 3500
+
+  # 24 vcpus — SMT-assisted middle ground (2 × 24 = 48 threads/socket,
+  # ~16 threads left for host + QEMU emulator). More CPU, mild sharing.
+  'gr1.rtx6k.96g.6xlarge':
+    vcpus: 24
+    ram: 96256
+    disk: 3500
+
+  # 32 vcpus — owner-requested. 2 × 32 = 64 threads = the ENTIRE socket's thread
+  # count, zero headroom for host/emulator threads. Expect CPU jitter/contention
+  # under load. Keep cpu_policy SHARED (do NOT pin) so the scheduler can float
+  # vCPUs; pinning 32 here would starve the host. Acceptable as an opt-in; scale
+  # back to .6xlarge/.4xlarge if latency suffers.
+  'gr1.rtx6k.96g.8xlarge':
     vcpus: 32
     ram: 96256
     disk: 3500
