@@ -340,9 +340,13 @@ nodes:
     mac: 1c:20:db:ec:60:93
     environment: zed
     hostgroup: "el9/uefi"
-  compute-epyc-52:
+  compute-shpc-052:
     mac: b0:7b:25:f8:66:92
-    hostgroup: 17
+    environment: zed
+    hostgroup: "el9/uefi"
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/scsi-SATA_DELLBOSS_VD_caebef8c08f80010'
   compute-shpc-053:
     mac: ec:2a:72:0a:9e:5c
     environment: zed
