@@ -67,7 +67,8 @@ def action_instances():
 
 def action_update():
     question = ("This will delete the flavor and recreate it for all other "
-                "changes than properties. Check project access after. Continue?")
+                "changes than properties. Project access is restored for the "
+                "recreated flavors. Continue?")
     if not himutils.confirm_action(question):
         return
 
@@ -83,7 +84,10 @@ def action_update():
 
         nc = Nova(options.config, debug=options.debug, log=logger, region=region)
         nc.set_dry_run(options.dry_run)
-        access = nc.get_flavor_access(filters=options.flavor)
+        # Project access per flavor before the update, so that it can be
+        # restored for the flavors that are recreated. Public flavors have
+        # no project access.
+        old_access = dict() if public else get_current_access(nc)
         for name, spec in sorted(flavors[options.flavor].items()):
             # Hack to override properties per flavor
             flavor_properties = properties.copy()
@@ -91,19 +95,20 @@ def action_update():
                 for p_name, prop in spec['properties'].items():
                     flavor_properties[p_name] = prop
                 del spec['properties']
-            nc.update_flavor(name=name, spec=spec,
-                             properties=flavor_properties, public=public)
-        # Update access
-        all_projects = set()
-        for name, projects in access.items():
-            for project_id in projects:
-                all_projects.add(project_id.tenant_id)
-        for project in all_projects:
-            # only keep access if project still exists
-            if kc.get_by_id('project', project):
-                nc.update_flavor_access(class_filter=options.flavor,
-                                        project_id=project,
-                                        action='grant')
+            result = nc.update_flavor(name=name, spec=spec,
+                                      properties=flavor_properties, public=public)
+            # Only a recreated flavor has a new id and has lost its access
+            if result != 'recreated' or not old_access.get(name):
+                continue
+            granted = nc.update_flavor_access_by_name(flavor_name=name,
+                                                      project_ids=old_access[name],
+                                                      action='grant')
+            printer.output_msg('%s recreated in %s, restored access for %s project(s)'
+                               % (name, region, len(granted)))
+            if len(granted) != len(old_access[name]):
+                himutils.sys_error('failed to restore access to %s in %s for: %s'
+                                   % (name, region,
+                                      ', '.join(set(old_access[name]) - set(granted))), 0)
 
 def action_purge():
     q = 'Purge flavors from class {} in region(s) {}'.format(options.flavor, ','.join(regions))
@@ -202,6 +207,20 @@ def get_flavor_config(region):
         himutils.sys_error('Could not find flavor config file config/flavors/%s.yaml'
                            % options.flavor)
     return flavors
+
+def get_current_access(nc):
+    """ Map flavor name to the list of project ids with access to that flavor.
+        Projects that no longer exist are dropped. """
+    access = dict()
+    for name, projects in nc.get_flavor_access(filters=options.flavor).items():
+        access[name] = list()
+        for project_id in projects:
+            # only keep access if project still exists
+            if kc.get_by_id('project', project_id.tenant_id):
+                access[name].append(project_id.tenant_id)
+            else:
+                himutils.sys_error('project not found %s' % project_id.tenant_id, 0)
+    return access
 
 def update_access(nc, access_action, region):
     flavors = get_flavor_config(region)
