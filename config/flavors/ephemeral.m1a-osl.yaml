@@ -11,14 +11,14 @@ ephemeral.m1a:
     vcpus: 8
     ram: 32768
     disk: 20
-    ephemeral-disk: 1000
+    ephemeral: 1000
   'ephemeral.m1a.4xlarge':
     vcpus: 16
     ram: 65536
     disk: 20
-    ephemeral-disk: 2000
+    ephemeral: 2000
   'ephemeral.m1a.8xlarge':
     vcpus: 32
     ram: 131072
     disk: 20
-    ephemeral-disk: 4000
+    ephemeral: 4000
