@@ -1,0 +1,5 @@
+---
+# M1 flavor used for TEST flavor "ephemeral"
+public: false
+properties: {}
+ephemeral.m1a: {}
