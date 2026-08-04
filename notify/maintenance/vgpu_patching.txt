@@ -7,7 +7,7 @@ Affected instance(s) connected to your email $admin
 
 $instances
 
-After the maintenance window you will need to update the instance vGPU
+After the maintenance window you will probably need to update the instance vGPU
 driver. More information here:
 
   https://docs.nrec.no/vgpu.html#upgrading-the-instance-drivers
