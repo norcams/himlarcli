@@ -288,7 +288,7 @@ def action_list():
                 else:
                     r_vm_states += f"{Color.dim}-{Color.reset}"
 
-                if re.search(r"central1|windows1|placeholder1|hpc1|dedicated1", r_aggregate):
+                if re.search(r"\b(central1|windows1|placeholder1|hpc1|dedicated1)\b", r_aggregate):
                     # aggregates that use central disk
                     r_disk = "-"
                 else:
