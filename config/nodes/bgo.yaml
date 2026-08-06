@@ -579,28 +579,28 @@ nodes:
       - name:           'installdevice'
         value:          'nvme0n1'
   compute-elixir2-105:
-    mac: 40:5b:7f:dd:a9:fe
+    mac: 8c:84:74:fc:10:7a
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
   compute-elixir2-106:
-    mac: 40:5b:7f:dd:89:4c
+    mac: 8c:84:74:fc:25:de
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
   compute-elixir2-107:
-    mac: 40:5b:7f:dd:bb:4a
+    mac: 8c:84:74:fc:0d:ae
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
   compute-elixir2-108:
-    mac: 40:5b:7f:dd:bd:66
+    mac: 8c:84:74:fc:0c:3e
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
