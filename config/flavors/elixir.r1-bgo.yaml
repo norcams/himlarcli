@@ -12,16 +12,16 @@ elixir.r1:
   "elixir.r1.large":
     vcpus: 2
     ram: 16384
-    disk: 60
+    disk: 45
   "elixir.r1.xlarge":
     vcpus: 4
     ram: 32768
-    disk: 60
+    disk: 45
   "elixir.r1.2xlarge":
     vcpus: 8
     ram: 65536
-    disk: 60
+    disk: 45
   "elixir.r1.4xlarge":
     vcpus: 16
     ram: 131072
-    disk: 60
+    disk: 45
