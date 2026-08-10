@@ -458,7 +458,7 @@ nodes:
       - name:           'installdevice'
         value:          'nvme0n1'
   compute-shpc-077:
-    mac: 0c:c3:7a:fb:c9:38
+    mac: 0c:c4:7a:fb:c9:38
     hostgroup: el9/uefi
     environment: zed
   console-01:
