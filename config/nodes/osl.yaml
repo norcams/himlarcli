@@ -673,6 +673,10 @@ nodes:
   object-ceph-05:
     mac: 4c:d9:8f:68:3a:0d
     hostgroup: 19
+  dummy-01:
+    mac: b4:a9:fc:58:be:95
+    hostgroup: el9/uefi
+    environment: zed
   proxy-01:
     compute_profile: small
     compute_resource: controller-08
