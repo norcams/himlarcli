@@ -1,0 +1,28 @@
+Dear NREC user,
+
+This is to notify you about an upcoming downtime due to maintenance of
+the vGPU infrastructure in the OSL region. We will be conducting a
+major upgrade which requires significant downtime.
+
+Starting Thursday August 20, vGPU instances will experience downtime
+of several hours. We expect the work in total to take 2-3 days, but
+downtime for a specific instance should only last a few hours. You
+will be notified when your instances are up and running again.
+
+The following instances in your projects are affected:
+
+$instances
+
+What is being planned:
+
+- Reinstall hypervisors with newer operating system
+- The aging Nvidia P40 GPUs will be replaced with RTX 6000s, that are
+  dramatically faster and support modern features
+- Upgrade to newer Nvidia drivers
+
+PS. If your instances are not in use and can be deleted, please delete
+them before the planned maintenance.
+
+Best Regards,
+--
+NREC Team <support@nrec.no>
