@@ -1,0 +1,25 @@
+Hi,
+
+Reduced redundancy on one of our hypervisors due to PSU failure.
+
+Currently, one of our hypervisors is running on a single power supply unit (PSU). The normal is 2 for redundancy. 
+The system is fully operational and stable, but does not currently have power redundancy. If the single power 
+supply that is currently working fails, it will cause downtime for all instances running on this hypervisor.
+
+We are in contact with the hypervisor vendor for support. This may result in planned downtime that we will get back to.
+
+In the meantime, we ask that you:
+
+Review any critical workloads or services that cannot tolerate unexpected downtime and contact us at support@nrec.no 
+if you have any questions or to discuss your specific needs.
+
+
+The following instance(s) in your project are affected:
+
+$instances
+
+
+
+Best Regards,
+--
+NREC Team <support@nrec.no>
