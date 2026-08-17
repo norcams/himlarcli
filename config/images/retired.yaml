@@ -19,6 +19,9 @@ images:
   'debian10':
     'name':             'GOLD Debian 10'
     'depricated':       'Outdated (Debian 10)'
+  'debian11':
+    'name':             'GOLD Debian 11'
+    'depricated':       'Outdated (Debian 11)'
   'fedora_27':
     'name':             'GOLD Fedora 27'
     'depricated':       'Outdated (Fedora)'
