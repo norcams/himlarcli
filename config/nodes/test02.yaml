@@ -50,10 +50,14 @@ nodes:
     compute_profile: small
     compute_resource: controller-02
     hostgroup: 6
+  controller-01:
+    mac: 18:66:da:81:6d:3a 
   controller-02:
-    mac: b8:ac:6f:91:8c:ab
+    mac: 18:66:da:81:8d:6a
   controller-03:
-    mac: b8:ac:6f:8d:3a:54
+    mac: 24:6e:96:74:87:58
+  controller-04:
+    mac: 24:6e:96:74:84:80
   dashboard-01:
     compute_profile: small
     compute_resource: controller-02
@@ -103,6 +107,8 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  login-01:
+    mac: 24:6e:96:8b:17:51
   metric-01:
     compute_profile: xlarge
     compute_resource: controller-01
