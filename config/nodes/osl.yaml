@@ -465,6 +465,9 @@ nodes:
     mac: d0:94:66:8a:52:bd
     hostgroup: el9/uefi
     environment: zed
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/scsi-SATA_DELLBOSS_VD_0163bdafa0a90010'
   console-01:
     compute_profile: medium
     compute_resource: controller-07
