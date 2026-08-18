@@ -32,6 +32,7 @@ images_gold=(
     ubuntu_2004
     ubuntu_2204
     ubuntu_2404
+    ubuntu_2604
     fedora_27
     fedora_28
     fedora_29
@@ -49,6 +50,7 @@ images_gold=(
     fedora_41
     fedora_42
     fedora_43
+    fedora_44
     debian9
     debian10
     debian11
