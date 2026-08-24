@@ -1,0 +1,28 @@
+Dear NREC user,
+
+The GPU upgrade process has taken longer time than anticipated, but
+your instances are now running again (if they were running before).
+
+Work on the specific hypervisor on which your instances are running is
+completed:
+
+- Upgraded operating system
+- Upgraded Nvidia drivers
+- Upgraded GPUs to RTX 6000 (Turing)
+
+The following instances are affected:
+
+$instances
+
+IMPORTANT: To ensure that you get the best experience, the guest vGPU
+driver should be upgraded in the instance. How to do this is explained
+in the user documentation:
+
+  https://docs.nrec.no/vgpu.html#upgrading-the-instance-drivers
+
+While the existing drivers may work, they should be upgraded to match
+the host driver.
+
+Best Regards,
+--
+NREC Team <support@nrec.no>
