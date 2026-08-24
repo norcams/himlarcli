@@ -201,9 +201,10 @@ nodes:
   compute-clarino-36:
     mac: f4:02:70:d0:04:ee
     hostgroup: 16
-  compute-clarino-37:
+  compute-clarino-037:
     mac: f4:02:70:cd:de:48
-    hostgroup: 16
+    hostgroup: el9/uefi
+    environment: zed
   compute-038:
     mac: dc:f4:01:e7:ea:2e
     hostgroup: el9/uefi
