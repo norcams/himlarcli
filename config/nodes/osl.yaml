@@ -296,9 +296,10 @@ nodes:
   compute-vgpu-42:
     mac: ac:1f:6b:64:72:84
     hostgroup: 11
-  compute-vgpu-17:
+  compute-rtx6k-017:
     mac: 34:48:ed:f9:88:d2
-    hostgroup: 17
+    environment: zed
+    hostgroup: "el9/uefi"
   compute-robin-18:
     mac: f4:02:70:c4:76:d8
     hostgroup: 17
