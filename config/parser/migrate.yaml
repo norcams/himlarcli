@@ -1,5 +1,5 @@
 ---
-desc:   'Migate instances. Only use on hosts with shared storage! For local storage see aggregate.py'
+desc:   'Migate instances'
 actions:
   list:           'List instances for migration'
   migrate:        'Migrate instances from source host to specific target host'
