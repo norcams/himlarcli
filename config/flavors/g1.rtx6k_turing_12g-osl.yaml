@@ -1,6 +1,5 @@
 ---
-# m1 flavor used for vGPU NVIDIA RTX 6000 (Turing) with 12GB GPU-memory
-# for osl region
+# Flavor used for vGPU NVIDIA RTX 6000 (Turing) with 12GB VRAM
 public: false
 properties:
   hw_rng:allowed: 'True'
@@ -8,8 +7,8 @@ properties:
   hw_rng:rate_period: 60
   resources:VGPU: '1'
   trait:CUSTOM_NREC_VGPU_RTX6000_TURING_12G: 'required'
-g1.rtx6k_turing.12g:
-  'g1.rtx6k_turing.12g':
+g1.rtx6k_turing_12g:
+  'g1.rtx6k_turing_12g.a':
     vcpus: 8
     ram: 61440 # 60 GiB
     disk: 60

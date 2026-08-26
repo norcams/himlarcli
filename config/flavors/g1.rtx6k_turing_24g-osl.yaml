@@ -1,6 +1,5 @@
 ---
-# Flavor used for vGPU NVIDIA RTX 6000 (Turing) with 24GB GPU-memory
-# for osl region
+# Flavor used for vGPU NVIDIA RTX 6000 (Turing) with 24GB VRAM
 public: false
 properties:
   hw_rng:allowed: 'True'
@@ -8,8 +7,8 @@ properties:
   hw_rng:rate_period: 60
   resources:VGPU: '1'
   trait:CUSTOM_NREC_VGPU_RTX6000_TURING_24G: 'required'
-g1.rtx6k_turing.24g:
-  'g1.rtx6k_turing.24g':
+g1.rtx6k_turing_24g:
+  'g1.rtx6k_turing_24g.a':
     vcpus: 32
     ram: 512000 # 500 GiB
     disk: 200

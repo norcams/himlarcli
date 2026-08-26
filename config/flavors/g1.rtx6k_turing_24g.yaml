@@ -1,0 +1,5 @@
+---
+# Flavors used for vGPU NVIDIA RTX 6000 (Turing) with 24GB VRAM
+public: false
+properties: {}
+g1.rtx6k_turing_24g: {}
