@@ -32,18 +32,6 @@ osl:
   - host: 'osl-storage-v2d-32'
     check: 'redfish-check'
     reason: 'predicted disk failure'
-  - host: 'osl-compute-atlas3-069'
-    check: 'redfish-check'
-    reason: 'fan issue'
-  - host: 'osl-compute-atlas3-070'
-    check: 'redfish-check'
-    reason: 'fan issue'
-  - host: 'osl-compute-atlas3-071'
-    check: 'redfish-check'
-    reason: 'fan issue'
-  - host: 'osl-compute-atlas3-072'
-    check: 'redfish-check'
-    reason: 'fan issue'
 
 
 test01: {}
