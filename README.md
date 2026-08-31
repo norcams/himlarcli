@@ -20,8 +20,11 @@ cd himlarcli
 /path/to/python3 -m venv .
 source bin/activate
 pip install --upgrade pip
-pip install -r requirements.txt
+PIP_CONSTRAINT=constraints.txt pip install -r requirements.txt
 ```
+
+`PIP_CONSTRAINT` is needed so pip's isolated build environment gets
+`setuptools<81` (with `pkg_resources`) when building python-foreman.
 
 ### el9 and Python 3.11
 

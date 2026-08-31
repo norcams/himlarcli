@@ -17,7 +17,7 @@ source bin/activate            # from repo root; virtualenv lives in the repo
 ```
 
 - Python 3.11 (tested on el8/el9/Ubuntu 22.04). System deps for `python-ldap`: `openldap-devel`/`python3.11-devel` (el9) or `libldap-dev libsasl2-dev build-essential` (Ubuntu).
-- Install: `pip install -r requirements.txt`.
+- Install: `PIP_CONSTRAINT=constraints.txt pip install -r requirements.txt` (the constraint gives pip's isolated build env `setuptools<81`, which still has `pkg_resources`, needed to build `python-foreman` — the last release, from 2018).
 - **Lint / tests** (this is the full CI check — there is no unit-test suite):
   ```bash
   ./test.sh                     # runs: pylint -E on every root *.py except setup.py
