@@ -47,6 +47,8 @@ A subcommand named `list-access` maps to `action_list_access()`. This is the con
 
 **Resource config** (`config/`). YAML definitions the commands read/apply: `flavors/` (one file per flavor class, with `-<region>` overrides, e.g. `m1.yaml` vs `m1a-osl.yaml`), `quotas/`, `security_group/`, `nodes/`, `images/`, `sensu/`, `checks/`, plus `compute_profiles.yaml`, `compute_resources.yaml`, `golden_images.yaml`. Region-specific files override the default via the `load_region_config` / `flavor.py:get_flavor_config` fallback convention.
 
+**Mail templates** (`notify/`). Plaintext email bodies referenced by path from commands that notify users (`project.py`, `user.py`, `demo.py`, `expired.py`, `mail.py`, `security_group.py`, and the `bin/enddate-*` cron wrappers), e.g. `notify/project_created.txt`. Add or edit templates here rather than embedding message text in Python.
+
 **Automation** (`bin/`). Shell wrappers that invoke the Python commands non-interactively for cron (enddate handling, image updates, stats, expired-demo cleanup, etc.).
 
 ## Conventions
@@ -54,3 +56,4 @@ A subcommand named `list-access` maps to `action_list_access()`. This is the con
 - Paths in code are relative to the repo root and resolved with `utils.get_abs_path()`; deployed installs live at `/opt/himlarcli`, so avoid hardcoding absolute paths — a few existing scripts hardcode `/opt/himlarcli/...` (e.g. `flavor.py:action_available_flavors`), which only works when deployed.
 - Destructive actions gate on `himutils.confirm_action()` and honor `--dry-run`.
 - Logging config is in `logging.yaml`; `--debug` adds a verbose console handler on top of the file log.
+- Retired scripts live in `archive/` (with their parser YAML in `config/parser/archive/`); `test.sh` only lints root-level `*.py`, so nothing under `archive/` is checked. Move scripts there instead of deleting them.
