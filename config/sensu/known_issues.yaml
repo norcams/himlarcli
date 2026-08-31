@@ -18,6 +18,9 @@ bgo:
   - host: 'bgo-compute-shpc-056'
     check: 'redfish-check'
     reason: 'Power supply 2 failed'
+  - host: 'bgo-compute-elixir1-92'
+    check: 'keepalive'
+    reason: 'shutdown, waiting for new raidkontroller'
 
 osl:
   - host: 'osl-object-ceph-05'
