@@ -1,0 +1,16 @@
+---
+# r1 flavor used for vGPU NVIDIA L40S with 48GB GPU-memory
+# for osl region (used by naic)
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+  aggregate_instance_extra_specs:type: 's== vgpul40s'
+  resources:VGPU: '1'
+  trait:CUSTOM_NREC_VGPU_L40S_48G: 'required'
+gr1.L40S.48g:
+  'gr1.L40S.48g.8xlarge':
+    vcpus: 32
+    ram: 245760
+    disk: 400
