@@ -889,7 +889,7 @@ nodes:
     compute_profile: large
     compute_resource: controller-08
     hostgroup: el9/legacy
-    environment: production_el9
+    environment: zed
     compute_attributes:
       volumes_attributes:
         '1':
