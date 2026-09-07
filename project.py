@@ -613,7 +613,7 @@ def action_access():
     resource_availability = {
         'vgpu'             : [ 'bgo', 'osl' ],
         'vgpu_l40s'        : [ 'bgo', 'osl' ],
-        'vgpu_l40s_whole'  : [ 'osl' ],
+        'vgpu_l40s_48g'    : [ 'osl' ],
         'shpc'             : [ 'bgo', 'osl' ],
         'shpc_ram'         : [ 'bgo', 'osl' ],
         'shpc_disk0'       : [ 'bgo', 'osl' ],
@@ -638,7 +638,7 @@ def action_access():
     resource_info = {
         'vgpu'             : 'Access to standard vGPU flavors and vGPU images',
         'vgpu_l40s'        : 'Access to L40s vGPU flavors and vGPU images',
-        'vgpu_l40s_whole'  : 'Access to L40s vGPU flavors (whole GPU) and vGPU images',
+        'vgpu_l40s_48g'    : 'Access to 48 GB VRAM L40s vGPU flavors and vGPU images',
         'shpc'             : 'Access to standard sHPC flavors (shpc.m1a and shpc.c1a)',
         'shpc_ram'         : 'Access to memory sHPC flavors (shpc.r1a)',
         'shpc_disk0'       : 'Access to 80 GB disk sHPC flavors (shpc.m1ad0 and shpc.c1ad0)',
@@ -845,7 +845,7 @@ def action_access():
     elif resource == 'vgpu_l40s':
         access_flavors.append('gr1.L40S.24g')
         access_images.append('vgpu')
-    elif resource == 'vgpu_l40s_whole':
+    elif resource == 'vgpu_l40s_48g':
         access_flavors.append('gr1.L40S.48g')
         access_images.append('vgpu')
     elif resource == 'shpc':
