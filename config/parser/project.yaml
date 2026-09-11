@@ -76,7 +76,7 @@ opt_args:
     'sub':      ['create', 'create-private']
     'dest':     'quota'
     'help':     'quota class'
-    'choices':  ['small', 'medium', 'large','vgpu']
+    'choices':  ['small', 'medium', 'large','vgpu', 'vgpu_l40s', 'vgpu_l40s_48g']
   '-u':
     'sub':      ['grant','revoke']
     'dest':     'users'
