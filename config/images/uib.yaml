@@ -34,4 +34,5 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'os_require_quiesce':        'yes'
-      'os_type':                   'linux'  
+      'os_secure_boot':            'required'
+      'os_type':                   'linux'
