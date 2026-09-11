@@ -29,7 +29,7 @@ if options.type and options.type not in project_types['types']:
 # Region
 regions = list()
 if options.region:
-    regions = regions.append(options.region)
+    regions.append(options.region)
 else:
     for region in  ksclient.get_regions():
         regions.append(region.id)
