@@ -1,0 +1,32 @@
+---
+# UiO R1 flavor
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 1000000
+  hw_rng:rate_period: 60
+uio.r1:
+  'uio.r1.medium':
+    vcpus: 1
+    ram: 8192 # 8 GiB
+    disk: 60
+  'uio.r1.large':
+    vcpus: 2
+    ram: 16384 # 16 GiB
+    disk: 60
+  'uio.r1.xlarge':
+    vcpus: 4
+    ram: 32768 # 32 GiB
+    disk: 60
+  'uio.r1.2xlarge':
+    vcpus: 8
+    ram: 65536 # 64 GiB
+    disk: 60
+  'uio.r1.3xlarge':
+    vcpus: 12
+    ram: 98304 # 96 GiB
+    disk: 60
+  'uio.r1.4xlarge':
+    vcpus: 16
+    ram: 131072 # 128 GiB
+    disk: 60
