@@ -19,6 +19,21 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  builder-02:
+    hostgroup: el9/legacy
+    environment: zed
+    compute_profile: medium
+    compute_resource: controller-08
+    compute_attributes:
+      volumes_attributes:
+        '1':
+          allocation:   '0G'
+          pool_name:    'dirpool'
+          capacity:     '140G'
+          format_type:  'qcow2'
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'vda'
   cephmds-01:
     hostgroup: 15
     compute_profile: medium
