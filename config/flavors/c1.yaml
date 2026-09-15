@@ -4,7 +4,7 @@ public: true
 properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
-  hw_rng:rate_period: 60
+  hw_rng:rate_period: 60000
 c1: # (2x) new
   'c1.medium': # [1-2-20]
     vcpus: 1
