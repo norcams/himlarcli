@@ -830,7 +830,8 @@ nodes:
   ns-01:
     compute_profile: medium
     compute_resource: controller-06
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: zed_bind
   object-ceph-01:
     mac: d0:94:66:09:0d:6c
     hostgroup: 16
