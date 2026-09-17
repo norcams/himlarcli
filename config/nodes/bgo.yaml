@@ -652,6 +652,34 @@ nodes:
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
+        value:          'sda'
+  bgo-geov1-115:
+    mac: 90:5a:08:7e:2e:00
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  bgo-geov1-116:
+    mac: 90:5a:08:7e:2d:74
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  bgo-geov1-117:
+    mac: 90:5a:08:7e2c:a2
+    environment: zed
+    hostgroup: el9/uefi  
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  bgo-geov1-118:
+    mac: 90:5a:08:7c:6d:ed
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
         value:          'nvme0n1'
   console-01:
     compute_profile: medium
