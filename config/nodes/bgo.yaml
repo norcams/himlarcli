@@ -654,28 +654,28 @@ nodes:
       - name:           'installdevice'
         value:          'sda'
   compute-geov1-115:
-    mac: 90:5a:08:7e:2e:00
+    mac: 90:5a:08:12:c4:94
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
   compute-geov1-116:
-    mac: 90:5a:08:7e:2d:74
+    mac: 90:5a:08:ab:42:78
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
   compute-geov1-117:
-    mac: 90:5a:08:7e2c:a2
+    mac: 90:5a:08:ac:22:04
     environment: zed
     hostgroup: el9/uefi  
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
   compute-geov1-118:
-    mac: 90:5a:08:7c:6d:ed
+    mac: 7c:c2:55:4e:b3:f8
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
