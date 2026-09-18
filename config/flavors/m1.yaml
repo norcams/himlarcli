@@ -4,7 +4,7 @@ public: true
 properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
-  hw_rng:rate_period: 60
+  hw_rng:rate_period: 60000
 m1: # (4x)
   'm1.tiny': # [1-0,5-1]
     vcpus: 1

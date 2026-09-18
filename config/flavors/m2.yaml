@@ -4,7 +4,7 @@ public: false
 properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
-  hw_rng:rate_period: 60
+  hw_rng:rate_period: 60000
 m2: # (4x)
   'm2.2xlarge': # [8-32-20]
     vcpus: 8

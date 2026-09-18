@@ -5,7 +5,7 @@ public: false
 properties:
   hw_rng:allowed: 'True'
   hw_rng:rate_bytes: 1000000
-  hw_rng:rate_period: 60
+  hw_rng:rate_period: 60000
   aggregate_instance_extra_specs:type: 's== vgpul40s'
   resources:VGPU: '1'
   trait:CUSTOM_NREC_VGPU_L40S_24G: 'required'
