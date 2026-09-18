@@ -659,28 +659,28 @@ nodes:
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'disk/by-id/wwn-0x60030480248181f2318310a38ae4a537'
   compute-geov1-116:
     mac: 90:5a:08:ab:42:78
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'disk/by-id/wwn-0x60030480248485f2318333e230ed1f13'
   compute-geov1-117:
     mac: 90:5a:08:ac:22:04
     environment: zed
     hostgroup: el9/uefi  
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'disk/by-id/wwn-0x600304802484b0f2318b5eabe38d8ae6'
   compute-geov1-118:
     mac: 7c:c2:55:4e:b3:f8
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'disk/by-id/wwn-0x6003048024847ff2318325041d8892bd'
   console-01:
     compute_profile: medium
     compute_resource: controller-05
