@@ -1,0 +1,18 @@
+---
+# Flavor used for GEOV in BGO
+
+# https://iaas.readthedocs.io/team/tips_and_tricks/dedicated-flavors.html
+public: false
+properties:
+  hw_rng:allowed: 'True'
+  hw_rng:rate_bytes: 2048
+  hw_rng:rate_period: 1
+  hw:mem_page_size: 2048
+  hw:cpu_policy: 'dedicated'
+  hw:cpu_thread_policy: 'require'
+  trait:CUSTOM_NREC_GEOV: 'required'
+geov:
+  'geov.16xlarge':
+    vcpus: 64 # 192/3 
+    ram:   250880 # 245GB leaves +32GB for host
+    disk:  3500 # 10727GB free divded with 3 
