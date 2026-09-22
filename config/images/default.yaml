@@ -17,6 +17,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'ubuntu_2404':
@@ -36,6 +37,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'ubuntu_2604':
@@ -55,6 +57,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'centosstream9':
@@ -74,6 +77,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'centosstream10':
@@ -93,6 +97,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'almalinux8':
@@ -111,6 +116,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'almalinux9':
@@ -129,6 +135,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'almalinux10':
@@ -148,6 +155,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'rockylinux8':
@@ -165,6 +173,7 @@ images:
       'hw_qemu_guest_agent':       'yes'
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'rockylinux9':
@@ -183,6 +192,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'rockylinux10':
@@ -202,6 +212,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'debian12':
@@ -221,6 +232,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'debian13':
@@ -240,6 +252,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'fedora_43':
@@ -259,6 +272,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'fedora_44':
@@ -278,5 +292,6 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
