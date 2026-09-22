@@ -1,0 +1,4 @@
+# python-foreman 0.4.20 (latest ever; upstream unmaintained) builds with
+# autosemver, which needs pkg_resources - removed in setuptools >= 81.
+# Used via: PIP_CONSTRAINT=constraints.txt pip install -r requirements.txt
+setuptools<81

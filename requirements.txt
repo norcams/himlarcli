@@ -3,6 +3,7 @@ argcomplete
 IPy
 pyyaml
 python-openstackclient
+python-cinderclient
 python-swiftclient
 python-neutronclient
 python-designateclient
@@ -25,10 +26,8 @@ tweepy
 slack_sdk
 jinja2
 tabulate
-# needed for python-foreman
-dulwich==0.19.16
-#setuptools==70.0.0 FIXME
-autosemver==0.5.4
+# latest release (2018, upstream unmaintained); building it needs
+# PIP_CONSTRAINT=constraints.txt, see constraints.txt
 python-foreman==0.4.20
 progressbar2
 # needed to run request_specs.py - require python 3.9+
