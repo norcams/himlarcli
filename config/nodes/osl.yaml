@@ -739,11 +739,13 @@ nodes:
   resolver-01:
     compute_profile: small
     compute_resource: controller-07
-    hostgroup: 16
+    hostgroup: el9/legacy
+    environment: zed_bind
   resolver-02:
     compute_profile: small
     compute_resource: controller-08
-    hostgroup: 16
+    hostgroup: el9/legacy
+    environment: zed_bind
   rgw-01:
     compute_profile: large
     compute_resource: controller-05
