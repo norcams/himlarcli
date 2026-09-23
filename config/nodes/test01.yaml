@@ -36,26 +36,32 @@ nodes:
   cephmds-01:
     compute_profile: medium
     compute_resource: controller-01
+    environment: el9
     hostgroup: el9/legacy
   cephmds-02:
     compute_profile: medium
     compute_resource: controller-02
+    environment: el9
     hostgroup: el9/legacy
   cephmds-03:
     compute_profile: medium
     compute_resource: controller-03
+    environment: el9
     hostgroup: el9/legacy
   cephmon-01:
     compute_profile: large
     compute_resource: controller-01
+    environment: el9
     hostgroup: el9/legacy
   cephmon-02:
     compute_profile: large
     compute_resource: controller-02
+    environment: el9
     hostgroup: el9/legacy
   cephmon-03:
     compute_profile: large
     compute_resource: controller-03
+    environment: el9
     hostgroup: el9/legacy
   compute-shpc-01:
     hostgroup: el9/legacy
