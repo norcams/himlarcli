@@ -37,7 +37,16 @@ osl:
     reason: 'predicted disk failure'
 
 
-test01: {}
+test01:
+  - host: 'test01-compute-04'
+    check: 'check-compute-routes'
+    reason: 'to computes have digital dreams?'
+  - host: 'test01-compute-04'
+    check: 'check-etcd-client-health'
+    reason: 'to computes have digital dreams?'
+  - host: 'test01-compute-04'
+    check: 'check-metadata-api'
+    reason: 'to computes have digital dreams?'
 
 
 # used for testing and example of known issue in a region
