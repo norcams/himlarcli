@@ -256,12 +256,12 @@ nodes:
     compute_profile: small
     compute_resource: controller-03
   resolver-01:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-02
     hostgroup: el9/legacy
     environment: zed_bind
   resolver-02:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-03
     hostgroup: el9/legacy
     environment: zed_bind
