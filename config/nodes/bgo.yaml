@@ -681,21 +681,21 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'disk/by-id/wwn-0x6003048024847ff2318325041d8892bd'
-  compute-alice3-119:
+  compute-shpc-119:
     mac: 8c:84:74:fc:0c:94
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'  
-  compute-alice3-120:
+  compute-shpc-120:
     mac: 8c:84:74:fc:0f:40
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-alice3-121:
+  compute-shpc-121:
     mac: 8c:84:74:fc:0f:24
     environment: zed
     hostgroup: el9/uefi
