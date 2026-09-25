@@ -687,21 +687,21 @@ nodes:
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'  
+        value:          'nvme0n1'  
   compute-shpc-120:
     mac: 8c:84:74:fc:0f:40
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'nvme0n1'
   compute-shpc-121:
     mac: 8c:84:74:fc:0f:24
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
-        value:          'sda'
+        value:          'nvme0n1'
   console-01:
     compute_profile: medium
     compute_resource: controller-05
