@@ -21,6 +21,9 @@ bgo:
   - host: 'bgo-compute-elixir1-92'
     check: 'keepalive'
     reason: 'shutdown, waiting for new raidkontroller'
+  - host: 'bgo-compute-h200-111'
+    check: 'redfish-check'
+    reason: 'waiting for support'
 
 osl:
   - host: 'osl-object-ceph-05'
