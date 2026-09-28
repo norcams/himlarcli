@@ -16,14 +16,14 @@ properties:
   # No SMT sharing, no oversubscription. Safest; best latency consistency.
   'gr1.rtx6k.96g.4xlarge':
     vcpus: 16
-    ram: 96256
+    ram: 90112
     disk: 3500
 
   # 24 vcpus — SMT-assisted middle ground (2 × 24 = 48 threads/socket,
   # ~16 threads left for host + QEMU emulator). More CPU, mild sharing.
   'gr1.rtx6k.96g.6xlarge':
     vcpus: 24
-    ram: 96256
+    ram: 90112
     disk: 3500
 
   # 32 vcpus — owner-requested. 2 × 32 = 64 threads = the ENTIRE socket's thread
@@ -33,5 +33,5 @@ properties:
   # back to .6xlarge/.4xlarge if latency suffers.
   'gr1.rtx6k.96g.8xlarge':
     vcpus: 32
-    ram: 96256
+    ram: 90112
     disk: 3500
