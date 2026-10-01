@@ -812,6 +812,9 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  login-03:
+    mac: 94:10:5a:ea:aa:9e
+    hostgroup: el9/uefi
   metric-01:
     compute_profile: xlarge
     compute_resource: controller-05
