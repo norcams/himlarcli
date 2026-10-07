@@ -32,9 +32,6 @@ osl:
   - host: 'osl-object-ceph-02'
     check: 'redfish-check'
     reason: 'predicted disk failure'
-  - host: 'osl-storage-v2d-32'
-    check: 'redfish-check'
-    reason: 'predicted disk failure'
 
 
 test01:
