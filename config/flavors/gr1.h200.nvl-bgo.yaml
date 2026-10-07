@@ -5,7 +5,7 @@
 # 64 cores
 # 768GB RAM
 # 1.9TB disk
-# 4x Nvidia h200 NVLink Board 4-WAY 
+# 8x Nvidia h200 with NVLink Board 4-WAY (2x4) 
 
 ## Need  NVIDIA datacenter driver + nvidia-fabricmanager for NVlink
 
@@ -28,8 +28,9 @@ gr1.h200.nvl:
   'gr1.h200.nvl.7xlarge':
     vcpus: 28 # Not dedicated, vCPUs are floating
     ram: 368640 #(360GB) /730 split (28vCPU + 360GB RAM per node)
-    disk: 1500 # Not sure how much disk space is needd for other files 
+    disk: 750 # Split in two and leave some for libvirt, to enable 2x instances
 
+# Experminatal flavor using all 8 gpus but split 4 by per numa node and seperate nvlink. Or so I guess. Experimental.  
   'gr1.h200.nvl.14xlarge':
     vcpus: 56 #(8 for host, less jitter) Not dedicated, vCPUs are floating
     ram: 737280 #(720GB) 56/720 split (28vCPU + 360GB RAM per node)
@@ -38,3 +39,4 @@ gr1.h200.nvl:
       hw:numa_nodes: 2
       hw:cpu_sockets: 2
       hw:pci_numa_affinity_policy: preferred
+      pci_passthrough:alias: 'h200nvl:8' # Use all 8 gpus with alias h200nvl
