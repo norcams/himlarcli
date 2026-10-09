@@ -565,12 +565,17 @@ class Nova(Client):
         """
         Update flavor with new spec or propertiesself.
         Note: Update require a delete and create with new ID
-        Version: 2022-7
+        Version: 2026-7
+        :rtype: str with the action taken on the flavor itself: created,
+                recreated or unchanged. Note that a recreated flavor has a
+                new ID and has lost all project access.
         """
         dry_run_txt = ' DRY_RUN:' if self.dry_run else ''
         flavor = self.get_by_name('flavor', name)
+        result = 'unchanged'
         if not flavor:
             # Create new flavor
+            result = 'created'
             self.logger.debug('=>%s create flavor %s', dry_run_txt, name)
             if not self.dry_run:
                 flavor = self.client.flavors.create(name=name,
@@ -586,6 +591,7 @@ class Nova(Client):
             if flavor and v != getattr(flavor, k):
                 update = True
         if update:
+            result = 'recreated'
             self.logger.debug('=>%s update flavor %s', dry_run_txt, name)
             if not self.dry_run:
                 # delete old
@@ -598,7 +604,7 @@ class Nova(Client):
                                                     is_public=public)
         # if no flavor we cannot do properties
         if not flavor:
-            return
+            return result
         # Unset old properties
         for k, v in flavor.get_keys().items():
             if k not in properties:
@@ -608,7 +614,7 @@ class Nova(Client):
         # Add new properties
         update = False
         if not properties:
-            return
+            return result
         flavor_keys = flavor.get_keys()
         for k, v in properties.items():
             # flavor keys return everything as unicode so we use string match
@@ -619,6 +625,7 @@ class Nova(Client):
                         flavor.set_keys({k:v})
                     except novaclient.exceptions.BadRequest as e:
                         self.logger.debug('=> %s', e)
+        return result
 
     def get_flavors(self, class_filter=None, sort_key='memory_mb', sort_dir='asc'):
         """
@@ -711,6 +718,40 @@ class Nova(Client):
                 self.logger.debug('=> unable to %s %s' %
                                   (action, flavor.name))
         return access_updated
+
+    def update_flavor_access_by_name(self, flavor_name, project_ids, action='grant'):
+        """
+            Grant or revoke access to a single flavor for a list of projects
+            Version: 2026-7
+            :param flavor_name: name of the flavor, e.g. m1.medium
+            :param project_ids: list of project ids
+            :rtype: List of project ids where the access was updated
+        """
+        dry_run_txt = 'DRY-RUN: ' if self.dry_run else ''
+        if action == 'revoke':
+            action_func = 'remove_tenant_access'
+        else:
+            action_func = 'add_tenant_access'
+        flavor = self.get_by_name('flavor', flavor_name)
+        if not flavor:
+            self.debug_log('flavor {} not found'.format(flavor_name))
+            return []
+        updated = list()
+        for project_id in project_ids:
+            try:
+                if not self.dry_run:
+                    getattr(self.client.flavor_access, action_func)(flavor.id,
+                                                                    project_id)
+                self.logger.debug('=> %s%s access to %s for project %s' %
+                                  (dry_run_txt, action, flavor_name, project_id))
+                updated.append(project_id)
+            except novaclient.exceptions.Conflict:
+                self.logger.debug('=> access exsists for %s and project %s' %
+                                  (flavor_name, project_id))
+            except novaclient.exceptions.NotFound:
+                self.logger.debug('=> unable to %s %s for project %s' %
+                                  (action, flavor_name, project_id))
+        return updated
 
     def get_flavor_access(self, filters):
         flavors = self.get_flavors(filters)
