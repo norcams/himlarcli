@@ -16,6 +16,7 @@ images:
       'hw_qemu_guest_agent':       'yes'
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'almalinux10_uib_puppet':
@@ -33,5 +34,6 @@ images:
       'hw_qemu_guest_agent':       'yes'
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
-      'os_type':                   'linux'  
+      'os_type':                   'linux'

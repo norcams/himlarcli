@@ -18,6 +18,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'ubuntu_2404':
@@ -38,6 +39,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'ubuntu_2604':
@@ -58,6 +60,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'almalinux9':
@@ -77,6 +80,7 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
   'almalinux10':
@@ -97,5 +101,6 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'

@@ -21,6 +21,9 @@ bgo:
   - host: 'bgo-compute-elixir1-92'
     check: 'keepalive'
     reason: 'shutdown, waiting for new raidkontroller'
+  - host: 'bgo-compute-h200-111'
+    check: 'redfish-check'
+    reason: 'waiting for support'
 
 osl:
   - host: 'osl-object-ceph-05'
@@ -29,15 +32,18 @@ osl:
   - host: 'osl-object-ceph-02'
     check: 'redfish-check'
     reason: 'predicted disk failure'
-  - host: 'osl-storage-v2h-18'
-    check: 'redfish-check'
-    reason: 'Disk37 predictive failure, Disk37 state is abnormal, DIMM050 memory MRC fatal error detected'
-  - host: 'osl-storage-v2d-32'
-    check: 'redfish-check'
-    reason: 'predicted disk failure'
 
 
-test01: {}
+test01:
+  - host: 'test01-compute-04'
+    check: 'check-compute-routes'
+    reason: 'to computes have digital dreams?'
+  - host: 'test01-compute-04'
+    check: 'check-etcd-client-health'
+    reason: 'to computes have digital dreams?'
+  - host: 'test01-compute-04'
+    check: 'check-metadata-api'
+    reason: 'to computes have digital dreams?'
 
 
 # used for testing and example of known issue in a region

@@ -16,6 +16,7 @@ images:
       'hw_scsi_model':          'virtio-scsi'
       'hw_qemu_guest_agent':    'yes'
       'hw_machine_type':        'q35'
+      'hw_require_fsfreeze':    'yes'
       'os_require_quiesce':     'yes'
       'os_type':                'linux'
   'uio_rhel9':
@@ -35,5 +36,6 @@ images:
       'hw_machine_type':           'q35'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'

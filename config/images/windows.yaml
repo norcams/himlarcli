@@ -18,6 +18,7 @@ images:
       'hw_qemu_guest_agent':       'yes'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'windows'
   'winsrv2025std':
@@ -37,5 +38,6 @@ images:
       'hw_qemu_guest_agent':       'yes'
       'hw_firmware_type':          'uefi'
       'hw_vif_multiqueue_enabled': 'yes'
+      'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'windows'

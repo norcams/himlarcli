@@ -533,14 +533,14 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'nvme0n1'
-  compute-epyc-096:
+  compute-shpc-096:
     mac: c4:cb:e1:ab:3f:24
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'sda'
-  compute-epyc-097:
+  compute-shpc-097:
     mac: c4:cb:e1:ab:3f:20
     environment: zed
     hostgroup: el9/uefi
@@ -648,6 +648,55 @@ nodes:
         value:          'nvme0n1'
   compute-alice3-114:
     mac: 8c:84:74:ff:4a:f4
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'sda'
+  compute-geov1-115:
+    mac: 90:5a:08:12:c4:94
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x60030480248181f2318310a38ae4a537'
+  compute-geov1-116:
+    mac: 90:5a:08:ab:42:78
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x60030480248485f2318333e230ed1f13'
+  compute-geov1-117:
+    mac: 90:5a:08:ac:22:04
+    environment: zed
+    hostgroup: el9/uefi  
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x600304802484b0f2318b5eabe38d8ae6'
+  compute-geov1-118:
+    mac: 7c:c2:55:4e:b3:f8
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'disk/by-id/wwn-0x6003048024847ff2318325041d8892bd'
+  compute-shpc-119:
+    mac: 8c:84:74:fc:0c:94
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'nvme0n1'  
+  compute-shpc-120:
+    mac: 8c:84:74:fc:0f:40
+    environment: zed
+    hostgroup: el9/uefi
+    host_parameters_attributes:
+      - name:           'installdevice'
+        value:          'nvme0n1'
+  compute-shpc-121:
+    mac: 8c:84:74:fc:0f:24
     environment: zed
     hostgroup: el9/uefi
     host_parameters_attributes:
@@ -763,6 +812,9 @@ nodes:
     host_parameters_attributes:
       - name:           'installdevice'
         value:          'vda'
+  login-03:
+    mac: 94:10:5a:ea:aa:9e
+    hostgroup: el9/uefi
   metric-01:
     compute_profile: xlarge
     compute_resource: controller-05
@@ -830,7 +882,8 @@ nodes:
   ns-01:
     compute_profile: medium
     compute_resource: controller-06
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: zed_bind
   object-ceph-01:
     mac: d0:94:66:09:0d:6c
     hostgroup: 16
@@ -879,13 +932,15 @@ nodes:
     compute_profile: small
     compute_resource: controller-05
   resolver-01:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-07
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: zed_bind
   resolver-02:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-08
-    hostgroup: 15
+    hostgroup: el9/legacy
+    environment: zed_bind
   rgw-01:
     compute_profile: 2xlarge
     compute_resource: controller-05

@@ -38,21 +38,33 @@ nodes:
   cephmds-01:
     compute_profile: medium
     compute_resource: controller-01
+    environment: el9
+    hostgroup: el9/legacy
   cephmds-02:
     compute_profile: medium
     compute_resource: controller-02
+    environment: el9
+    hostgroup: el9/legacy
   cephmds-03:
     compute_profile: medium
     compute_resource: controller-03
+    environment: el9
+    hostgroup: el9/legacy
   cephmon-01:
     compute_profile: large
     compute_resource: controller-01
+    environment: el9
+    hostgroup: el9/legacy
   cephmon-02:
     compute_profile: large
     compute_resource: controller-02
+    environment: el9
+    hostgroup: el9/legacy
   cephmon-03:
     compute_profile: large
     compute_resource: controller-03
+    environment: el9
+    hostgroup: el9/legacy
   compute-shpc-01:
     hostgroup: el9/legacy
     environment: zed
@@ -170,6 +182,9 @@ nodes:
     host_parameters_attributes:
       - name: "installdevice"
         value: "vda"
+  login-03:
+    mac: 2c:ea:7f:f1:66:a6
+    hostgroup: el9/uefi
   metric-01:
     compute_profile: xlarge
     hostgroup: el9/legacy
@@ -246,12 +261,12 @@ nodes:
     compute_profile: small
     compute_resource: controller-03
   resolver-01:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-02
     hostgroup: el9/legacy
     environment: zed_bind
   resolver-02:
-    compute_profile: small
+    compute_profile: medium
     compute_resource: controller-03
     hostgroup: el9/legacy
     environment: zed_bind
