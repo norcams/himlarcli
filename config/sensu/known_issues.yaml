@@ -25,14 +25,6 @@ bgo:
     check: 'redfish-check'
     reason: 'waiting for support'
 
-osl:
-  - host: 'osl-object-ceph-05'
-    check: 'redfish-check'
-    reason: 'need new disk'
-  - host: 'osl-object-ceph-02'
-    check: 'redfish-check'
-    reason: 'predicted disk failure'
-
 
 test01:
   - host: 'test01-compute-04'
