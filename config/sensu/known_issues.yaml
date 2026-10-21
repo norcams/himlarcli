@@ -25,6 +25,7 @@ bgo:
     check: 'redfish-check'
     reason: 'waiting for support'
 
+osl: {}
 
 test01:
   - host: 'test01-compute-04'
