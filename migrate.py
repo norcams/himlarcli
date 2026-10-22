@@ -341,6 +341,9 @@ def migrate_instance(instance, target=None):
     while True:
         timeout += -1
         migrating_instance = nc.get_by_id('server', instance.id)
+        if migrating_instance is None:
+            print(f'{Color.fg.red}{Color.bold}Could not find instance!{Color.reset}')
+            continue
         hypervisor = getattr(migrating_instance, 'OS-EXT-SRV-ATTR:hypervisor_hostname')
         task_state = getattr(migrating_instance, 'OS-EXT-STS:task_state')
         status = getattr(migrating_instance, 'status')
