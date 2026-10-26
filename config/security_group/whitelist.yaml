@@ -4,6 +4,7 @@ direction:
 protocol:
   - ipv6-icmp
   - icmp
+  - "58"
 remote_group_id: ["!None"]
 port:
   - 22
