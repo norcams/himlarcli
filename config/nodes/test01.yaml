@@ -290,20 +290,30 @@ nodes:
   status-01:
     compute_profile: medium
     compute_resource: controller-03
-  storage-01:
-    hostgroup: 4
+  storage-001:
+    environment: el9
+    hostgroup: el9/legacy
+    keepdevices: true
     mac: 18:66:da:51:60:64
-  storage-02:
-    hostgroup: 4
+  storage-002:
+    environment: el9
+    hostgroup: el9/legacy
+    keepdevices: true
     mac: 18:66:da:51:62:1f
-  storage-03:
-    hostgroup: 4
+  storage-003:
+    environment: el9
+    hostgroup: el9/legacy
+    keepdevices: true
     mac: 18:66:da:51:70:a7
-  storage-04:
-    hostgroup: 4
+  storage-004:
+    environment: el9
+    hostgroup: el9/legacy
+    keepdevices: true
     mac: 18:66:da:51:6e:65
-  storage-05:
-    hostgroup: 4
+  storage-005:
+    environment: el9
+    hostgroup: el9/legacy
+    keepdevices: true
     mac: b0:83:fe:e8:3a:31
   telemetry-01:
     compute_profile: xlarge
