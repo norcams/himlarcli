@@ -293,8 +293,13 @@ nodes:
   storage-001:
     environment: el9
     hostgroup: el9/legacy
-    keepdevices: true
+#    keepdevices: true
     mac: 18:66:da:51:60:64
+    host_parameters_attributes:
+      - name: "installdevice"
+        value: "sdm" # this is not the final root dev after install
+      - name: "keepdevices"
+        value: true
   storage-002:
     environment: el9
     hostgroup: el9/legacy
