@@ -71,6 +71,9 @@ class Nova(Client):
         except novaclient.exceptions.NotFound:
             self.logger.debug('=> %s with id %s not found', obj_type, obj_id)
             result = None
+        except novaclient.exceptions.ClientException:
+            self.logger.debug('=> %s with id %s gave unknown error', obj_type, obj_id)
+            result = None
         return result
 
     def get_keypairs(self, user_id):
