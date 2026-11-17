@@ -9,19 +9,20 @@ nodes:
     compute_profile: small
     compute_resource: controller-03
   builder-01:
-    hostgroup: 6
+    hostgroup: el9/legacy
+    environment: zed
     compute_profile: medium
-    compute_resource: controller-03
+    compute_resource: controller-04
     compute_attributes:
       volumes_attributes:
-        '1':
-          allocation:   '0G'
-          pool_name:    'masstorage'
-          capacity:     '50G'
-          format_type:  'qcow2'
+        "1":
+          allocation: "0G"
+          pool_name: "dirpool"
+          capacity: "140G"
+          format_type: "qcow2"
     host_parameters_attributes:
-      - name:           'installdevice'
-        value:          'vda'
+      - name: "installdevice"
+        value: "vda"
   cephmon-object-01:
     compute_profile: small
     compute_resource: controller-03
