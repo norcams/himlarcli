@@ -255,12 +255,12 @@ images:
       'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
-  'fedora_43':
-    'name':             'GOLD Fedora 43'
-    'depricated':       'Outdated (Fedora 43)'
+  'fedora_44':
+    'name':             'GOLD Fedora 44'
+    'depricated':       'Outdated (Fedora 44)'
     'url':              'http://builder/'
-    'latest':           'fedora_43-latest.qcow2'
-    'builder_checksum': 'fedora_43-latest.md5'
+    'latest':           'fedora_44-latest.qcow2'
+    'builder_checksum': 'fedora_44-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'
@@ -275,12 +275,12 @@ images:
       'hw_require_fsfreeze':       'yes'
       'os_require_quiesce':        'yes'
       'os_type':                   'linux'
-  'fedora_44':
-    'name':             'GOLD Fedora 44'
-    'depricated':       'Outdated (Fedora 44)'
+  'fedora_45':
+    'name':             'GOLD Fedora 45'
+    'depricated':       'Outdated (Fedora 45)'
     'url':              'http://builder/'
-    'latest':           'fedora_44-latest.qcow2'
-    'builder_checksum': 'fedora_44-latest.md5'
+    'latest':           'fedora_45-latest.qcow2'
+    'builder_checksum': 'fedora_45-latest.md5'
     'min_ram':          1024
     'min_disk':         8
     'visibility':       'public'

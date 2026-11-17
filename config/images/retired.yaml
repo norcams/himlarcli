@@ -70,6 +70,9 @@ images:
   'fedora_42':
     'name':             'GOLD Fedora 42'
     'depricated':       'Outdated (Fedora 42)'
+  'fedora_43':
+    'name':             'GOLD Fedora 43'
+    'depricated':       'Outdated (Fedora 43)'
   'ubuntu_1604':
     'name':             'GOLD Ubuntu 16.04 LTS'
     'depricated':       'Outdated (Ubuntu 16.04)'
