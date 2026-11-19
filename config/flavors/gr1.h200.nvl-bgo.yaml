@@ -27,13 +27,13 @@ properties:
 gr1.h200.nvl:
   'gr1.h200.nvl.7xlarge':
     vcpus: 28 # Not dedicated, vCPUs are floating
-    ram: 368640 #(360GB) /730 split (28vCPU + 360GB RAM per node)
+    ram: 737280 #(720GB) (28vCPU + 720GB RAM per node)
     disk: 750 # Split in two and leave some for libvirt, to enable 2x instances
 
 # Experminatal flavor using all 8 gpus but split 4 by per numa node and seperate nvlink. Or so I guess. Experimental.  
   'gr1.h200.nvl.14xlarge':
     vcpus: 56 #(8 for host, less jitter) Not dedicated, vCPUs are floating
-    ram: 737280 #(720GB) 56/720 split (28vCPU + 360GB RAM per node)
+    ram: 1474560 #(1.4TB) (28vCPU + 720GB RAM per node)
     disk: 1500 # Not sure how much disk space is needd for other files
     properties:
       hw:numa_nodes: 2
