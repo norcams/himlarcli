@@ -20,6 +20,7 @@ from himlarcli import tests
 tests.is_virtual_env()
 
 from himlarcli.keystone import Keystone
+from himlarcli.neutron import Neutron
 from himlarcli.nova import Nova
 from himlarcli.parser import Parser
 from himlarcli.printer import Printer
@@ -189,6 +190,77 @@ def instance_details(region, instance):
         'ipv6': ', '.join(ipv6) if ipv6 else '(none)',
     }
 
+def find_instance_ids_by_ip(address):
+    """
+    Ask neutron which port holds the given address and return a list of
+    (region, instance id) pairs. This is the fast path for an IP search:
+    neutron matches the address with an indexed, exact comparison, so it
+    costs a couple of API calls per region instead of listing every
+    instance in the region.
+
+    Floating ips live outside a port's fixed_ips, so they are looked up
+    separately, and only when the address is not a fixed ip anywhere.
+
+    Returns None if neutron could not be queried in some region, which
+    tells the caller to fall back to scanning. An empty list means the
+    lookup worked and the address is not in use.
+    """
+    found = []
+    for region in sorted(regions):
+        logger.debug(f'=> look up {address.compressed} in {region}')
+        nc = himutils.get_client(Neutron, options, logger, region)
+        # Neutron stores addresses in canonical form, so always ask with
+        # the compressed notation and not with whatever the user typed.
+        ports = nc.get_ports(fixed_ips=f'ip_address={address.compressed}',
+                             fields=['device_id', 'device_owner'])
+        if ports is None:
+            return None
+        if not ports:
+            floatingips = nc.get_floatingips(floating_ip_address=address.compressed,
+                                             fields=['port_id'])
+            if floatingips is None:
+                return None
+            for floatingip in floatingips:
+                if not floatingip.get('port_id'):
+                    continue
+                attached = nc.get_ports(id=floatingip['port_id'],
+                                        fields=['device_id', 'device_owner'])
+                if attached is None:
+                    return None
+                ports += attached
+        for port in ports:
+            owner = port.get('device_owner', '')
+            if not owner.startswith('compute:'):
+                logger.debug(f'=> {address.compressed} in {region} is held by a '
+                             f"port owned by {owner or 'nobody'}, not an instance")
+                continue
+            if port.get('device_id'):
+                found.append((region, port['device_id']))
+    return found
+
+def fetch_instances(instance_ids):
+    """Yield (region, instance) for each (region, instance id) pair."""
+    novaclients = {}
+    for region, instance_id in instance_ids:
+        if region not in novaclients:
+            novaclients[region] = himutils.get_client(Nova, options, logger, region)
+        instance = novaclients[region].get_by_id('server', instance_id)
+        if not instance:
+            himutils.error(f'port in {region} points at missing instance {instance_id}')
+            continue
+        yield region, instance
+
+def scan_instances(address):
+    """
+    Yield (region, instance) for every instance, or for the instances
+    holding the given address. This lists all instances in all selected
+    regions, and is the slow path used when neutron cannot be queried.
+    """
+    for region, instance in iter_instances():
+        if address and not match_ip(instance, address):
+            continue
+        yield region, instance
+
 #---------------------------------------------------------------------
 # Action functions
 #---------------------------------------------------------------------
@@ -231,12 +303,12 @@ def action_search():
     Search for instances by name glob and/or IP address. Both filters
     may be combined, in which case an instance has to match both.
 
-    Filtering is done locally on a full instance listing per region
-    rather than through nova's own 'name'/'ip'/'ip6' search options.
-    That costs one listing per region, but keeps glob semantics the same
-    everywhere instead of depending on the regex dialect of nova's
-    database, and it also finds floating IPs, which nova's ip filter
-    does not match.
+    An IP search is resolved through neutron, which knows the port that
+    holds the address, so only the matching instances are fetched from
+    nova. A name search has to list the instances of every selected
+    region and match locally: nova's own name filter is a regex handed
+    to its database, so translating a glob to it would behave differently
+    from one deployment to the next.
     """
     if not options.name and not options.ip:
         himutils.fatal('search needs --name and/or --ip')
@@ -251,12 +323,21 @@ def action_search():
         case = 'ignoring case' if options.ignore_case else 'case sensitive'
         logger.debug(f'=> search for name matching {options.name} ({case})')
 
+    if address:
+        instance_ids = find_instance_ids_by_ip(address)
+        if instance_ids is None:
+            himutils.error('neutron lookup failed, falling back to '
+                           'a full instance scan')
+            candidates = scan_instances(address)
+        else:
+            candidates = fetch_instances(instance_ids)
+    else:
+        candidates = scan_instances(None)
+
     found = 0
-    for region, instance in iter_instances():
+    for region, instance in candidates:
         if options.name and not match_name(instance, options.name,
                                            options.ignore_case):
-            continue
-        if address and not match_ip(instance, address):
             continue
         found += 1
         printer.output_dict(instance_details(region, instance))

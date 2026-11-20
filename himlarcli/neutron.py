@@ -115,6 +115,48 @@ class Neutron(Client):
             rules = None
         return rules
 
+# ==================================== PORT ==================================
+
+    def get_ports(self, **kwargs):
+        """
+            Get a list of ports, filtered by the given keyword arguments.
+            Note that neutron stores addresses in canonical form, so an
+            address filter must use the compressed notation of an IPv6
+            address. E.G.
+                get_ports(fixed_ips='ip_address=2001:db8::1')
+                get_ports(fixed_ips='ip_address=10.0.0.5',
+                          fields=['device_id', 'device_owner'])
+            Version: 2026-11
+            :rtype: List, or None if neutron could not be queried
+        """
+        try:
+            ports = self.client.list_ports(retrieve_all=True, **kwargs)
+        except exceptions.ServiceUnavailable:
+            self.log_error('Neutron: Service Unavailable')
+            return None
+        except exceptions.NeutronException as e:
+            self.log_error(e)
+            return None
+        return ports.get('ports', list())
+
+    def get_floatingips(self, **kwargs):
+        """
+            Get a list of floating ips, filtered by the given keyword
+            arguments. E.G.
+                get_floatingips(floating_ip_address='158.39.77.10')
+            Version: 2026-11
+            :rtype: List, or None if neutron could not be queried
+        """
+        try:
+            floatingips = self.client.list_floatingips(retrieve_all=True, **kwargs)
+        except exceptions.ServiceUnavailable:
+            self.log_error('Neutron: Service Unavailable')
+            return None
+        except exceptions.NeutronException as e:
+            self.log_error(e)
+            return None
+        return floatingips.get('floatingips', list())
+
 # =================================== NETWORK ================================
 
     def list_networks(self, retrieve_all=True):
