@@ -9,9 +9,10 @@ actions:
   'start':    'Start one or more instances'
   'stop':     'Stop one or more instances'
   'lock':     'Lock one or more instances, with a reason'
+  'unlock':   'Unlock one or more instances'
 opt_args:
   'instances':
-    'sub':      ['start', 'stop', 'lock']
+    'sub':      ['start', 'stop', 'lock', 'unlock']
     'help':     'id of the instance(s) to act on'
     'metavar':  '<instance-id>'
     'nargs':    '+'
@@ -22,7 +23,7 @@ opt_args:
     'metavar':  '<text>'
     'required': true
   '--assume-yes':
-    'sub':      ['start', 'stop', 'lock']
+    'sub':      ['start', 'stop', 'lock', 'unlock']
     'dest':     'assume_yes'
     'help':     'do not ask for confirmation'
     'action':   'store_const'

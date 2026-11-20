@@ -439,6 +439,44 @@ class Nova(Client):
         self.debug_log(f'lock instance {instance.id} with reason {reason}')
         return True
 
+    def unlock_instance(self, instance):
+        """
+            Wrapper to unlock an instance. Unlocking an instance that
+            is not locked is a no-op in nova.
+            Version: 2026-11
+            :rtype: bool, True if the instance was unlocked
+        """
+        self.log_dry_run('unlock_instance', instance=instance.id)
+        if self.dry_run:
+            return False
+        try:
+            instance.unlock()
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return False
+        self.debug_log(f'unlock instance {instance.id}')
+        return True
+
+    def delete_instance_metadata(self, instance, keys):
+        """
+            Wrapper to remove metadata keys from an instance. Nova
+            answers 404 for a key the instance does not have, so only
+            pass keys that are known to be there.
+            Version: 2026-11
+            :rtype: bool, True if the metadata was removed
+        """
+        self.log_dry_run('delete_instance_metadata', instance=instance.id,
+                         keys=keys)
+        if self.dry_run:
+            return False
+        try:
+            self.client.servers.delete_meta(instance, keys)
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return False
+        self.debug_log(f'delete metadata {keys} from instance {instance.id}')
+        return True
+
     def set_instance_metadata(self, instance, metadata):
         """
             Wrapper to add or update metadata on an instance. Instance

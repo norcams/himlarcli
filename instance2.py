@@ -8,8 +8,8 @@ derived from that domain. The 'user' action lists every instance owned
 by a single user, grouped by project, and the 'search' action looks up
 instances by name glob and/or IP address.
 
-The 'start', 'stop' and 'lock' actions take instance ids and change
-the instances they name.
+The 'start', 'stop', 'lock' and 'unlock' actions take instance ids and
+change the instances they name.
 
 Working name for the next generation of instance.py.
 """
@@ -414,6 +414,28 @@ def lock_one(nc, instance):
         return 'locked, but metadata failed'
     return 'metadata set, but lock failed' if metadata_set else 'failed'
 
+def unlock_one(nc, instance):
+    """
+    Unlock a single instance and clear the reason the lock action
+    recorded. The instance is unlocked first, so a failure to clear the
+    metadata cannot leave it locked with no visible reason. A left over
+    reason is cleared even when the instance is no longer locked.
+    """
+    has_reason = LOCK_REASON_KEY in (getattr(instance, 'metadata', None) or {})
+    if getattr(instance, 'locked', None) is False and not has_reason:
+        return 'skipped: not locked'
+    unlocked = nc.unlock_instance(instance)
+    cleared = True
+    if has_reason:
+        cleared = nc.delete_instance_metadata(instance, [LOCK_REASON_KEY])
+    if options.dry_run:
+        return 'dry-run'
+    if unlocked and cleared:
+        return 'unlocked'
+    if unlocked:
+        return 'unlocked, but reason not cleared'
+    return 'reason cleared, but unlock failed' if cleared else 'failed'
+
 #---------------------------------------------------------------------
 # Action functions
 #---------------------------------------------------------------------
@@ -529,6 +551,9 @@ def action_stop():
 
 def action_lock():
     change_instances('lock', lock_one)
+
+def action_unlock():
+    change_instances('unlock', unlock_one)
 
 #---------------------------------------------------------------------
 # Run local function with the same name as the action (Note: - => _)
