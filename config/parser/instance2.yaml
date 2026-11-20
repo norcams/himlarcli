@@ -24,8 +24,9 @@ opt_args:
   '--ip':
     'sub':      'search'
     'dest':     'ip'
-    'help':     'IPv4 or IPv6 address to search for'
-    'metavar':  '<address>'
+    'help':     'IPv4 or IPv6 address to search for, comma separated for
+                 several'
+    'metavar':  '<address[,address]>'
   '--id-only':
     'sub':      'search'
     'dest':     'id_only'

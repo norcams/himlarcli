@@ -155,6 +155,29 @@ def match_name(instance, pattern, ignore_case=False):
         return fnmatch.fnmatchcase(instance.name.lower(), pattern.lower())
     return fnmatch.fnmatchcase(instance.name, pattern)
 
+def parse_addresses(text):
+    """
+    Parse a comma separated list of IPv4 and IPv6 addresses. Every
+    address is validated and normalized, and duplicates are dropped, so
+    one address written in two different IPv6 notations is looked up
+    once rather than twice.
+    """
+    addresses = []
+    for part in text.split(','):
+        part = part.strip()
+        if not part:
+            continue
+        address = None
+        try:
+            address = ipaddress.ip_address(part)
+        except ValueError:
+            himutils.fatal(f'{part} is not a valid IPv4 or IPv6 address')
+        if address is not None and address not in addresses:
+            addresses.append(address)
+    if not addresses:
+        himutils.fatal(f'no address found in --ip {text}')
+    return addresses
+
 def match_ip(instance, address):
     """
     True if any address of the instance equals the given address, which
@@ -171,6 +194,10 @@ def match_ip(instance, address):
                 logger.debug(f"=> unparsable address {interface['addr']} "
                              f'for instance {instance.name} ({instance.id})')
     return False
+
+def match_any_ip(instance, addresses):
+    """True if the instance holds any one of the given addresses."""
+    return any(match_ip(instance, address) for address in addresses)
 
 def instance_details(region, instance):
     """
@@ -218,52 +245,61 @@ def output_instance_table(records):
                                  for record in records],
                            sortby=columns.index('name'))
 
-def find_instance_ids_by_ip(address):
+def find_instance_ids_by_ip(addresses):
     """
-    Ask neutron which port holds the given address and return a list of
-    (region, instance id) pairs. This is the fast path for an IP search:
-    neutron matches the address with an indexed, exact comparison, so it
-    costs a couple of API calls per region instead of listing every
-    instance in the region.
+    Ask neutron which ports hold the given addresses and return a list
+    of (region, instance id) pairs. This is the fast path for an IP
+    search: neutron matches an address with an indexed, exact
+    comparison, so it costs a couple of API calls per address and
+    region instead of listing every instance in the region.
 
     Floating ips live outside a port's fixed_ips, so they are looked up
-    separately, and only when the address is not a fixed ip anywhere.
+    separately, and only when an address is not a fixed ip anywhere.
+
+    Pairs are deduplicated, so giving both the IPv4 and the IPv6
+    address of one instance reports that instance once.
 
     Returns None if neutron could not be queried in some region, which
     tells the caller to fall back to scanning. An empty list means the
-    lookup worked and the address is not in use.
+    lookups worked and none of the addresses are in use.
     """
     found = []
+    seen = set()
     for region in sorted(regions):
-        logger.debug(f'=> look up {address.compressed} in {region}')
         nc = himutils.get_client(Neutron, options, logger, region)
-        # Neutron stores addresses in canonical form, so always ask with
-        # the compressed notation and not with whatever the user typed.
-        ports = nc.get_ports(fixed_ips=f'ip_address={address.compressed}',
-                             fields=['device_id', 'device_owner'])
-        if ports is None:
-            return None
-        if not ports:
-            floatingips = nc.get_floatingips(floating_ip_address=address.compressed,
-                                             fields=['port_id'])
-            if floatingips is None:
+        for address in addresses:
+            logger.debug(f'=> look up {address.compressed} in {region}')
+            # Neutron stores addresses in canonical form, so always ask
+            # with the compressed notation, not with what the user typed.
+            ports = nc.get_ports(fixed_ips=f'ip_address={address.compressed}',
+                                 fields=['device_id', 'device_owner'])
+            if ports is None:
                 return None
-            for floatingip in floatingips:
-                if not floatingip.get('port_id'):
-                    continue
-                attached = nc.get_ports(id=floatingip['port_id'],
-                                        fields=['device_id', 'device_owner'])
-                if attached is None:
+            if not ports:
+                floatingips = nc.get_floatingips(floating_ip_address=address.compressed,
+                                                 fields=['port_id'])
+                if floatingips is None:
                     return None
-                ports += attached
-        for port in ports:
-            owner = port.get('device_owner', '')
-            if not owner.startswith('compute:'):
-                logger.debug(f'=> {address.compressed} in {region} is held by a '
-                             f"port owned by {owner or 'nobody'}, not an instance")
-                continue
-            if port.get('device_id'):
-                found.append((region, port['device_id']))
+                for floatingip in floatingips:
+                    if not floatingip.get('port_id'):
+                        continue
+                    attached = nc.get_ports(id=floatingip['port_id'],
+                                            fields=['device_id', 'device_owner'])
+                    if attached is None:
+                        return None
+                    ports += attached
+            for port in ports:
+                owner = port.get('device_owner', '')
+                if not owner.startswith('compute:'):
+                    logger.debug(f'=> {address.compressed} in {region} is held by a '
+                                 f"port owned by {owner or 'nobody'}, not an instance")
+                    continue
+                if not port.get('device_id'):
+                    continue
+                pair = (region, port['device_id'])
+                if pair not in seen:
+                    seen.add(pair)
+                    found.append(pair)
     return found
 
 def fetch_instances(instance_ids):
@@ -278,14 +314,16 @@ def fetch_instances(instance_ids):
             continue
         yield region, instance
 
-def scan_instances(address):
+def scan_instances(addresses):
     """
     Yield (region, instance) for every instance, or for the instances
-    holding the given address. This lists all instances in all selected
-    regions, and is the slow path used when neutron cannot be queried.
+    holding any of the given addresses. This lists all instances in all
+    selected regions, and is the slow path used when neutron cannot be
+    queried. Each instance is yielded once however many of the
+    addresses it holds.
     """
     for region, instance in iter_instances():
-        if address and not match_ip(instance, address):
+        if addresses and not match_any_ip(instance, addresses):
             continue
         yield region, instance
 
@@ -331,6 +369,10 @@ def action_search():
     Search for instances by name glob and/or IP address. Both filters
     may be combined, in which case an instance has to match both.
 
+    --ip takes one address or several comma separated ones. An instance
+    is reported once however many of the addresses belong to it, so
+    passing both the IPv4 and the IPv6 address of a host is harmless.
+
     With --id-only the matching instance ids are printed bare, one per
     line, for feeding into a shell loop or xargs.
 
@@ -343,27 +385,21 @@ def action_search():
     """
     if not options.name and not options.ip:
         himutils.fatal('search needs --name and/or --ip')
-    address = None
-    if options.ip:
-        try:
-            address = ipaddress.ip_address(options.ip)
-        except ValueError:
-            himutils.fatal(f'{options.ip} is not a valid IPv4 or IPv6 address')
-        logger.debug(f'=> search for IPv{address.version} address {address.compressed}')
+    addresses = parse_addresses(options.ip) if options.ip else []
     if options.name:
         case = 'ignoring case' if options.ignore_case else 'case sensitive'
         logger.debug(f'=> search for name matching {options.name} ({case})')
 
-    if address:
-        instance_ids = find_instance_ids_by_ip(address)
+    if addresses:
+        instance_ids = find_instance_ids_by_ip(addresses)
         if instance_ids is None:
             himutils.error('neutron lookup failed, falling back to '
                            'a full instance scan')
-            candidates = scan_instances(address)
+            candidates = scan_instances(addresses)
         else:
             candidates = fetch_instances(instance_ids)
     else:
-        candidates = scan_instances(None)
+        candidates = scan_instances([])
 
     records = [instance_details(region, instance)
                for region, instance in candidates
