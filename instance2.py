@@ -96,18 +96,27 @@ def count_instances(classifiers):
 
 def output_stats(stats, subject):
     """
-    Print stats as instance counts, or as a percentage of the total
-    when --percent was given.
+    Print one grouping as an aligned block of groups, in the same shape
+    as a single search hit. Groups are sorted and the total comes last,
+    rather than sorting into the middle of them.
+
+    Counts are reported as they are. Percentages are rounded to one
+    decimal and leave the total out, since it is always 100. They stay
+    numbers rather than becoming strings, so --format json and csv get
+    numbers too.
     """
     total = stats.get('total', 0)
-    if not options.percent:
-        result = dict(stats)
-        result['header'] = f'Number of instances grouped by {subject}:'
+    groups = sorted((key, value) for key, value in stats.items()
+                    if key != 'total')
+    if options.percent:
+        header = f'Percent of instances grouped by {subject}'
+        fields = {key: round((value / total) * 100, 1) for key, value in groups} \
+            if total > 0 else {}
     else:
-        result = ({key: (value / total) * 100 for key, value in stats.items()}
-                  if total > 0 else {})
-        result['header'] = f'Percent of instances grouped by {subject}:'
-    printer.output_dict(result)
+        header = f'Number of instances grouped by {subject}'
+        fields = dict(groups)
+        fields['total'] = total
+    printer.output_record(header, fields)
 
 def classify_project_type(instance):
     """

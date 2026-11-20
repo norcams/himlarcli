@@ -59,7 +59,11 @@ class Printer(object):
             fields : dict, in the order the fields should be printed
         """
         if self.format not in ['text', 'table']:
-            self.output_dict(dict(fields), sort=False)
+            fields = dict(fields)
+            if self.format == 'csv':
+                # a dict with a 'header' gets a csv column header row
+                fields = {'header': True, **fields}
+            self.output_dict(fields, sort=False)
             return
         if header:
             print("\n%s" % header)
