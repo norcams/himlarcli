@@ -2,7 +2,6 @@
 desc:         'Instance stats. Use <action> -h for help on each action'
 actions:
   'statistics': 'Instance counts, grouped by project type, email domain or organization'
-  'user':     'List all instances owned by a user'
   'search':   'Search for instances by name and/or IP address'
   'start':    'Start one or more instances'
   'stop':     'Stop one or more instances'
@@ -55,6 +54,18 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
+  '--user':
+    'sub':      'search'
+    'dest':     'user'
+    'help':     'only instances created by these users, given as email addresses'
+    'metavar':  '<email>'
+    'nargs':    '+'
+  '--project':
+    'sub':      'search'
+    'dest':     'project'
+    'help':     'only instances in these projects, given by name'
+    'metavar':  '<project>'
+    'nargs':    '+'
   '--locked':
     'sub':      'search'
     'dest':     'locked'
@@ -69,11 +80,6 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
-  '-n':
-    'sub':      'user'
-    'dest':     'email'
-    'help':     'user name (email)'
-    'required': true
   '--project-type':
     'sub':      'statistics'
     'dest':     'project_type'

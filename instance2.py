@@ -4,9 +4,8 @@ Instance statistics for the NREC cloud.
 
 The 'statistics' action counts instances across all (or one) region,
 grouped by project type, by the email domain of the owning user, or by
-the organization derived from that domain. The 'user' action lists
-every instance owned by a single user, grouped by project, and the
-'search' action looks up instances by name glob and/or IP address.
+the organization derived from that domain. The 'search' action looks
+up instances by name glob, IP address or the user that created them.
 
 Search can also report the locked instances, with the reason nova
 recorded and when the lock was set.
@@ -207,6 +206,63 @@ def parse_addresses(text):
         himutils.fatal(f'no address found in --ip {text}')
     return addresses
 
+def split_values(values, option):
+    """
+    Flatten an option that takes several arguments into a list of
+    single values. Arguments may also be comma separated, and repeats
+    are dropped.
+    """
+    flattened = []
+    for value in values:
+        for item in value.split(','):
+            item = item.strip()
+            if item and item not in flattened:
+                flattened.append(item)
+    if not flattened:
+        himutils.fatal(f'no value given in {option}')
+    return flattened
+
+def resolve_users(values):
+    """
+    Turn the --user values into the keystone user ids to match on. An
+    email can map to two ids: a user has an api identity and a
+    federated dataporten one, and an instance records whichever of them
+    created it.
+
+    An email that matches no user at all is fatal, since a typo would
+    otherwise quietly narrow the search instead of failing.
+    """
+    user_ids = []
+    for email in split_values(values, '--user'):
+        found = [kc.get_user_by_email(email, user_type)
+                 for user_type in ('api', 'dp')]
+        found = [user.id for user in found if user]
+        if not found:
+            himutils.fatal(f'no user found for {email}, '
+                           'check the spelling and case')
+        logger.debug(f'=> {email} resolves to {len(found)} user id(s)')
+        for user_id in found:
+            if user_id not in user_ids:
+                user_ids.append(user_id)
+    return user_ids
+
+def resolve_projects(values):
+    """
+    Turn the --project values into the project ids to match on. A name
+    that matches no project is fatal, for the same reason an unknown
+    user is.
+    """
+    project_ids = []
+    for name in split_values(values, '--project'):
+        project = kc.get_project_by_name(name)
+        if not project:
+            himutils.fatal(f'no project found for {name}, '
+                           'check the spelling and case')
+        logger.debug(f'=> project {name} is {project.id}')
+        if project.id not in project_ids:
+            project_ids.append(project.id)
+    return project_ids
+
 def match_ip(instance, address):
     """
     True if any address of the instance equals the given address, which
@@ -227,6 +283,23 @@ def match_ip(instance, address):
 def match_any_ip(instance, addresses):
     """True if the instance holds any one of the given addresses."""
     return any(match_ip(instance, address) for address in addresses)
+
+def matches_filters(instance, resolved):
+    """
+    Apply the search criteria that the candidate source did not already
+    narrow by. Whichever source was used, every given criterion ends up
+    checked exactly once.
+    """
+    if options.name and not match_name(instance, options.name,
+                                       options.ignore_case):
+        return False
+    if options.locked and not getattr(instance, 'locked', False):
+        return False
+    if resolved['users'] and instance.user_id not in resolved['users']:
+        return False
+    if resolved['projects'] and instance.tenant_id not in resolved['projects']:
+        return False
+    return True
 
 def instance_details(region, instance):
     """
@@ -357,6 +430,33 @@ def fetch_instances(instance_ids):
             himutils.error(f'port in {region} points at missing instance {instance_id}')
             continue
         yield region, instance
+
+def scan_users(user_ids):
+    """
+    Yield (region, instance) for the instances created by the given
+    users, letting nova filter on the user id, so this does not have to
+    list whole regions. An instance records one creator, so no instance
+    can come back under two of the ids.
+    """
+    for region in sorted(regions):
+        for user_id in user_ids:
+            logger.debug(f'=> list instances created by {user_id} in {region}')
+            for instance in nova_client(region).get_all_instances(
+                    search_opts={'user_id': user_id}):
+                yield region, instance
+
+def scan_projects(project_ids):
+    """
+    Yield (region, instance) for the instances of the given projects,
+    letting nova filter on the project, so this does not have to list
+    whole regions. An instance belongs to one project, so no instance
+    can come back under two of the ids.
+    """
+    for region in sorted(regions):
+        for project_id in project_ids:
+            logger.debug(f'=> list instances in project {project_id} in {region}')
+            for instance in nova_client(region).get_project_instances(project_id):
+                yield region, instance
 
 def scan_locked():
     """
@@ -494,28 +594,6 @@ def action_statistics():
             counter.setdefault(group, 0)
         output_stats(counter, subject)
 
-def action_user():
-    if not kc.is_valid_user(email=options.email):
-        himutils.fatal(f'{options.email} is not a valid user. '
-                       'Please check your spelling and case.')
-    user_objects = kc.get_user_objects(email=options.email, domain=options.domain)
-    novaclients = {region: himutils.get_client(Nova, options, logger, region)
-                   for region in sorted(regions)}
-    total = 0
-    for project in user_objects['projects']:
-        instances = [f'{instance.name} ({region})'
-                     for region, nc in novaclients.items()
-                     for instance in nc.get_project_instances(project.id)]
-        total += len(instances)
-        printer.output_dict({
-            'header': f"{project.name} (type={getattr(project, 'type', 'unknown')})",
-            'instances': instances if instances else ['(none)'],
-        })
-    printer.output_dict({
-        'header': f'Instances owned by {options.email}',
-        'total': total,
-    })
-
 def action_search():
     """
     Search for instances by name glob and/or IP address. Both filters
@@ -530,6 +608,16 @@ def action_search():
     instance, and nova does that filtering, so it does not have to list
     whole regions.
 
+    --user takes one or more email addresses and matches the instances
+    those users created. --project takes one or more project names and
+    matches the instances in them, whoever created those.
+
+    The most selective criterion decides where the candidates come
+    from: an address goes through neutron, a user, a project or the
+    lock through nova's own filters, and only a bare name search has to
+    list whole regions. The remaining criteria are then applied to what
+    comes back.
+
     With --id-only the matching instance ids are printed bare, one per
     line, for feeding into a shell loop or xargs.
 
@@ -540,8 +628,14 @@ def action_search():
     to its database, so translating a glob to it would behave differently
     from one deployment to the next.
     """
-    if not options.name and not options.ip and not options.locked:
-        himutils.fatal('search needs --name, --ip and/or --locked')
+    if not (options.name or options.ip or options.locked or options.user
+            or options.project):
+        himutils.fatal('search needs --name, --ip, --user, --project '
+                       'and/or --locked')
+    resolved = {
+        'users': resolve_users(options.user) if options.user else [],
+        'projects': resolve_projects(options.project) if options.project else [],
+    }
     addresses = parse_addresses(options.ip) if options.ip else []
     if options.name:
         case = 'ignoring case' if options.ignore_case else 'case sensitive'
@@ -555,6 +649,10 @@ def action_search():
             candidates = scan_instances(addresses)
         else:
             candidates = fetch_instances(instance_ids)
+    elif resolved['users']:
+        candidates = scan_users(resolved['users'])
+    elif resolved['projects']:
+        candidates = scan_projects(resolved['projects'])
     elif options.locked:
         candidates = scan_locked()
     else:
@@ -562,9 +660,7 @@ def action_search():
 
     records = [instance_details(region, instance)
                for region, instance in candidates
-               if (not options.name or match_name(instance, options.name,
-                                                  options.ignore_case))
-               and (not options.locked or getattr(instance, 'locked', False))]
+               if matches_filters(instance, resolved)]
 
     # --id-only exists to be piped, so it prints bare ids and ignores
     # both --format and the count footer
