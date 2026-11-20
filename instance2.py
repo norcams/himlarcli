@@ -173,22 +173,50 @@ def match_ip(instance, address):
     return False
 
 def instance_details(region, instance):
-    """Collect the reportable fields of a single instance."""
+    """
+    Collect the reportable fields of a single instance, in the order
+    they should be presented. 'name' and 'region' come first because
+    the compact output uses them as its header line.
+    """
     project = get_object('project', instance.tenant_id)
     user = get_object('user', instance.user_id)
     ipv4, ipv6 = instance_addresses(instance)
     return {
-        'header': f'{instance.name} ({region})',
+        'name': instance.name,
+        'region': region,
         'id': instance.id,
         'status': instance.status,
-        'region': region,
+        'flavor': instance.flavor.get('original_name', 'unknown'),
+        'created': short_date(instance.created),
         'project': project.name if project else f'(unknown id={instance.tenant_id})',
         'user': user.name if user else f'(unknown id={instance.user_id})',
-        'flavor': instance.flavor.get('original_name', 'unknown'),
-        'created': instance.created,
         'ipv4': ', '.join(ipv4) if ipv4 else '(none)',
         'ipv6': ', '.join(ipv6) if ipv6 else '(none)',
     }
+
+def short_date(created):
+    """Turn nova's 2022-02-16T11:35:27Z into 2022-02-16 11:35:27."""
+    try:
+        return himutils.convert_date(created, '%Y-%m-%dT%H:%M:%SZ',
+                                     '%Y-%m-%d %H:%M:%S')
+    except (ValueError, TypeError):
+        logger.debug(f'=> unexpected date format {created}')
+        return created
+
+def output_instance(record):
+    """Print one instance as a header line and a block of fields."""
+    fields = {key: value for key, value in record.items()
+              if key not in ('name', 'region')}
+    printer.output_record(f"{record['name']} ({record['region']})", fields)
+
+def output_instance_table(records):
+    """Print instances as a table, one row per instance."""
+    columns = ['id', 'name', 'region', 'status', 'flavor', 'ipv4', 'ipv6',
+               'project', 'user']
+    printer.output_records(header=[column.upper() for column in columns],
+                           rows=[[record[column] for column in columns]
+                                 for record in records],
+                           sortby=columns.index('name'))
 
 def find_instance_ids_by_ip(address):
     """
@@ -334,14 +362,31 @@ def action_search():
     else:
         candidates = scan_instances(None)
 
-    found = 0
-    for region, instance in candidates:
-        if options.name and not match_name(instance, options.name,
-                                           options.ignore_case):
-            continue
-        found += 1
-        printer.output_dict(instance_details(region, instance))
-    printer.output_dict({'header': f'Instances found: {found}'})
+    records = [instance_details(region, instance)
+               for region, instance in candidates
+               if not options.name or match_name(instance, options.name,
+                                                 options.ignore_case)]
+
+    # A single hit gets the full field block, several get a table. The
+    # machine readable formats always get one full record per instance,
+    # so that piping does not depend on how many instances matched.
+    if options.format in ('json', 'csv'):
+        for position, record in enumerate(records):
+            # Printer writes a csv column header for a dict that has a
+            # 'header' key, and it belongs above the first row only
+            if options.format == 'csv' and position == 0:
+                record = {'header': True, **record}
+            printer.output_dict(record, sort=False)
+    elif not records:
+        pass
+    elif options.format == 'table' or len(records) > 1:
+        output_instance_table(records)
+    else:
+        output_instance(records[0])
+
+    # The count is obvious when there is exactly one hit
+    if len(records) != 1 and options.format in ('text', 'table'):
+        printer.output_msg(f'{len(records)} instances found')
 
 #---------------------------------------------------------------------
 # Run local function with the same name as the action (Note: - => _)
