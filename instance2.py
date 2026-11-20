@@ -2,11 +2,11 @@
 """
 Instance statistics for the NREC cloud.
 
-Counts instances across all (or one) region and groups them by project
-type, by the email domain of the owning user, or by the organization
-derived from that domain. The 'user' action lists every instance owned
-by a single user, grouped by project, and the 'search' action looks up
-instances by name glob and/or IP address.
+The 'statistics' action counts instances across all (or one) region,
+grouped by project type, by the email domain of the owning user, or by
+the organization derived from that domain. The 'user' action lists
+every instance owned by a single user, grouped by project, and the
+'search' action looks up instances by name glob and/or IP address.
 
 Search can also report the locked instances, with the reason nova
 recorded and when the lock was set.
@@ -74,19 +74,24 @@ def iter_instances():
         for instance in nova_client(region).get_all_instances():
             yield region, instance
 
-def count_instances(classify):
+def count_instances(classifiers):
     """
-    Count all instances, grouped by the key returned by classify(instance).
-    A classifier returning None counts towards the total only.
+    Count all instances once, grouped by each of the given classifiers.
+    classifiers is a list of (key, function) pairs and the result maps
+    each key to its own counter, so asking for several groupings costs
+    no more region listings than asking for one. A classifier returning
+    None counts towards the total only.
     """
-    stats = Counter()
+    stats = {key: Counter() for key, _classify in classifiers}
     total = 0
     for _region, instance in iter_instances():
         total += 1
-        key = classify(instance)
-        if key:
-            stats[key] += 1
-    stats['total'] = total
+        for key, classify in classifiers:
+            group = classify(instance)
+            if group:
+                stats[key][group] += 1
+    for counter in stats.values():
+        counter['total'] = total
     return stats
 
 def output_stats(stats, subject):
@@ -454,17 +459,29 @@ def unlock_one(nc, instance):
 #---------------------------------------------------------------------
 # Action functions
 #---------------------------------------------------------------------
-def action_project():
-    stats = count_instances(classify_project_type)
-    for project_type in PROJECT_TYPES:
-        stats.setdefault(project_type, 0)
-    output_stats(stats, 'project type')
-
-def action_users():
-    output_stats(count_instances(classify_email_domain), 'user email domain')
-
-def action_org():
-    output_stats(count_instances(classify_organization), 'user organization')
+def action_statistics():
+    """
+    Count instances, grouped by whichever of the groupings were asked
+    for. Several may be combined, and they are then all counted in one
+    pass over the instances.
+    """
+    # dest, what the header calls it, classifier, groups to always show
+    groupings = [
+        ('project_type', 'project type', classify_project_type, PROJECT_TYPES),
+        ('email_domain', 'user email domain', classify_email_domain, []),
+        ('organization', 'user organization', classify_organization, []),
+    ]
+    wanted = [grouping for grouping in groupings if getattr(options, grouping[0])]
+    if not wanted:
+        himutils.fatal('statistics needs one or more of --project-type, '
+                       '--email-domain and --organization')
+    stats = count_instances([(key, classify)
+                             for key, _subject, classify, _baseline in wanted])
+    for key, subject, _classify, baseline in wanted:
+        counter = stats[key]
+        for group in baseline:
+            counter.setdefault(group, 0)
+        output_stats(counter, subject)
 
 def action_user():
     if not kc.is_valid_user(email=options.email):
