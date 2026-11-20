@@ -19,7 +19,7 @@ opt_args:
   '--reason':
     'sub':      'lock'
     'dest':     'reason'
-    'help':     'why the instance is locked, stored as instance metadata'
+    'help':     'why the instance is locked, recorded by nova as locked_reason'
     'metavar':  '<text>'
     'required': true
   '--assume-yes':

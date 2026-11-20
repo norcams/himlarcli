@@ -457,45 +457,6 @@ class Nova(Client):
         self.debug_log(f'unlock instance {instance.id}')
         return True
 
-    def delete_instance_metadata(self, instance, keys):
-        """
-            Wrapper to remove metadata keys from an instance. Nova
-            answers 404 for a key the instance does not have, so only
-            pass keys that are known to be there.
-            Version: 2026-11
-            :rtype: bool, True if the metadata was removed
-        """
-        self.log_dry_run('delete_instance_metadata', instance=instance.id,
-                         keys=keys)
-        if self.dry_run:
-            return False
-        try:
-            self.client.servers.delete_meta(instance, keys)
-        except novaclient.exceptions.ClientException as e:
-            self.log_error(e)
-            return False
-        self.debug_log(f'delete metadata {keys} from instance {instance.id}')
-        return True
-
-    def set_instance_metadata(self, instance, metadata):
-        """
-            Wrapper to add or update metadata on an instance. Instance
-            metadata is listed as properties by 'openstack server show'.
-            Version: 2026-11
-            :rtype: bool, True if the metadata was set
-        """
-        self.log_dry_run('set_instance_metadata', instance=instance.id,
-                         metadata=metadata)
-        if self.dry_run:
-            return False
-        try:
-            self.client.servers.set_meta(instance, metadata)
-        except novaclient.exceptions.ClientException as e:
-            self.log_error(e)
-            return False
-        self.debug_log(f'set metadata {metadata} on instance {instance.id}')
-        return True
-
     def stop_project_instances(self, project, dry_run=False):
         """
             Stop all instances in a project

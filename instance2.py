@@ -44,10 +44,6 @@ regions = himutils.get_regions(options, kc)
 # emitted so the list below can be updated.
 PROJECT_TYPES = ['admin', 'demo', 'education', 'hpc', 'personal', 'research', 'test']
 
-# Instance metadata key the 'lock' action records its reason in. Nova
-# metadata is what 'openstack server show' lists under properties.
-LOCK_REASON_KEY = 'lock_reason'
-
 #---------------------------------------------------------------------
 # Helper functions
 #---------------------------------------------------------------------
@@ -397,44 +393,26 @@ def stop_one(nc, instance):
 
 def lock_one(nc, instance):
     """
-    Lock a single instance and record why. The reason goes into
-    instance metadata, which is what 'openstack server show' lists
-    under properties, and is also handed to nova's own lock reason.
-    Metadata is written first, so a failing lock cannot leave an
-    instance locked with no visible reason.
+    Lock a single instance and record why. Nova stores the reason
+    itself from compute api version 2.73 onwards, and reports it as
+    locked_reason in 'openstack server show'.
     """
-    metadata_set = nc.set_instance_metadata(instance,
-                                            {LOCK_REASON_KEY: options.reason})
     locked = nc.lock_instance(instance, options.reason)
     if options.dry_run:
         return 'dry-run'
-    if locked and metadata_set:
-        return 'locked'
-    if locked:
-        return 'locked, but metadata failed'
-    return 'metadata set, but lock failed' if metadata_set else 'failed'
+    return 'locked' if locked else 'failed'
 
 def unlock_one(nc, instance):
     """
-    Unlock a single instance and clear the reason the lock action
-    recorded. The instance is unlocked first, so a failure to clear the
-    metadata cannot leave it locked with no visible reason. A left over
-    reason is cleared even when the instance is no longer locked.
+    Unlock a single instance. Nova drops its locked_reason along with
+    the lock, so there is nothing else to clean up.
     """
-    has_reason = LOCK_REASON_KEY in (getattr(instance, 'metadata', None) or {})
-    if getattr(instance, 'locked', None) is False and not has_reason:
+    if getattr(instance, 'locked', None) is False:
         return 'skipped: not locked'
     unlocked = nc.unlock_instance(instance)
-    cleared = True
-    if has_reason:
-        cleared = nc.delete_instance_metadata(instance, [LOCK_REASON_KEY])
     if options.dry_run:
         return 'dry-run'
-    if unlocked and cleared:
-        return 'unlocked'
-    if unlocked:
-        return 'unlocked, but reason not cleared'
-    return 'reason cleared, but unlock failed' if cleared else 'failed'
+    return 'unlocked' if unlocked else 'failed'
 
 #---------------------------------------------------------------------
 # Action functions
