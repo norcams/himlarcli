@@ -8,6 +8,9 @@ derived from that domain. The 'user' action lists every instance owned
 by a single user, grouped by project, and the 'search' action looks up
 instances by name glob and/or IP address.
 
+Search can also report the locked instances, with the reason nova
+recorded and when the lock was set.
+
 The 'start', 'stop', 'lock' and 'unlock' actions take instance ids and
 change the instances they name.
 
@@ -44,6 +47,9 @@ regions = himutils.get_regions(options, kc)
 # emitted so the list below can be updated.
 PROJECT_TYPES = ['admin', 'demo', 'education', 'hpc', 'personal', 'research', 'test']
 
+# Columns reported by 'search --locked'
+LOCKED_COLUMNS = ['id', 'name', 'region', 'project', 'locked', 'reason']
+
 #---------------------------------------------------------------------
 # Helper functions
 #---------------------------------------------------------------------
@@ -56,12 +62,16 @@ def get_object(obj_type, obj_id):
     """
     return kc.get_by_id(obj_type, obj_id)
 
+@lru_cache(maxsize=None)
+def nova_client(region):
+    """One nova client per region, built on demand and reused."""
+    return himutils.get_client(Nova, options, logger, region)
+
 def iter_instances():
     """Yield (region, instance) for every instance in the selected regions."""
     for region in sorted(regions):
         logger.debug(f'=> count region {region}')
-        nc = himutils.get_client(Nova, options, logger, region)
-        for instance in nc.get_all_instances():
+        for instance in nova_client(region).get_all_instances():
             yield region, instance
 
 def count_instances(classify):
@@ -211,7 +221,7 @@ def instance_details(region, instance):
     project = get_object('project', instance.tenant_id)
     user = get_object('user', instance.user_id)
     ipv4, ipv6 = instance_addresses(instance)
-    return {
+    details = {
         'name': instance.name,
         'region': region,
         'id': instance.id,
@@ -223,6 +233,12 @@ def instance_details(region, instance):
         'ipv4': ', '.join(ipv4) if ipv4 else '(none)',
         'ipv6': ', '.join(ipv6) if ipv6 else '(none)',
     }
+    # getattr: the change actions share this function and have no --locked
+    if getattr(options, 'locked', False):
+        locked_at = nova_client(region).get_lock_time(instance)
+        details['locked'] = short_date(locked_at) if locked_at else '(unknown)'
+        details['reason'] = getattr(instance, 'locked_reason', None) or '(none)'
+    return details
 
 def short_date(timestamp):
     """
@@ -247,10 +263,11 @@ def output_instance(record):
               if key not in ('name', 'region')}
     printer.output_record(f"{record['name']} ({record['region']})", fields)
 
-def output_instance_table(records):
+def output_instance_table(records, columns=None):
     """Print instances as a table, one row per instance."""
-    columns = ['id', 'name', 'region', 'status', 'flavor', 'ipv4', 'ipv6',
-               'project', 'user']
+    if not columns:
+        columns = ['id', 'name', 'region', 'status', 'flavor', 'ipv4', 'ipv6',
+                   'project', 'user']
     printer.output_records(header=[column.upper() for column in columns],
                            rows=[[record[column] for column in columns]
                                  for record in records],
@@ -324,6 +341,16 @@ def fetch_instances(instance_ids):
             himutils.error(f'port in {region} points at missing instance {instance_id}')
             continue
         yield region, instance
+
+def scan_locked():
+    """
+    Yield (region, instance) for every locked instance, letting nova do
+    the filtering, so this does not have to list the whole region.
+    """
+    for region in sorted(regions):
+        logger.debug(f'=> list locked instances in {region}')
+        for instance in nova_client(region).get_locked_instances():
+            yield region, instance
 
 def scan_instances(addresses):
     """
@@ -412,33 +439,6 @@ def lock_one(nc, instance):
         return 'dry-run'
     return 'locked' if locked else 'failed'
 
-def list_locked():
-    """
-    List the locked instances of every selected region, with the reason
-    nova recorded and, where the instance action log still holds it,
-    when the lock was set.
-    """
-    rows = []
-    for region in sorted(regions):
-        nc = himutils.get_client(Nova, options, logger, region)
-        for instance in nc.get_locked_instances():
-            project = get_object('project', instance.tenant_id)
-            locked_at = nc.get_lock_time(instance)
-            rows.append([
-                instance.id,
-                instance.name,
-                region,
-                project.name if project else f'(unknown id={instance.tenant_id})',
-                short_date(locked_at) if locked_at else '(unknown)',
-                getattr(instance, 'locked_reason', None) or '(none)',
-            ])
-    if not rows:
-        printer.output_msg('no locked instances found')
-        return
-    printer.output_records(
-        header=['ID', 'NAME', 'REGION', 'PROJECT', 'LOCKED', 'REASON'],
-        rows=rows, sortby=1)
-
 def unlock_one(nc, instance):
     """
     Unlock a single instance. Nova drops its locked_reason along with
@@ -497,6 +497,11 @@ def action_search():
     is reported once however many of the addresses belong to it, so
     passing both the IPv4 and the IPv6 address of a host is harmless.
 
+    --locked narrows the result to locked instances and reports when
+    each one was locked and why. On its own it lists every locked
+    instance, and nova does that filtering, so it does not have to list
+    whole regions.
+
     With --id-only the matching instance ids are printed bare, one per
     line, for feeding into a shell loop or xargs.
 
@@ -507,8 +512,8 @@ def action_search():
     to its database, so translating a glob to it would behave differently
     from one deployment to the next.
     """
-    if not options.name and not options.ip:
-        himutils.fatal('search needs --name and/or --ip')
+    if not options.name and not options.ip and not options.locked:
+        himutils.fatal('search needs --name, --ip and/or --locked')
     addresses = parse_addresses(options.ip) if options.ip else []
     if options.name:
         case = 'ignoring case' if options.ignore_case else 'case sensitive'
@@ -522,13 +527,16 @@ def action_search():
             candidates = scan_instances(addresses)
         else:
             candidates = fetch_instances(instance_ids)
+    elif options.locked:
+        candidates = scan_locked()
     else:
         candidates = scan_instances([])
 
     records = [instance_details(region, instance)
                for region, instance in candidates
-               if not options.name or match_name(instance, options.name,
-                                                 options.ignore_case)]
+               if (not options.name or match_name(instance, options.name,
+                                                  options.ignore_case))
+               and (not options.locked or getattr(instance, 'locked', False))]
 
     # --id-only exists to be piped, so it prints bare ids and ignores
     # both --format and the count footer
@@ -550,7 +558,7 @@ def action_search():
     elif not records:
         pass
     elif options.format == 'table' or len(records) > 1:
-        output_instance_table(records)
+        output_instance_table(records, LOCKED_COLUMNS if options.locked else None)
     else:
         output_instance(records[0])
 
@@ -565,13 +573,6 @@ def action_stop():
     change_instances('stop', stop_one)
 
 def action_lock():
-    if options.list_locked:
-        list_locked()
-        return
-    if not options.instances:
-        himutils.fatal('lock needs one or more instance ids, or --list')
-    if not options.reason:
-        himutils.fatal('lock needs --reason')
     change_instances('lock', lock_one)
 
 def action_unlock():
