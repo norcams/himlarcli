@@ -26,6 +26,14 @@ opt_args:
     'dest':     'ip'
     'help':     'IPv4 or IPv6 address to search for'
     'metavar':  '<address>'
+  '--id-only':
+    'sub':      'search'
+    'dest':     'id_only'
+    'help':     'only output the id of each instance found, one per line
+                 (ignores --format)'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   '--ignore-case':
     'sub':      'search'
     'dest':     'ignore_case'

@@ -331,6 +331,9 @@ def action_search():
     Search for instances by name glob and/or IP address. Both filters
     may be combined, in which case an instance has to match both.
 
+    With --id-only the matching instance ids are printed bare, one per
+    line, for feeding into a shell loop or xargs.
+
     An IP search is resolved through neutron, which knows the port that
     holds the address, so only the matching instances are fetched from
     nova. A name search has to list the instances of every selected
@@ -366,6 +369,13 @@ def action_search():
                for region, instance in candidates
                if not options.name or match_name(instance, options.name,
                                                  options.ignore_case)]
+
+    # --id-only exists to be piped, so it prints bare ids and ignores
+    # both --format and the count footer
+    if options.id_only:
+        for record in records:
+            print(record['id'])
+        return
 
     # A single hit gets the full field block, several get a table. The
     # machine readable formats always get one full record per instance,
