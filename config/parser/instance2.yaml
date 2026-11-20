@@ -1,0 +1,47 @@
+---
+desc:         'Instance stats. Use <action> -h for help on each action'
+actions:
+  'project':  'Stats grouped by project type'
+  'users':    'Stats grouped by user email domain'
+  'org':      'Stats grouped by user organization'
+  'user':     'List all instances owned by a user'
+  'search':   'Search for instances by name and/or IP address'
+opt_args:
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+    'weight':   100
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
+    'weight':   90
+  '--name':
+    'sub':      'search'
+    'dest':     'name'
+    'help':     'instance name to search for, may be globbed (* ? [seq])'
+    'metavar':  '<glob>'
+  '--ip':
+    'sub':      'search'
+    'dest':     'ip'
+    'help':     'IPv4 or IPv6 address to search for'
+    'metavar':  '<address>'
+  '--ignore-case':
+    'sub':      'search'
+    'dest':     'ignore_case'
+    'help':     'ignore case when matching --name'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '-n':
+    'sub':      'user'
+    'dest':     'email'
+    'help':     'user name (email)'
+    'required': true
+  '-o':
+    'sub':      ['users', 'project', 'org']
+    'dest':     'output'
+    'metavar':  '<type>'
+    'help':     'output data type (instance count or percentage)'
+    'choices':  ['count', 'pct']
+    'default':  'count'
