@@ -95,10 +95,10 @@ opt_args:
     'action':   'store_const'
     'const':    true
     'default':  false
-  '-o':
+  '--percent':
     'sub':      'statistics'
-    'dest':     'output'
-    'metavar':  '<type>'
-    'help':     'output data type (instance count or percentage)'
-    'choices':  ['count', 'pct']
-    'default':  'count'
+    'dest':     'percent'
+    'help':     'report each group as a percentage of the total, not as a count'
+    'action':   'store_const'
+    'const':    true
+    'default':  false

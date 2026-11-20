@@ -95,16 +95,18 @@ def count_instances(classifiers):
     return stats
 
 def output_stats(stats, subject):
-    """Print stats as either an instance count or a percentage of the total."""
+    """
+    Print stats as instance counts, or as a percentage of the total
+    when --percent was given.
+    """
     total = stats.get('total', 0)
-    if options.output == 'count':
+    if not options.percent:
         result = dict(stats)
         result['header'] = f'Number of instances grouped by {subject}:'
-    elif total > 0:
-        result = {key: (value / total) * 100 for key, value in stats.items()}
-        result['header'] = f'Percent of instances grouped by {subject}:'
     else:
-        result = {'header': f'Percent of instances grouped by {subject}:'}
+        result = ({key: (value / total) * 100 for key, value in stats.items()}
+                  if total > 0 else {})
+        result['header'] = f'Percent of instances grouped by {subject}:'
     printer.output_dict(result)
 
 def classify_project_type(instance):
