@@ -183,35 +183,33 @@ def match_name(instance, pattern, ignore_case=False):
         return fnmatch.fnmatchcase(instance.name.lower(), pattern.lower())
     return fnmatch.fnmatchcase(instance.name, pattern)
 
-def parse_addresses(text):
+def parse_addresses(values):
     """
-    Parse a comma separated list of IPv4 and IPv6 addresses. Every
-    address is validated and normalized, and duplicates are dropped, so
-    one address written in two different IPv6 notations is looked up
-    once rather than twice.
+    Turn the --ip values into the addresses to look up. Every address
+    is validated and normalized, and duplicates are dropped, so one
+    address written in two different IPv6 notations is looked up once
+    rather than twice.
     """
     addresses = []
-    for part in text.split(','):
-        part = part.strip()
-        if not part:
-            continue
+    for item in split_values(values, '--ip'):
         address = None
         try:
-            address = ipaddress.ip_address(part)
+            address = ipaddress.ip_address(item)
         except ValueError:
-            himutils.fatal(f'{part} is not a valid IPv4 or IPv6 address')
+            himutils.fatal(f'{item} is not a valid IPv4 or IPv6 address')
         if address is not None and address not in addresses:
             addresses.append(address)
-    if not addresses:
-        himutils.fatal(f'no address found in --ip {text}')
     return addresses
 
 def split_values(values, option):
     """
-    Flatten an option that takes several arguments into a list of
-    single values. Arguments may also be comma separated, and repeats
+    Flatten a multi value option into a list of single values. --ip,
+    --user and --project all take theirs either as separate arguments
+    or comma separated, and this is what makes both forms work. Repeats
     are dropped.
     """
+    if isinstance(values, str): # a lone value, not a list of them
+        values = [values]
     flattened = []
     for value in values:
         for item in value.split(','):
@@ -599,18 +597,19 @@ def action_search():
     Search for instances by name glob and/or IP address. Both filters
     may be combined, in which case an instance has to match both.
 
-    --ip takes one address or several comma separated ones. An instance
-    is reported once however many of the addresses belong to it, so
-    passing both the IPv4 and the IPv6 address of a host is harmless.
+    --ip, --user and --project each take several values, either as
+    separate arguments or comma separated. An instance is reported once
+    however many of the values match it, so passing both the IPv4 and
+    the IPv6 address of one host is harmless.
 
     --locked narrows the result to locked instances and reports when
     each one was locked and why. On its own it lists every locked
     instance, and nova does that filtering, so it does not have to list
     whole regions.
 
-    --user takes one or more email addresses and matches the instances
-    those users created. --project takes one or more project names and
-    matches the instances in them, whoever created those.
+    --ip matches an address, --user the instances those users created,
+    and --project every instance in those projects, whoever created
+    them.
 
     The most selective criterion decides where the candidates come
     from: an address goes through neutron, a user, a project or the
