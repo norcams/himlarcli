@@ -6,7 +6,28 @@ actions:
   'org':      'Stats grouped by user organization'
   'user':     'List all instances owned by a user'
   'search':   'Search for instances by name and/or IP address'
+  'start':    'Start one or more instances'
+  'stop':     'Stop one or more instances'
+  'lock':     'Lock one or more instances, with a reason'
 opt_args:
+  'instances':
+    'sub':      ['start', 'stop', 'lock']
+    'help':     'id of the instance(s) to act on'
+    'metavar':  '<instance-id>'
+    'nargs':    '+'
+  '--reason':
+    'sub':      'lock'
+    'dest':     'reason'
+    'help':     'why the instance is locked, stored as instance metadata'
+    'metavar':  '<text>'
+    'required': true
+  '--assume-yes':
+    'sub':      ['start', 'stop', 'lock']
+    'dest':     'assume_yes'
+    'help':     'do not ask for confirmation'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   '--domain':
     'dest':     'domain'
     'help':     'openstack domain to use'

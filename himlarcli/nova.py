@@ -381,11 +381,14 @@ class Nova(Client):
     def stop_instance(self, instance, lock=None):
         """
             Wrapper to stop an instance
-            Version: 2023-03
+            Version: 2026-11
+            :rtype: bool, True if nova accepted the stop request
         """
+        stopped = False
         if instance.status == 'ACTIVE' and not self.dry_run:
             try:
                 instance.stop()
+                stopped = True
                 if lock:
                     instance.lock(lock)
                     self.logger.debug(f'=>lock instance {instance.id} with reason {lock}')
@@ -393,21 +396,67 @@ class Nova(Client):
                 self.log_error(e)
         if instance.status == 'ACTIVE':
             self.logger.debug('%s stop instance %s', self.log_prefix(), instance.id)
+        return stopped
 
     def start_instance(self, instance, unlock=False):
         """
             Wrapper to start an instance
-            Version: 2023-03
+            Version: 2026-11
+            :rtype: bool, True if nova accepted the start request
         """
+        started = False
         if instance.status == 'SHUTOFF' and not self.dry_run:
             try:
                 if unlock:
                     instance.unlock()
                 instance.start()
+                started = True
             except novaclient.exceptions.Conflict as e:
                 self.log_error(e)
         if instance.status == 'SHUTOFF':
             self.logger.debug('%s start instance %s', self.log_prefix(), instance.id)
+        return started
+
+    def lock_instance(self, instance, reason=None):
+        """
+            Wrapper to lock an instance, with an optional reason. The
+            reason is stored by nova itself and needs compute api
+            version 2.73 or later.
+            Version: 2026-11
+            :rtype: bool, True if the instance was locked
+        """
+        self.log_dry_run('lock_instance', instance=instance.id, reason=reason)
+        if self.dry_run:
+            return False
+        try:
+            if reason:
+                instance.lock(reason)
+            else:
+                instance.lock()
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return False
+        self.debug_log(f'lock instance {instance.id} with reason {reason}')
+        return True
+
+    def set_instance_metadata(self, instance, metadata):
+        """
+            Wrapper to add or update metadata on an instance. Instance
+            metadata is listed as properties by 'openstack server show'.
+            Version: 2026-11
+            :rtype: bool, True if the metadata was set
+        """
+        self.log_dry_run('set_instance_metadata', instance=instance.id,
+                         metadata=metadata)
+        if self.dry_run:
+            return False
+        try:
+            self.client.servers.set_meta(instance, metadata)
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return False
+        self.debug_log(f'set metadata {metadata} on instance {instance.id}')
+        return True
 
     def stop_project_instances(self, project, dry_run=False):
         """

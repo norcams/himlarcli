@@ -8,6 +8,9 @@ derived from that domain. The 'user' action lists every instance owned
 by a single user, grouped by project, and the 'search' action looks up
 instances by name glob and/or IP address.
 
+The 'start', 'stop' and 'lock' actions take instance ids and change
+the instances they name.
+
 Working name for the next generation of instance.py.
 """
 
@@ -40,6 +43,10 @@ regions = himutils.get_regions(options, kc)
 # with any other type are counted in the total only, and a warning is
 # emitted so the list below can be updated.
 PROJECT_TYPES = ['admin', 'demo', 'education', 'hpc', 'personal', 'research', 'test']
+
+# Instance metadata key the 'lock' action records its reason in. Nova
+# metadata is what 'openstack server show' lists under properties.
+LOCK_REASON_KEY = 'lock_reason'
 
 #---------------------------------------------------------------------
 # Helper functions
@@ -327,6 +334,86 @@ def scan_instances(addresses):
             continue
         yield region, instance
 
+def find_instances_by_id(instance_ids):
+    """
+    Resolve instance ids to (region, instance, novaclient) triples. An
+    id does not say which region it lives in, so every selected region
+    is tried until the instance turns up. Repeated ids are collapsed,
+    and an id that is nowhere to be found is reported and skipped.
+    """
+    novaclients = {region: himutils.get_client(Nova, options, logger, region)
+                   for region in sorted(regions)}
+    found = []
+    for instance_id in dict.fromkeys(instance_ids):
+        for region, nc in novaclients.items():
+            instance = nc.get_by_id('server', instance_id)
+            if instance:
+                found.append((region, instance, nc))
+                break
+        else:
+            himutils.error(f'instance {instance_id} not found in '
+                           f"{', '.join(novaclients)}")
+    return found
+
+def change_instances(action_name, apply_change):
+    """
+    Shared flow for the start, stop and lock actions: resolve the given
+    ids, show what is about to be touched, ask once for the whole
+    batch, then apply the change and report the outcome per instance.
+    """
+    targets = find_instances_by_id(options.instances)
+    if not targets:
+        return
+    if not options.assume_yes:
+        output_instance_table([instance_details(region, instance)
+                               for region, instance, _nc in targets])
+        question = (f'Are you sure you will {action_name} the '
+                    f'{len(targets)} instance(s) above')
+        if not himutils.confirm_action(question):
+            return
+    printer.output_records(
+        header=['ID', 'NAME', 'REGION', 'RESULT'],
+        rows=[[instance.id, instance.name, region, apply_change(nc, instance)]
+              for region, instance, nc in targets],
+        sortby=1)
+
+def start_one(nc, instance):
+    """Start a single instance and report what happened."""
+    if instance.status != 'SHUTOFF':
+        return f'skipped: status is {instance.status}'
+    started = nc.start_instance(instance)
+    if options.dry_run:
+        return 'dry-run'
+    return 'start requested' if started else 'failed'
+
+def stop_one(nc, instance):
+    """Stop a single instance and report what happened."""
+    if instance.status != 'ACTIVE':
+        return f'skipped: status is {instance.status}'
+    stopped = nc.stop_instance(instance)
+    if options.dry_run:
+        return 'dry-run'
+    return 'stop requested' if stopped else 'failed'
+
+def lock_one(nc, instance):
+    """
+    Lock a single instance and record why. The reason goes into
+    instance metadata, which is what 'openstack server show' lists
+    under properties, and is also handed to nova's own lock reason.
+    Metadata is written first, so a failing lock cannot leave an
+    instance locked with no visible reason.
+    """
+    metadata_set = nc.set_instance_metadata(instance,
+                                            {LOCK_REASON_KEY: options.reason})
+    locked = nc.lock_instance(instance, options.reason)
+    if options.dry_run:
+        return 'dry-run'
+    if locked and metadata_set:
+        return 'locked'
+    if locked:
+        return 'locked, but metadata failed'
+    return 'metadata set, but lock failed' if metadata_set else 'failed'
+
 #---------------------------------------------------------------------
 # Action functions
 #---------------------------------------------------------------------
@@ -433,6 +520,15 @@ def action_search():
     # The count is obvious when there is exactly one hit
     if len(records) != 1 and options.format in ('text', 'table'):
         printer.output_msg(f'{len(records)} instances found')
+
+def action_start():
+    change_instances('start', start_one)
+
+def action_stop():
+    change_instances('stop', stop_one)
+
+def action_lock():
+    change_instances('lock', lock_one)
 
 #---------------------------------------------------------------------
 # Run local function with the same name as the action (Note: - => _)
