@@ -15,13 +15,19 @@ opt_args:
     'sub':      ['start', 'stop', 'lock', 'unlock']
     'help':     'id of the instance(s) to act on'
     'metavar':  '<instance-id>'
-    'nargs':    '+'
+    'nargs':    '*'
   '--reason':
     'sub':      'lock'
     'dest':     'reason'
     'help':     'why the instance is locked, recorded by nova as locked_reason'
     'metavar':  '<text>'
-    'required': true
+  '--list':
+    'sub':      'lock'
+    'dest':     'list_locked'
+    'help':     'list locked instances and why they are locked, and do nothing else'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
   '--assume-yes':
     'sub':      ['start', 'stop', 'lock', 'unlock']
     'dest':     'assume_yes'

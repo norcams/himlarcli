@@ -439,6 +439,40 @@ class Nova(Client):
         self.debug_log(f'lock instance {instance.id} with reason {reason}')
         return True
 
+    def get_locked_instances(self):
+        """
+            Get all locked instances in the region. Nova can filter on
+            the lock itself from compute api version 2.73, and the
+            result is filtered again locally, so that a version which
+            ignores the query parameter cannot report every instance
+            as locked.
+            Version: 2026-11
+            :rtype: List
+        """
+        instances = self.get_all_instances(search_opts={'locked': True})
+        locked = [i for i in instances if getattr(i, 'locked', False)]
+        self.debug_log(f'found {len(locked)} locked instances in {self.region}')
+        return locked
+
+    def get_lock_time(self, instance):
+        """
+            Find when an instance was last locked. Nova keeps no lock
+            timestamp, so this is the start time of the most recent
+            lock entry in the instance action log, and None when the
+            log no longer holds one.
+            Version: 2026-11
+            :rtype: str or None
+        """
+        try:
+            actions = self.client.instance_action.list(instance)
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return None
+        times = [a.start_time for a in actions
+                 if getattr(a, 'action', None) == 'lock'
+                 and getattr(a, 'start_time', None)]
+        return max(times) if times else None
+
     def unlock_instance(self, instance):
         """
             Wrapper to unlock an instance. Unlocking an instance that

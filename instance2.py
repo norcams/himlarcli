@@ -224,14 +224,22 @@ def instance_details(region, instance):
         'ipv6': ', '.join(ipv6) if ipv6 else '(none)',
     }
 
-def short_date(created):
-    """Turn nova's 2022-02-16T11:35:27Z into 2022-02-16 11:35:27."""
-    try:
-        return himutils.convert_date(created, '%Y-%m-%dT%H:%M:%SZ',
-                                     '%Y-%m-%d %H:%M:%S')
-    except (ValueError, TypeError):
-        logger.debug(f'=> unexpected date format {created}')
-        return created
+def short_date(timestamp):
+    """
+    Shorten a nova timestamp for display, so that 2022-02-16T11:35:27Z
+    becomes 2022-02-16 11:35:27. Creation times and instance action
+    times are not formatted the same, so several formats are tried, and
+    anything unrecognised is passed through untouched.
+    """
+    for timeformat in ('%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S.%f',
+                       '%Y-%m-%dT%H:%M:%S'):
+        try:
+            return himutils.convert_date(timestamp, timeformat,
+                                         '%Y-%m-%d %H:%M:%S')
+        except (ValueError, TypeError):
+            continue
+    logger.debug(f'=> unexpected date format {timestamp}')
+    return timestamp
 
 def output_instance(record):
     """Print one instance as a header line and a block of fields."""
@@ -357,6 +365,8 @@ def change_instances(action_name, apply_change):
     ids, show what is about to be touched, ask once for the whole
     batch, then apply the change and report the outcome per instance.
     """
+    if not options.instances:
+        himutils.fatal(f'{action_name} needs one or more instance ids')
     targets = find_instances_by_id(options.instances)
     if not targets:
         return
@@ -401,6 +411,33 @@ def lock_one(nc, instance):
     if options.dry_run:
         return 'dry-run'
     return 'locked' if locked else 'failed'
+
+def list_locked():
+    """
+    List the locked instances of every selected region, with the reason
+    nova recorded and, where the instance action log still holds it,
+    when the lock was set.
+    """
+    rows = []
+    for region in sorted(regions):
+        nc = himutils.get_client(Nova, options, logger, region)
+        for instance in nc.get_locked_instances():
+            project = get_object('project', instance.tenant_id)
+            locked_at = nc.get_lock_time(instance)
+            rows.append([
+                instance.id,
+                instance.name,
+                region,
+                project.name if project else f'(unknown id={instance.tenant_id})',
+                short_date(locked_at) if locked_at else '(unknown)',
+                getattr(instance, 'locked_reason', None) or '(none)',
+            ])
+    if not rows:
+        printer.output_msg('no locked instances found')
+        return
+    printer.output_records(
+        header=['ID', 'NAME', 'REGION', 'PROJECT', 'LOCKED', 'REASON'],
+        rows=rows, sortby=1)
 
 def unlock_one(nc, instance):
     """
@@ -528,6 +565,13 @@ def action_stop():
     change_instances('stop', stop_one)
 
 def action_lock():
+    if options.list_locked:
+        list_locked()
+        return
+    if not options.instances:
+        himutils.fatal('lock needs one or more instance ids, or --list')
+    if not options.reason:
+        himutils.fatal('lock needs --reason')
     change_instances('lock', lock_one)
 
 def action_unlock():
