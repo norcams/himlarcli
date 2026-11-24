@@ -48,6 +48,64 @@ class Printer(object):
         elif self.format == 'csv':
             self.__dict_to_csv(objects=objects, sort=sort)
 
+    def output_record(self, header, fields):
+        """
+            Print a single record as an ordered block of aligned
+            key/value lines, with a one line header instead of the
+            heavy banner of output_dict(). Field order is kept as
+            given. The machine readable formats fall back to
+            output_dict(), so they stay one object per record.
+            Version: 2026-11
+            fields : dict, in the order the fields should be printed
+        """
+        if self.format not in ['text', 'table']:
+            fields = dict(fields)
+            if self.format == 'csv':
+                # a dict with a 'header' gets a csv column header row
+                fields = {'header': True, **fields}
+            self.output_dict(fields, sort=False)
+            return
+        if header:
+            print("\n%s" % header)
+        width = max((len(str(key)) for key in fields), default=0)
+        for key, value in fields.items():
+            print("  %s  %s" % (str(key).ljust(width), value))
+
+    def output_records(self, header, rows, align=None, sortby=0):
+        """
+            Print homogeneous records as a table, one row per record,
+            for the human readable formats. The machine readable
+            formats get one object per record instead, so that piping
+            the output does not depend on the chosen layout.
+            Version: 2026-11
+            header : list of column names
+            rows   : list of lists, with the values in header order
+            align  : list of 'l', 'r' or 'c', one per column
+            sortby : index of the column to sort by, or None
+        """
+        if self.format in ['json', 'csv']:
+            for row in rows:
+                self.output_dict(dict(zip(header, row)), sort=False)
+            return
+        table = PrettyTable()
+        table.border = 0
+        table.left_padding_width = 0
+        table.right_padding_width = 2
+        names = [str(name) for name in header]
+        if sys.stdout.isatty(): # keep escape codes out of a pipe
+            names = [Color.fg.MGN + Color.bold + name + Color.reset
+                     for name in names]
+        table.field_names = names
+        for i, name in enumerate(names):
+            table.align[name] = align[i] if align else 'l'
+        for row in rows:
+            table.add_row(row)
+        if sortby is not None:
+            table.sortby = names[sortby]
+        # prettytable pads the last column, so trim the line ends
+        print('\n'.join(line.rstrip()
+                        for line in table.get_string().splitlines()))
+
     def output_msg(self, msg):
         if self.format == 'text':
             print("\n{}\n".format(msg))

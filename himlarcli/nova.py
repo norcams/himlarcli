@@ -381,11 +381,14 @@ class Nova(Client):
     def stop_instance(self, instance, lock=None):
         """
             Wrapper to stop an instance
-            Version: 2023-03
+            Version: 2026-11
+            :rtype: bool, True if nova accepted the stop request
         """
+        stopped = False
         if instance.status == 'ACTIVE' and not self.dry_run:
             try:
                 instance.stop()
+                stopped = True
                 if lock:
                     instance.lock(lock)
                     self.logger.debug(f'=>lock instance {instance.id} with reason {lock}')
@@ -393,21 +396,100 @@ class Nova(Client):
                 self.log_error(e)
         if instance.status == 'ACTIVE':
             self.logger.debug('%s stop instance %s', self.log_prefix(), instance.id)
+        return stopped
 
     def start_instance(self, instance, unlock=False):
         """
             Wrapper to start an instance
-            Version: 2023-03
+            Version: 2026-11
+            :rtype: bool, True if nova accepted the start request
         """
+        started = False
         if instance.status == 'SHUTOFF' and not self.dry_run:
             try:
                 if unlock:
                     instance.unlock()
                 instance.start()
+                started = True
             except novaclient.exceptions.Conflict as e:
                 self.log_error(e)
         if instance.status == 'SHUTOFF':
             self.logger.debug('%s start instance %s', self.log_prefix(), instance.id)
+        return started
+
+    def lock_instance(self, instance, reason=None):
+        """
+            Wrapper to lock an instance, with an optional reason. The
+            reason is stored by nova itself and needs compute api
+            version 2.73 or later.
+            Version: 2026-11
+            :rtype: bool, True if the instance was locked
+        """
+        self.log_dry_run('lock_instance', instance=instance.id, reason=reason)
+        if self.dry_run:
+            return False
+        try:
+            if reason:
+                instance.lock(reason)
+            else:
+                instance.lock()
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return False
+        self.debug_log(f'lock instance {instance.id} with reason {reason}')
+        return True
+
+    def get_locked_instances(self):
+        """
+            Get all locked instances in the region. Nova can filter on
+            the lock itself from compute api version 2.73, and the
+            result is filtered again locally, so that a version which
+            ignores the query parameter cannot report every instance
+            as locked.
+            Version: 2026-11
+            :rtype: List
+        """
+        instances = self.get_all_instances(search_opts={'locked': True})
+        locked = [i for i in instances if getattr(i, 'locked', False)]
+        self.debug_log(f'found {len(locked)} locked instances in {self.region}')
+        return locked
+
+    def get_lock_time(self, instance):
+        """
+            Find when an instance was last locked. Nova keeps no lock
+            timestamp, so this is the start time of the most recent
+            lock entry in the instance action log, and None when the
+            log no longer holds one.
+            Version: 2026-11
+            :rtype: str or None
+        """
+        try:
+            actions = self.client.instance_action.list(instance)
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return None
+        times = [a.start_time for a in actions
+                 if getattr(a, 'action', None) == 'lock'
+                 and getattr(a, 'start_time', None)]
+        return max(times) if times else None
+
+    def unlock_instance(self, instance):
+        """
+            Wrapper to unlock an instance. Unlocking an instance that
+            is not locked is a no-op in nova.
+            Version: 2026-11
+            :rtype: bool, True if the instance was unlocked
+        """
+        self.log_dry_run('unlock_instance', instance=instance.id)
+        if self.dry_run:
+            return False
+        try:
+            instance.unlock()
+        except novaclient.exceptions.ClientException as e:
+            self.log_error(e)
+            return False
+        self.debug_log(f'unlock instance {instance.id}')
+        return True
 
     def stop_project_instances(self, project, dry_run=False):
         """

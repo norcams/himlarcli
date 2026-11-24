@@ -1,20 +1,110 @@
 ---
-desc:         'Instance stats. Use <action> -h for help on each action'
+desc:         'Instance search, statistics and state changes. Use <action> -h for help on each action'
 actions:
-  'project':  'Stats grouped by project type'
-  'users':    'Stats grouped by user email domain'
-  'org':      'Stats grouped by user organization'
-  'user':     'List all user instances. FIXME: This does not look at home here'
+  'statistics': 'Instance counts, grouped by project type, email domain or organization'
+  'search':   'Search for instances by name and/or IP address'
+  'start':    'Start one or more instances'
+  'stop':     'Stop one or more instances'
+  'lock':     'Lock one or more instances, with a reason'
+  'unlock':   'Unlock one or more instances'
 opt_args:
-  '-n':
-    'sub':      'user'
-    'dest':     'email'
-    'help':     'user name (email)'
+  'instances':
+    'sub':      ['start', 'stop', 'lock', 'unlock']
+    'help':     'id of the instance(s) to act on'
+    'metavar':  '<instance-id>'
+    'nargs':    '+'
+  '--reason':
+    'sub':      'lock'
+    'dest':     'reason'
+    'help':     'why the instance is locked, recorded by nova as locked_reason'
+    'metavar':  '<text>'
     'required': true
-  '-o':
-    'sub':      ['users', 'project', 'org']
-    'dest':     'output'
-    'metavar':
-    'help':     'output data type (instance count or percentage)'
-    'choices':  ['count', 'pct']
-    'default':  'count'
+  '--assume-yes':
+    'sub':      ['start', 'stop', 'lock', 'unlock']
+    'dest':     'assume_yes'
+    'help':     'do not ask for confirmation'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--domain':
+    'dest':     'domain'
+    'help':     'openstack domain to use'
+    'default':  'Dataporten'
+    'weight':   100
+  '--region':
+    'dest':     'region'
+    'help':     'only use this region'
+    'weight':   90
+  '--name':
+    'sub':      'search'
+    'dest':     'name'
+    'help':     'instance name to search for, may be globbed (* ? [seq])'
+    'metavar':  '<glob>'
+  '--ip':
+    'sub':      'search'
+    'dest':     'ip'
+    'help':     'only instances with these IPv4 or IPv6 addresses'
+    'metavar':  '<address>'
+    'nargs':    '+'
+  '--id-only':
+    'sub':      'search'
+    'dest':     'id_only'
+    'help':     'only output the id of each instance found, one per line
+                 (ignores --format)'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--user':
+    'sub':      'search'
+    'dest':     'user'
+    'help':     'only instances created by these users, given as email addresses'
+    'metavar':  '<email>'
+    'nargs':    '+'
+  '--project':
+    'sub':      'search'
+    'dest':     'project'
+    'help':     'only instances in these projects, given by name'
+    'metavar':  '<project>'
+    'nargs':    '+'
+  '--locked':
+    'sub':      'search'
+    'dest':     'locked'
+    'help':     'only locked instances, with the lock time and reason'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--ignore-case':
+    'sub':      'search'
+    'dest':     'ignore_case'
+    'help':     'ignore case when matching --name'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--project-type':
+    'sub':      'statistics'
+    'dest':     'project_type'
+    'help':     'group by project type'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--email-domain':
+    'sub':      'statistics'
+    'dest':     'email_domain'
+    'help':     'group by the email domain of the user that created the instance'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--organization':
+    'sub':      'statistics'
+    'dest':     'organization'
+    'help':     'group by the organization of the user that created the instance'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
+  '--percent':
+    'sub':      'statistics'
+    'dest':     'percent'
+    'help':     'report each group as a percentage of the total, not as a count'
+    'action':   'store_const'
+    'const':    true
+    'default':  false
