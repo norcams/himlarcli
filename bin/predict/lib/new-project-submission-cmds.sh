@@ -36,10 +36,38 @@ set -e
 RT=$1
 SUBMISSION_ID=$2
 element_data=$3
+dumpMode=$4
 answer_data=$(curl -s -H "Authorization: Bearer ${NETTSKJEMA_API_ACCESS_TOKEN}" -X GET https://nettskjema.no/api/v3/form/submission/${SUBMISSION_ID})
 
 # Debug
 #echo $answer_data > answer_data.json
+
+# Dump mode: print answer data and exit
+if [ ! -z $dumpMode ]
+then
+  if [ $dumpMode == "--dumpjson" ]
+  then
+    echo "$answer_data" | jq .
+    exit
+  fi
+  # --dumphuman: one jq pass over answer_data + element_data
+  echo "$answer_data" | jq -r --slurpfile ed <(echo "$element_data") '
+    ($ed[0] | INDEX(.elementId)) as $E
+    | .answers[]
+    | . as $a
+    | $E[.elementId|tostring] as $el
+    | select($el != null)
+    | (((($el.text // $el.description // "") | split("\n")) | .[0]) // "") as $q
+    | select($q != "")
+    | $q,
+      ( ( if ($a.answerOptionIds // [] | length) > 0
+          then ($a.answerOptionIds | map(. as $o | "  " + (($el.answerOptions // [])[] | select(.answerOptionId == $o) | .text)))
+          else [ "  " + (($a.textAnswer // "") | tostring) ]
+        end )[] ),
+      ""
+  '
+  exit
+fi
 
 echo
 

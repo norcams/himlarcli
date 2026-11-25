@@ -18,3 +18,10 @@ source create-nettskjema-access-token.sh
 ```bash
 bash new-project.sh SUBMISSION_ID
 ```
+
+6. Dump one submission's answer data (then exit)
+
+```bash
+bash new-project.sh --dumphuman SUBMISSION_ID   # human readable
+bash new-project.sh --dumpjson SUBMISSION_ID    # raw JSON
+```
