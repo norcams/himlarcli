@@ -296,7 +296,7 @@ nodes:
     mac: 18:66:da:51:60:64
     host_parameters_attributes:
       - name: 'installdevice'
-        value: value: 'disk/by-id/ata-DELLBOSS_VD_482071cd0b270010'
+        value: 'disk/by-id/ata-DELLBOSS_VD_482071cd0b270010'
       - name: 'keepdevices'
         value: true
   storage-002:
